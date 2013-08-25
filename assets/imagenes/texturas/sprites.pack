@@ -1,0 +1,345 @@
+
+sprites.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Saltando
+  rotate: false
+  xy: 1, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 3
+Andando
+  rotate: false
+  xy: 439, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 14
+Saltando
+  rotate: false
+  xy: 1, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 1
+SaltandoDown
+  rotate: false
+  xy: 439, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 1
+SaltandoDown
+  rotate: false
+  xy: 1, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 12
+SaltandoDown
+  rotate: false
+  xy: 1, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 11
+Andando
+  rotate: false
+  xy: 439, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 16
+SaltandoDown
+  rotate: false
+  xy: 1, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 6
+Andando
+  rotate: false
+  xy: 439, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 2
+
+sprites2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Andando
+  rotate: false
+  xy: 1, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 8
+SaltandoDown
+  rotate: false
+  xy: 439, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 7
+Andando
+  rotate: false
+  xy: 1, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 6
+Andando
+  rotate: false
+  xy: 439, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 13
+SaltandoDown
+  rotate: false
+  xy: 1, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 4
+Saltando
+  rotate: false
+  xy: 439, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 2
+Andando
+  rotate: false
+  xy: 1, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 9
+Andando
+  rotate: false
+  xy: 439, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 3
+
+sprites3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Andando
+  rotate: false
+  xy: 1, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 12
+Andando
+  rotate: false
+  xy: 439, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 1
+Saltando
+  rotate: false
+  xy: 1, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 8
+Andando
+  rotate: false
+  xy: 439, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 11
+Andando
+  rotate: false
+  xy: 1, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 20
+Andando
+  rotate: false
+  xy: 439, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 23
+Andando
+  rotate: false
+  xy: 1, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 18
+Andando
+  rotate: false
+  xy: 439, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 21
+
+sprites4.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+Andando
+  rotate: false
+  xy: 1, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 15
+Andando
+  rotate: false
+  xy: 439, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 7
+Andando
+  rotate: false
+  xy: 1, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 5
+SaltandoDown
+  rotate: false
+  xy: 439, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 3
+SaltandoDown
+  rotate: false
+  xy: 1, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 9
+Andando
+  rotate: false
+  xy: 439, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 10
+SaltandoDown
+  rotate: false
+  xy: 1, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 2
+Saltando
+  rotate: false
+  xy: 439, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 6
+
+sprites5.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+SaltandoDown
+  rotate: false
+  xy: 1, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 10
+Saltando
+  rotate: false
+  xy: 439, 732
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 5
+SaltandoDown
+  rotate: false
+  xy: 1, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 8
+Saltando
+  rotate: false
+  xy: 439, 488
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 4
+Andando
+  rotate: false
+  xy: 1, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 4
+SaltandoDown
+  rotate: false
+  xy: 439, 244
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 5
+Andando
+  rotate: false
+  xy: 1, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 19
+Saltando
+  rotate: false
+  xy: 439, 0
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 7
+
+sprites6.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+block
+  rotate: false
+  xy: 1, 464
+  size: 427, 469
+  orig: 427, 469
+  offset: 0, 0
+  index: -1
+block2
+  rotate: false
+  xy: 1, 0
+  size: 411, 463
+  orig: 411, 463
+  offset: 0, 0
+  index: -1
+Andando
+  rotate: false
+  xy: 430, 690
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 22
+Andando
+  rotate: false
+  xy: 430, 446
+  size: 436, 243
+  orig: 436, 243
+  offset: 0, 0
+  index: 17
