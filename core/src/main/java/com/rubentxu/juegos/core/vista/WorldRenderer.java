@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.modelo.Block;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.World;
@@ -20,7 +21,7 @@ public class WorldRenderer {
 
     private static final float CAMERA_WIDTH = 10f;
     private static final float CAMERA_HEIGHT = 7f;
-    private static final float RUNNING_FRAME_DURATION = 0.2f;
+    private static final float RUNNING_FRAME_DURATION = 0.02f;
 
     private World world;
     private OrthographicCamera cam;
@@ -29,25 +30,30 @@ public class WorldRenderer {
     ShapeRenderer debugRenderer = new ShapeRenderer();
 
     /** Textures **/
-    private TextureRegion rubenIdleLeft;
-    private TextureRegion rubenIdleRight;
+    private Array<TextureAtlas.AtlasRegion> rubenIdleLeft;
+    private Array<TextureAtlas.AtlasRegion> rubenIdleRight;
+
     private TextureRegion blockTexture;
     private TextureRegion rubenFrame;
-    private TextureRegion rubenJumpLeft;
-    private TextureRegion rubenFallLeft;
-    private TextureRegion rubenJumpRight;
-    private TextureRegion rubenFallRight;
+    private Array<TextureAtlas.AtlasRegion> rubenJumpRight;
+    private Array<TextureAtlas.AtlasRegion> rubenFallRight;
 
     /** Animations **/
-    private Animation walkLeftAnimation;
-    private Animation walkRightAnimation;
 
+    private Animation walkRightAnimation;
+    private Animation jumpRightAnimation;
+    private Animation fallRightAnimation;
     private SpriteBatch spriteBatch;
     private boolean debug = false;
     private int width;
     private int height;
     private float ppuX;	// pixels per unit on the X axis
     private float ppuY;	// pixels per unit on the Y axis
+    private float timeJump;
+    private float timefall;
+    private float framesJump;
+    private float framesFall;
+
 
     public void setSize (int w, int h) {
         this.width = w;
@@ -65,9 +71,10 @@ public class WorldRenderer {
     public WorldRenderer(World world, boolean debug) {
         this.world = world;
         this.cam = new OrthographicCamera(CAMERA_WIDTH, CAMERA_HEIGHT);
-        this.cam.position.set(world.getRubentxu().getPosition().x, world.getRubentxu().getPosition().y, 0);
-// this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
+        this.cam.position.set(CAMERA_WIDTH / 2f, CAMERA_HEIGHT / 2f, 0);
         this.cam.update();
+        this.timeJump=0;
+        this.timefall=0;
         this.debug = debug;
         spriteBatch = new SpriteBatch();
         loadTextures();
@@ -75,27 +82,26 @@ public class WorldRenderer {
 
     private void loadTextures() {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
-        rubenIdleLeft = atlas.findRegion("Andando");
-        rubenIdleRight = new TextureRegion(rubenIdleLeft);
-        rubenIdleLeft.flip(true, false);
+        rubenIdleRight=  atlas.findRegions("Andando");
         blockTexture = atlas.findRegion("block");
-
-        walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, rubenIdleLeft);
-        walkLeftAnimation.setPlayMode(Animation.LOOP);
-
+        rubenJumpRight = atlas.findRegions("Saltando");
+        rubenFallRight = atlas.findRegions("SaltandoDown");
+        framesFall=rubenFallRight.size;
+        framesJump=rubenJumpRight.size;
         walkRightAnimation = new Animation(RUNNING_FRAME_DURATION, rubenIdleRight);
         walkRightAnimation.setPlayMode(Animation.LOOP);
+        jumpRightAnimation = new Animation(RUNNING_FRAME_DURATION*5, rubenJumpRight);
+        //jumpRightAnimation.setPlayMode(Animation.LOOP);
+        fallRightAnimation = new Animation(RUNNING_FRAME_DURATION*5, rubenFallRight);
+        //fallRightAnimation.setPlayMode(Animation.LOOP);
 
-        rubenJumpLeft = atlas.findRegion("Saltando");
-        rubenJumpRight = new TextureRegion(rubenJumpLeft);
-        rubenJumpLeft.flip(true, false);
-        rubenFallLeft = atlas.findRegion("SaltandoDown");
-        rubenFallRight = new TextureRegion(rubenFallLeft);
-        rubenFallLeft.flip(true, false);
+
     }
 
 
     public void render() {
+        this.cam.position.set(world.getRubentxu().getPosition().x,CAMERA_HEIGHT/1.7F, 0);
+        this.cam.update();
         spriteBatch.setProjectionMatrix(cam.combined);
         spriteBatch.begin();
         drawBlocks();
@@ -109,24 +115,53 @@ public class WorldRenderer {
 
     private void drawBlocks() {
         for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
-// spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
+            // spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
             spriteBatch.draw(blockTexture, block.getPosition().x, block.getPosition().y, Block.SIZE, Block.SIZE);
         }
     }
 
     private void drawRubentxu() {
         Rubentxu ruben = world.getRubentxu();
-        rubenFrame = ruben.isFacingLeft() ? rubenIdleLeft : rubenIdleRight;
+
+        rubenFrame =  rubenIdleRight.get(0);
         if(ruben.getState().equals(State.WALKING)) {
-            rubenFrame = ruben.isFacingLeft() ? walkLeftAnimation.getKeyFrame(ruben.getStateTime(), false) : walkRightAnimation.getKeyFrame(ruben.getStateTime(), false);
+            timeJump=0;
+            timefall=0;
+
+            rubenFrame = walkRightAnimation.getKeyFrame(ruben.getStateTime(), true);
         } else if (ruben.getState().equals(State.JUMPING)) {
             if (ruben.getVelocity().y > 0) {
-                rubenFrame = ruben.isFacingLeft() ? rubenJumpLeft : rubenJumpRight;
+                System.out.println(timeJump);
+                if(framesJump>=timeJump){
+                    timeJump=ruben.getStateTime()%framesJump;
+                    System.out.println("lo flipo"+framesJump);
+                }
+                System.out.println(timeJump);
+                    rubenFrame =jumpRightAnimation.getKeyFrame(timeJump,true);
+
+
             } else {
-                rubenFrame = ruben.isFacingLeft() ? rubenFallLeft : rubenFallRight;
+
+                if(framesFall>=timefall){
+                    timefall=ruben.getStateTime()%framesFall;
+                }
+                System.out.println(timefall);
+                rubenFrame =fallRightAnimation.getKeyFrame(timefall,true);
+
             }
+        } else  {
+            timeJump=0;
+            timefall=0;
+
         }
-// spriteBatch.draw(rubenFrame, ruben.getPosition().x * ppuX, ruben.getPosition().y * ppuY, Bob.SIZE * ppuX, Bob.SIZE * ppuY);
+        if(ruben.isFacingLeft() && !rubenFrame.isFlipX()) {
+           rubenFrame.flip(true,false);
+        }else if (!ruben.isFacingLeft() && rubenFrame.isFlipX()) {
+            rubenFrame.flip(true,false);
+        }
+
+
+        // spriteBatch.draw(rubenFrame, ruben.getPosition().x * ppuX, ruben.getPosition().y * ppuY, ruben.SIZE * ppuX, ruben.SIZE * ppuY);
         spriteBatch.draw(rubenFrame, ruben.getPosition().x-0.25f, ruben.getPosition().y, Rubentxu.SIZE, Rubentxu.SIZE);
     }
 

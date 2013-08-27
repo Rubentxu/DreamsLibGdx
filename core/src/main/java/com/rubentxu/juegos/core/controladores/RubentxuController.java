@@ -18,10 +18,10 @@ public class RubentxuController {
 
     private static final long LONG_JUMP_PRESS 	= 150l;
     private static final float ACCELERATION 	= 20f;
-    private static final float GRAVITY 			= -20f;
+    private static final float GRAVITY 			= -15f;
     private static final float MAX_JUMP_SPEED	= 7f;
     private static final float DAMP 			= 0.90f;
-    private static final float MAX_VEL 			= 4f;
+    private static final float MAX_VEL 			= 2f;
 
     private World world;
     private Rubentxu ruben;
@@ -91,10 +91,10 @@ public class RubentxuController {
 
     /** The main update method **/
     public void update(float delta) {
-        // Processing the input - setting the states of Bob
+
         processInput();
 
-        // If Bob is grounded then reset the state to IDLE
+
         if (grounded && ruben.getState().equals(Rubentxu.State.JUMPING)) {
             ruben.setState(Rubentxu.State.IDLE);
         }
@@ -108,10 +108,8 @@ public class RubentxuController {
         // apply acceleration to change velocity
         ruben.getVelocity().add(ruben.getAcceleration().x, ruben.getAcceleration().y);
 
-        // checking collisions with the surrounding blocks depending on Bob's velocity
         checkCollisionWithBlocks(delta);
 
-        // apply damping to halt Bob nicely
         ruben.getVelocity().x *= DAMP;
 
         // ensure terminal velocity is not exceeded
@@ -127,38 +125,37 @@ public class RubentxuController {
 
     }
 
-    /** Collision checking **/
+
     private void checkCollisionWithBlocks(float delta) {
-        // scale velocity to frame units
+
         ruben.getVelocity().mul(delta);
 
-        // Obtain the rectangle from the pool instead of instantiating it
+
         Rectangle rubenRect = rectPool.obtain();
-        // set the rectangle to ruben's bounding box
+
         rubenRect.set(ruben.getBounds().x, ruben.getBounds().y, ruben.getBounds().width, ruben.getBounds().height);
 
-        // we first check the movement on the horizontal X axis
+
         int startX, endX;
         int startY = (int) ruben.getBounds().y;
         int endY = (int) (ruben.getBounds().y + ruben.getBounds().height);
-        // if Bob is heading left then we check if he collides with the block on his left
-        // we check the block on his right otherwise
+
         if (ruben.getVelocity().x < 0) {
             startX = endX = (int) Math.floor(ruben.getBounds().x + ruben.getVelocity().x);
         } else {
             startX = endX = (int) Math.floor(ruben.getBounds().x + ruben.getBounds().width + ruben.getVelocity().x);
         }
 
-        // get the block(s) ruben can collide with
+
         populateCollidableBlocks(startX, startY, endX, endY);
 
-        // simulate ruben's movement on the X
+
         rubenRect.x += ruben.getVelocity().x;
 
-        // clear collision boxes in world
+
         world.getCollisionRects().clear();
 
-        // if ruben collides, make his horizontal velocity 0
+
         for (Block block : collidable) {
             if (block == null) continue;
             if (rubenRect.overlaps(block.getBounds())) {
@@ -168,10 +165,8 @@ public class RubentxuController {
             }
         }
 
-        // reset the x position of the collision box
         rubenRect.x = ruben.getPosition().x;
 
-        // the same thing but on the vertical Y axis
         startX = (int) ruben.getBounds().x;
         endX = (int) (ruben.getBounds().x + ruben.getBounds().width);
         if (ruben.getVelocity().y < 0) {
@@ -195,20 +190,20 @@ public class RubentxuController {
                 break;
             }
         }
-        // reset the collision box's position on Y
+
         rubenRect.y = ruben.getPosition().y;
 
-        // update Bob's position
+
         ruben.getPosition().add(ruben.getVelocity());
         ruben.getBounds().x = ruben.getPosition().x;
         ruben.getBounds().y = ruben.getPosition().y;
 
-        // un-scale velocity (not in frame time)
+
         ruben.getVelocity().mul(1 / delta);
 
     }
 
-    /** populate the collidable array with the blocks found in the enclosing coordinates **/
+
     private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
         collidable.clear();
         for (int x = startX; x <= endX; x++) {
@@ -220,7 +215,7 @@ public class RubentxuController {
         }
     }
 
-    /** Change Bob's state and parameters based on input controls **/
+
     private boolean processInput() {
         if (keys.get(Keys.JUMP)) {
             if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
