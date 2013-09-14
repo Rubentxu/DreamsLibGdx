@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="50" height="10" tilewidth="64" tileheight="64">
+ <properties>
+  <property name="unitScale" value=".03125"/>
+ </properties>
+ <tileset firstgid="1" name="tiles" tilewidth="64" tileheight="64">
+  <image source="Genetica-tiles.png" trans="ff00ff" width="640" height="256"/>
+  <tile id="0">
+   <properties>
+    <property name="name" value="images_01"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="name" value="images_02"/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="name" value="images_03"/>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="name" value="images_04"/>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="name" value="images_05"/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="name" value="images_06"/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="name" value="images_07"/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="name" value="images_08"/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="name" value="images_09"/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="name" value="images_10"/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="name" value="images_11"/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="name" value="images_12"/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="name" value="images_13"/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="name" value="images_14"/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="name" value="images_15"/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="name" value="images_16"/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="name" value="images_17"/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="name" value="images_18"/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="name" value="images_19"/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="name" value="images_20"/>
+   </properties>
+  </tile>
+  <tile id="20">
+   <properties>
+    <property name="name" value="images_21"/>
+   </properties>
+  </tile>
+  <tile id="21">
+   <properties>
+    <property name="name" value="images_22"/>
+   </properties>
+  </tile>
+  <tile id="22">
+   <properties>
+    <property name="name" value="images_23"/>
+   </properties>
+  </tile>
+  <tile id="23">
+   <properties>
+    <property name="name" value="images_24"/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="name" value="images_25"/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="name" value="images_26"/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="name" value="images_27"/>
+   </properties>
+  </tile>
+  <tile id="27">
+   <properties>
+    <property name="name" value="images_28"/>
+   </properties>
+  </tile>
+  <tile id="28">
+   <properties>
+    <property name="name" value="images_29"/>
+   </properties>
+  </tile>
+  <tile id="29">
+   <properties>
+    <property name="name" value="images_30"/>
+   </properties>
+  </tile>
+  <tile id="30">
+   <properties>
+    <property name="name" value="images_31"/>
+   </properties>
+  </tile>
+  <tile id="31">
+   <properties>
+    <property name="name" value="images_32"/>
+   </properties>
+  </tile>
+  <tile id="32">
+   <properties>
+    <property name="name" value="images_33"/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="name" value="images_34"/>
+   </properties>
+  </tile>
+  <tile id="34">
+   <properties>
+    <property name="name" value="images_35"/>
+   </properties>
+  </tile>
+  <tile id="35">
+   <properties>
+    <property name="name" value="images_36"/>
+   </properties>
+  </tile>
+  <tile id="36">
+   <properties>
+    <property name="name" value="images_37"/>
+   </properties>
+  </tile>
+  <tile id="37">
+   <properties>
+    <property name="name" value="images_38"/>
+   </properties>
+  </tile>
+  <tile id="38">
+   <properties>
+    <property name="name" value="images_39"/>
+   </properties>
+  </tile>
+  <tile id="39">
+   <properties>
+    <property name="name" value="images_40"/>
+   </properties>
+  </tile>
+ </tileset>
+ <layer name="background" width="50" height="10">
+  <data encoding="base64" compression="zlib">
+   eJxjYmBgYBrFo3gUj+JRPIpH8ZDGAFLBA+k=
+  </data>
+ </layer>
+ <layer name="background-elements" width="50" height="10" visible="0">
+  <data encoding="base64" compression="zlib">
+   eJzNlDsOACAIQzHc/84uTo1FIdbQxQ9g8KGYxfKDvaPGGh3WBvsVRbFO5plzVLyRQdbOWKqV5XHj/6r+jIWihr+5VxXlybhU/mcXHopewvrIzr/SZ7qwQ6ny6npf1O1bivwme6sAWQ==
+  </data>
+ </layer>
+ <layer name="platform" width="50" height="10">
+  <data encoding="base64" compression="zlib">
+   eJzVVF0PwiAMPF+MOpzoeDA86KL//z9KYwkEh3Q2i3rJhX1QegelwP/DflsAg3QcFPE+cDczZsgozb1q/D8FHmfqyEE+toJ56+I55y+AfGyEc2s1uGe20DoTDaR1RR7GBXVoIa2rc+BNuKZBOiNix+PwiUAhpuoq1rzl3A7P++yVua5Yzgtpc28Y+5JD3Ufc93sjF+1P9GK0wguQtouQHq89l/T0SF7MxLee2SH1OFus5Srv5ViLGQMfG7AIfw==
+  </data>
+ </layer>
+ <objectgroup name="objects" width="50" height="10">
+  <object name="plataforma" type="object" x="706" y="589" width="1139" height="39"/>
+  <object name="plataforma2" type="object" x="773" y="139" width="238" height="45"/>
+  <object name="plataforma3" type="object" x="1025" y="260" width="121" height="47"/>
+  <object name="plataforma4" type="object" x="1298" y="391" width="368" height="43"/>
+  <object name="plataforma5" type="object" x="1666" y="394" width="54" height="33"/>
+  <object name="plataforma6" type="object" x="1731" y="461" width="54" height="33"/>
+  <object name="plataforma7" type="object" x="1783" y="523" width="128" height="31"/>
+  <object name="pared" type="object" x="645" y="368" width="50" height="269"/>
+  <object name="pared2" type="object" x="649" y="264" width="43" height="98"/>
+  <object name="suelo" type="object" x="1885" y="591" width="1261" height="37"/>
+  <object name="pared3" type="object" x="3145" y="9" width="61" height="580"/>
+  <object name="pared4" type="object" x="-21" y="14" width="63" height="496"/>
+  <object name="suelo2" type="object" x="3" y="520" width="635" height="57"/>
+  <object name="plataforma8" type="object" x="397" y="460" width="238" height="45"/>
+  <object name="pared5" type="object" x="595" y="337" width="43" height="98"/>
+  <object name="plataforma3-bis" type="object" x="1029" y="511" width="121" height="47"/>
+ </objectgroup>
+ <layer name="foreground" width="50" height="10">
+  <properties>
+   <property name="group" value="3"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJxjYCANcJCofrAC9oF2AB0AC5XMYaWSOfgAGx3sGGqAHuFOKaBGGqNmXqRWmicEsLmZ0rKR1m7Hlp44CYjRIg1Sy5/I5rAjicHczIEkRq90MdAAAJj3AIo=
+  </data>
+ </layer>
+</map>

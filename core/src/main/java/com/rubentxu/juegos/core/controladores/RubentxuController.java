@@ -1,60 +1,45 @@
 package com.rubentxu.juegos.core.controladores;
 
 
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pool;
-import com.rubentxu.juegos.core.modelo.Block;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.WorldManifold;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.World;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class RubentxuController {
+
+
     enum Keys {
         LEFT, RIGHT, JUMP, FIRE
     }
 
-    private static final long LONG_JUMP_PRESS 	= 150l;
-    private static final float ACCELERATION 	= 20f;
-    private static final float GRAVITY 			= -15f;
-    private static final float MAX_JUMP_SPEED	= 7f;
-    private static final float DAMP 			= 0.90f;
-    private static final float MAX_VEL 			= 2f;
-
     private World world;
     private Rubentxu ruben;
-    private long	jumpPressedTime;
-    private boolean jumpingPressed;
-    private boolean grounded = false;
+    float stillTime = 0;
+    long lastGroundTime = 0;
 
-    // This is the rectangle pool used in collision detection
-    // Good to avoid instantiation each frame
-    private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
-        @Override
-        protected Rectangle newObject() {
-            return new Rectangle();
-        }
-    };
+
 
     static Map<Keys, Boolean> keys = new HashMap<RubentxuController.Keys, Boolean>();
+
     static {
         keys.put(Keys.LEFT, false);
         keys.put(Keys.RIGHT, false);
         keys.put(Keys.JUMP, false);
         keys.put(Keys.FIRE, false);
-    };
-
-    // Blocks that Bob can collide with any given frame
-    private Array<Block> collidable = new Array<Block>();
+    }
 
     public RubentxuController(World world) {
         this.world = world;
-        this.ruben = world.getRubentxu();
-    }
+        this.ruben = world.getRuben();
 
-    // ** Key presses and touches **************** //
+    }
 
     public void leftPressed() {
         keys.get(keys.put(Keys.LEFT, true));
@@ -82,179 +67,158 @@ public class RubentxuController {
 
     public void jumpReleased() {
         keys.get(keys.put(Keys.JUMP, false));
-        jumpingPressed = false;
+        //jumpingPressed = false;
     }
 
     public void fireReleased() {
         keys.get(keys.put(Keys.FIRE, false));
     }
 
-    /** The main update method **/
+    /**
+     * The main update method *
+     */
     public void update(float delta) {
-
-        processInput();
-
-
-        if (grounded && ruben.getState().equals(Rubentxu.State.JUMPING)) {
-            ruben.setState(Rubentxu.State.IDLE);
-        }
-
-        // Setting initial vertical acceleration
-        ruben.getAcceleration().y = GRAVITY;
-
-        // Convert acceleration to frame time
-        ruben.getAcceleration().mul(delta);
-
-        // apply acceleration to change velocity
-        ruben.getVelocity().add(ruben.getAcceleration().x, ruben.getAcceleration().y);
-
-        checkCollisionWithBlocks(delta);
-
-        ruben.getVelocity().x *= DAMP;
-
-        // ensure terminal velocity is not exceeded
-        if (ruben.getVelocity().x > MAX_VEL) {
-            ruben.getVelocity().x = MAX_VEL;
-        }
-        if (ruben.getVelocity().x < -MAX_VEL) {
-            ruben.getVelocity().x = -MAX_VEL;
-        }
-
-        // simply updates the state time
+        processInput(delta);
         ruben.update(delta);
-
     }
 
+    public boolean processInput(float delta) {
 
-    private void checkCollisionWithBlocks(float delta) {
+       /* if (keys.get(Keys.JUMP)) {
 
-        ruben.getVelocity().mul(delta);
-
-
-        Rectangle rubenRect = rectPool.obtain();
-
-        rubenRect.set(ruben.getBounds().x, ruben.getBounds().y, ruben.getBounds().width, ruben.getBounds().height);
-
-
-        int startX, endX;
-        int startY = (int) ruben.getBounds().y;
-        int endY = (int) (ruben.getBounds().y + ruben.getBounds().height);
-
-        if (ruben.getVelocity().x < 0) {
-            startX = endX = (int) Math.floor(ruben.getBounds().x + ruben.getVelocity().x);
-        } else {
-            startX = endX = (int) Math.floor(ruben.getBounds().x + ruben.getBounds().width + ruben.getVelocity().x);
-        }
+            ruben.setState(Rubentxu.State.JUMPING);
+            //ruben.getVelocity().y = MAX_JUMP_SPEED;
+            ruben.getVelocity().y = ruben.getMovementForce();
+            grounded = false;
 
 
-        populateCollidableBlocks(startX, startY, endX, endY);
-
-
-        rubenRect.x += ruben.getVelocity().x;
-
-
-        world.getCollisionRects().clear();
-
-
-        for (Block block : collidable) {
-            if (block == null) continue;
-            if (rubenRect.overlaps(block.getBounds())) {
-                ruben.getVelocity().x = 0;
-                world.getCollisionRects().add(block.getBounds());
-                break;
-            }
-        }
-
-        rubenRect.x = ruben.getPosition().x;
-
-        startX = (int) ruben.getBounds().x;
-        endX = (int) (ruben.getBounds().x + ruben.getBounds().width);
-        if (ruben.getVelocity().y < 0) {
-            startY = endY = (int) Math.floor(ruben.getBounds().y + ruben.getVelocity().y);
-        } else {
-            startY = endY = (int) Math.floor(ruben.getBounds().y + ruben.getBounds().height + ruben.getVelocity().y);
-        }
-
-        populateCollidableBlocks(startX, startY, endX, endY);
-
-        rubenRect.y += ruben.getVelocity().y;
-
-        for (Block block : collidable) {
-            if (block == null) continue;
-            if (rubenRect.overlaps(block.getBounds())) {
-                if (ruben.getVelocity().y < 0) {
-                    grounded = true;
-                }
-                ruben.getVelocity().y = 0;
-                world.getCollisionRects().add(block.getBounds());
-                break;
-            }
-        }
-
-        rubenRect.y = ruben.getPosition().y;
-
-
-        ruben.getPosition().add(ruben.getVelocity());
-        ruben.getBounds().x = ruben.getPosition().x;
-        ruben.getBounds().y = ruben.getPosition().y;
-
-
-        ruben.getVelocity().mul(1 / delta);
-
-    }
-
-
-    private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
-        collidable.clear();
-        for (int x = startX; x <= endX; x++) {
-            for (int y = startY; y <= endY; y++) {
-                if (x >= 0 && x < world.getLevel().getWidth() && y >=0 && y < world.getLevel().getHeight()) {
-                    collidable.add(world.getLevel().get(x, y));
-                }
-            }
-        }
-    }
-
-
-    private boolean processInput() {
-        if (keys.get(Keys.JUMP)) {
-            if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
-                jumpingPressed = true;
-                jumpPressedTime = System.currentTimeMillis();
-                ruben.setState(Rubentxu.State.JUMPING);
-                ruben.getVelocity().y = MAX_JUMP_SPEED;
-                grounded = false;
-            } else {
-                if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
-                    jumpingPressed = false;
-                } else {
-                    if (jumpingPressed) {
-                        ruben.getVelocity().y = MAX_JUMP_SPEED;
-                    }
-                }
-            }
-        }
-        if (keys.get(Keys.LEFT)) {
-            // left is pressed
+        } else if (keys.get(Keys.LEFT)) {
             ruben.setFacingLeft(true);
             if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
                 ruben.setState(Rubentxu.State.WALKING);
             }
-            ruben.getAcceleration().x = -ACCELERATION;
+            ruben.getVelocity().x = -ruben.getMovementForce();
         } else if (keys.get(Keys.RIGHT)) {
-            // left is pressed
+
             ruben.setFacingLeft(false);
             if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
                 ruben.setState(Rubentxu.State.WALKING);
             }
-            ruben.getAcceleration().x = ACCELERATION;
+            ruben.getVelocity().x = ruben.getMovementForce();
         } else {
             if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
                 ruben.setState(Rubentxu.State.IDLE);
-            }
-            ruben.getAcceleration().x = 0;
 
+            }
+            ruben.getVelocity().x = 0;
+            ruben.getVelocity().y = 0;
+
+        }*/
+        Vector2 vel = ruben.getBody().getLinearVelocity();
+        Vector2 pos = ruben.getBody().getPosition();
+        ruben.setGrounded( isPlayerGrounded(Gdx.graphics.getDeltaTime()));
+        if(ruben.isGrounded()) {
+            lastGroundTime = System.nanoTime();
+        } else {
+            if(System.nanoTime() - lastGroundTime < 100000000) {
+                ruben.setGrounded( true);
+            }
+        }
+
+        // cap max velocity on x
+        if(Math.abs(vel.x) > ruben.MAX_VELOCITY) {
+            vel.x = Math.signum(vel.x) * ruben.MAX_VELOCITY;
+            ruben.getBody().setLinearVelocity(vel.x, vel.y);
+        }
+
+        // calculate stilltime & damp
+        if(!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
+            stillTime += Gdx.graphics.getDeltaTime();
+            ruben.getBody().setLinearVelocity(vel.x * 0.9f, vel.y);
+        }
+        else {
+            stillTime = 0;
+        }
+
+        if(!ruben.isGrounded()) {
+            ruben.getRubenPhysicsFixture().setFriction(0f);
+            ruben.getRubenSensorFixture().setFriction(0f);
+        } else {
+            if(!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT) && stillTime > 0.2) {
+                ruben.getRubenPhysicsFixture().setFriction(100f);
+                ruben.getRubenSensorFixture().setFriction(100f);
+            }
+            else {
+                ruben.getRubenPhysicsFixture().setFriction(0.2f);
+                ruben.getRubenSensorFixture().setFriction(0.2f);
+            }
+
+           /* if(groundedPlatform != null && groundedPlatform.dist == 0) {
+                player.applyLinearImpulse(0, -24, pos.x, pos.y);
+            }*/
+        }
+
+        // apply left impulse, but only if max velocity is not reached yet
+        if(keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
+            ruben.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
+        }
+
+        // apply right impulse, but only if max velocity is not reached yet
+        if(keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
+            ruben.getBody().applyLinearImpulse(2f, 0, pos.x, pos.y, true);
+        }
+
+        // jump, but only when grounded
+        if(keys.get(Keys.JUMP)) {
+            ruben.setJump(false);
+            if(ruben.isGrounded()) {
+                ruben.getBody().setLinearVelocity(vel.x, 0);
+                System.out.println("jump before: " + ruben.getBody().getLinearVelocity());
+                ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
+                ruben.getBody().applyLinearImpulse(0, 48, pos.x, pos.y, true);
+                System.out.println("jump, " + ruben.getBody().getLinearVelocity());
+            }
+        }
+
+
+
+
+
+        return false;
+    }
+
+    public boolean isPlayerGrounded(float deltaTime) {
+        //groundedPlatform = null;
+        List<Contact> contactList =  ruben.getPhysics().getContactList();
+        for(int i = 0; i < contactList.size(); i++) {
+            Contact contact = contactList.get(i);
+            if(contact.isTouching() && (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
+                    contact.getFixtureB() == ruben.getRubenSensorFixture())) {
+
+                Vector2 pos = ruben.getBody().getPosition();
+                WorldManifold manifold = contact.getWorldManifold();
+                boolean below = true;
+                for(int j = 0; j < manifold.getNumberOfContactPoints(); j++) {
+                    below &= (manifold.getPoints()[j].y < pos.y - 1.5f);
+                }
+                if(manifold.getNormal().y > 0) return true;
+
+                if(below) {
+                   /* if(contact.getFixtureA().getUserData() != null && contact.getFixtureA().getUserData().equals("p")) {
+                        groundedPlatform = (MovingPlatform)contact.getFixtureA().getBody().getUserData();
+                    }
+
+                    if(contact.getFixtureB().getUserData() != null && contact.getFixtureB().getUserData().equals("p")) {
+                        groundedPlatform = (MovingPlatform)contact.getFixtureB().getBody().getUserData();
+                    }*/
+                    return true;
+                }
+
+                return false;
+            }
         }
         return false;
     }
+
+
 }
