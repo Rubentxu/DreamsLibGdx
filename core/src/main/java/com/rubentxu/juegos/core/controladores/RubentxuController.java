@@ -119,6 +119,7 @@ public class RubentxuController {
         ruben.setGrounded( isPlayerGrounded(Gdx.graphics.getDeltaTime()));
         if(ruben.isGrounded()) {
             lastGroundTime = System.nanoTime();
+
         } else {
             if(System.nanoTime() - lastGroundTime < 100000000) {
                 ruben.setGrounded( true);
@@ -144,6 +145,14 @@ public class RubentxuController {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);
         } else {
+            ruben.setState(Rubentxu.State.IDLE);
+            if (keys.get(Keys.LEFT)) {
+                ruben.setFacingLeft(true);
+                ruben.setState(Rubentxu.State.WALKING);
+            } else if (keys.get(Keys.RIGHT)) {
+                ruben.setFacingLeft(false);
+                ruben.setState(Rubentxu.State.WALKING);
+            }
             if(!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT) && stillTime > 0.2) {
                 ruben.getRubenPhysicsFixture().setFriction(100f);
                 ruben.getRubenSensorFixture().setFriction(100f);
@@ -170,7 +179,7 @@ public class RubentxuController {
 
         // jump, but only when grounded
         if(keys.get(Keys.JUMP)) {
-            ruben.setJump(false);
+            ruben.setState(Rubentxu.State.JUMPING);
             if(ruben.isGrounded()) {
                 ruben.getBody().setLinearVelocity(vel.x, 0);
                 System.out.println("jump before: " + ruben.getBody().getLinearVelocity());
@@ -179,10 +188,6 @@ public class RubentxuController {
                 System.out.println("jump, " + ruben.getBody().getLinearVelocity());
             }
         }
-
-
-
-
 
         return false;
     }
@@ -199,9 +204,10 @@ public class RubentxuController {
                 WorldManifold manifold = contact.getWorldManifold();
                 boolean below = true;
                 for(int j = 0; j < manifold.getNumberOfContactPoints(); j++) {
-                    below &= (manifold.getPoints()[j].y < pos.y - 1.5f);
+                    below = (manifold.getPoints()[j].y < pos.y - 1.8f);
+                    //if (below) return true;
                 }
-                if(manifold.getNormal().y > 0) return true;
+                if(manifold.getNormal().y > pos.y-ruben.getHeight()) return true;
 
                 if(below) {
                    /* if(contact.getFixtureA().getUserData() != null && contact.getFixtureA().getUserData().equals("p")) {

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import net.dermetfan.libgdx.box2d.Box2DUtils;
 
 
 public class Rubentxu extends Entity {
@@ -18,7 +19,7 @@ public class Rubentxu extends Entity {
 
     private Fixture rubenPhysicsFixture;
     private Fixture rubenSensorFixture;
-    public final float width, height;
+
     private Vector2 velocity = new Vector2();
     public final static float MAX_VELOCITY = 7f;
     private float stateTime=0;
@@ -26,13 +27,13 @@ public class Rubentxu extends Entity {
     private boolean grounded=true;
 
 
-
     public Rubentxu(World world, float x, float y, float width, float height) {
-        super("Heroe", 1);
-        this.width = width;
-        this.height = height;
+        super("Heroe", 1,x,y,width,height);
         this.setPhysics(world.getPhysics());
         createRubenxu(world, x, y, width, height);
+        //super.setScale(height/100);
+        super.setOrigin(Box2DUtils.width(body)/2,Box2DUtils.height(body)/2);
+        super.setSize(Box2DUtils.width(body), Box2DUtils.height(body));
     }
 
     public void createRubenxu(World world, float x, float y, float width, float height) {
@@ -48,7 +49,7 @@ public class Rubentxu extends Entity {
         poly.dispose();
 
         PolygonShape sensor = new PolygonShape();
-        sensor.setAsBox(width, height/5,new Vector2(0, -height),0);
+        sensor.setAsBox(width*0.9f, height/5,new Vector2(0, -height*0.9f),0);
         rubenSensorFixture = body.createFixture(sensor, 0);
 
         sensor.dispose();
@@ -104,14 +105,6 @@ public class Rubentxu extends Entity {
 
     public Fixture getRubenSensorFixture() {
         return rubenSensorFixture;
-    }
-
-    public boolean isJump() {
-        return jump;
-    }
-
-    public void setJump(boolean jump) {
-        this.jump = jump;
     }
 
     public boolean isGrounded() {

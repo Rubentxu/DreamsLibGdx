@@ -29,7 +29,7 @@ public class World {
         parser = new Box2DMapObjectParser();
         System.out.println(getParser().getHierarchy(map));
         getParser().load(getPhysics(), map);
-        ruben = new Rubentxu(this,10, 6, 0.9f, 1.8f);
+        ruben = new Rubentxu(this,10, 6, 0.7f, 1.8f);
         assets= new AssetManager();
         font = new BitmapFont();
         getAssets().load("imagenes/test/ball.png", Texture.class);

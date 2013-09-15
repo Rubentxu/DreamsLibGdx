@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.World;
+import net.dermetfan.libgdx.box2d.Box2DUtils;
 
 public class Entity extends Sprite implements Comparable<Entity> {
 
@@ -12,7 +13,8 @@ public class Entity extends Sprite implements Comparable<Entity> {
     protected final String type;
     private World physics;
 
-    public Entity(String type, int id) {
+    public Entity(String type, int id, float x, float y, float width, float height) {
+        super();
         this.type = type;
         this.id = id;
     }

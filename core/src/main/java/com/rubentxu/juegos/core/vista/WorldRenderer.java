@@ -8,13 +8,18 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
+import net.dermetfan.libgdx.box2d.Box2DUtils;
+import net.dermetfan.libgdx.graphics.AnimatedBox2DSprite;
 import net.dermetfan.libgdx.graphics.AnimatedSprite;
 import net.dermetfan.libgdx.graphics.Box2DSprite;
+
+import java.util.ArrayList;
 
 
 public class WorldRenderer {
@@ -37,7 +42,7 @@ public class WorldRenderer {
     private Array<TextureAtlas.AtlasRegion> rubenRight;
 
     private TextureRegion blockTexture;
-    private TextureRegion rubenFrame;
+    private TextureRegion frameRuben;
     private Array<TextureAtlas.AtlasRegion> rubenJumpRight;
     private Array<TextureAtlas.AtlasRegion> rubenFallRight;
 
@@ -50,13 +55,16 @@ public class WorldRenderer {
     private SpriteBatch spriteBatch;
     private boolean debug = false;
     private int width;
-    private int height;     
+    private int height;
     private float timeJump;
     private float timefall;
     private float framesJump;
     private float framesFall;
     private Rubentxu ruben;
-
+    public static final float PIXEL_METER= 64 ;
+    public static final float METER_PIXEL= 0.015625f ;
+    private AnimatedBox2DSprite AnimationRuben;
+    private AnimatedSprite walkLeftAnimation;
 
     public void setSize (int w, int h) {
         this.width = w;
@@ -73,7 +81,6 @@ public class WorldRenderer {
 
     public WorldRenderer(final World world, boolean debug) {
         this.world = world;
-        System.out.println("Cantidad de capas:: "+world.getMap().getLayers().getCount());
         ruben = world.getRuben();
         debugRenderer = new Box2DDebugRenderer();
         renderer = new OrthogonalTiledMapRenderer(world.getMap(), world.getParser().getUnitScale());
@@ -90,8 +97,11 @@ public class WorldRenderer {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
         rubenRight=  atlas.findRegions("Andando");
-        blockTexture = atlas.findRegion("block");
+
+
+
         rubenJumpRight = atlas.findRegions("Saltando");
+
         rubenFallRight = atlas.findRegions("SaltandoDown");
         framesFall=rubenFallRight.size;
         framesJump=rubenJumpRight.size;
@@ -99,26 +109,36 @@ public class WorldRenderer {
         Animation walkRight = new Animation(RUNNING_FRAME_DURATION, rubenRight);
         walkRight.setPlayMode(Animation.LOOP);
         walkRightAnimation = new AnimatedSprite(walkRight);
-        walkRightAnimation.setCenterFrames(true);
-        walkRightAnimation.setSize(rubenRight.peek().getRegionWidth(), rubenRight.peek().getRegionHeight());
-        walkRightAnimation.setOrigin(walkRightAnimation.getWidth() / 2, walkRightAnimation.getHeight() / 2);
-        walkRightAnimation.setPosition(Gdx.graphics.getWidth() - walkRightAnimation.getWidth(), 0);
+
+
+        Array<TextureAtlas.AtlasRegion>  rubenLeft = new Array<TextureAtlas.AtlasRegion>();
+        for (TextureAtlas.AtlasRegion r: rubenRight)      {
+
+            TextureAtlas.AtlasRegion r2 = new TextureAtlas.AtlasRegion(r);
+            r2.flip(true,false);
+            rubenLeft.add(r2);
+        }
+
+        Animation walkLeft = new Animation(RUNNING_FRAME_DURATION, rubenLeft);
+        walkLeft.setPlayMode(Animation.LOOP);
+        walkLeftAnimation= new AnimatedSprite(walkLeft) ;
+
+        AnimationRuben=new AnimatedBox2DSprite(walkRightAnimation);
+        AnimationRuben.setSize(4,4f);
+        AnimationRuben.setOrigin(AnimationRuben.getWidth()/2,AnimationRuben.getHeight()/1.9f);
+        AnimationRuben.setPosition(ruben.getBody().getPosition().x-AnimationRuben.getWidth()/2,
+                ruben.getBody().getPosition().y-AnimationRuben.getHeight()/1.9f);
+
 
         Animation jumpRight = new Animation(RUNNING_FRAME_DURATION*5, rubenJumpRight);
         jumpRight.setPlayMode(Animation.LOOP);
         jumpRightAnimation = new AnimatedSprite(jumpRight);
-        jumpRightAnimation.setCenterFrames(true);
-        jumpRightAnimation.setSize(rubenJumpRight.peek().getRegionWidth(), rubenJumpRight.peek().getRegionHeight());
-        jumpRightAnimation.setOrigin(jumpRightAnimation.getWidth() / 2, jumpRightAnimation.getHeight() / 2);
-        jumpRightAnimation.setPosition(Gdx.graphics.getWidth() - jumpRightAnimation.getWidth(), 0);
+
 
         Animation fallRight = new Animation(RUNNING_FRAME_DURATION*5, rubenFallRight);
         fallRight.setPlayMode(Animation.LOOP);
         fallRightAnimation = new AnimatedSprite(fallRight);
-        fallRightAnimation.setCenterFrames(true);
-        fallRightAnimation.setSize(rubenFallRight.peek().getRegionWidth(), rubenFallRight.peek().getRegionHeight());
-        fallRightAnimation.setOrigin(fallRightAnimation.getWidth() / 2, fallRightAnimation.getHeight() / 2);
-        fallRightAnimation.setPosition(Gdx.graphics.getWidth() - fallRightAnimation.getWidth(), 0);
+
 
 
     }
@@ -130,8 +150,7 @@ public class WorldRenderer {
         drawRubentxu();
         spriteBatch.setProjectionMatrix(cam.combined);
 
-        renderer.setView(getCam());
-        renderer.render();
+
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), 4, 4);
 
         cam.position.set( world.getRuben().getBody().getPosition().x, cam.viewportHeight/2, 0);
@@ -142,12 +161,24 @@ public class WorldRenderer {
 
         spriteBatch.begin();
 
-        world.getFont().drawMultiLine(spriteBatch, "friction: " + world.getRuben().getRubenPhysicsFixture().getFriction() + "\ngrounded: "
-                + ruben.isGrounded(), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
+//        world.getFont().drawMultiLine(spriteBatch, "friction: " + world.getRuben().getRubenPhysicsFixture().getFriction() + "\ngrounded: "
+//                + ruben.isGrounded(), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
 
-        Box2DSprite.draw(spriteBatch, world.getPhysics());
+        //Box2DSprite.draw(spriteBatch, world.getPhysics());
 
-        spriteBatch.draw(rubenFrame, ruben.getBody().getPosition().x , ruben.getBody().getPosition().y , ruben.getWidth()/2, ruben.getHeight()/2);
+
+        world.getFont().drawMultiLine(spriteBatch, "RegionWidth: " + AnimationRuben.isPlaying()+ "\ngrounded: "
+                + Float.toString( AnimationRuben.getTime()), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
+
+        AnimationRuben.update();
+        AnimationRuben.draw(spriteBatch);
+
+
+
+
+
+
+
         spriteBatch.end();
 
 
@@ -167,22 +198,46 @@ public class WorldRenderer {
 
     private void drawRubentxu() {
 
+        if(ruben.isFacingLeft() ) {
+            System.out.println("A la izquierda");
+            AnimationRuben.setAnimatedSprite(walkLeftAnimation);
+        }else  {
+            System.out.println("A la Derecha");
+            AnimationRuben.setAnimatedSprite(walkRightAnimation);
+        }
+        if(ruben.getState().equals(State.IDLE)) {
+            System.out.println("Parado: ");
+            AnimationRuben.stop();
 
-        rubenFrame =  rubenRight.get(0);
+
+        } else {
+            System.out.println("Andando: ");
+            AnimationRuben.play();
+        }
+
+
         if(ruben.getState().equals(State.WALKING)) {
             timeJump=0;
             timefall=0;
 
-            rubenFrame = walkRightAnimation.getAnimation().getKeyFrame(ruben.getStateTime(), true);
+
+
+            if(ruben.isFacingLeft() ) {
+                System.out.println("A la izquierda");
+                AnimationRuben.setAnimatedSprite(walkLeftAnimation);
+            }else   {
+                System.out.println("A la Derecha");
+                AnimationRuben.setAnimatedSprite(walkRightAnimation);
+            }
         } else if (ruben.getState().equals(State.JUMPING)) {
             if (ruben.getVelocity().y > 0) {
-                System.out.println(timeJump);
+
                 if(framesJump>=timeJump){
                     timeJump=ruben.getStateTime()%framesJump;
-                    System.out.println("lo flipo"+framesJump);
                 }
-                System.out.println(timeJump);
-                    rubenFrame =jumpRightAnimation.getAnimation().getKeyFrame(timeJump,true);
+
+                AnimationRuben.setAnimatedSprite( jumpRightAnimation);
+
 
 
             } else {
@@ -190,8 +245,9 @@ public class WorldRenderer {
                 if(framesFall>=timefall){
                     timefall=ruben.getStateTime()%framesFall;
                 }
-                System.out.println(timefall);
-                rubenFrame =fallRightAnimation.getAnimation().getKeyFrame(timefall,true);
+
+
+                AnimationRuben.setAnimatedSprite( fallRightAnimation);
 
             }
         } else  {
@@ -199,11 +255,9 @@ public class WorldRenderer {
             timefall=0;
 
         }
-        if(ruben.isFacingLeft() && !rubenFrame.isFlipX()) {
-           rubenFrame.flip(true,false);
-        }else if (!ruben.isFacingLeft() && rubenFrame.isFlipX()) {
-            rubenFrame.flip(true,false);
-        }
+
+        AnimationRuben.setPosition(ruben.getBody().getPosition().x-AnimationRuben.getWidth()/2,
+                ruben.getBody().getPosition().y-AnimationRuben.getHeight()/1.9f);
 
     }
 
