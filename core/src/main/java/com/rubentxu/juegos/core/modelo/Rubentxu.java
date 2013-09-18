@@ -1,10 +1,10 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
-import net.dermetfan.libgdx.box2d.Box2DUtils;
+import com.rubentxu.juegos.core.utils.dermetfan.box2d.*;
 
 
 public class Rubentxu extends Entity {

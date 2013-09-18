@@ -1,12 +1,11 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.badlogic.gdx.math.Vector2;
-import net.dermetfan.libgdx.box2d.Box2DMapObjectParser;
+import com.badlogic.gdx.assets.*;
+import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.maps.tiled.*;
+import com.badlogic.gdx.math.*;
+import com.rubentxu.juegos.core.utils.dermetfan.box2d.*;
 
 public class World {
 

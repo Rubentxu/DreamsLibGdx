@@ -18,13 +18,7 @@
             <artifactId>gdx</artifactId>
             <version>${gdx.version}</version>
         </dependency>
-        <dependency>
-            <groupId>net.dermetfan</groupId>
-            <artifactId>libgdx</artifactId>
-            <version>1.0</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/libgdx-utils.jar</systemPath>
-        </dependency>
+
     </dependencies>
 
 

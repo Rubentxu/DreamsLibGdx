@@ -1,16 +1,14 @@
 package com.rubentxu.juegos.core.controladores;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.WorldManifold;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.badlogic.gdx.*;
+import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.*;
+import com.rubentxu.juegos.core.modelo.*;
 import com.rubentxu.juegos.core.modelo.World;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class RubentxuController {
 
@@ -194,8 +192,8 @@ public class RubentxuController {
 
     public boolean isPlayerGrounded(float deltaTime) {
         //groundedPlatform = null;
-        List<Contact> contactList =  ruben.getPhysics().getContactList();
-        for(int i = 0; i < contactList.size(); i++) {
+        Array<Contact> contactList =  ruben.getPhysics().getContactList();
+        for(int i = 0; i < contactList.size; i++) {
             Contact contact = contactList.get(i);
             if(contact.isTouching() && (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
                     contact.getFixtureB() == ruben.getRubenSensorFixture())) {
