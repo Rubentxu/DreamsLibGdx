@@ -81,7 +81,7 @@ public class WorldRenderer {
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
         Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
         rubenJumpRight = atlas.findRegions("Saltando");
-        rubenFallRight = atlas.findRegions("SaltandoDown");
+        rubenFallRight = atlas.findRegions("Cayendo");
 
         Animation walkRight = new Animation(RUNNING_FRAME_DURATION, rubenRight);
         walkRight.setPlayMode(Animation.LOOP);
@@ -98,7 +98,7 @@ public class WorldRenderer {
         fallLeftAnimation= convertToLeft(rubenFallRight,5) ;
 
         AnimationRuben=new AnimatedBox2DSprite(walkRightAnimation);
-        AnimationRuben.setSize(8f,4f);
+        AnimationRuben.setSize(2.65f,4f);
         AnimationRuben.setOrigin(AnimationRuben.getWidth()/2,AnimationRuben.getHeight()/1.9f);
         AnimationRuben.setPosition(ruben.getBody().getPosition().x-AnimationRuben.getWidth()/2,
                 ruben.getBody().getPosition().y-AnimationRuben.getHeight()/1.9f);
