@@ -10,6 +10,7 @@ import com.rubentxu.juegos.core.modelo.World;
 
 import java.util.*;
 
+
 public class RubentxuController {
 
 
@@ -24,7 +25,7 @@ public class RubentxuController {
 
 
 
-    static Map<Keys, Boolean> keys = new HashMap<RubentxuController.Keys, Boolean>();
+    static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
 
     static {
         keys.put(Keys.LEFT, false);
@@ -115,14 +116,7 @@ public class RubentxuController {
         Vector2 vel = ruben.getBody().getLinearVelocity();
         Vector2 pos = ruben.getBody().getPosition();
         ruben.setGrounded( isPlayerGrounded(Gdx.graphics.getDeltaTime()));
-        if(ruben.isGrounded()) {
-            lastGroundTime = System.nanoTime();
 
-        } else {
-            if(System.nanoTime() - lastGroundTime < 100000000) {
-                ruben.setGrounded( true);
-            }
-        }
 
         // cap max velocity on x
         if(Math.abs(vel.x) > ruben.MAX_VELOCITY) {
@@ -142,6 +136,7 @@ public class RubentxuController {
         if(!ruben.isGrounded()) {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);
+            if(!ruben.getState().equals(Rubentxu.State.JUMPING)) ruben.setState(Rubentxu.State.FALL);
         } else {
             ruben.setState(Rubentxu.State.IDLE);
             if (keys.get(Keys.LEFT)) {
@@ -200,7 +195,15 @@ public class RubentxuController {
 
                 Vector2 pos = ruben.getBody().getPosition();
                 WorldManifold manifold = contact.getWorldManifold();
-                boolean below = true;
+                float anguloColision;
+                anguloColision= new Vector2(manifold.getNormal().x,manifold.getNormal().y).angle()
+                        ;
+                anguloColision= (float) ((anguloColision * 180f / Math.PI) + 360f) % 360f ;
+                 if (anguloColision > 45f && anguloColision < 135f) return true;
+
+
+
+             /*   boolean below = true;
                 for(int j = 0; j < manifold.getNumberOfContactPoints(); j++) {
                     below = (manifold.getPoints()[j].y < pos.y - 1.8f);
                     //if (below) return true;
@@ -208,15 +211,15 @@ public class RubentxuController {
                 if(manifold.getNormal().y > pos.y-ruben.getHeight()) return true;
 
                 if(below) {
-                   /* if(contact.getFixtureA().getUserData() != null && contact.getFixtureA().getUserData().equals("p")) {
+                   *//* if(contact.getFixtureA().getUserData() != null && contact.getFixtureA().getUserData().equals("p")) {
                         groundedPlatform = (MovingPlatform)contact.getFixtureA().getBody().getUserData();
                     }
 
                     if(contact.getFixtureB().getUserData() != null && contact.getFixtureB().getUserData().equals("p")) {
                         groundedPlatform = (MovingPlatform)contact.getFixtureB().getBody().getUserData();
-                    }*/
+                    }*//*
                     return true;
-                }
+                }*/
 
                 return false;
             }

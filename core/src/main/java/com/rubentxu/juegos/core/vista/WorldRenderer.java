@@ -27,6 +27,7 @@ public class WorldRenderer {
     /** Textures **/
     private Array<TextureAtlas.AtlasRegion> rubenJumpRight;
     private Array<TextureAtlas.AtlasRegion> rubenFallRight;
+    private Array<TextureAtlas.AtlasRegion> rubenIdleRight;
 
     /** Animations **/
     private AnimatedBox2DSprite AnimationRuben;
@@ -36,6 +37,8 @@ public class WorldRenderer {
     private AnimatedSprite walkLeftAnimation;
     private AnimatedSprite jumpLeftAnimation;
     private AnimatedSprite fallLeftAnimation;
+    private AnimatedSprite idleRightAnimation;
+    private AnimatedSprite idleLeftAnimation;
 
     private SpriteBatch spriteBatch;
     private boolean debug = false;
@@ -43,9 +46,11 @@ public class WorldRenderer {
     private int height;
     private float timeJump;
     private float timefall;
+    private float timeIdle;
     private Rubentxu ruben;
     private float framesJump;
     private float framesFall;
+
 
 
     public void setSize (int w, int h) {
@@ -82,20 +87,27 @@ public class WorldRenderer {
         Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
         rubenJumpRight = atlas.findRegions("Saltando");
         rubenFallRight = atlas.findRegions("Cayendo");
+        rubenIdleRight = atlas.findRegions("Parado");
 
         Animation walkRight = new Animation(RUNNING_FRAME_DURATION, rubenRight);
         walkRight.setPlayMode(Animation.LOOP);
         walkRightAnimation = new AnimatedSprite(walkRight);
 
-        Animation jumpRight = new Animation(RUNNING_FRAME_DURATION*5, rubenJumpRight);
+        Animation jumpRight = new Animation(RUNNING_FRAME_DURATION*7, rubenJumpRight);
         jumpRightAnimation = new AnimatedSprite(jumpRight);
         Animation fallRight = new Animation(RUNNING_FRAME_DURATION*5, rubenFallRight);
         fallRightAnimation = new AnimatedSprite(fallRight);
 
+        Animation idleRight = new Animation(RUNNING_FRAME_DURATION*4, rubenIdleRight);
+        idleRight.setPlayMode(Animation.LOOP);
+        idleRightAnimation = new AnimatedSprite(idleRight);
+
         walkLeftAnimation= convertToLeft(rubenRight,1);
         walkLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
-        jumpLeftAnimation= convertToLeft(rubenJumpRight,5) ;
+        jumpLeftAnimation= convertToLeft(rubenJumpRight,7) ;
         fallLeftAnimation= convertToLeft(rubenFallRight,5) ;
+        idleLeftAnimation= convertToLeft(rubenIdleRight,4);
+        idleLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
 
         AnimationRuben=new AnimatedBox2DSprite(walkRightAnimation);
         AnimationRuben.setSize(2.65f,4f);
@@ -158,22 +170,34 @@ public class WorldRenderer {
         if(ruben.getState().equals(State.IDLE)) {
             System.out.println("Parado: ");
             if(walkRightAnimation.getTime()==0 && walkLeftAnimation.getTime()==0) AnimationRuben.stop();
-
+            timeIdle+= Gdx.graphics.getDeltaTime();
             walkRightAnimation.setTime(0);
             walkLeftAnimation.setTime(0);
 
-        } else {
-            System.out.println("Andando: ");
-            AnimationRuben.play();
+            if (timeIdle > 2){
+                if(ruben.isFacingLeft() ) {
+                    System.out.println("A la izquierda");
+                    AnimationRuben.setAnimatedSprite(idleLeftAnimation);
+                }else   {
+                    System.out.println("A la Derecha");
+                    AnimationRuben.setAnimatedSprite(idleRightAnimation);
+                }
+            }
+
         }
 
         if(ruben.getState().equals(State.WALKING)) {
             timeJump=0;
             timefall=0;
+            timeIdle=0;
+            System.out.println("Andando: ");
+            AnimationRuben.play();
             jumpRightAnimation.setTime(0);
             fallRightAnimation.setTime(0);
             jumpLeftAnimation.setTime(0);
             fallLeftAnimation.setTime(0);
+            idleLeftAnimation.setTime(0);
+            idleRightAnimation.setTime(0);
 
             if(ruben.isFacingLeft() ) {
                 System.out.println("A la izquierda");
@@ -184,7 +208,7 @@ public class WorldRenderer {
             }
         } else if (ruben.getState().equals(State.JUMPING)) {
             if (ruben.getVelocity().y > 0) {
-
+                System.out.println("Salto");
                 if(framesJump>=timeJump){
                     timeJump=ruben.getStateTime()%framesJump;
                 }
@@ -195,19 +219,20 @@ public class WorldRenderer {
                 }
 
             } else {
-                if(framesFall>=timefall){
-                    timefall=ruben.getStateTime()%framesFall;
-                }
+                System.out.println("Cayendo");
+
                 if(ruben.isFacingLeft() ) {
                     AnimationRuben.setAnimatedSprite(fallLeftAnimation);
                 }else   {
                     AnimationRuben.setAnimatedSprite( fallRightAnimation);
                 }
             }
-        } else  {
-            timeJump=0;
-            timefall=0;
-
+        } else if (ruben.getState().equals(State.FALL))  {
+            if(ruben.isFacingLeft() ) {
+                AnimationRuben.setAnimatedSprite(fallLeftAnimation);
+            }else   {
+                AnimationRuben.setAnimatedSprite( fallRightAnimation);
+            }
         }
 
         AnimationRuben.setPosition(ruben.getBody().getPosition().x-AnimationRuben.getWidth()/2,

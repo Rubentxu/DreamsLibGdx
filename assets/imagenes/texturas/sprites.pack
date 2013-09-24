@@ -58,13 +58,6 @@ Andando
   orig: 124, 188
   offset: 0, 0
   index: 2
-Saltando
-  rotate: false
-  xy: 632, 1142
-  size: 124, 188
-  orig: 124, 188
-  offset: 0, 0
-  index: 9
 Parado
   rotate: false
   xy: 506, 952
@@ -114,13 +107,6 @@ Andando
   orig: 124, 188
   offset: 0, 0
   index: 5
-Saltando
-  rotate: false
-  xy: 254, 1142
-  size: 124, 188
-  orig: 124, 188
-  offset: 0, 0
-  index: 6
 Andando
   rotate: false
   xy: 128, 382
@@ -163,13 +149,6 @@ Andando
   orig: 124, 188
   offset: 0, 0
   index: 12
-Saltando
-  rotate: false
-  xy: 380, 1142
-  size: 124, 188
-  orig: 124, 188
-  offset: 0, 0
-  index: 7
 Parado
   rotate: false
   xy: 254, 952
@@ -345,13 +324,6 @@ Andando
   orig: 124, 188
   offset: 0, 0
   index: 20
-Saltando
-  rotate: false
-  xy: 128, 1142
-  size: 124, 188
-  orig: 124, 188
-  offset: 0, 0
-  index: 5
 Parado
   rotate: false
   xy: 758, 762
@@ -366,13 +338,6 @@ Andando
   orig: 124, 188
   offset: 0, 0
   index: 11
-Saltando
-  rotate: false
-  xy: 506, 1142
-  size: 124, 188
-  orig: 124, 188
-  offset: 0, 0
-  index: 8
 Parado
   rotate: false
   xy: 128, 952

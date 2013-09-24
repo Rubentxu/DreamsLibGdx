@@ -11,7 +11,7 @@ public class Rubentxu extends Entity {
 
 
     public enum State {
-        IDLE, WALKING, JUMPING, DYING
+        IDLE, WALKING, JUMPING, DYING, FALL
     }
 
     State state = State.IDLE;
@@ -20,7 +20,7 @@ public class Rubentxu extends Entity {
     private Fixture rubenPhysicsFixture;
     private Fixture rubenSensorFixture;
 
-    private Vector2 velocity = new Vector2();
+
     public final static float MAX_VELOCITY = 7f;
     private float stateTime=0;
     private boolean jump = false;
@@ -69,7 +69,7 @@ public class Rubentxu extends Entity {
     }
 
     public Vector2 getVelocity() {
-        return velocity;
+        return body.getLinearVelocity();
     }
 
 
