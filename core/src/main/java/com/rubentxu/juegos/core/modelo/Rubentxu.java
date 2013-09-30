@@ -4,10 +4,11 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.physics.box2d.*;
+import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.*;
 
 
-public class Rubentxu extends Entity {
+public class Rubentxu extends Box2DPhysicsObject {
 
 
     public enum State {
@@ -22,40 +23,35 @@ public class Rubentxu extends Entity {
 
 
     public final static float MAX_VELOCITY = 7f;
-    private float stateTime=0;
-    private boolean jump = false;
+    public final static float JUMP_FORCE = 58f;
     private boolean grounded=true;
 
 
     public Rubentxu(World world, float x, float y, float width, float height) {
-        super("Heroe", 1,x,y,width,height);
-        this.setPhysics(world.getPhysics());
+        super("Heroe", grupos.HEROES,world.getPhysics(),x,y,width,height,0);
         createRubenxu(world, x, y, width, height);
-        //super.setScale(height/100);
-        super.setOrigin(Box2DUtils.width(body)/2,Box2DUtils.height(body)/2);
-        super.setSize(Box2DUtils.width(body), Box2DUtils.height(body));
+        preContactCallEnabled = true;
+        beginContactCallEnabled = true;
+        endContactCallEnabled = true;
     }
 
     public void createRubenxu(World world, float x, float y, float width, float height) {
+        defineBody();
+        createBody();
+        body.setFixedRotation(true);
+        body.setSleepingAllowed(false);
 
-        BodyDef def = new BodyDef();
-        def.type = BodyDef.BodyType.DynamicBody;
-        def.fixedRotation=true ;
-        body =  world.getPhysics().createBody(def);
-
-        PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width, height);
-        rubenPhysicsFixture = body.createFixture(poly, 1);
+        PolygonShape poly= (PolygonShape) createShape(width,height,0);
+        rubenPhysicsFixture = createFixture(defineFixture(poly));
+        rubenPhysicsFixture.setRestitution(0);
         poly.dispose();
 
-        PolygonShape sensor = new PolygonShape();
-        sensor.setAsBox(width*0.9f, height/5,new Vector2(0, -height*0.9f),0);
-        rubenSensorFixture = body.createFixture(sensor, 0);
-
+        PolygonShape sensor = (PolygonShape) createShape(width*0.9f, height/5,new Vector2(0, -height*0.9f),0);
+        rubenSensorFixture = createFixture(defineFixture(sensor));
+        rubenSensorFixture.setRestitution(0);
         sensor.dispose();
 
         body.setBullet(true);
-        body.setTransform(x, y, 0);
 
     }
 
@@ -85,20 +81,6 @@ public class Rubentxu extends Entity {
         return body;
     }
 
-    public void update(float delta) {
-
-
-
-    }
-
-    public float getStateTime() {
-        return stateTime;
-    }
-
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
-    }
-
     public Fixture getRubenPhysicsFixture() {
         return rubenPhysicsFixture;
     }
@@ -116,10 +98,19 @@ public class Rubentxu extends Entity {
     }
 
     @Override
-    public void draw(SpriteBatch spriteBatch){
-        update(Gdx.graphics.getDeltaTime());
-        super.draw(spriteBatch);
+    public void handlePreSolve(Contact contact, Manifold oldManifold) {
+
+
+        IBox2DPhysicsObject otro= (IBox2DPhysicsObject) ((this == contact.getFixtureA().getBody().getUserData()) ?
+                        contact.getFixtureB().getBody().getUserData() : contact.getFixtureA().getBody().getUserData());
+
+        float heroTop= getY();
+        float objectBottom= otro.getY() + (otro.getHeight()/2);
+
+        if(objectBottom<heroTop) contact.setEnabled(false);
+
     }
+
 
 
 

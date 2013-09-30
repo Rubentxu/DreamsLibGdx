@@ -18,23 +18,17 @@ public interface IBox2DPhysicsObject {
     public float getY();
     public void setY(float value);
     public float getRotation();
-    public void setRotation(float value);
     public float getWidth();
-    public float setWidth(float value);
     public float getHeight();
-    public float setHeight(float value);
-    public float getDepth();
-    public float getRadius();
-    public float setRadius(float value);
     public Body getBody();
     
 
     public Boolean getBeginContactCallEnabled();
-    public Boolean setBeginContactCallEnabled(Boolean value);
+    public void setBeginContactCallEnabled(Boolean value);
     public Boolean getEndContactCallEnabled();
-    public Boolean setEndContactCallEnabled(Boolean value);
+    public void setEndContactCallEnabled(Boolean value);
     public Boolean getPreContactCallEnabled();
-    public Boolean setPreContactCallEnabled(Boolean value);
+    public void setPreContactCallEnabled(Boolean value);
     public Boolean getPostContactCallEnabled();
-    public Boolean setPostContactCallEnabled(Boolean value);
+    public void setPostContactCallEnabled(Boolean value);
 }

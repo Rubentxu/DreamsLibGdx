@@ -44,8 +44,6 @@ public class WorldRenderer {
     private boolean debug = false;
     private int width;
     private int height;
-    private float timeJump;
-    private float timefall;
     private float timeIdle;
     private Rubentxu ruben;
     private float framesJump;
@@ -187,8 +185,6 @@ public class WorldRenderer {
         }
 
         if(ruben.getState().equals(State.WALKING)) {
-            timeJump=0;
-            timefall=0;
             timeIdle=0;
             System.out.println("Andando: ");
             AnimationRuben.play();
@@ -209,9 +205,6 @@ public class WorldRenderer {
         } else if (ruben.getState().equals(State.JUMPING)) {
             if (ruben.getVelocity().y > 0) {
                 System.out.println("Salto");
-                if(framesJump>=timeJump){
-                    timeJump=ruben.getStateTime()%framesJump;
-                }
                 if(ruben.isFacingLeft() ) {
                     AnimationRuben.setAnimatedSprite(jumpLeftAnimation);
                 }else   {

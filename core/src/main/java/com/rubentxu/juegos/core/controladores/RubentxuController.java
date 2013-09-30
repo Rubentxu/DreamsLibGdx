@@ -21,9 +21,6 @@ public class RubentxuController {
     private World world;
     private Rubentxu ruben;
     float stillTime = 0;
-    long lastGroundTime = 0;
-
-
 
     static Map<Keys, Boolean> keys = new HashMap<Keys, Boolean>();
 
@@ -78,44 +75,13 @@ public class RubentxuController {
      */
     public void update(float delta) {
         processInput(delta);
-        ruben.update(delta);
     }
 
     public boolean processInput(float delta) {
 
-       /* if (keys.get(Keys.JUMP)) {
-
-            ruben.setState(Rubentxu.State.JUMPING);
-            //ruben.getVelocity().y = MAX_JUMP_SPEED;
-            ruben.getVelocity().y = ruben.getMovementForce();
-            grounded = false;
-
-
-        } else if (keys.get(Keys.LEFT)) {
-            ruben.setFacingLeft(true);
-            if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
-                ruben.setState(Rubentxu.State.WALKING);
-            }
-            ruben.getVelocity().x = -ruben.getMovementForce();
-        } else if (keys.get(Keys.RIGHT)) {
-
-            ruben.setFacingLeft(false);
-            if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
-                ruben.setState(Rubentxu.State.WALKING);
-            }
-            ruben.getVelocity().x = ruben.getMovementForce();
-        } else {
-            if (!ruben.getState().equals(Rubentxu.State.JUMPING)) {
-                ruben.setState(Rubentxu.State.IDLE);
-
-            }
-            ruben.getVelocity().x = 0;
-            ruben.getVelocity().y = 0;
-
-        }*/
         Vector2 vel = ruben.getBody().getLinearVelocity();
         Vector2 pos = ruben.getBody().getPosition();
-        ruben.setGrounded( isPlayerGrounded(Gdx.graphics.getDeltaTime()));
+        ruben.setGrounded( isPlayerGrounded(delta));
 
 
         // cap max velocity on x
@@ -177,7 +143,7 @@ public class RubentxuController {
                 ruben.getBody().setLinearVelocity(vel.x, 0);
                 System.out.println("jump before: " + ruben.getBody().getLinearVelocity());
                 ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-                ruben.getBody().applyLinearImpulse(0, 48, pos.x, pos.y, true);
+                ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
                 System.out.println("jump, " + ruben.getBody().getLinearVelocity());
             }
         }
@@ -187,7 +153,7 @@ public class RubentxuController {
 
     public boolean isPlayerGrounded(float deltaTime) {
         //groundedPlatform = null;
-        Array<Contact> contactList =  ruben.getPhysics().getContactList();
+        Array<Contact> contactList =  world.getPhysics().getContactList();
         for(int i = 0; i < contactList.size; i++) {
             Contact contact = contactList.get(i);
             if(contact.isTouching() && (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
