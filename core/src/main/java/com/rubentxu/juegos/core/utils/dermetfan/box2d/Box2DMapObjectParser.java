@@ -266,7 +266,13 @@ public class Box2DMapObjectParser {
             Polyline polyline = ((PolylineMapObject) mapObject).getPolyline();
             polyline.setPosition(polyline.getX() * unitScale - body.getPosition().x, polyline.getY() * unitScale - body.getPosition().y);
             polyline.setScale(unitScale, unitScale);
-            ((ChainShape) shape).createChain(polyline.getTransformedVertices());
+            float[] vertices= polyline.getTransformedVertices();
+            Vector2[] vectores= new Vector2[vertices.length / 2];
+            for (int i = 0,j=0; i < vertices.length; i += 2,j++) {
+                vectores[j].x = vertices[i];
+                vectores[j].y  = vertices[i + 1];
+            }
+            ((ChainShape) shape).createChain(vectores);
         } else if(mapObject instanceof CircleMapObject) {
             shape = new CircleShape();
             Circle circle = ((CircleMapObject) mapObject).getCircle();
@@ -276,6 +282,15 @@ public class Box2DMapObjectParser {
             ((CircleShape) shape).setRadius(circle.radius);
         } else if(mapObject instanceof EllipseMapObject) {
             Ellipse ellipse = ((EllipseMapObject) mapObject).getEllipse();
+
+             /*
+		b2ChainShape* chain = (b2ChainShape*)addr;
+		b2Vec2* verticesOut = new b2Vec2[numVertices];
+		for( int i = 0; i < numVertices; i++ )
+			verticesOut[i] = b2Vec2(verts[i<<1], verts[(i<<1)+1]);
+		chain->CreateChain( verticesOut, numVertices );
+		delete verticesOut;
+	*/
 
             if(ellipse.width == ellipse.height) {
                 CircleMapObject circleMapObject = new CircleMapObject(ellipse.x, ellipse.y, ellipse.width / 2);
@@ -287,12 +302,12 @@ public class Box2DMapObjectParser {
                 return createFixture(circleMapObject);
             }
 
-            IllegalArgumentException exception = new IllegalArgumentException("Cannot parse " + mapObject.getName() + " because " + mapObject.getClass().getSimpleName() + "s that are not circles are not supported");
-            Gdx.app.error(getClass().getSimpleName(), exception.getMessage(), exception);
+            IllegalArgumentException exception = new IllegalArgumentException("Cannot parse " + mapObject.getName() + " because  that are not circles are not supported");
+            Gdx.app.error(getClass().getName(), exception.getMessage(), exception);
             throw exception;
         } else if(mapObject instanceof TextureMapObject) {
-            IllegalArgumentException exception = new IllegalArgumentException("Cannot parse " + mapObject.getName() + " because " + mapObject.getClass().getSimpleName() + "s are not supported");
-            Gdx.app.error(getClass().getSimpleName(), exception.getMessage(), exception);
+            IllegalArgumentException exception = new IllegalArgumentException("Cannot parse " + mapObject.getName() + " because s are not supported");
+            Gdx.app.error(getClass().getName(), exception.getMessage(), exception);
             throw exception;
         } else
             assert false : mapObject + " is a not known subclass of " + MapObject.class.getName();
@@ -529,14 +544,14 @@ public class Box2DMapObjectParser {
      * @return a human readable {@link String} containing the hierarchy of the {@link MapObjects} of the given {@link Map}
      */
     public String getHierarchy(Map map) {
-        String hierarchy = map.getClass().getSimpleName() + "\n", key, layerHierarchy;
+        String hierarchy = map.getClass().getName() + "\n", key, layerHierarchy;
 
         Iterator<String> keys = map.getProperties().getKeys();
         while(keys.hasNext())
             hierarchy += (key = keys.next()) + ": " + map.getProperties().get(key) + "\n";
 
         for(MapLayer layer : map.getLayers()) {
-            hierarchy += "\t" + layer.getName() + " (" + layer.getClass().getSimpleName() + "):\n";
+            hierarchy += "\t" + layer.getName() + " (" + layer.getClass().getName() + "):\n";
             layerHierarchy = getHierarchy(layer).replace("\n", "\n\t\t");
             layerHierarchy = layerHierarchy.endsWith("\n\t\t") ? layerHierarchy.substring(0, layerHierarchy.lastIndexOf("\n\t\t")) : layerHierarchy;
             hierarchy += !layerHierarchy.equals("") ? "\t\t" + layerHierarchy : layerHierarchy;
@@ -553,7 +568,7 @@ public class Box2DMapObjectParser {
         String hierarchy = "", key;
 
         for(MapObject object : layer.getObjects()) {
-            hierarchy += object.getName() + " (" + object.getClass().getSimpleName() + "):\n";
+            hierarchy += object.getName() + " (" + object.getClass().getName() + "):\n";
             Iterator<String> keys = object.getProperties().getKeys();
             while(keys.hasNext())
                 hierarchy += "\t" + (key = keys.next()) + ": " + object.getProperties().get(key) + "\n";

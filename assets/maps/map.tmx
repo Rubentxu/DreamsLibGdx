@@ -3,7 +3,7 @@
  <properties>
   <property name="unitScale" value=".03125"/>
  </properties>
- <tileset firstgid="1" name="tiles" tilewidth="64" tileheight="64">
+ <tileset firstgid="1" name="tilesDreams" tilewidth="64" tileheight="64">
   <image source="Genetica-tiles.png" trans="ff00ff" width="640" height="256"/>
   <tile id="0">
    <properties>
@@ -211,7 +211,7 @@
    eJxjYmBgYBrFo3gUj+JRPIpH8ZDGAFLBA+k=
   </data>
  </layer>
- <layer name="background-elements" width="50" height="10" visible="0">
+ <layer name="background-elements" width="50" height="10">
   <data encoding="base64" compression="zlib">
    eJzNlDsOACAIQzHc/84uTo1FIdbQxQ9g8KGYxfKDvaPGGh3WBvsVRbFO5plzVLyRQdbOWKqV5XHj/6r+jIWihr+5VxXlybhU/mcXHopewvrIzr/SZ7qwQ6ny6npf1O1bivwme6sAWQ==
   </data>

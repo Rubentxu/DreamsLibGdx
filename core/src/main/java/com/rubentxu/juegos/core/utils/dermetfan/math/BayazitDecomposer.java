@@ -431,7 +431,7 @@ public abstract class BayazitDecomposer {
 			if(vertices.size <= 3)
 				return vertices;
 			if(areaTolerance < 0)
-				throw new InvalidParameterException("areaTolerance: must be equal to or greater then zero.");
+				throw new IllegalArgumentException("areaTolerance: must be equal to or greater then zero.");
 			Array<Vector2> result = new Array<Vector2>();
 			Vector2 v1, v2, v3;
 			float old1, old2, new1;
@@ -441,7 +441,7 @@ public abstract class BayazitDecomposer {
 			for(int index = 0; index < vertices.size; ++index, v2 = v3) {
 				if(index == vertices.size - 1) {
 					if(result.size == 0)
-						throw new InvalidParameterException("areaTolerance: The tolerance is too high!");
+						throw new IllegalArgumentException("areaTolerance: The tolerance is too high!");
 					v3 = result.get(0);
 				} else
 					v3 = vertices.get(index);

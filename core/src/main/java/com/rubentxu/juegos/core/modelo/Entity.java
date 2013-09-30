@@ -63,21 +63,5 @@ public class Entity extends Sprite implements Comparable<Entity> {
         this.physics = physics;
     }
 
-    public String toString() {
-        return String.format(
-                "[Entity]:\n" +
-                        "\ttype: %s\n" +
-                        "\tid: %d\n" +
-                        "\tconnection: %d" +
-                        "\tpos: %s\n" +
-                        "\trot: %G\n" +
-                        "\tvel: %s\n" +
-                        "\trot-vel: %G",
-                type, id,
-                getPos().toString(),
-                getRotation(),
-                getBody().getLinearVelocity().toString(),
-                getBody().getAngularVelocity()
-        );
-    }
+
 }
