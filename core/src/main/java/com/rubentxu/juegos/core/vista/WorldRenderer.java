@@ -143,7 +143,7 @@ public class WorldRenderer {
 
         spriteBatch.begin();
 //        world.getFont().drawMultiLine(spriteBatch, "friction: " + world.getRuben().getRubenPhysicsFixture().getFriction() + "\ngrounded: "
-//                + ruben.isGrounded(), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
+//                + ruben.isOnGround(), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
 
         world.getFont().drawMultiLine(spriteBatch, "RegionWidth: " + AnimationRuben.isPlaying()+ "\ngrounded: "
                 + Float.toString( AnimationRuben.getTime()), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
@@ -159,14 +159,11 @@ public class WorldRenderer {
     private void drawRubentxu() {
 
         if(ruben.isFacingLeft() ) {
-            System.out.println("A la izquierda");
             AnimationRuben.setAnimatedSprite(walkLeftAnimation);
         }else  {
-            System.out.println("A la Derecha");
             AnimationRuben.setAnimatedSprite(walkRightAnimation);
         }
         if(ruben.getState().equals(State.IDLE)) {
-            System.out.println("Parado: ");
             if(walkRightAnimation.getTime()==0 && walkLeftAnimation.getTime()==0) AnimationRuben.stop();
             timeIdle+= Gdx.graphics.getDeltaTime();
             walkRightAnimation.setTime(0);
@@ -174,10 +171,8 @@ public class WorldRenderer {
 
             if (timeIdle > 2){
                 if(ruben.isFacingLeft() ) {
-                    System.out.println("A la izquierda");
                     AnimationRuben.setAnimatedSprite(idleLeftAnimation);
                 }else   {
-                    System.out.println("A la Derecha");
                     AnimationRuben.setAnimatedSprite(idleRightAnimation);
                 }
             }
@@ -186,7 +181,6 @@ public class WorldRenderer {
 
         if(ruben.getState().equals(State.WALKING)) {
             timeIdle=0;
-            System.out.println("Andando: ");
             AnimationRuben.play();
             jumpRightAnimation.setTime(0);
             fallRightAnimation.setTime(0);
@@ -196,15 +190,12 @@ public class WorldRenderer {
             idleRightAnimation.setTime(0);
 
             if(ruben.isFacingLeft() ) {
-                System.out.println("A la izquierda");
                 AnimationRuben.setAnimatedSprite(walkLeftAnimation);
             }else   {
-                System.out.println("A la Derecha");
                 AnimationRuben.setAnimatedSprite(walkRightAnimation);
             }
         } else if (ruben.getState().equals(State.JUMPING)) {
             if (ruben.getVelocity().y > 0) {
-                System.out.println("Salto");
                 if(ruben.isFacingLeft() ) {
                     AnimationRuben.setAnimatedSprite(jumpLeftAnimation);
                 }else   {
@@ -212,7 +203,6 @@ public class WorldRenderer {
                 }
 
             } else {
-                System.out.println("Cayendo");
 
                 if(ruben.isFacingLeft() ) {
                     AnimationRuben.setAnimatedSprite(fallLeftAnimation);

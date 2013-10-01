@@ -1,14 +1,16 @@
 package com.rubentxu.juegos.core.controladores;
 
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.utils.*;
-import com.rubentxu.juegos.core.modelo.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.WorldManifold;
+import com.badlogic.gdx.utils.Array;
+import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.World;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class RubentxuController {
@@ -81,28 +83,27 @@ public class RubentxuController {
 
         Vector2 vel = ruben.getBody().getLinearVelocity();
         Vector2 pos = ruben.getBody().getPosition();
-        ruben.setGrounded( isPlayerGrounded(delta));
+       // ruben.setOnGround(isPlayerGrounded(delta));
 
 
         // cap max velocity on x
-        if(Math.abs(vel.x) > ruben.MAX_VELOCITY) {
+        if (Math.abs(vel.x) > ruben.MAX_VELOCITY) {
             vel.x = Math.signum(vel.x) * ruben.MAX_VELOCITY;
             ruben.getBody().setLinearVelocity(vel.x, vel.y);
         }
 
         // calculate stilltime & damp
-        if(!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
+        if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
             stillTime += Gdx.graphics.getDeltaTime();
             ruben.getBody().setLinearVelocity(vel.x * 0.9f, vel.y);
-        }
-        else {
+        } else {
             stillTime = 0;
         }
 
-        if(!ruben.isGrounded()) {
+        if (!ruben.onGround()) {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);
-            if(!ruben.getState().equals(Rubentxu.State.JUMPING)) ruben.setState(Rubentxu.State.FALL);
+            if (!ruben.getState().equals(Rubentxu.State.JUMPING)) ruben.setState(Rubentxu.State.FALL);
         } else {
             ruben.setState(Rubentxu.State.IDLE);
             if (keys.get(Keys.LEFT)) {
@@ -112,11 +113,10 @@ public class RubentxuController {
                 ruben.setFacingLeft(false);
                 ruben.setState(Rubentxu.State.WALKING);
             }
-            if(!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT) && stillTime > 0.2) {
+            if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT) && stillTime > 0.2) {
                 ruben.getRubenPhysicsFixture().setFriction(100f);
                 ruben.getRubenSensorFixture().setFriction(100f);
-            }
-            else {
+            } else {
                 ruben.getRubenPhysicsFixture().setFriction(0.2f);
                 ruben.getRubenSensorFixture().setFriction(0.2f);
             }
@@ -127,49 +127,47 @@ public class RubentxuController {
         }
 
         // apply left impulse, but only if max velocity is not reached yet
-        if(keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
+        if (keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
             ruben.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
         }
 
         // apply right impulse, but only if max velocity is not reached yet
-        if(keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
+        if (keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
             ruben.getBody().applyLinearImpulse(2f, 0, pos.x, pos.y, true);
         }
 
         // jump, but only when grounded
-        if(keys.get(Keys.JUMP)) {
+        if (keys.get(Keys.JUMP)) {
             ruben.setState(Rubentxu.State.JUMPING);
-            if(ruben.isGrounded()) {
+            if (ruben.onGround()) {
                 ruben.getBody().setLinearVelocity(vel.x, 0);
-                System.out.println("jump before: " + ruben.getBody().getLinearVelocity());
                 ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
                 ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
-                System.out.println("jump, " + ruben.getBody().getLinearVelocity());
+
             }
         }
 
         return false;
     }
 
-    public boolean isPlayerGrounded(float deltaTime) {
+    /*public boolean isPlayerGrounded(float deltaTime) {
         //groundedPlatform = null;
-        Array<Contact> contactList =  world.getPhysics().getContactList();
-        for(int i = 0; i < contactList.size; i++) {
+        Array<Contact> contactList = world.getPhysics().getContactList();
+        for (int i = 0; i < contactList.size; i++) {
             Contact contact = contactList.get(i);
-            if(contact.isTouching() && (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
+            if (contact.isTouching() && (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
                     contact.getFixtureB() == ruben.getRubenSensorFixture())) {
 
                 Vector2 pos = ruben.getBody().getPosition();
                 WorldManifold manifold = contact.getWorldManifold();
-                float anguloColision;
-                anguloColision= new Vector2(manifold.getNormal().x,manifold.getNormal().y).angle()
-                        ;
-                anguloColision= (float) ((anguloColision * 180f / Math.PI) + 360f) % 360f ;
-                 if (anguloColision > 45f && anguloColision < 135f) return true;
+                float anguloColision = new Vector2(manifold.getNormal().x, manifold.getNormal().y).angle();
+                anguloColision = (float) ((anguloColision * 180f / Math.PI) + 360f) % 360f;
+
+                if (anguloColision > 45f && anguloColision < 135f) return true;
 
 
 
-             /*   boolean below = true;
+             *//*   boolean below = true;
                 for(int j = 0; j < manifold.getNumberOfContactPoints(); j++) {
                     below = (manifold.getPoints()[j].y < pos.y - 1.8f);
                     //if (below) return true;
@@ -177,21 +175,21 @@ public class RubentxuController {
                 if(manifold.getNormal().y > pos.y-ruben.getHeight()) return true;
 
                 if(below) {
-                   *//* if(contact.getFixtureA().getUserData() != null && contact.getFixtureA().getUserData().equals("p")) {
+                   *//**//* if(contact.getFixtureA().getUserData() != null && contact.getFixtureA().getUserData().equals("p")) {
                         groundedPlatform = (MovingPlatform)contact.getFixtureA().getBody().getUserData();
                     }
 
                     if(contact.getFixtureB().getUserData() != null && contact.getFixtureB().getUserData().equals("p")) {
                         groundedPlatform = (MovingPlatform)contact.getFixtureB().getBody().getUserData();
-                    }*//*
+                    }*//**//*
                     return true;
-                }*/
+                }*//*
 
                 return false;
             }
         }
         return false;
-    }
+    }*/
 
 
 }

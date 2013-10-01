@@ -24,19 +24,4 @@ public interface IBox2DPhysicsObject {
     public Body getBody();
 
 
-    public Boolean getBeginContactCallEnabled();
-
-    public void setBeginContactCallEnabled(Boolean value);
-
-    public Boolean getEndContactCallEnabled();
-
-    public void setEndContactCallEnabled(Boolean value);
-
-    public Boolean getPreContactCallEnabled();
-
-    public void setPreContactCallEnabled(Boolean value);
-
-    public Boolean getPostContactCallEnabled();
-
-    public void setPostContactCallEnabled(Boolean value);
 }

@@ -30,6 +30,7 @@ public class World {
         System.out.println(getParser().getHierarchy(map));
         getParser().load(getPhysics(), map);
         ruben = new Rubentxu(this, 10, 6, 0.7f, 1.8f);
+        physics.setContactListener(ruben);
         assets = new AssetManager();
         font = new BitmapFont();
         getAssets().load("imagenes/test/ball.png", Texture.class);

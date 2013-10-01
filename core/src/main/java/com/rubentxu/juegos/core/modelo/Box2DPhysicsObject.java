@@ -7,19 +7,45 @@ import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
-public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener {
+public class Box2DPhysicsObject implements IBox2DPhysicsObject {
 
+
+    public Box2DPhysicsObject(String name, grupos mapobject, Body body) {
+        this.nombre=name;
+        this.grupo= mapobject;
+        this.setBody(body);
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
+    public void setFixtureDef(FixtureDef fixtureDef) {
+        this.fixtureDef = fixtureDef;
+    }
+
+    public Fixture getFixture() {
+        return fixture;
+    }
+
+    public void setFixture(Fixture fixture) {
+        this.fixture = fixture;
+    }
 
     public enum grupos {
         HEROES, ENEMIGOS, PLATAFORMAS, PLATAFOR_MASMOVILES,
-        MONEDAS, SENSORES
+        MONEDAS, SENSORES , MAPOBJECT
     }
 
     protected com.badlogic.gdx.physics.box2d.World box2D;
     protected BodyDef bodyDef;
-    protected Body body;
-    protected FixtureDef fixtureDef;
-    protected Fixture fixture;
+    private Body body;
+    private FixtureDef fixtureDef;
+    private Fixture fixture;
 
     private float x, y, width = 1, height = 1, radius = 0;
 
@@ -27,10 +53,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
     private grupos grupo;
     private String nombre;
 
-    protected Boolean beginContactCallEnabled;
-    protected Boolean endContactCallEnabled;
-    protected Boolean preContactCallEnabled;
-    protected Boolean postContactCallEnabled;
+
 
     public Array points;
     public Array vertices;
@@ -57,7 +80,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
         createBody();
         Shape shape = createShape(width, height, 0);
         defineFixture(shape);
-        createFixture(fixtureDef);
+        createFixture(getFixtureDef());
         defineJoint();
         createJoint();
 
@@ -72,8 +95,8 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
     }
 
     protected void createBody() {
-        body = box2D.createBody(bodyDef);
-        body.setUserData(this);
+        setBody(box2D.createBody(bodyDef));
+        getBody().setUserData(this);
     }
 
     protected Shape createShape(float width, float height, float radius) {
@@ -101,11 +124,11 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
     }
 
     protected FixtureDef defineFixture(Shape shape) {
-        fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 1;
-        fixtureDef.friction = 0.6f;
-        fixtureDef.restitution = 0.3f;
+        setFixtureDef(new FixtureDef());
+        getFixtureDef().shape = shape;
+        getFixtureDef().density = 1;
+        getFixtureDef().friction = 0.6f;
+        getFixtureDef().restitution = 0.3f;
         //fixtureDef.filter.categoryBits=  PhysicsCollisionCategories.Get("Level");
         //fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAll();
 
@@ -117,16 +140,16 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
             for (int i = 0; i < verticesLength; i++) {
                 polygonShape = new PolygonShape();
                 polygonShape.set((Vector2[]) vertices.get(i));
-                fixtureDef.shape = polygonShape;
-                body.createFixture(fixtureDef);
+                getFixtureDef().shape = polygonShape;
+                getBody().createFixture(getFixtureDef());
             }
         }
-        return fixtureDef;
+        return getFixtureDef();
     }
 
     protected Fixture createFixture(FixtureDef fixtureDef) {
-        fixture = body.createFixture(fixtureDef);
-        return fixture;
+        setFixture(getBody().createFixture(fixtureDef));
+        return getFixture();
     }
 
     protected void defineJoint() {
@@ -156,41 +179,41 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
 
     @Override
     public float getX() {
-        return body.getPosition().x;
+        return getBody().getPosition().x;
     }
 
     @Override
     public void setX(float value) {
-        body.getPosition().x = value;
+        getBody().getPosition().x = value;
     }
 
     @Override
     public float getY() {
-        return body.getPosition().y;
+        return getBody().getPosition().y;
 
     }
 
     @Override
     public void setY(float value) {
-        body.getPosition().y = value;
+        getBody().getPosition().y = value;
     }
 
 
     @Override
     public float getRotation() {
-        return (float) (body.getAngle() * 180 / Math.PI);
+        return (float) (getBody().getAngle() * 180 / Math.PI);
 
     }
 
     @Override
     public float getWidth() {
-        return Box2DUtils.width(body);
+        return Box2DUtils.width(getBody());
     }
 
 
     @Override
     public float getHeight() {
-        return Box2DUtils.height(body);
+        return Box2DUtils.height(getBody());
     }
 
     @Override
@@ -198,63 +221,4 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, ContactListener 
         return body;
     }
 
-    @Override
-    public Boolean getBeginContactCallEnabled() {
-        return beginContactCallEnabled;
-    }
-
-    @Override
-    public void setBeginContactCallEnabled(Boolean value) {
-        beginContactCallEnabled = value;
-    }
-
-    @Override
-    public Boolean getEndContactCallEnabled() {
-        return endContactCallEnabled;
-    }
-
-    @Override
-    public void setEndContactCallEnabled(Boolean value) {
-        endContactCallEnabled = value;
-    }
-
-    @Override
-    public Boolean getPreContactCallEnabled() {
-        return preContactCallEnabled;
-    }
-
-    @Override
-    public void setPreContactCallEnabled(Boolean value) {
-        preContactCallEnabled = value;
-    }
-
-    @Override
-    public Boolean getPostContactCallEnabled() {
-        return postContactCallEnabled;
-    }
-
-    @Override
-    public void setPostContactCallEnabled(Boolean value) {
-        postContactCallEnabled = value;
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
 }
