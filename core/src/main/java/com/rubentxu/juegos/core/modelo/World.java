@@ -1,11 +1,12 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.assets.*;
-import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.maps.tiled.*;
-import com.badlogic.gdx.math.*;
-import com.rubentxu.juegos.core.utils.dermetfan.box2d.*;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Vector2;
+import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 public class World {
 
@@ -23,13 +24,13 @@ public class World {
 
     private void createDreamsWorld() {
 
-        physics= new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        map= new TmxMapLoader().load("maps/map.tmx");
+        physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
+        map = new TmxMapLoader().load("maps/map.tmx");
         parser = new Box2DMapObjectParser();
         System.out.println(getParser().getHierarchy(map));
         getParser().load(getPhysics(), map);
-        ruben = new Rubentxu(this,10, 6, 0.7f, 1.8f);
-        assets= new AssetManager();
+        ruben = new Rubentxu(this, 10, 6, 0.7f, 1.8f);
+        assets = new AssetManager();
         font = new BitmapFont();
         getAssets().load("imagenes/test/ball.png", Texture.class);
         getAssets().load("imagenes/test/japanischeFlagge.jpg", Texture.class);

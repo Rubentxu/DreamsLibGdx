@@ -15,10 +15,10 @@ public class PhysicsCollisionCategories {
     private static HashMap<String,Object> categoryNames = new HashMap<String, Object>();
 
     public static Boolean Has(int categories,int theCategory){
-        BitSet bs= BitSet.valueOf(new byte[]{new Integer(theCategory).byteValue()});
-        return bs.intersects(BitSet.valueOf(new byte[]{new Integer(categories).byteValue()}));
+//        BitSet bs= BitSet.valueOf(new byte[]{new Integer(theCategory).byteValue()});
+//        return bs.intersects(BitSet.valueOf(new byte[]{new Integer(categories).byteValue()}));
 
-
+          return false;
     }
 
     public void Add(String categoryName) throws Exception {
