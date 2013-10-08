@@ -10,6 +10,6 @@ Para ejecutar utiliza mvn clean install -Pdesktop , por ahora solo he probado en
 Como esta en cambio constante no aseguro que funcione, cuando tenga algo mas o menos decente creare un Tag, 
 para que se pueda ir observando los avances.
 
-Una muestra en un video de lo que llevo hecho por ahora, https://www.facebook.com/photo.php?v=10201835705632741
+Una muestra en un video de lo que llevo hecho por ahora, https://www.facebook.com/photo.php?v=10201835705632741&l=8805765887770945281
 
 
