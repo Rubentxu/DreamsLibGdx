@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
@@ -58,6 +59,7 @@ public class WorldRenderer {
     private Rubentxu ruben;
     private float framesJump;
     private float framesFall;
+    Vector3 point = new Vector3();
 
 
     public void setSize(int w, int h) {
@@ -122,6 +124,9 @@ public class WorldRenderer {
         AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
                 ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
 
+        world.getFont().setScale(1 / 16F);
+        world.getFont().setUseIntegerPositions(false);
+
 
     }
 
@@ -140,7 +145,6 @@ public class WorldRenderer {
 
         TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
         drawRubentxu();
-        spriteBatch.setProjectionMatrix(cam.combined);
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), 4, 4);
 
@@ -151,19 +155,19 @@ public class WorldRenderer {
         renderer.render();
 
         spriteBatch.begin();
-//        world.getFont().drawMultiLine(spriteBatch, "friction: " + world.getRuben().getRubenPhysicsFixture().getFriction() + "\ngrounded: "
-//                + ruben.isOnGround(), ruben.getBody().getPosition().x+20, ruben.getBody().getPosition().y);
-
-        world.getFont().drawMultiLine(spriteBatch, "RegionWidth: " + AnimationRuben.isPlaying() + "\ngrounded: "
-                + Float.toString(AnimationRuben.getTime()), ruben.getBody().getPosition().x + 20, ruben.getBody().getPosition().y);
-
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
+        if (DreamsGame.DEBUG) {
+            world.getFont().drawMultiLine(spriteBatch, "Friccion del cuerpo: " + ruben.getRubenSensorFixture().getFriction()
+                    + "\nIsGround: " + ruben.isGround(), cam.position.x - 9.5f,
+                    cam.position.y + 5.5f);
+        }
         spriteBatch.end();
 
-        if(DreamsGame.DEBUG){
+        if (DreamsGame.DEBUG) {
             debugRenderer.render(world.getPhysics(), cam.combined);
         }
+        spriteBatch.setProjectionMatrix(cam.combined);
 
     }
 

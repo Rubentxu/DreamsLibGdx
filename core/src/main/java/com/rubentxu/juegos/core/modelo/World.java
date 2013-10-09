@@ -32,8 +32,10 @@ public class World {
         ruben = new Rubentxu(this, 10, 6, 0.7f, 1.8f);
         assets = new AssetManager();
         font = new BitmapFont();
-        getAssets().load("imagenes/test/ball.png", Texture.class);
-        getAssets().load("imagenes/test/japanischeFlagge.jpg", Texture.class);
+        //font.setScale(0.01f,0.01f);
+
+//        getAssets().load("imagenes/test/ball.png", Texture.class);
+//        getAssets().load("imagenes/test/japanischeFlagge.jpg", Texture.class);
 
     }
 

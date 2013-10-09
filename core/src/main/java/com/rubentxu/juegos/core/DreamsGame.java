@@ -8,7 +8,7 @@ public class DreamsGame extends Game {
 
     public static final String VERSION = "0.1 Pre-Alpha";
     public static final String LOG = "Rubentxu Dreams";
-    public static final boolean DEBUG = false;
+    public static boolean DEBUG = false;
     FPSLogger log;
 
 	@Override
