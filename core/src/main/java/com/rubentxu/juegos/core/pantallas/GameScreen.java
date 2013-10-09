@@ -2,7 +2,6 @@ package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
-import com.rubentxu.juegos.core.controladores.RubentxuController;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 import com.badlogic.gdx.Application.ApplicationType;
@@ -16,7 +15,7 @@ public class GameScreen implements Screen, InputProcessor {
 
     private World world;
     private WorldRenderer renderer;
-    private RubentxuController controller;
+    private com.rubentxu.juegos.core.controladores.WorldController controller;
 
     private int width, height;
 
@@ -24,7 +23,7 @@ public class GameScreen implements Screen, InputProcessor {
     public void show() {
         world = new World();
         renderer = new WorldRenderer(world, true);
-        controller = new RubentxuController(world);
+        controller = new com.rubentxu.juegos.core.controladores.WorldController(world);
         Gdx.input.setInputProcessor(this);
     }
 

@@ -2,43 +2,22 @@ package com.rubentxu.juegos.core.modelo;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject {
 
-
-    public Box2DPhysicsObject(String name, grupos mapobject, Body body) {
-        this.nombre=name;
-        this.grupo= mapobject;
-        this.setBody(body);
-    }
-
-    public void setBody(Body body) {
-        this.body = body;
-    }
-
-    public FixtureDef getFixtureDef() {
-        return fixtureDef;
-    }
-
-    public void setFixtureDef(FixtureDef fixtureDef) {
-        this.fixtureDef = fixtureDef;
-    }
-
-    public Fixture getFixture() {
-        return fixture;
-    }
-
-    public void setFixture(Fixture fixture) {
-        this.fixture = fixture;
-    }
-
-    public enum grupos {
-        HEROES, ENEMIGOS, PLATAFORMAS, PLATAFOR_MASMOVILES,
-        MONEDAS, SENSORES , MAPOBJECT
+    public static enum GRUPOS {
+        HEROES, ENEMIGOS, PLATAFORMAS, PLATAFORMAS_MOVILES,
+        MONEDAS, SENSORES, ESTATICOS
     }
 
     protected com.badlogic.gdx.physics.box2d.World box2D;
@@ -46,23 +25,27 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     private Body body;
     private FixtureDef fixtureDef;
     private Fixture fixture;
+    private float x;
+    private float y;
+    private float width = 1;
+    private float height = 1;
+    private float radius = 0;
 
-    private float x, y, width = 1, height = 1, radius = 0;
-
-
-    private grupos grupo;
+    private GRUPOS grupo;
     private String nombre;
-
-
-
     public Array points;
     public Array vertices;
 
+    public Box2DPhysicsObject(String nombre, GRUPOS grupo, Body body) {
+        this.nombre=nombre;
+        this.grupo=grupo;
+        this.body=body;
+    }
 
-    public Box2DPhysicsObject(String nombre, grupos tipo, com.badlogic.gdx.physics.box2d.World box2D,
+    public Box2DPhysicsObject(String nombre, GRUPOS grupo, com.badlogic.gdx.physics.box2d.World box2D,
                               float x, float y, float width, float height, float radius) {
-        this.nombre = nombre;
-        this.grupo = tipo;
+        this.nombre=nombre;
+        this.grupo=grupo;
         this.box2D = box2D;
         this.x = x;
         this.y = y;
@@ -85,7 +68,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
         createJoint();
 
     }
-
 
     protected void defineBody() {
         bodyDef = new BodyDef();
@@ -219,6 +201,42 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     @Override
     public Body getBody() {
         return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public FixtureDef getFixtureDef() {
+        return fixtureDef;
+    }
+
+    public void setFixtureDef(FixtureDef fixtureDef) {
+        this.fixtureDef = fixtureDef;
+    }
+
+    public Fixture getFixture() {
+        return fixture;
+    }
+
+    public void setFixture(Fixture fixture) {
+        this.fixture = fixture;
+    }
+
+    public GRUPOS getGrupo() {
+        return grupo;
+    }
+
+    public void setGrupo(GRUPOS grupo) {
+        this.grupo = grupo;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
 }

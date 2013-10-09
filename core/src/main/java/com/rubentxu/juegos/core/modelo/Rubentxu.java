@@ -2,23 +2,13 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactFilter;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
-import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 
-public class Rubentxu extends Box2DPhysicsObject implements ContactListener, ContactFilter {
+public class Rubentxu extends Box2DPhysicsObject  {
 
-    @Override
-    public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-        return false;
-    }
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING, FALL
@@ -26,8 +16,8 @@ public class Rubentxu extends Box2DPhysicsObject implements ContactListener, Con
 
     public final static float MAX_VELOCITY = 7f;
     public final static float JUMP_FORCE = 58f;
-    protected boolean onGround = true;
-    State state = State.IDLE;
+    private boolean onGround = true;
+    private State state = State.IDLE;
     boolean facingLeft = true;
     private float killVelocity;
     private Boolean hurt;
@@ -40,8 +30,8 @@ public class Rubentxu extends Box2DPhysicsObject implements ContactListener, Con
     private Fixture rubenSensorFixture;
 
     public Rubentxu(World world, float x, float y, float width, float height) {
-        super("Heroe", grupos.HEROES, world.getPhysics(), x, y, width, height, 0);
-        grounContacts= new Array<Fixture>();
+        super("Heroe", GRUPOS.HEROES, world.getPhysics(), x, y, width, height, 0);
+        setGrounContacts(new Array<Fixture>());
         createRubenxu(world, x, y, width, height);
     }
 
@@ -97,105 +87,41 @@ public class Rubentxu extends Box2DPhysicsObject implements ContactListener, Con
         return rubenSensorFixture;
     }
 
-    public boolean onGround() {
+    public boolean isGround() {
         return onGround;
     }
 
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        System.out.println("preSolve ");
-
-        Body otro = (Body) ((this.getBody() == contact.getFixtureA().getBody()) ?
-                contact.getFixtureB().getBody() : contact.getFixtureA().getBody());
-
-        float heroTop = getY();
-        float objectBottom = otro.getPosition().y + (Box2DUtils.height(otro) / 2);
-
-        //if (objectBottom > heroTop) contact.setEnabled(false);
-
+    public void setGround(boolean onGround) {
+        this.onGround = onGround;
     }
 
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-        System.out.println("postSolve ");
+
+
+    public Array<Fixture> getGrounContacts() {
+        return grounContacts;
     }
 
-    @Override
-    public void beginContact(Contact contact) {
-        System.out.println("Begin contact");
-        Fixture collider = (Fixture) ((this.getRubenSensorFixture() == contact.getFixtureA()) ?
-                contact.getFixtureB() : contact.getFixtureA());
-
-/*        if (collider instanceof EnemyObject) {
-            if (body.getLinearVelocity().y < killVelocity && !hurt) {
-                hurt();
-
-                Vector2 hurtVelocity = body.getLinearVelocity();
-                hurtVelocity.y = -hurtVelocityY;
-                hurtVelocity.x = hurtVelocityX;
-                if (collider.getX() > getX()) {
-                    hurtVelocity.x = -hurtVelocityX;
-                }
-                body.setLinearVelocity(hurtVelocity);
-            } else {
-                springOffEnemy = collider.getY() - getHeight();
-                //onGiveDamage.dispatch();
-            }
-
-        }*/
-
-        //angulo de colision contacta con el sensor.
-        if (contact.isTouching() ) {
-            float anguloColision = new Vector2(contact.getWorldManifold().getNormal().x, contact.getWorldManifold().getNormal().y).angle();
-            anguloColision = (float) ((anguloColision * 180f / Math.PI) + 360f) % 360f;
-
-            if (anguloColision > 45f && anguloColision < 135f) {
-                grounContacts.add(collider);
-                onGround = true;
-                updateCombinedGroundAngle();
-                System.out.println("OnGroun True");
-            }
-        }
-
-
+    public void setGrounContacts(Array<Fixture> grounContacts) {
+        this.grounContacts = grounContacts;
     }
 
-    @Override
-    public void endContact(Contact contact) {
-        System.out.println("End contact");
-        Fixture collider = (Fixture) ((this.getRubenSensorFixture() == contact.getFixtureA()) ?
-                contact.getFixtureB() : contact.getFixtureA());
-
-        int index= grounContacts.indexOf(collider ,false);
-        if(index !=-1){
-            grounContacts.removeIndex(index);
-            if(grounContacts.size==0) onGround=false;
-            System.out.println("OnGroun False");
-            updateCombinedGroundAngle();
-
-        }
-
-    }
-
-    protected void updateCombinedGroundAngle() {
+    public void updateCombinedGroundAngle() {
         combinedGroundAngle = 0;
-        if (grounContacts.size == 0) return;
+        if (getGrounContacts().size == 0) return;
 
-        for (Fixture contact : grounContacts) {
+        for (Fixture contact : getGrounContacts()) {
             float angle = contact.getBody().getAngle();
             float turn = (float) (45 * Math.PI / 180);
             angle = angle % turn;
             combinedGroundAngle += angle;
         }
-        combinedGroundAngle /= grounContacts.size;
+        combinedGroundAngle /= getGrounContacts().size;
     }
 
     public void hurt() {
         hurt = true;
 
     }
-
 
 
 

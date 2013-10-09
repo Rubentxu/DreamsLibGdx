@@ -26,6 +26,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef.*;
 import com.badlogic.gdx.physics.box2d.joints.*;
 import com.badlogic.gdx.utils.*;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
 import com.rubentxu.juegos.core.utils.dermetfan.math.*;
 
 import java.util.*;
@@ -224,7 +225,7 @@ public class Box2DMapObjectParser {
                 duplicate++;
             name += duplicate;
         }
-        Box2DPhysicsObject box2DPhysicsObject= new Box2DPhysicsObject(name,Box2DPhysicsObject.grupos.MAPOBJECT,body);
+        Box2DPhysicsObject box2DPhysicsObject= new Box2DPhysicsObject(name, GRUPOS.ESTATICOS,body);
         body.setUserData(box2DPhysicsObject);
         bodies.put(name, body);
 
@@ -324,6 +325,7 @@ public class Box2DMapObjectParser {
         fixtureDef.restitution = getProperty(properties, aliases.restitution, fixtureDef.restitution);
 
         Fixture fixture = body.createFixture(fixtureDef);
+        fixture.setUserData(body.getUserData());
         ((Box2DPhysicsObject) body.getUserData()).setFixtureDef(fixtureDef);
         ((Box2DPhysicsObject) body.getUserData()).setFixture(fixture);
         shape.dispose();

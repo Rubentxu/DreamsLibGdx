@@ -1,12 +1,19 @@
 package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.FPSLogger;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 
 public class DreamsGame extends Game {
 
+    public static final String VERSION = "0.1 Pre-Alpha";
+    public static final String LOG = "Rubentxu Dreams";
+    public static final boolean DEBUG = false;
+    FPSLogger log;
+
 	@Override
 	public void create () {
+        log = new FPSLogger();
         setScreen(new GameScreen());
 	}
     @Override
@@ -17,6 +24,7 @@ public class DreamsGame extends Game {
     @Override
     public void render() {
         super.render();
+        log.log();
     }
 
     @Override

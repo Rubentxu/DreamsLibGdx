@@ -2,6 +2,10 @@ package com.rubentxu.juegos.core.modelo.interfaces;
 
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 
 public interface IBox2DPhysicsObject {
 
@@ -22,6 +26,5 @@ public interface IBox2DPhysicsObject {
     public float getHeight();
 
     public Body getBody();
-
 
 }
