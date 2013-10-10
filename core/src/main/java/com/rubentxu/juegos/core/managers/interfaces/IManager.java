@@ -8,11 +8,11 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 
 public interface IManager {
 
-    public void handleBeginContact(Contact contact) ;
+    public void handleBeginContact(Contact contact);
 
-    public void handleEndContact(Contact contact) ;
+    public void handleEndContact(Contact contact);
 
-    public void handlePostSolve(Contact contact, ContactImpulse impulse) ;
+    public void handlePostSolve(Contact contact, ContactImpulse impulse);
 
     public void handlePreSolve(Contact contact, Manifold oldManifold);
 

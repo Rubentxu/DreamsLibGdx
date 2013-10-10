@@ -1,13 +1,11 @@
 package com.rubentxu.juegos.core.controladores;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactFilter;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
@@ -92,20 +90,19 @@ public class WorldController implements ContactListener, ContactFilter {
 
     @Override
     public void beginContact(Contact contact) {
-        if ((GRUPOS.HEROES == ((Box2DPhysicsObject)contact.getFixtureA().getUserData()).getGrupo())){
-           rubenManager.handleBeginContact(contact);
-            Gdx.app.log(DreamsGame.LOG, "Begin contact");
-        }
+        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
+                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
+            rubenManager.handleBeginContact(contact);
 
+        }
     }
 
     @Override
     public void endContact(Contact contact) {
-        if ((GRUPOS.HEROES == ((Box2DPhysicsObject)contact.getFixtureA().getUserData()).getGrupo())){
+        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
+                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
             rubenManager.handleEndContact(contact);
-            Gdx.app.log(DreamsGame.LOG, "End contact");
         }
-
     }
 
     @Override

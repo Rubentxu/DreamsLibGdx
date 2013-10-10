@@ -130,8 +130,9 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     }
 
     protected Fixture createFixture(FixtureDef fixtureDef) {
-        setFixture(getBody().createFixture(fixtureDef));
-        return getFixture();
+        fixture= body.createFixture(fixtureDef);
+        fixture.setUserData(this);
+        return fixture;
     }
 
     protected void defineJoint() {

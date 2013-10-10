@@ -15,7 +15,7 @@ import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.World;
 
 
-public class RubentxuManager implements IManager{
+public class RubentxuManager implements IManager {
 
 
     private World world;
@@ -102,38 +102,35 @@ public class RubentxuManager implements IManager{
 
     @Override
     public void handleBeginContact(Contact contact) {
-        Fixture collider = (Fixture) ((ruben.getRubenSensorFixture() == contact.getFixtureA()) ?
-                contact.getFixtureB() : contact.getFixtureA());
+        Gdx.app.log(DreamsGame.LOG, "Begin contact");
 
+        if (contact.getFixtureA() == ruben.getRubenSensorFixture())
+            ruben.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
 
+        if (contact.getFixtureB() == ruben.getRubenSensorFixture())
+            ruben.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
 
-        //angulo de colision contacta con el sensor.
-        if (contact.isTouching()) {
-            float anguloColision = new Vector2(contact.getWorldManifold().getNormal().x, contact.getWorldManifold().getNormal().y).angle();
-            anguloColision = (float) ((anguloColision * 180f / Math.PI) + 360f) % 360f;
-
-            if (anguloColision > 45f && anguloColision < 135f) {
-                ruben.getGrounContacts().add(collider);
-                ruben.setGround(true);
-                ruben.updateCombinedGroundAngle();
-                Gdx.app.log(DreamsGame.LOG, "OnGroun True");
-            }
+        if (ruben.getGrounContacts().size() > 0){
+            ruben.setGround(true);
+            Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
+
 
     }
 
     @Override
     public void handleEndContact(Contact contact) {
-        Fixture collider = (Fixture) ((ruben.getRubenSensorFixture() == contact.getFixtureA()) ?
-                contact.getFixtureB() : contact.getFixtureA());
+        Gdx.app.log(DreamsGame.LOG, "End contact");
 
-        int index = ruben.getGrounContacts().indexOf(collider, false);
-        if (index != -1) {
-            ruben.getGrounContacts().removeIndex(index);
-            if (ruben.getGrounContacts().size == 0) ruben.setGround(false);
+        if (contact.getFixtureA() == ruben.getRubenSensorFixture())
+            ruben.getGrounContacts().remove(contact.getFixtureB());//A is foot so B is ground
+
+        if (contact.getFixtureB() == ruben.getRubenSensorFixture())
+            ruben.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
+
+        if (ruben.getGrounContacts().size() == 0){
+            ruben.setGround(false);
             Gdx.app.log(DreamsGame.LOG, "OnGroun False");
-            ruben.updateCombinedGroundAngle();
-
         }
     }
 
