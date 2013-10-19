@@ -80,12 +80,20 @@ public class WorldController implements ContactListener, ContactFilter {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
+                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
+            rubenManager.handlePreSolve(contact,oldManifold);
 
+        }
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
+        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
+                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
+            rubenManager.handlePostSolve(contact,impulse);
 
+        }
     }
 
     @Override
@@ -107,7 +115,7 @@ public class WorldController implements ContactListener, ContactFilter {
 
     @Override
     public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-        return false;
+        return true;
     }
 
 }

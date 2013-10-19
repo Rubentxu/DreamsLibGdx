@@ -2,7 +2,10 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 
@@ -17,7 +20,7 @@ public class Rubentxu extends Box2DPhysicsObject  {
     }
 
     public final static float MAX_VELOCITY = 7f;
-    public final static float JUMP_FORCE = 58f;
+    public final static float JUMP_FORCE = 45f;
     private boolean onGround = true;
     private State state = State.IDLE;
     boolean facingLeft = true;
@@ -38,23 +41,31 @@ public class Rubentxu extends Box2DPhysicsObject  {
     }
 
     public void createRubenxu(World world, float x, float y, float width, float height) {
-        defineBody();
-        createBody();
+        BodyDef def = new BodyDef();
+        def.type = BodyDef.BodyType.DynamicBody;
+        def.position.x = x;
+        def.position.y = y;
+        super.setBody(world.getPhysics().createBody(def));
         super.getBody().setFixedRotation(true);
-        super.getBody().setSleepingAllowed(false);
 
-        PolygonShape poly = (PolygonShape) createShape(width, height, 0);
-        rubenPhysicsFixture = createFixture(defineFixture(poly));
-        rubenPhysicsFixture.setRestitution(0);
+        PolygonShape poly = new PolygonShape();
+        poly.setAsBox(width,height);
+
+        rubenPhysicsFixture = super.getBody().createFixture(poly,1);
+        rubenPhysicsFixture.setUserData(this);
         poly.dispose();
 
-        PolygonShape sensor = (PolygonShape) createShape(width * 0.9f, height / 5, new Vector2(0, -height * 0.9f), 0);
-        rubenSensorFixture = createFixture(defineFixture(sensor));
-        rubenSensorFixture.setRestitution(0);
-        rubenSensorFixture.setSensor(true);
-        sensor.dispose();
 
-        super.getBody().setBullet(true);
+        CircleShape circle = new CircleShape();
+        circle.setRadius(0.6f);
+        circle.setPosition(new Vector2(0, -height*0.9f));
+        rubenSensorFixture = super.getBody().createFixture(circle, 0);
+        rubenSensorFixture.setSensor(true);
+        rubenSensorFixture.setUserData(this);
+        circle.dispose();
+
+        //super.getBody().setBullet(true);
+
 
     }
 
@@ -125,9 +136,29 @@ public class Rubentxu extends Box2DPhysicsObject  {
         hurt = true;
 
     }
-
-
-
+    @Override
+    public String toString() {
+        return
+                "onGround=" + onGround +
+                "\nstate=" + state +
+                "\nfacingLeft=" + facingLeft +
+                "\nisActive= " + getBody().isActive() +
+                "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
+                "\nisAwake=" + getBody().isAwake()+
+                "\nAngle=" + getBody().getAngle()+
+                "\nAngularDamping=" + getBody().getAngularDamping()+
+                "\nAngularVelocity=" + getBody().getAngularVelocity()+
+                "\nGravityScale=" + getBody().getGravityScale()+
+                "\nInertia=" + getBody().getInertia()+
+                "\nMass=" + getBody().getMass()+
+                "\nisBullet=" + getBody().isBullet()+
+                "\nisFixedRotation=" + getBody().isFixedRotation()+
+                "\nLinearDamping=" + getBody().getLinearDamping()+
+                "\nLinearVelocity=" + getBody().getLinearVelocity().toString()+
+                "\nPosition=" + getBody().getPosition().toString()+
+                "\nLocalCenter=" + getBody().getLocalCenter().toString()+
+                "\nWorldCenter=" + getBody().getWorldCenter().toString();
+    }
 }
 
 

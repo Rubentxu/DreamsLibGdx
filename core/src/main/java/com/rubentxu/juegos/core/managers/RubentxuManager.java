@@ -112,6 +112,8 @@ public class RubentxuManager implements IManager {
 
         if (ruben.getGrounContacts().size() > 0){
             ruben.setGround(true);
+            contact.setEnabled(true);
+
             Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
 
@@ -130,6 +132,7 @@ public class RubentxuManager implements IManager {
 
         if (ruben.getGrounContacts().size() == 0){
             ruben.setGround(false);
+            contact.resetFriction();
             Gdx.app.log(DreamsGame.LOG, "OnGroun False");
         }
     }
@@ -146,7 +149,7 @@ public class RubentxuManager implements IManager {
 
     @Override
     public boolean handleShouldCollide(Fixture fixtureA, Fixture fixtureB) {
-        return false;
+        return true;
     }
 
 }

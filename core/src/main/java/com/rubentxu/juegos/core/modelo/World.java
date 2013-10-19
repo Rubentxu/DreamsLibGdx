@@ -1,21 +1,26 @@
 package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
+import com.sun.java.swing.plaf.windows.WindowsFileChooserUI;
 
 public class World {
 
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;
-    private AssetManager assets;
+    public static AssetManager assets = null;
     private Rubentxu ruben;
     private Box2DMapObjectParser parser;
-    private BitmapFont font;
+    private Window winDebug;
 
     public World() {
         createDreamsWorld();
@@ -29,14 +34,12 @@ public class World {
         parser = new Box2DMapObjectParser();
         System.out.println(getParser().getHierarchy(map));
         getParser().load(getPhysics(), map);
-        ruben = new Rubentxu(this, 10, 6, 0.7f, 1.8f);
+        ruben = new Rubentxu(this, 91, 3.6f, 0.7f, 1.8f);
         assets = new AssetManager();
-        font = new BitmapFont();
-        //font.setScale(0.01f,0.01f);
-
-//        getAssets().load("imagenes/test/ball.png", Texture.class);
-//        getAssets().load("imagenes/test/japanischeFlagge.jpg", Texture.class);
-
+        getAssets().load("imagenes/texturas/debug.jpg", Texture.class);
+                getAssets().load("imagenes/test/ball.png", Texture.class);
+        //        getAssets().load("imagenes/test/japanischeFlagge.jpg", Texture.class);
+        getAssets().finishLoading();
     }
 
     public void dispose() {
@@ -64,7 +67,4 @@ public class World {
         return parser;
     }
 
-    public BitmapFont getFont() {
-        return font;
-    }
 }

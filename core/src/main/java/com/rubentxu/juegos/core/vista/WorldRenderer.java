@@ -1,19 +1,23 @@
 package com.rubentxu.juegos.core.vista;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
 
@@ -124,8 +128,6 @@ public class WorldRenderer {
         AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
                 ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
 
-        world.getFont().setScale(1 / 16F);
-        world.getFont().setUseIntegerPositions(false);
 
 
     }
@@ -158,16 +160,19 @@ public class WorldRenderer {
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
         if (DreamsGame.DEBUG) {
-            world.getFont().drawMultiLine(spriteBatch, "Friccion del cuerpo: " + ruben.getRubenSensorFixture().getFriction()
-                    + "\nIsGround: " + ruben.isGround(), cam.position.x - 9.5f,
-                    cam.position.y + 5.5f);
+
+           /*cache.setMultiLineText(ruben.toString(), cam.position.x - 11.5f, cam.position.y + 8f);
+           cache.draw(spriteBatch);*/
+            DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y-2);
+            DebugWindow.myLabel.setText(ruben.toString());
+            DebugWindow.getInstance().pack();
+            DebugWindow.getInstance().draw(spriteBatch,0.8f);
+
         }
         spriteBatch.end();
-
         if (DreamsGame.DEBUG) {
             debugRenderer.render(world.getPhysics(), cam.combined);
         }
-        spriteBatch.setProjectionMatrix(cam.combined);
 
     }
 
