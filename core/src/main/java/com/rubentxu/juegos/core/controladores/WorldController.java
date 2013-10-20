@@ -1,18 +1,25 @@
 package com.rubentxu.juegos.core.controladores;
 
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactFilter;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
 
 
 public class WorldController implements ContactListener, ContactFilter {
+
+
 
 
     public static enum Keys {
@@ -22,6 +29,7 @@ public class WorldController implements ContactListener, ContactFilter {
     private World world;
     float stillTime = 0;
     private final RubentxuManager rubenManager;
+    private final PlatformManager platformManager;
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
 
@@ -36,7 +44,12 @@ public class WorldController implements ContactListener, ContactFilter {
         this.world = world;
         world.getPhysics().setContactListener(this);
         rubenManager = new RubentxuManager(world);
+        platformManager= new PlatformManager();
+        platformManager.setMovingPlatformplatforms(world.getMovingPlatformplatforms());
+        platformManager.setPlatforms(world.getPlatforms());
     }
+
+
 
     public void leftPressed() {
         keys.get(keys.put(WorldController.Keys.LEFT, true));
@@ -76,6 +89,7 @@ public class WorldController implements ContactListener, ContactFilter {
      */
     public void update(float delta) {
         rubenManager.update(delta);
+        platformManager.update(delta);
     }
 
     @Override
@@ -85,6 +99,7 @@ public class WorldController implements ContactListener, ContactFilter {
             rubenManager.handlePreSolve(contact,oldManifold);
 
         }
+        platformManager.handlePreSolve(contact,oldManifold);
     }
 
     @Override

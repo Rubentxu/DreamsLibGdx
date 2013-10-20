@@ -110,7 +110,7 @@ public class RubentxuManager implements IManager {
         if (contact.getFixtureB() == ruben.getRubenSensorFixture())
             ruben.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
 
-        if (ruben.getGrounContacts().size() > 0){
+        if (ruben.getGrounContacts().size() > 0) {
             ruben.setGround(true);
             contact.setEnabled(true);
 
@@ -130,7 +130,7 @@ public class RubentxuManager implements IManager {
         if (contact.getFixtureB() == ruben.getRubenSensorFixture())
             ruben.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
 
-        if (ruben.getGrounContacts().size() == 0){
+        if (ruben.getGrounContacts().size() == 0) {
             ruben.setGround(false);
             contact.resetFriction();
             Gdx.app.log(DreamsGame.LOG, "OnGroun False");

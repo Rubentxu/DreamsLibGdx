@@ -1,17 +1,18 @@
 package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.rubentxu.juegos.core.DreamsGame;
-import com.rubentxu.juegos.core.utils.debug.DebugWindow;
+import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
-import com.sun.java.swing.plaf.windows.WindowsFileChooserUI;
+
+import java.util.HashSet;
 
 public class World {
 
@@ -21,12 +22,28 @@ public class World {
     private Rubentxu ruben;
     private Box2DMapObjectParser parser;
     private Window winDebug;
+    private HashSet<Platform> platforms;
+    private HashSet<MovingPlatform> MovingPlatformplatforms;
 
     public World() {
         createDreamsWorld();
+        createMovingPlatform();
+    }
+    private void createMovingPlatform(){
+        Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.5f, 1);
+        Body body2 = createBox(BodyDef.BodyType.KinematicBody, 4, 1, 1);
+        MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body1,
+                68,5,64,9);
+
+        MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body2,
+                78,4,80,9 );
+        MovingPlatformplatforms= new HashSet<MovingPlatform>();
+        MovingPlatformplatforms.add(m1);
+        MovingPlatformplatforms.add(m2);
+        platforms = new HashSet<Platform>();
+
 
     }
-
     private void createDreamsWorld() {
 
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
@@ -67,4 +84,32 @@ public class World {
         return parser;
     }
 
+    private Body createBox(BodyDef.BodyType type, float width, float height, float density){
+        BodyDef def= new BodyDef();
+        def.type= type;
+        Body box = physics.createBody(def);
+
+        PolygonShape poly = new PolygonShape();
+        poly.setAsBox(width, height);
+        box.createFixture(poly, density);
+        poly.dispose();
+
+        return box;
+    }
+
+    public HashSet<Platform> getPlatforms() {
+        return platforms;
+    }
+
+    public void setPlatforms(HashSet<Platform> platforms) {
+        this.platforms = platforms;
+    }
+
+    public HashSet<MovingPlatform> getMovingPlatformplatforms() {
+        return MovingPlatformplatforms;
+    }
+
+    public void setMovingPlatformplatforms(HashSet<MovingPlatform> movingPlatformplatforms) {
+        MovingPlatformplatforms = movingPlatformplatforms;
+    }
 }

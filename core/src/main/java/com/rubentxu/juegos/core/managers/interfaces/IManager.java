@@ -17,4 +17,6 @@ public interface IManager {
     public void handlePreSolve(Contact contact, Manifold oldManifold);
 
     public boolean handleShouldCollide(Fixture fixtureA, Fixture fixtureB);
+
+    public void update(float delta);
 }
