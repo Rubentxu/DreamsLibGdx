@@ -64,7 +64,7 @@ public class Rubentxu extends Box2DPhysicsObject  {
         rubenSensorFixture.setUserData(this);
         circle.dispose();
 
-        //super.getBody().setBullet(true);
+        super.getBody().setBullet(true);
 
 
     }
@@ -119,18 +119,6 @@ public class Rubentxu extends Box2DPhysicsObject  {
         this.grounContacts = grounContacts;
     }
 
-    public void updateCombinedGroundAngle() {
-        combinedGroundAngle = 0;
-        if (getGrounContacts().size() == 0) return;
-
-        for (Fixture contact : getGrounContacts()) {
-            float angle = contact.getBody().getAngle();
-            float turn = (float) (45 * Math.PI / 180);
-            angle = angle % turn;
-            combinedGroundAngle += angle;
-        }
-        combinedGroundAngle /= getGrounContacts().size();
-    }
 
     public void hurt() {
         hurt = true;
@@ -157,6 +145,8 @@ public class Rubentxu extends Box2DPhysicsObject  {
                 "\nLinearVelocity=" + getBody().getLinearVelocity().toString()+
                 "\nPosition=" + getBody().getPosition().toString()+
                 "\nLocalCenter=" + getBody().getLocalCenter().toString()+
+                "\nWidth=" +getWidth()+
+                "\nHeight=" + getHeight()+
                 "\nWorldCenter=" + getBody().getWorldCenter().toString();
     }
 }

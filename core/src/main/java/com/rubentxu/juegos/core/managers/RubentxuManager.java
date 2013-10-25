@@ -20,7 +20,7 @@ public class RubentxuManager implements IManager {
 
     private World world;
     private Rubentxu ruben;
-    float stillTime = 0;
+    private int stillTime = 0;
 
     public RubentxuManager(World world) {
         this.world = world;
@@ -35,7 +35,14 @@ public class RubentxuManager implements IManager {
 
         Vector2 vel = ruben.getBody().getLinearVelocity();
         Vector2 pos = ruben.getBody().getPosition();
+        velocityLimit(vel,delta);
+        processContactGround();
+        applyImpulses(vel, pos);
 
+        return false;
+    }
+
+    private void velocityLimit(Vector2 vel,float delta) {
         // cap max velocity on x
         if (Math.abs(vel.x) > ruben.MAX_VELOCITY) {
             vel.x = Math.signum(vel.x) * ruben.MAX_VELOCITY;
@@ -44,12 +51,42 @@ public class RubentxuManager implements IManager {
 
         // calculate stilltime & damp
         if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
-            stillTime += Gdx.graphics.getDeltaTime();
+            ruben.getBody().setLinearVelocity(vel.x * 0.9f, vel.y);
+        }
+
+        // calculate stilltime & damp
+        if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
+            stillTime += delta;
             ruben.getBody().setLinearVelocity(vel.x * 0.9f, vel.y);
         } else {
             stillTime = 0;
         }
+    }
 
+    private void applyImpulses(Vector2 vel, Vector2 pos) {
+        // apply left impulse, but only if max velocity is not reached yet
+        if (WorldController.keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
+            ruben.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
+        }
+
+        // apply right impulse, but only if max velocity is not reached yet
+        if (WorldController.keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
+            ruben.getBody().applyLinearImpulse(2f, 0, pos.x, pos.y, true);
+        }
+
+        // jump, but only when grounded
+        if (WorldController.keys.get(Keys.JUMP)) {
+            ruben.setState(Rubentxu.State.JUMPING);
+            if (ruben.isGround()) {
+                ruben.getBody().setLinearVelocity(vel.x, 0);
+                ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
+                ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
+
+            }
+        }
+    }
+
+    private void processContactGround() {
         if (!ruben.isGround()) {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);
@@ -75,29 +112,6 @@ public class RubentxuManager implements IManager {
                 player.applyLinearImpulse(0, -24, pos.x, pos.y);
             }*/
         }
-
-        // apply left impulse, but only if max velocity is not reached yet
-        if (WorldController.keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
-            ruben.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
-        }
-
-        // apply right impulse, but only if max velocity is not reached yet
-        if (WorldController.keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
-            ruben.getBody().applyLinearImpulse(2f, 0, pos.x, pos.y, true);
-        }
-
-        // jump, but only when grounded
-        if (WorldController.keys.get(Keys.JUMP)) {
-            ruben.setState(Rubentxu.State.JUMPING);
-            if (ruben.isGround()) {
-                ruben.getBody().setLinearVelocity(vel.x, 0);
-                ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-                ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
-
-            }
-        }
-
-        return false;
     }
 
     @Override

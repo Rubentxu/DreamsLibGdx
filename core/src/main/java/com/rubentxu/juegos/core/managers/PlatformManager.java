@@ -17,7 +17,6 @@ import java.util.HashSet;
 
 public class PlatformManager implements IManager {
 
-    private World world;
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> MovingPlatformplatforms;
 

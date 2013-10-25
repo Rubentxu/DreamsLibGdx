@@ -31,8 +31,8 @@ public class DreamsGame extends Game {
         gameInputs = new GameInputs(world, controller, renderer);
         Gdx.input.setInputProcessor(gameInputs);
         setScreen(gameScreen);
-
 	}
+
     @Override
     public void dispose() {
         super.dispose();

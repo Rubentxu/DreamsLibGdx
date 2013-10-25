@@ -107,7 +107,7 @@ public class WorldRenderer {
         idleLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
 
         AnimationRuben = new AnimatedBox2DSprite(walkRightAnimation);
-        AnimationRuben.setSize(2.65f, 4f);
+        AnimationRuben.setSize(ruben.getWidth()*2, ruben.getHeight());
         AnimationRuben.setOrigin(AnimationRuben.getWidth() / 2, AnimationRuben.getHeight() / 1.9f);
         AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
                 ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
