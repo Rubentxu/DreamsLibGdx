@@ -1,8 +1,13 @@
 package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.rubentxu.juegos.core.inputs.GameInputs;
+import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
+import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 public class DreamsGame extends Game {
 
@@ -10,11 +15,23 @@ public class DreamsGame extends Game {
     public static final String LOG = "Rubentxu Dreams";
     public static boolean DEBUG = false;
     FPSLogger log;
+    private World world;
+    private WorldRenderer renderer;
+    private WorldController controller;
+    private GameScreen gameScreen;
+    private GameInputs gameInputs;
 
-	@Override
+    @Override
 	public void create () {
         log = new FPSLogger();
-        setScreen(new GameScreen());
+        world = new World();
+        renderer=new WorldRenderer(world, true);
+        controller= new WorldController(world);
+        gameScreen= new GameScreen( world,controller,renderer);
+        gameInputs = new GameInputs(world, controller, renderer);
+        Gdx.input.setInputProcessor(gameInputs);
+        setScreen(gameScreen);
+
 	}
     @Override
     public void dispose() {

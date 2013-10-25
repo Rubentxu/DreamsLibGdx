@@ -27,9 +27,8 @@ public class WorldController implements ContactListener, ContactFilter {
     }
 
     private World world;
-    float stillTime = 0;
-    private final RubentxuManager rubenManager;
-    private final PlatformManager platformManager;
+    private RubentxuManager rubenManager;
+    private PlatformManager platformManager;
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
 
@@ -131,6 +130,12 @@ public class WorldController implements ContactListener, ContactFilter {
     @Override
     public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
         return true;
+    }
+
+    public void dispose() {
+        rubenManager=null;
+        platformManager=null;
+
     }
 
 }

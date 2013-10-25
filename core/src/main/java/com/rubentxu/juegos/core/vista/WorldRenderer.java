@@ -1,17 +1,14 @@
 package com.rubentxu.juegos.core.vista;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
@@ -56,29 +53,16 @@ public class WorldRenderer {
     private AnimatedSprite idleLeftAnimation;
 
     private SpriteBatch spriteBatch;
-    private boolean debug = false;
     private int width;
     private int height;
     private float timeIdle;
     private Rubentxu ruben;
-    private float framesJump;
-    private float framesFall;
-    Vector3 point = new Vector3();
-
 
     public void setSize(int w, int h) {
-        this.width = w;
-        this.height = h;
-        cam.viewportWidth = width / 25;
-        cam.viewportHeight = height / 25;
-    }
-
-    public boolean isDebug() {
-        return debug;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debug = debug;
+        this.setWidth(w);
+        this.setHeight(h);
+        cam.viewportWidth = getWidth() / 25;
+        cam.viewportHeight = getHeight() / 25;
     }
 
     public WorldRenderer(final World world, boolean debug) {
@@ -90,7 +74,7 @@ public class WorldRenderer {
         cam = new OrthographicCamera();
         loadTextures();
 
-        final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
+        //final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
 
     }
 
@@ -160,9 +144,6 @@ public class WorldRenderer {
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
         if (DreamsGame.DEBUG) {
-
-           /*cache.setMultiLineText(ruben.toString(), cam.position.x - 11.5f, cam.position.y + 8f);
-           cache.draw(spriteBatch);*/
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y-2);
             DebugWindow.myLabel.setText(ruben.toString());
             DebugWindow.getInstance().pack();
@@ -252,4 +233,19 @@ public class WorldRenderer {
         return cam;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
 }

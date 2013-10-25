@@ -21,7 +21,6 @@ public class World {
     public static AssetManager assets = null;
     private Rubentxu ruben;
     private Box2DMapObjectParser parser;
-    private Window winDebug;
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> MovingPlatformplatforms;
 
@@ -54,8 +53,6 @@ public class World {
         ruben = new Rubentxu(this, 91, 3.6f, 0.7f, 1.8f);
         assets = new AssetManager();
         getAssets().load("imagenes/texturas/debug.jpg", Texture.class);
-                getAssets().load("imagenes/test/ball.png", Texture.class);
-        //        getAssets().load("imagenes/test/japanischeFlagge.jpg", Texture.class);
         getAssets().finishLoading();
     }
 
