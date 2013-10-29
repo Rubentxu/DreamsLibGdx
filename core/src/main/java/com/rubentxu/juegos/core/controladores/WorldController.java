@@ -42,7 +42,7 @@ public class WorldController implements ContactListener, ContactFilter {
     public WorldController(com.rubentxu.juegos.core.modelo.World world) {
         this.world = world;
         world.getPhysics().setContactListener(this);
-        rubenManager = new RubentxuManager(world);
+        rubenManager = new RubentxuManager(world.getRuben());
         platformManager= new PlatformManager();
         platformManager.setMovingPlatformplatforms(world.getMovingPlatformplatforms());
         platformManager.setPlatforms(world.getPlatforms());

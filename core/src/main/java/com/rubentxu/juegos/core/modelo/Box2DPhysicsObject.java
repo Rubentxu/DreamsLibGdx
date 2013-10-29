@@ -2,18 +2,14 @@ package com.rubentxu.juegos.core.modelo;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject {
+
 
     public static enum GRUPOS {
         HEROES, ENEMIGOS, PLATAFORMAS, PLATAFORMAS_MOVILES,
@@ -30,6 +26,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     private float width = 1;
     private float height = 1;
     private float radius = 0;
+    private Vector2 velocity;
 
     private GRUPOS grupo;
     private String nombre;
@@ -40,6 +37,12 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
         this.nombre=nombre;
         this.grupo=grupo;
         this.body=body;
+    }
+
+    public Box2DPhysicsObject(String nombre, GRUPOS grupo,  World physics) {
+        this.nombre=nombre;
+        this.grupo=grupo;
+        this.box2D = physics;
     }
 
     public Box2DPhysicsObject(String nombre, GRUPOS grupo, com.badlogic.gdx.physics.box2d.World box2D,
@@ -238,6 +241,16 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Vector2 getVelocity() {
+        if(body!=null) return body.getLinearVelocity();
+        return velocity;
+    }
+
+    public void setVelocity(Vector2 velocity) {
+        if(body!=null)  body.setLinearVelocity(velocity);
+        this.velocity = velocity;
     }
 
 }

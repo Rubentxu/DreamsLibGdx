@@ -50,7 +50,7 @@ public class World {
         parser = new Box2DMapObjectParser();
         System.out.println(getParser().getHierarchy(map));
         getParser().load(getPhysics(), map);
-        ruben = new Rubentxu(this, 91, 3.6f, 0.7f, 1.8f);
+        ruben = new Rubentxu(this.physics, 91, 3.6f, 0.7f, 1.8f);
         assets = new AssetManager();
         getAssets().load("imagenes/texturas/debug.jpg", Texture.class);
         getAssets().finishLoading();

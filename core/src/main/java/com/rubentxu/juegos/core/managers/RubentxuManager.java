@@ -17,34 +17,31 @@ import com.rubentxu.juegos.core.modelo.World;
 
 public class RubentxuManager implements IManager {
 
-
-    private World world;
     private Rubentxu ruben;
     private int stillTime = 0;
 
-    public RubentxuManager(World world) {
-        this.world = world;
-        this.ruben = world.getRuben();
+    public RubentxuManager(Rubentxu ruben) {
+        this.ruben = ruben;
     }
 
     public void update(float delta) {
         processInput(delta);
     }
 
-    public boolean processInput(float delta) {
+    public void processInput(float delta) {
 
-        Vector2 vel = ruben.getBody().getLinearVelocity();
+        Vector2 vel = ruben.getVelocity();
         Vector2 pos = ruben.getBody().getPosition();
         velocityLimit(vel,delta);
         processContactGround();
         applyImpulses(vel, pos);
 
-        return false;
     }
 
     private void velocityLimit(Vector2 vel,float delta) {
-        // cap max velocity on x
-        if (Math.abs(vel.x) > ruben.MAX_VELOCITY) {
+
+
+        if (ruben.isVelocityXOverMax()){
             vel.x = Math.signum(vel.x) * ruben.MAX_VELOCITY;
             ruben.getBody().setLinearVelocity(vel.x, vel.y);
         }

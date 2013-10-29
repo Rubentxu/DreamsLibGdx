@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
@@ -14,6 +15,17 @@ import java.util.HashSet;
 
 public class Rubentxu extends Box2DPhysicsObject  {
 
+
+
+
+    public boolean isVelocityXOverMax() {
+        Vector2 vel = this.getBody().getLinearVelocity();
+        return Math.abs(vel.x) > this.MAX_VELOCITY;
+    }
+
+    public void setVelocity(float v, float v1) {
+
+    }
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING, FALL
@@ -34,18 +46,23 @@ public class Rubentxu extends Box2DPhysicsObject  {
     private Fixture rubenPhysicsFixture;
     private Fixture rubenSensorFixture;
 
-    public Rubentxu(World world, float x, float y, float width, float height) {
-        super("Heroe", GRUPOS.HEROES, world.getPhysics(), x, y, width, height, 0);
+    public Rubentxu(World physics) {
+        super("Heroe", GRUPOS.HEROES, physics);
         setGrounContacts(new HashSet<Fixture>());
-        createRubenxu(world, x, y, width, height);
     }
 
-    public void createRubenxu(World world, float x, float y, float width, float height) {
+    public Rubentxu(World physics, float x, float y, float width, float height) {
+        super("Heroe", GRUPOS.HEROES, physics, x, y, width, height, 0);
+        setGrounContacts(new HashSet<Fixture>());
+        createRubenxu(physics, x, y, width, height);
+    }
+
+    public void createRubenxu(World physics, float x, float y, float width, float height) {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.x = x;
         def.position.y = y;
-        super.setBody(world.getPhysics().createBody(def));
+        super.setBody(physics.createBody(def));
         super.getBody().setFixedRotation(true);
 
         PolygonShape poly = new PolygonShape();
