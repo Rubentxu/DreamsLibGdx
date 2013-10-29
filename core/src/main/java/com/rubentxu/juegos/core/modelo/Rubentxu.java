@@ -16,17 +16,6 @@ import java.util.HashSet;
 public class Rubentxu extends Box2DPhysicsObject  {
 
 
-
-
-    public boolean isVelocityXOverMax() {
-        Vector2 vel = this.getBody().getLinearVelocity();
-        return Math.abs(vel.x) > this.MAX_VELOCITY;
-    }
-
-    public void setVelocity(float v, float v1) {
-
-    }
-
     public enum State {
         IDLE, WALKING, JUMPING, DYING, FALL
     }
@@ -54,15 +43,15 @@ public class Rubentxu extends Box2DPhysicsObject  {
     public Rubentxu(World physics, float x, float y, float width, float height) {
         super("Heroe", GRUPOS.HEROES, physics, x, y, width, height, 0);
         setGrounContacts(new HashSet<Fixture>());
-        createRubenxu(physics, x, y, width, height);
+        createRubenxu( x, y, width, height);
     }
 
-    public void createRubenxu(World physics, float x, float y, float width, float height) {
+    public void createRubenxu( float x, float y, float width, float height) {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.x = x;
         def.position.y = y;
-        super.setBody(physics.createBody(def));
+        super.setBody(box2D.createBody(def));
         super.getBody().setFixedRotation(true);
 
         PolygonShape poly = new PolygonShape();
@@ -84,6 +73,12 @@ public class Rubentxu extends Box2DPhysicsObject  {
         super.getBody().setBullet(true);
 
 
+    }
+
+
+    public boolean isVelocityXOverMax() {
+        Vector2 vel = this.getBody().getLinearVelocity();
+        return Math.abs(vel.x) > this.MAX_VELOCITY;
     }
 
     public boolean isFacingLeft() {

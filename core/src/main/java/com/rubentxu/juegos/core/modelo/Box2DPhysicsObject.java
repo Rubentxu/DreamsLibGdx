@@ -26,7 +26,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     private float width = 1;
     private float height = 1;
     private float radius = 0;
-    private Vector2 velocity;
 
     private GRUPOS grupo;
     private String nombre;
@@ -244,13 +243,12 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     }
 
     public Vector2 getVelocity() {
-        if(body!=null) return body.getLinearVelocity();
-        return velocity;
+       return body.getLinearVelocity();
+
     }
 
     public void setVelocity(Vector2 velocity) {
-        if(body!=null)  body.setLinearVelocity(velocity);
-        this.velocity = velocity;
+        body.setLinearVelocity(velocity);
     }
 
 }

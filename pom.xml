@@ -122,5 +122,6 @@
 
 	<modules>
 		<module>core</module>
+		<module>desktop</module>
 	</modules>
 </project>

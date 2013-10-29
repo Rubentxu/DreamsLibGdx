@@ -37,6 +37,20 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>com.googlecode.mavennatives</groupId>
+                <artifactId>maven-nativedependencies-plugin</artifactId>
+                <version>0.0.6</version>
+                <executions>
+                    <execution>
+                        <id>unpacknatives</id>
+                        <phase>pre-integration-test</phase>
+                        <goals><goal>copy</goal></goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+
         </plugins>
     </build>
 </project>
