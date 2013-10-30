@@ -76,9 +76,13 @@ public class Rubentxu extends Box2DPhysicsObject  {
     }
 
 
-    public boolean isVelocityXOverMax() {
+    public void velocityLimit() {
         Vector2 vel = this.getBody().getLinearVelocity();
-        return Math.abs(vel.x) > this.MAX_VELOCITY;
+
+        if (Math.abs(vel.x) > this.MAX_VELOCITY){
+            vel.x = Math.signum(vel.x) * this.MAX_VELOCITY;
+            this.setVelocity(new Vector2(vel.x, vel.y));
+        }
     }
 
     public boolean isFacingLeft() {
@@ -91,6 +95,10 @@ public class Rubentxu extends Box2DPhysicsObject  {
 
     public Vector2 getVelocity() {
         return super.getBody().getLinearVelocity();
+    }
+
+    public void setVelocity(Vector2 velocity) {
+         super.getBody().setLinearVelocity(velocity);
     }
 
     public State getState() {

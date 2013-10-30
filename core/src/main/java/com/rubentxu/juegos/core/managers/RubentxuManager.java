@@ -32,19 +32,15 @@ public class RubentxuManager implements IManager {
 
         Vector2 vel = ruben.getVelocity();
         Vector2 pos = ruben.getBody().getPosition();
-        velocityLimit(vel,delta);
+        processVelocity(vel,delta);
         processContactGround();
         applyImpulses(vel, pos);
 
     }
 
-    private void velocityLimit(Vector2 vel,float delta) {
+    public void processVelocity(Vector2 vel,float delta) {
 
-
-        if (ruben.isVelocityXOverMax()){
-            vel.x = Math.signum(vel.x) * ruben.MAX_VELOCITY;
-            ruben.getBody().setLinearVelocity(vel.x, vel.y);
-        }
+        ruben.velocityLimit();
 
         // calculate stilltime & damp
         if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
@@ -60,7 +56,7 @@ public class RubentxuManager implements IManager {
         }
     }
 
-    private void applyImpulses(Vector2 vel, Vector2 pos) {
+    public void applyImpulses(Vector2 vel, Vector2 pos) {
         // apply left impulse, but only if max velocity is not reached yet
         if (WorldController.keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
             ruben.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
@@ -78,12 +74,11 @@ public class RubentxuManager implements IManager {
                 ruben.getBody().setLinearVelocity(vel.x, 0);
                 ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
                 ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
-
             }
         }
     }
 
-    private void processContactGround() {
+    public void processContactGround() {
         if (!ruben.isGround()) {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);

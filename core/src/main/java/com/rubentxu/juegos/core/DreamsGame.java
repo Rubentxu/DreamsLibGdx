@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.managers.PlatformManager;
+import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
@@ -26,7 +28,18 @@ public class DreamsGame extends Game {
         log = new FPSLogger();
         world = new World();
         renderer=new WorldRenderer(world, true);
-        controller= new WorldController(world);
+
+        RubentxuManager rubenManager = new RubentxuManager(world.getRuben());
+        PlatformManager platformManager = new PlatformManager();
+        platformManager.setMovingPlatformplatforms(world.getMovingPlatformplatforms());
+        platformManager.setPlatforms(world.getPlatforms());
+
+        controller= new WorldController();
+        controller.setRubenManager(rubenManager);
+        controller.setPlatformManager(platformManager);
+        world.getPhysics().setContactListener(controller);
+
+
         gameScreen= new GameScreen( world,controller,renderer);
         gameInputs = new GameInputs(world, controller, renderer);
         Gdx.input.setInputProcessor(gameInputs);
