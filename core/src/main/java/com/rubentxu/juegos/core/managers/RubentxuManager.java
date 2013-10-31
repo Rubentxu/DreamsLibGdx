@@ -25,18 +25,13 @@ public class RubentxuManager implements IManager {
     }
 
     public void update(float delta) {
-        processInput(delta);
-    }
-
-    public void processInput(float delta) {
-
         Vector2 vel = ruben.getVelocity();
         Vector2 pos = ruben.getBody().getPosition();
         processVelocity(vel,delta);
         processContactGround();
         applyImpulses(vel, pos);
-
     }
+
 
     public void processVelocity(Vector2 vel,float delta) {
 
@@ -44,13 +39,8 @@ public class RubentxuManager implements IManager {
 
         // calculate stilltime & damp
         if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
-            ruben.getBody().setLinearVelocity(vel.x * 0.9f, vel.y);
-        }
-
-        // calculate stilltime & damp
-        if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
             stillTime += delta;
-            ruben.getBody().setLinearVelocity(vel.x * 0.9f, vel.y);
+            ruben.getBody().setLinearVelocity(ruben.getVelocity().x * 0.9f, vel.y);
         } else {
             stillTime = 0;
         }
@@ -69,11 +59,13 @@ public class RubentxuManager implements IManager {
 
         // jump, but only when grounded
         if (WorldController.keys.get(Keys.JUMP)) {
-            ruben.setState(Rubentxu.State.JUMPING);
             if (ruben.isGround()) {
+                ruben.setState(Rubentxu.State.JUMPING);
                 ruben.getBody().setLinearVelocity(vel.x, 0);
                 ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
                 ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
+            }else if(!ruben.getState().equals(Rubentxu.State.JUMPING)) {
+                ruben.setState(Rubentxu.State.FALL);
             }
         }
     }

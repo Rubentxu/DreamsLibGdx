@@ -22,7 +22,7 @@ public class Rubentxu extends Box2DPhysicsObject  {
 
     public final static float MAX_VELOCITY = 7f;
     public final static float JUMP_FORCE = 45f;
-    private boolean onGround = true;
+    private boolean onGround = false;
     private State state = State.IDLE;
     boolean facingLeft = true;
     private float killVelocity;
@@ -51,8 +51,8 @@ public class Rubentxu extends Box2DPhysicsObject  {
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.x = x;
         def.position.y = y;
-        super.setBody(box2D.createBody(def));
-        super.getBody().setFixedRotation(true);
+        setBody(box2D.createBody(def));
+        getBody().setFixedRotation(true);
 
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width,height);
@@ -109,10 +109,6 @@ public class Rubentxu extends Box2DPhysicsObject  {
         this.state = newState;
     }
 
-    public Body getBody() {
-        return super.getBody();
-    }
-
     public Fixture getRubenPhysicsFixture() {
         return rubenPhysicsFixture;
     }
@@ -128,8 +124,6 @@ public class Rubentxu extends Box2DPhysicsObject  {
     public void setGround(boolean onGround) {
         this.onGround = onGround;
     }
-
-
 
     public HashSet<Fixture> getGrounContacts() {
         return grounContacts;

@@ -18,6 +18,12 @@
             <artifactId>gdx</artifactId>
             <version>${gdx.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.badlogicgames.gdx</groupId>
+            <artifactId>gdx-platform</artifactId>
+            <version>${gdx.version}</version>
+            <classifier>natives-desktop</classifier>
+        </dependency>
 
     </dependencies>
 
@@ -40,12 +46,13 @@
             <plugin>
                 <groupId>com.googlecode.mavennatives</groupId>
                 <artifactId>maven-nativedependencies-plugin</artifactId>
-                <version>0.0.6</version>
+                <version>0.0.7</version>
                 <executions>
                     <execution>
                         <id>unpacknatives</id>
-                        <phase>pre-integration-test</phase>
-                        <goals><goal>copy</goal></goals>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>
