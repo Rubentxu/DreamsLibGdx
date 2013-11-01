@@ -3,6 +3,7 @@ package com.rubentxu.juegos.core.controladores;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxNativesLoader;
+import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import org.junit.Before;
@@ -15,20 +16,26 @@ import static org.junit.Assert.assertTrue;
 
 public class WorldControllerTest {
 
-    private static WorldController worldController;
+    WorldController worldController;
 
-    @BeforeClass
-    public static void testSetup() {
+    @Before
+    public void testSetup() {
         worldController = new WorldController();
     }
 
     @Test
     public void testLeftPressed() {
         worldController.leftPressed();
-        assertTrue(WorldController.keys.get(WorldController.Keys.LEFT));
+        assertWorldContainsKey(WorldController.Keys.LEFT);
+        
     }
 
-    @Test
+    private void assertWorldContainsKey(Keys key) {
+    	assertTrue(WorldController.keys.get(key));
+		
+	}
+
+	@Test
     public void testLeftReleased() {
         worldController.leftReleased();
         assertFalse(WorldController.keys.get(WorldController.Keys.LEFT));
@@ -38,7 +45,7 @@ public class WorldControllerTest {
     @Test
     public void testRightPressed() {
         worldController.rightPressed();
-        assertTrue(WorldController.keys.get(WorldController.Keys.RIGHT));
+        assertWorldContainsKey(WorldController.Keys.RIGHT);
     }
 
     @Test
@@ -50,7 +57,7 @@ public class WorldControllerTest {
     @Test
     public void testJumpPressed() {
         worldController.jumpPressed();
-        assertTrue(WorldController.keys.get(WorldController.Keys.JUMP));
+        assertWorldContainsKey(WorldController.Keys.JUMP);
     }
 
     @Test
@@ -62,7 +69,7 @@ public class WorldControllerTest {
     @Test
     public void testFirePressed() {
         worldController.firePressed();
-        assertTrue(WorldController.keys.get(WorldController.Keys.FIRE));
+        assertWorldContainsKey(WorldController.Keys.FIRE);
     }
 
     @Test
