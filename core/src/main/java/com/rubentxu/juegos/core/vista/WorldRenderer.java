@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
@@ -23,22 +22,19 @@ public class WorldRenderer {
 
 
     private static final float RUNNING_FRAME_DURATION = 0.02f;
-    private World world;
-    private OrthographicCamera cam;
-    private OrthogonalTiledMapRenderer renderer;
-
     /**
      * for debug rendering *
      */
     Box2DDebugRenderer debugRenderer;
-
+    private World world;
+    private OrthographicCamera cam;
+    private OrthogonalTiledMapRenderer renderer;
     /**
      * Textures *
      */
     private Array<TextureAtlas.AtlasRegion> rubenJumpRight;
     private Array<TextureAtlas.AtlasRegion> rubenFallRight;
     private Array<TextureAtlas.AtlasRegion> rubenIdleRight;
-
     /**
      * Animations *
      */
@@ -51,19 +47,11 @@ public class WorldRenderer {
     private AnimatedSprite fallLeftAnimation;
     private AnimatedSprite idleRightAnimation;
     private AnimatedSprite idleLeftAnimation;
-
     private SpriteBatch spriteBatch;
     private int width;
     private int height;
     private float timeIdle;
     private Rubentxu ruben;
-
-    public void setSize(int w, int h) {
-        this.setWidth(w);
-        this.setHeight(h);
-        cam.viewportWidth = getWidth() / 25;
-        cam.viewportHeight = getHeight() / 25;
-    }
 
     public WorldRenderer(final World world, boolean debug) {
         this.world = world;
@@ -76,6 +64,13 @@ public class WorldRenderer {
 
         //final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
 
+    }
+
+    public void setSize(int w, int h) {
+        this.setWidth(w);
+        this.setHeight(h);
+        cam.viewportWidth = getWidth() / 25;
+        cam.viewportHeight = getHeight() / 25;
     }
 
     private void loadTextures() {
@@ -107,11 +102,10 @@ public class WorldRenderer {
         idleLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
 
         AnimationRuben = new AnimatedBox2DSprite(walkRightAnimation);
-        AnimationRuben.setSize(ruben.getWidth()*2, ruben.getHeight());
+        AnimationRuben.setSize(ruben.getWidth() * 2, ruben.getHeight());
         AnimationRuben.setOrigin(AnimationRuben.getWidth() / 2, AnimationRuben.getHeight() / 1.9f);
         AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
                 ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
-
 
 
     }
@@ -144,10 +138,10 @@ public class WorldRenderer {
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
         if (DreamsGame.DEBUG) {
-            DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y-2);
+            DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
             DebugWindow.myLabel.setText(ruben.toString());
             DebugWindow.getInstance().pack();
-            DebugWindow.getInstance().draw(spriteBatch,0.8f);
+            DebugWindow.getInstance().draw(spriteBatch, 0.8f);
 
         }
         spriteBatch.end();
@@ -196,20 +190,11 @@ public class WorldRenderer {
                 AnimationRuben.setAnimatedSprite(walkRightAnimation);
             }
         } else if (ruben.getState().equals(State.JUMPING)) {
-            if (ruben.getVelocity().y > 0) {
-                if (ruben.isFacingLeft()) {
-                    AnimationRuben.setAnimatedSprite(jumpLeftAnimation);
-                } else {
-                    AnimationRuben.setAnimatedSprite(jumpRightAnimation);
-                }
 
+            if (ruben.isFacingLeft()) {
+                AnimationRuben.setAnimatedSprite(jumpLeftAnimation);
             } else {
-
-                if (ruben.isFacingLeft()) {
-                    AnimationRuben.setAnimatedSprite(fallLeftAnimation);
-                } else {
-                    AnimationRuben.setAnimatedSprite(fallRightAnimation);
-                }
+                AnimationRuben.setAnimatedSprite(jumpRightAnimation);
             }
         } else if (ruben.getState().equals(State.FALL)) {
             if (ruben.isFacingLeft()) {
@@ -223,7 +208,6 @@ public class WorldRenderer {
                 ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
 
     }
-
 
     public void dispose() {
         renderer.dispose();

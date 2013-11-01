@@ -12,7 +12,6 @@ import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
-import com.rubentxu.juegos.core.modelo.World;
 
 
 public class RubentxuManager implements IManager {
@@ -35,15 +34,14 @@ public class RubentxuManager implements IManager {
 
     public void processVelocity(Vector2 vel,float delta) {
 
-        ruben.velocityLimit();
-
-        // calculate stilltime & damp
         if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
             stillTime += delta;
             ruben.getBody().setLinearVelocity(ruben.getVelocity().x * 0.9f, vel.y);
         } else {
-            stillTime = 0;
+            setStillTime(0);
         }
+
+        ruben.velocityLimit();
     }
 
     public void applyImpulses(Vector2 vel, Vector2 pos) {
@@ -74,7 +72,8 @@ public class RubentxuManager implements IManager {
         if (!ruben.isGround()) {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);
-            if (!ruben.getState().equals(Rubentxu.State.JUMPING)) ruben.setState(Rubentxu.State.FALL);
+            if (ruben.getVelocity().y <= 0 || !ruben.getState().equals(Rubentxu.State.JUMPING))
+                ruben.setState(Rubentxu.State.FALL);
         } else {
             ruben.setState(Rubentxu.State.IDLE);
             if (WorldController.keys.get(Keys.LEFT)) {
@@ -100,7 +99,7 @@ public class RubentxuManager implements IManager {
 
     @Override
     public void handleBeginContact(Contact contact) {
-        Gdx.app.log(DreamsGame.LOG, "Begin contact");
+        //Gdx.app.log(DreamsGame.LOG, "Begin contact");
 
         if (contact.getFixtureA() == ruben.getRubenSensorFixture())
             ruben.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
@@ -112,7 +111,7 @@ public class RubentxuManager implements IManager {
             ruben.setGround(true);
             contact.setEnabled(true);
 
-            Gdx.app.log(DreamsGame.LOG, "OnGroun True");
+           // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
 
 
@@ -150,4 +149,7 @@ public class RubentxuManager implements IManager {
         return true;
     }
 
+    public void setStillTime(int stillTime) {
+        this.stillTime = stillTime;
+    }
 }
