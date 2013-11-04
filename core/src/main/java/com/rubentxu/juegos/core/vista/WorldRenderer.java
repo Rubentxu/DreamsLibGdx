@@ -13,6 +13,7 @@ import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
@@ -22,6 +23,7 @@ public class WorldRenderer {
 
 
     private static final float RUNNING_FRAME_DURATION = 0.02f;
+    private final MovingPlatform mp;
     /**
      * for debug rendering *
      */
@@ -61,6 +63,7 @@ public class WorldRenderer {
         spriteBatch = renderer.getSpriteBatch();
         cam = new OrthographicCamera();
         loadTextures();
+        mp=world.getMovingPlatformplatforms().iterator().next();
 
         //final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
 
@@ -139,7 +142,7 @@ public class WorldRenderer {
         AnimationRuben.draw(spriteBatch);
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
-            DebugWindow.myLabel.setText(ruben.toString());
+            DebugWindow.myLabel.setText(mp.toString());
             DebugWindow.getInstance().pack();
             DebugWindow.getInstance().draw(spriteBatch, 0.8f);
 

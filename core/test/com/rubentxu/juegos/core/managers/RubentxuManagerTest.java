@@ -22,14 +22,13 @@ import static org.junit.Assert.assertTrue;
 
 public class RubentxuManagerTest {
 
-
-    static final float BOX_STEP=1/3f;
-    static final int BOX_VELOCITY_ITERATIONS=10;
-    static final int BOX_POSITION_ITERATIONS=10;
     private static RubentxuManager rubentxuManager;
     private static Rubentxu r;
     private static WorldController controller;
     private static World physic;
+    private Vector2 velocity;
+    private Contact contact;
+    private Fixture fixMock;
 
 
     private class MyContact extends Contact {
@@ -51,14 +50,31 @@ public class RubentxuManagerTest {
         controller=new WorldController();
     }
 
+    @Before
+    public void setup(){
+        velocity=new Vector2(0, 0f);
+        r.setVelocity(velocity);
+        contact = createNiceMock(Contact.class);
+        fixMock= createNiceMock(Fixture.class);
+        r.getGrounContacts().clear();
+        controller.rightReleased();
+        controller.leftReleased();
+        controller.jumpReleased();
+        r.setGround(true);
+    }
+
+
+    @Test
+    public void testUpdate() {
+        rubentxuManager.update(1);
+        assertEquals(0,r.getVelocity().x, 0);
+    }
+
     /* Test sobre el metodo applyImpulses */
     @Test
     public void testApplyImpulses() {
         Vector2 vel = r.getVelocity();
         Vector2 pos = r.getBody().getPosition();
-        controller.rightReleased();
-        controller.jumpReleased();
-        controller.leftReleased();
 
         rubentxuManager.applyImpulses(vel,pos);
         assertEquals(vel.x, r.getVelocity().x,0);
@@ -66,45 +82,22 @@ public class RubentxuManagerTest {
 
     @Test
     public void testApplyImpulsesLeft() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.rightReleased();
-        controller.jumpReleased();
         controller.leftPressed();
-
         rubentxuManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
-        //physic.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-        System.out.println("Left "+r.getVelocity().toString());
         assertTrue(r.getVelocity().toString(), velocity.x > r.getVelocity().x);
     }
 
     @Test
     public void testApplyImpulsesRight() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
         controller.rightPressed();
-
         rubentxuManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
-       // physic.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-        System.out.println("Right "+r.getVelocity().toString());
         assertTrue(r.getVelocity().toString(), velocity.x < r.getVelocity().x);
-
     }
 
     @Test
     public void testApplyImpulsesJump() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.rightReleased();
         controller.jumpPressed();
-        r.setGround(true);
-
         rubentxuManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
-        // physic.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-        System.out.println("Jump "+r.getVelocity().toString());
         assertTrue(r.getVelocity().toString(), velocity.y < r.getVelocity().y);
         assertEquals(Rubentxu.State.JUMPING,r.getState());
 
@@ -112,17 +105,11 @@ public class RubentxuManagerTest {
 
     @Test
     public void testNoApplyImpulsesJump() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.rightReleased();
         controller.jumpPressed();
         r.setGround(false);
         r.setState(Rubentxu.State.IDLE);
 
         rubentxuManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
-        // physic.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-        System.out.println("Jump "+r.getVelocity().toString());
         assertEquals( velocity.y , r.getVelocity().y,0);
         assertEquals(Rubentxu.State.FALL,r.getState());
 
@@ -130,88 +117,57 @@ public class RubentxuManagerTest {
 
     @Test
     public void testApplyImpulsesRightPressedAndLeftPressed() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
         controller.leftPressed();
-        controller.jumpReleased();
         controller.rightPressed();
-
         rubentxuManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
-        // physic.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-        System.out.println("RightAndLef "+r.getVelocity().toString());
         assertEquals( velocity.x , r.getVelocity().x,0);
-
     }
 
     @Test
     public void testApplyImpulsesRightPressedAndLeftPressedAndJump() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
         controller.leftPressed();
         controller.jumpPressed();
         controller.rightPressed();
-        r.setGround(true);
 
         rubentxuManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
-        // physic.step(BOX_STEP, BOX_VELOCITY_ITERATIONS, BOX_POSITION_ITERATIONS);
-        System.out.println("RightAndLefAndJump "+r.getVelocity().toString());
         assertTrue( velocity.y < r.getVelocity().y);
 
     }
      /* Test sobre el metodo processVelocity */
     @Test
     public void testProcessVelocityMAX_VELOCITY() {
-        Vector2 velocity=new Vector2(10, 0f);
+        velocity=new Vector2(10, 0f);
         r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
-        controller.rightReleased();
-        r.setGround(true);
 
         rubentxuManager.processVelocity(velocity,1f);
-        System.out.println("Velocity "+r.getVelocity().toString());
         assertEquals(r.MAX_VELOCITY, r.getVelocity().x, 0);
     }
 
     @Test
     public void testProcessVelocityRightPressed() {
-        Vector2 velocity=new Vector2(10, 0f);
+        velocity=new Vector2(10, 0f);
         r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
         controller.rightPressed();
-        r.setGround(true);
 
         rubentxuManager.processVelocity(velocity,1f);
-        System.out.println("Velocity "+r.getVelocity().toString());
         assertEquals( r.MAX_VELOCITY, r.getVelocity().x,0);
     }
 
     @Test
     public void testProcessVelocityRightPressed2() {
-        Vector2 velocity=new Vector2(5, 0f);
+        velocity=new Vector2(5, 0f);
         r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
         controller.rightPressed();
-        r.setGround(true);
 
         rubentxuManager.processVelocity(velocity,1f);
-        System.out.println("Velocity "+r.getVelocity().toString());
         assertEquals( velocity.x, r.getVelocity().x,0);
     }
 
     @Test
     public void testProcessVelocity() {
-        Vector2 velocity=new Vector2(5, 0f);
+        velocity=new Vector2(5, 0f);
         r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
-        controller.rightReleased();
-        r.setGround(true);
-
         rubentxuManager.processVelocity(velocity,1f);
-        System.out.println("Velocity "+r.getVelocity().toString());
         assertTrue(velocity.x > r.getVelocity().x);
     }
 
@@ -219,76 +175,45 @@ public class RubentxuManagerTest {
 
     @Test
     public void testProcessContactGroundisGroundFalse() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
-        controller.rightReleased();
         r.setGround(false);
 
         rubentxuManager.processContactGround();
-        System.out.println("Velocity "+r.getVelocity().toString());
         assertEquals(r.getState(), Rubentxu.State.FALL);
         assertEquals(r.getRubenPhysicsFixture().getFriction(), 0, 0);
     }
 
     @Test
     public void testProcessContactGroundisGroundFalseAndJumping() {
-        Vector2 velocity=new Vector2(0, 2f);
+        velocity=new Vector2(0, 2f);
         r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
-        controller.rightReleased();
         r.setGround(false);
         r.setState(Rubentxu.State.JUMPING);
 
         rubentxuManager.processContactGround();
-        System.out.println("Velocity "+r.getVelocity().toString());
         assertTrue( r.getState().equals(Rubentxu.State.JUMPING));
         assertEquals(r.getRubenPhysicsFixture().getFriction(), 0, 0);
     }
 
     @Test
     public void testProcessContactGroundisGroundTrue() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
-        controller.rightReleased();
-        r.setGround(true);
         rubentxuManager.setStillTime(0);
         rubentxuManager.processContactGround();
-        System.out.println("Friction "+r.getRubenPhysicsFixture().getFriction());
         assertEquals(r.getState(), Rubentxu.State.IDLE);
         assertEquals(r.getRubenPhysicsFixture().getFriction() , 0.2,.1);
     }
 
     @Test
     public void testProcessContactGroundisGroundTrueStillTime1() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
-        controller.rightReleased();
-        r.setGround(true);
         rubentxuManager.setStillTime(1);
         rubentxuManager.processContactGround();
-        System.out.println("Friction "+r.getRubenPhysicsFixture().getFriction());
         assertEquals( r.getState(),Rubentxu.State.IDLE);
         assertEquals(r.getRubenPhysicsFixture().getFriction() , 100,.1);
     }
 
     @Test
     public void testProcessContactGroundisGroundTrueRightPressed() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
-        controller.leftReleased();
-        controller.jumpReleased();
         controller.rightPressed();
-        r.setGround(true);
-
         rubentxuManager.processContactGround();
-        System.out.println("Friction " + r.getRubenPhysicsFixture().getFriction());
         assertEquals(r.getState(), Rubentxu.State.WALKING);
         assertFalse(r.isFacingLeft());
         assertEquals(r.getRubenPhysicsFixture().getFriction() , 0.2,.1);
@@ -296,15 +221,9 @@ public class RubentxuManagerTest {
 
     @Test
     public void testProcessContactGroundisGroundTrueLeftPressed() {
-        Vector2 velocity=new Vector2(0, 0f);
-        r.setVelocity(velocity);
         controller.leftPressed();
-        controller.jumpReleased();
-        controller.rightReleased();
-        r.setGround(true);
 
         rubentxuManager.processContactGround();
-        System.out.println("Friction " + r.getRubenPhysicsFixture().getFriction());
         assertEquals(r.getState(), Rubentxu.State.WALKING);
         assertTrue(r.isFacingLeft());
         assertEquals(r.getRubenPhysicsFixture().getFriction() , 0.2,.1);
@@ -312,14 +231,11 @@ public class RubentxuManagerTest {
 
     @Test
     public void testhandleBeginContact() {
-        Contact contact = createNiceMock(Contact.class);
-        Fixture fixMock= createNiceMock(Fixture.class);
         expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
         expect(contact.getFixtureB()).andReturn(fixMock).anyTimes();
         replay(contact);
 
         rubentxuManager.handleBeginContact(contact);
-
         assertTrue(r.getGrounContacts().contains(fixMock));
         assertTrue(r.isGround());
 
@@ -327,29 +243,58 @@ public class RubentxuManagerTest {
 
     @Test
     public void testhandleBeginContact2() {
-        Contact contact = createNiceMock(Contact.class);
-        Fixture fixMock= createNiceMock(Fixture.class);
         expect(contact.getFixtureB()).andReturn(r.getRubenSensorFixture()).anyTimes();
         expect(contact.getFixtureA()).andReturn(fixMock).anyTimes();
         replay(contact);
 
         rubentxuManager.handleBeginContact(contact);
-
         assertTrue(r.getGrounContacts().contains(fixMock));
         assertTrue(r.isGround());
     }
 
     @Test
     public void testhandleBeginContact3() {
-        Contact contact = createNiceMock(Contact.class);
-        Fixture fixMock= createNiceMock(Fixture.class);
         expect(contact.getFixtureA()).andReturn(fixMock).anyTimes();
         replay(contact);
         r.getGrounContacts().clear();
         rubentxuManager.handleBeginContact(contact);
-
         assertTrue(r.getGrounContacts().isEmpty());
     }
+
+    @Test
+    public void testhandleEndContact() {
+        r.getGrounContacts().add(fixMock);
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixMock).anyTimes();
+        replay(contact);
+        rubentxuManager.handleEndContact(contact);
+
+        assertTrue(r.getGrounContacts().isEmpty());
+        assertFalse(r.isGround());
+    }
+
+    @Test
+    public void testhandleEndContact2() {
+        r.getGrounContacts().add(fixMock);
+        expect(contact.getFixtureB()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureA()).andReturn(fixMock).anyTimes();
+        replay(contact);
+
+        rubentxuManager.handleEndContact(contact);
+        assertTrue(r.getGrounContacts().isEmpty());
+        assertFalse(r.isGround());
+    }
+
+    @Test
+    public void testhandleEndContact3() {
+        r.getGrounContacts().add(fixMock);
+        expect(contact.getFixtureA()).andReturn(fixMock).anyTimes();
+        replay(contact);
+
+        rubentxuManager.handleEndContact(contact);
+        assertFalse(r.getGrounContacts().isEmpty());
+    }
+
 
 
 

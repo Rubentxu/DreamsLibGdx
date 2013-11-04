@@ -17,8 +17,54 @@ import java.util.HashSet;
 
 public class PlatformManager implements IManager {
 
+
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> MovingPlatformplatforms;
+
+    @Override
+    public void update(float delta) {
+        for (MovingPlatform p: getMovingPlatformplatforms()){
+            Math.max(1/30.0f, delta);
+            updateMovingPlatform(p,delta);
+        }
+    }
+
+
+
+    public void updateMovingPlatform(MovingPlatform platform,float delta){
+        Vector2 velocity= platform.getBody().getLinearVelocity();
+        if((platform.waitForPassenger && platform.getPassengers().size()==0) || !platform.enabled){
+            velocity.set(0,0);
+        }else {
+            Vector2 destination= new Vector2(platform.getStart());
+
+
+            if(platform.getStart().dst(platform.getBody().getPosition()) >= platform.maxDist) {
+                platform.setForward( true);
+                System.out.println("Cambio direccion");
+                platform.getBody().setLinearVelocity(platform.getBody().getPosition().scl(-delta*platform.speed));
+            }  else if (platform.getEnd().dst(platform.getBody().getPosition()) <= platform.maxDist) {
+                 platform.setForward(false);
+                platform.getBody().setLinearVelocity(platform.getBody().getPosition().scl(delta*platform.speed));
+            }
+
+
+            for (Body passenger : platform.getPassengers()){
+                passenger.setLinearVelocity(velocity);
+            }
+        }
+
+
+        Vector2 passengerVelocity;
+        for (Body passenger : platform.getPassengers()){
+            if(velocity.y > 0){
+                passengerVelocity= passenger.getLinearVelocity();
+                passengerVelocity.y+= velocity.y;
+                passenger.setLinearVelocity(passengerVelocity);
+            }
+
+        }
+    }
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -57,44 +103,6 @@ public class PlatformManager implements IManager {
     @Override
     public boolean handleShouldCollide(Fixture fixtureA, Fixture fixtureB) {
         return false;
-    }
-
-    @Override
-    public void update(float delta) {
-       for (MovingPlatform p: getMovingPlatformplatforms()){
-           updateMovingPlatform(p,delta);
-       }
-    }
-
-    private void updateMovingPlatform(MovingPlatform platform,float delta){
-        Vector2 velocity= platform.getBody().getLinearVelocity();
-        if((platform.waitForPassenger && platform.getPassengers().size()==0) || !platform.enabled){
-            velocity.set(0,0);
-        }else {
-            Vector2 destination= platform.getForward()? new Vector2(platform.getEnd().x,platform.getEnd().y):
-                                new Vector2(platform.getStart().x,platform.getStart().y);
-
-            destination.sub(platform.getBody().getPosition());
-            velocity= destination;
-
-            if(velocity.len()> platform.speed) {
-                velocity.limit(platform.speed);
-            }else {
-                platform.setForward(!platform.getForward());
-            }
-
-        }
-        platform.getBody().setLinearVelocity(velocity);
-
-        Vector2 passengerVelocity;
-        for (Body passenger : platform.getPassengers()){
-            if(velocity.y > 0){
-                passengerVelocity= passenger.getLinearVelocity();
-                passengerVelocity.y+= velocity.y;
-                passenger.setLinearVelocity(passengerVelocity);
-            }
-
-        }
     }
 
     public HashSet<Platform> getPlatforms() {

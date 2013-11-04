@@ -88,6 +88,7 @@ public class WorldController implements ContactListener, ContactFilter {
             getRubenManager().handlePostSolve(contact, impulse);
 
         }
+
     }
 
     @Override
@@ -97,6 +98,7 @@ public class WorldController implements ContactListener, ContactFilter {
             getRubenManager().handleBeginContact(contact);
 
         }
+        getPlatformManager().handleBeginContact(contact);
     }
 
     @Override
@@ -105,6 +107,7 @@ public class WorldController implements ContactListener, ContactFilter {
                 || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
             getRubenManager().handleEndContact(contact);
         }
+        getPlatformManager().handleEndContact(contact);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.core.managers;
+package com.rubentxu.juegos.core.modelo;
 
 
 import com.badlogic.gdx.math.Vector2;

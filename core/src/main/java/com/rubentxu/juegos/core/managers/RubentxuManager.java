@@ -119,7 +119,7 @@ public class RubentxuManager implements IManager {
 
     @Override
     public void handleEndContact(Contact contact) {
-        Gdx.app.log(DreamsGame.LOG, "End contact");
+        //Gdx.app.log(DreamsGame.LOG, "End contact");
 
         if (contact.getFixtureA() == ruben.getRubenSensorFixture())
             ruben.getGrounContacts().remove(contact.getFixtureB());//A is foot so B is ground
@@ -130,7 +130,7 @@ public class RubentxuManager implements IManager {
         if (ruben.getGrounContacts().size() == 0) {
             ruben.setGround(false);
             contact.resetFriction();
-            Gdx.app.log(DreamsGame.LOG, "OnGroun False");
+            //Gdx.app.log(DreamsGame.LOG, "OnGroun False");
         }
     }
 
