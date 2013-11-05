@@ -32,34 +32,42 @@ public class PlatformManager implements IManager {
 
 
     public void updateMovingPlatform(MovingPlatform platform,float delta){
-        Vector2 velocity= platform.getBody().getLinearVelocity();
+        platform.setDirection((platform.getForward())?platform.reverseDesplazamiento:platform.desplazamiento);
         if((platform.waitForPassenger && platform.getPassengers().size()==0) || !platform.enabled){
-            velocity.set(0,0);
+            platform.setDirection(new Vector2(0f,0f));
         }else {
-            Vector2 destination= new Vector2(platform.getStart());
 
 
-            if(platform.getStart().dst(platform.getBody().getPosition()) >= platform.maxDist) {
+
+          /*  if(platform.getStart().dst(platform.getBody().getPosition()) >= platform.maxDist) {
                 platform.setForward( true);
                 System.out.println("Cambio direccion");
-                platform.getBody().setLinearVelocity(platform.getBody().getPosition().scl(-delta*platform.speed));
+                platform.getBody().setLinearVelocity(velocity.scl(-delta));
             }  else if (platform.getEnd().dst(platform.getBody().getPosition()) <= platform.maxDist) {
                  platform.setForward(false);
-                platform.getBody().setLinearVelocity(platform.getBody().getPosition().scl(delta*platform.speed));
-            }
+                platform.getBody().setLinearVelocity(velocity.scl(delta));
+            }*/
+            platform.getDirection().sub( platform.getDirection().x*delta*platform.speed,
+                    platform.getDirection().y*delta*platform.speed);
 
+            if(Math.abs( platform.getDirection().len()) < 1){
+                platform.setForward(!platform.getForward());
+                System.out.println("Sustraer");
+
+            }
+            platform.getBody().setLinearVelocity(platform.getDirection());
 
             for (Body passenger : platform.getPassengers()){
-                passenger.setLinearVelocity(velocity);
+                passenger.setLinearVelocity(platform.getDirection());
             }
         }
 
 
         Vector2 passengerVelocity;
         for (Body passenger : platform.getPassengers()){
-            if(velocity.y > 0){
+            if(platform.getDirection().y > 0){
                 passengerVelocity= passenger.getLinearVelocity();
-                passengerVelocity.y+= velocity.y;
+                passengerVelocity.y+= platform.getDirection().y;
                 passenger.setLinearVelocity(passengerVelocity);
             }
 

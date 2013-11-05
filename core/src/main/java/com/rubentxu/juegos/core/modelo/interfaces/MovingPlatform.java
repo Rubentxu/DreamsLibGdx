@@ -13,6 +13,8 @@ import java.util.HashSet;
 
 public class MovingPlatform extends Platform{
 
+    public Vector2 reverseDesplazamiento;
+    public Vector2 desplazamiento;
     public float speed=2;
     public Boolean enabled=true;
     public Boolean waitForPassenger=false;
@@ -22,6 +24,7 @@ public class MovingPlatform extends Platform{
     private HashSet<Body> passengers= new HashSet<Body>();
     public float dist=0;
     public float maxDist;
+    private Vector2 direction;
 
 
     public MovingPlatform(Body body){
@@ -30,11 +33,13 @@ public class MovingPlatform extends Platform{
 
     public MovingPlatform(String nombre, GRUPOS grupo, Body body,float x, float y, float ex, float ey,float maxDist) {
         super(nombre, grupo, body);
-        start.x= x +Box2DUtils.width(body)/2;
-        start.y= y +Box2DUtils.height(body)/2;
-        end.x= ex +Box2DUtils.width(body)/2;
-        end.y= ey +Box2DUtils.height(body)/2;
-        this.maxDist=start.dst(end);
+        start.x= x;
+        start.y= y;
+        end.x= ex;
+        end.y= ey;
+        this.maxDist=end.dst(start);
+        this.desplazamiento=end.cpy().sub(start);
+        this.reverseDesplazamiento=start.cpy().sub(end);
         body.setTransform(start,0);
         body.getFixtureList().get(0).setUserData(this);
         body.setUserData(this);
@@ -82,8 +87,19 @@ public class MovingPlatform extends Platform{
                 "\nDistancia = " + this.maxDist+
                 "\nDistacia hasta Comienzo= " +  start.dst(this.getBody().getPosition())+
                 "\nDistacia hasta Final= " +  end.dst(this.getBody().getPosition()) +
+                "\nDistacia Actual= " +  this.direction.len() +
+                "\nVector Desplazamiento= " +  this.desplazamiento +
+                "\nVector ReverseDesplazamiento= " +  this.reverseDesplazamiento +
                 "\nForward= " +  forward +
                 "\nPasajeros= " + passengers.size() ;
 
+    }
+
+    public void setDirection(Vector2 direction) {
+        this.direction = direction;
+    }
+
+    public Vector2 getDirection() {
+        return direction;
     }
 }
