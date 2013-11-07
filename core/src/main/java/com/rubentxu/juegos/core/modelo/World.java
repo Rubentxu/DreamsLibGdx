@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
@@ -30,12 +31,12 @@ public class World {
     }
     private void createMovingPlatform(){
         Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.5f, 1);
-        Body body2 = createBox(BodyDef.BodyType.KinematicBody, 4, 1, 1);
+        Body body2 = createBox(BodyDef.BodyType.KinematicBody, 2, 1, 1);
         MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body1,
                 68,5,64,9,4);
 
         MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body2,
-                78,4,80,9 ,6);
+                78,4,80,9 ,20);
         MovingPlatformplatforms= new HashSet<MovingPlatform>();
         //MovingPlatformplatforms.add(m1);
         MovingPlatformplatforms.add(m2);
@@ -88,7 +89,9 @@ public class World {
 
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width, height);
-        box.createFixture(poly, density);
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape=poly;
+        box.createFixture(fixDef);
         poly.dispose();
 
         return box;

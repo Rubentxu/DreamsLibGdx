@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Platform;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
 
 import java.util.HashSet;
@@ -23,68 +22,48 @@ public class PlatformManager implements IManager {
 
     @Override
     public void update(float delta) {
-        for (MovingPlatform p: getMovingPlatformplatforms()){
-            Math.max(1/30.0f, delta);
-            updateMovingPlatform(p,delta);
+        for (MovingPlatform p : getMovingPlatformplatforms()) {
+            updateMovingPlatform(p, delta);
         }
     }
 
+    public void updateMovingPlatform(MovingPlatform platform, float delta) {
+        Vector2 velocity = platform.getpVelocity().cpy();
 
+        if ((platform.waitForPassenger && platform.getPassengers().size() == 0) || !platform.enabled) {
+            velocity = new Vector2(0f, 0f);
+        } else {
 
-    public void updateMovingPlatform(MovingPlatform platform,float delta){
-        platform.setDirection((platform.getForward())?platform.reverseDesplazamiento:platform.desplazamiento);
-        if((platform.waitForPassenger && platform.getPassengers().size()==0) || !platform.enabled){
-            platform.setDirection(new Vector2(0f,0f));
-        }else {
+            if (platform.getForward()) delta *= -1f;
+            velocity.scl(delta);
+            platform.setDistance(platform.getDistance() + velocity.len()*delta);
 
+            if (platform.getDistance() >= platform.getMaxDist() || platform.getDistance() <=0) {
 
-
-          /*  if(platform.getStart().dst(platform.getBody().getPosition()) >= platform.maxDist) {
-                platform.setForward( true);
-                System.out.println("Cambio direccion");
-                platform.getBody().setLinearVelocity(velocity.scl(-delta));
-            }  else if (platform.getEnd().dst(platform.getBody().getPosition()) <= platform.maxDist) {
-                 platform.setForward(false);
-                platform.getBody().setLinearVelocity(velocity.scl(delta));
-            }*/
-            platform.getDirection().sub( platform.getDirection().x*delta*platform.speed,
-                    platform.getDirection().y*delta*platform.speed);
-
-            if(Math.abs( platform.getDirection().len()) < 1){
                 platform.setForward(!platform.getForward());
-                System.out.println("Sustraer");
-
             }
-            platform.getBody().setLinearVelocity(platform.getDirection());
 
-            for (Body passenger : platform.getPassengers()){
-                passenger.setLinearVelocity(platform.getDirection());
+            platform.getBody().setLinearVelocity(velocity);
+
+            for (Body passenger : platform.getPassengers()) {
+                passenger.setLinearVelocity(velocity);
             }
         }
 
 
-        Vector2 passengerVelocity;
-        for (Body passenger : platform.getPassengers()){
-            if(platform.getDirection().y > 0){
-                passengerVelocity= passenger.getLinearVelocity();
-                passengerVelocity.y+= platform.getDirection().y;
-                passenger.setLinearVelocity(passengerVelocity);
-            }
-
-        }
     }
 
     @Override
     public void handleBeginContact(Contact contact) {
-        for (MovingPlatform p: getMovingPlatformplatforms()){
-            p.getPassengers().add(getCollider(p,contact).getBody());
+        for (MovingPlatform p : getMovingPlatformplatforms()) {
+            p.getPassengers().add(getCollider(p, contact).getBody());
         }
     }
 
     @Override
     public void handleEndContact(Contact contact) {
-        for (MovingPlatform p: getMovingPlatformplatforms()){
-            p.getPassengers().remove(getCollider(p,contact).getBody());
+        for (MovingPlatform p : getMovingPlatformplatforms()) {
+            p.getPassengers().remove(getCollider(p, contact).getBody());
         }
     }
 
@@ -129,7 +108,7 @@ public class PlatformManager implements IManager {
         MovingPlatformplatforms = movingPlatformplatforms;
     }
 
-    private Box2DPhysicsObject getCollider (MovingPlatform p,Contact contact) {
+    private Box2DPhysicsObject getCollider(MovingPlatform p, Contact contact) {
         Box2DPhysicsObject collider = (Box2DPhysicsObject) ((p == contact.getFixtureA().getUserData()) ? contact.getFixtureB().getUserData() : contact.getFixtureA().getUserData());
         return collider;
     }

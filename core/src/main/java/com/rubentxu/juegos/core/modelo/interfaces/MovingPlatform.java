@@ -3,43 +3,41 @@ package com.rubentxu.juegos.core.modelo.interfaces;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.rubentxu.juegos.core.modelo.Platform;
-import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 import java.util.HashSet;
 
 public class MovingPlatform extends Platform{
 
-    public Vector2 reverseDesplazamiento;
-    public Vector2 desplazamiento;
+
+    private final Vector2 pVelocity;
+    private final float maxDist;
+    private float distance=0;
     public float speed=2;
     public Boolean enabled=true;
     public Boolean waitForPassenger=false;
     private Vector2 start= new Vector2();
     private Vector2 end= new Vector2();
-    private Boolean forward= true;
+    private Boolean forward= false;
     private HashSet<Body> passengers= new HashSet<Body>();
-    public float dist=0;
-    public float maxDist;
-    private Vector2 direction;
 
 
-    public MovingPlatform(Body body){
+
+    public MovingPlatform(Body body, Vector2 pVelocity){
         super("Platform",GRUPOS.PLATAFORMAS_MOVILES,body);
+        this.pVelocity = pVelocity;
+        this.maxDist=0;
     }
 
-    public MovingPlatform(String nombre, GRUPOS grupo, Body body,float x, float y, float ex, float ey,float maxDist) {
+    public MovingPlatform(String nombre, GRUPOS grupo, Body body,float x, float y, float ex, float ey,float speed) {
         super(nombre, grupo, body);
         start.x= x;
         start.y= y;
         end.x= ex;
         end.y= ey;
-        this.maxDist=end.dst(start);
-        this.desplazamiento=end.cpy().sub(start);
-        this.reverseDesplazamiento=start.cpy().sub(end);
+        this.pVelocity=end.cpy().sub(start).scl(speed);
+        this.maxDist=start.dst(end);
+        this.setDistance(0f);
         body.setTransform(start,0);
         body.getFixtureList().get(0).setUserData(this);
         body.setUserData(this);
@@ -84,22 +82,27 @@ public class MovingPlatform extends Platform{
                 "\nPosicion Comienzo= " + start+
                 "\nPosicion Final= " + end+
                 "\nPosicion Actual= " + this.getBody().getPosition()+
-                "\nDistancia = " + this.maxDist+
-                "\nDistacia hasta Comienzo= " +  start.dst(this.getBody().getPosition())+
-                "\nDistacia hasta Final= " +  end.dst(this.getBody().getPosition()) +
-                "\nDistacia Actual= " +  this.direction.len() +
-                "\nVector Desplazamiento= " +  this.desplazamiento +
-                "\nVector ReverseDesplazamiento= " +  this.reverseDesplazamiento +
+                "\nVelocidad= " + this.pVelocity+
+                "\nMaxDistancia = " + this.getMaxDist() +
+                "\nDistacia = " + this.getDistance() +
                 "\nForward= " +  forward +
                 "\nPasajeros= " + passengers.size() ;
 
     }
 
-    public void setDirection(Vector2 direction) {
-        this.direction = direction;
+    public Vector2 getpVelocity() {
+        return pVelocity;
     }
 
-    public Vector2 getDirection() {
-        return direction;
+    public float getMaxDist() {
+        return maxDist;
+    }
+
+    public float getDistance() {
+        return distance;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
     }
 }
