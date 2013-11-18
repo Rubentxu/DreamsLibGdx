@@ -1,16 +1,15 @@
 package com.rubentxu.juegos.core.managers;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
+import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 
 
@@ -98,7 +97,7 @@ public class RubentxuManager implements IManager {
     }
 
     @Override
-    public void handleBeginContact(Contact contact) {
+    public void handleBeginContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
 
         if (contact.getFixtureA() == ruben.getRubenSensorFixture())
@@ -110,7 +109,8 @@ public class RubentxuManager implements IManager {
         if (ruben.getGrounContacts().size() > 0) {
             ruben.setGround(true);
             contact.setEnabled(true);
-
+            ruben.getRubenPhysicsFixture().setFriction(0.2f);
+            ruben.getRubenSensorFixture().setFriction(0.2f);
            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
 
@@ -118,7 +118,7 @@ public class RubentxuManager implements IManager {
     }
 
     @Override
-    public void handleEndContact(Contact contact) {
+    public void handleEndContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
         //Gdx.app.log(DreamsGame.LOG, "End contact");
 
         if (contact.getFixtureA() == ruben.getRubenSensorFixture())

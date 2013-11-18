@@ -36,7 +36,7 @@ public class World {
                 68,5,64,9,4);
 
         MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body2,
-                78,4,80,9 ,20);
+                78,4,80,9 ,4);
         MovingPlatformplatforms= new HashSet<MovingPlatform>();
         //MovingPlatformplatforms.add(m1);
         MovingPlatformplatforms.add(m2);
@@ -91,6 +91,7 @@ public class World {
         poly.setAsBox(width, height);
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape=poly;
+        fixDef.friction= 0.3f;
         box.createFixture(fixDef);
         poly.dispose();
 

@@ -31,7 +31,7 @@ public class DreamsGame extends Game {
 
         RubentxuManager rubenManager = new RubentxuManager(world.getRuben());
         PlatformManager platformManager = new PlatformManager();
-        platformManager.setMovingPlatformplatforms(world.getMovingPlatformplatforms());
+        platformManager.setMovingPlatforms(world.getMovingPlatformplatforms());
         platformManager.setPlatforms(world.getPlatforms());
 
         controller= new WorldController();

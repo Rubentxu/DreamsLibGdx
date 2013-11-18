@@ -5,12 +5,13 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 
 public interface IManager {
 
-    public void handleBeginContact(Contact contact);
+    public void handleBeginContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB);
 
-    public void handleEndContact(Contact contact);
+    public void handleEndContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB);
 
     public void handlePostSolve(Contact contact, ContactImpulse impulse);
 

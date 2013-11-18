@@ -63,64 +63,12 @@ public class WorldController implements ContactListener, ContactFilter {
         keys.get(keys.put(WorldController.Keys.FIRE, false));
     }
 
-    /**
-     * The main update method *
-     */
-    public void update(float delta) {
-        getRubenManager().update(delta);
-        getPlatformManager().update(delta);
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
-                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
-            getRubenManager().handlePreSolve(contact, oldManifold);
-
-        }
-        getPlatformManager().handlePreSolve(contact, oldManifold);
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
-                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
-            getRubenManager().handlePostSolve(contact, impulse);
-
-        }
-
-    }
-
-    @Override
-    public void beginContact(Contact contact) {
-        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
-                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
-            getRubenManager().handleBeginContact(contact);
-
-        }
-        getPlatformManager().handleBeginContact(contact);
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-        if ((GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo())
-                || GRUPOS.HEROES == ((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo()) {
-            getRubenManager().handleEndContact(contact);
-        }
-        getPlatformManager().handleEndContact(contact);
-    }
-
-    @Override
-    public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
-        return true;
-    }
 
     public void dispose() {
         setRubenManager(null);
         setPlatformManager(null);
 
     }
-
 
     public RubentxuManager getRubenManager() {
         return rubenManager;
@@ -142,4 +90,72 @@ public class WorldController implements ContactListener, ContactFilter {
         LEFT, RIGHT, JUMP, FIRE
     }
 
+    /**
+     * The main update method *
+     */
+    public void update(float delta) {
+        getRubenManager().update(delta);
+        getPlatformManager().update(delta);
+    }
+
+
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
+            getRubenManager().handlePreSolve(contact, oldManifold);
+        }
+        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
+            getPlatformManager().handlePreSolve(contact, oldManifold);
+        }
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
+            getRubenManager().handlePostSolve(contact, impulse);
+        }
+        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
+            getPlatformManager().handlePostSolve(contact, impulse);
+        }
+
+    }
+
+    @Override
+    public void beginContact(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
+            getRubenManager().handleBeginContact(contact, box2dPhysicsA, box2dPhysicsB);
+        }
+        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
+
+            getPlatformManager().handleBeginContact(contact,box2dPhysicsA,box2dPhysicsB);
+        }
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
+            getRubenManager().handleEndContact(contact,box2dPhysicsA, box2dPhysicsB);
+        }
+        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
+            getPlatformManager().handleEndContact(contact, box2dPhysicsA, box2dPhysicsB);
+        }
+    }
+
+    @Override
+    public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
+        return true;
+    }
 }

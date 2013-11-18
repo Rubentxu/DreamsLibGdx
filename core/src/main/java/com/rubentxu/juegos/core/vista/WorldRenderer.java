@@ -130,7 +130,7 @@ public class WorldRenderer {
         drawRubentxu();
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), 4, 4);
-
+        ruben.getBody().setAwake(true);
         cam.position.set(world.getRuben().getBody().getPosition().x, cam.viewportHeight / 2, 0);
         cam.update();
 
