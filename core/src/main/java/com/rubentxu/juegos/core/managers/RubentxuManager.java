@@ -86,8 +86,8 @@ public class RubentxuManager implements IManager {
                 ruben.getRubenPhysicsFixture().setFriction(100f);
                 ruben.getRubenSensorFixture().setFriction(100f);
             } else {
-                ruben.getRubenPhysicsFixture().setFriction(0.2f);
-                ruben.getRubenSensorFixture().setFriction(0.2f);
+                ruben.getRubenPhysicsFixture().setFriction(0.4f);
+                ruben.getRubenSensorFixture().setFriction(0.4f);
             }
 
            /* if(groundedPlatform != null && groundedPlatform.dist == 0) {

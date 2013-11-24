@@ -31,12 +31,12 @@ public class World {
     }
     private void createMovingPlatform(){
         Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.5f, 1);
-        Body body2 = createBox(BodyDef.BodyType.KinematicBody, 2, 1, 1);
+        Body body2 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);
         MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body1,
                 68,5,64,9,4);
 
         MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body2,
-                78,4,80,9 ,4);
+                77,3,80,9 ,3);
         MovingPlatformplatforms= new HashSet<MovingPlatform>();
         //MovingPlatformplatforms.add(m1);
         MovingPlatformplatforms.add(m2);
@@ -91,7 +91,7 @@ public class World {
         poly.setAsBox(width, height);
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape=poly;
-        fixDef.friction= 0.3f;
+        fixDef.friction= 2f;
         box.createFixture(fixDef);
         poly.dispose();
 

@@ -52,41 +52,48 @@ public class PlatformManager implements IManager {
             velocity = new Vector2(0f, 0f);
         } else {
 
-            if (platform.getForward()) velocity.scl(-1f);
+
 
             platform.setTime(platform.getTime() + delta);
             platform.setDistance(platform.getDistance() + velocity.len() * delta);
+
+
+
+            if (platform.getForward()) velocity.scl(-1f);
+
+
 
             if (platform.getDistance() > platform.getMaxDist()) {
                 platform.setTime(0);
                 platform.setForward(!platform.getForward());
                 platform.setDistance(0);
-            }
+                /*for (Box2DPhysicsObject passenger : platform.getPassengers()) {
+                    if ( velocity.y <=0) {
+                        float forceY;
+                        if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)
+                                && ((Rubentxu) passenger).getState().equals(Rubentxu.State.JUMPING)) {
+                            forceY = 0;
+                        } else {
+                            forceY = (velocity.y / delta*0.9f) * passenger.getBody().getMass();
 
-            platform.getBody().setLinearVelocity(velocity);
+                        }
 
-            for (Box2DPhysicsObject passenger : platform.getPassengers()) {
-                if (velocity.y < 0) {
-                    float forceY;
-                    if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)
-                            && ((Rubentxu) passenger).getState().equals(Rubentxu.State.JUMPING)) {
-                        forceY = 0;
-                    } else {
-                        //forceY = (velocity.y / delta*0.9f) * passenger.getBody().getMass();
-                        Vector2 p=passenger.getBody().getLinearVelocityFromWorldPoint(velocity);
-                        forceY = (p.y / delta) * passenger.getBody().getMass();
+                        passenger.getBody().applyLinearImpulse(0, -24, passenger.getBody().getWorldCenter().x,
+                                passenger.getBody().getWorldCenter().y, true);
                     }
-
-                    passenger.getBody().applyForce(0, forceY, passenger.getBody().getWorldCenter().x,
-                            passenger.getBody().getWorldCenter().y, true);
-                }
+                }*/
             }
+            platform.getBody().setLinearVelocity(velocity);
         }
     }
 
     @Override
     public void handleBeginContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
+        System.out.println("Fricciones BeginContact : "+contact.getFixtureA().getFriction()+ "-- "+contact.getFixtureB().getFriction());
+        contact.resetFriction();
+        System.out.println("Fricciones BeginContact2 : "+contact.getFixtureA().getFriction()+ "-- "+contact.getFixtureB().getFriction());
 
+        System.out.println("Reset Friccion "+ contact.getFriction()+ " --" +contact.getFixtureA().getFriction()+ " --" +contact.getFixtureB().getFriction());
         if(box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)){
             float posPlatform = box2dPhysicsA.getBody().getPosition().y + box2dPhysicsB.getHeight() / 2 ;
             float posPassenger = box2dPhysicsB.getBody().getPosition().y - box2dPhysicsB.getHeight() / 1.9f;
@@ -126,7 +133,7 @@ public class PlatformManager implements IManager {
 
     @Override
     public void handlePreSolve(Contact contact, Manifold oldManifold) {
-
+        contact.resetFriction();
         for (Platform p : getPlatforms()) {
             if (p.isOneWay()) {
                 Box2DPhysicsObject collider = (Box2DPhysicsObject) ((p.equals(contact.getFixtureA().getUserData())) ? contact.getFixtureB().getUserData() : contact.getFixtureA().getUserData());
@@ -136,6 +143,34 @@ public class PlatformManager implements IManager {
                     contact.setEnabled(false);
             }
         }
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+        MovingPlatform movingPlatform;
+        Box2DPhysicsObject passenger;
+
+        if(box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)){
+            movingPlatform= (MovingPlatform) box2dPhysicsA;
+            passenger= box2dPhysicsB;
+        }else {
+            movingPlatform= (MovingPlatform) box2dPhysicsB;
+            passenger= box2dPhysicsA;
+        }
+
+
+
+        for ( Vector2 point  :contact.getWorldManifold().getPoints()) {
+
+            Vector2 pointVelPlatform = movingPlatform.getBody().getLinearVelocityFromWorldPoint( point );
+            Vector2 pointVelOther = passenger.getBody().getLinearVelocityFromWorldPoint( point );
+            Vector2 relativeVel = movingPlatform.getBody().getLocalVector(pointVelOther.sub(pointVelPlatform));
+            Vector2 relativeVelP = passenger.getBody().getLocalVector(pointVelPlatform.sub(pointVelOther));
+            if ( relativeVel.y > 0 && passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)
+                    && !((Rubentxu) passenger).getState().equals(Rubentxu.State.JUMPING) ) {
+                relativeVel.x= (((Rubentxu) passenger).getState().equals(Rubentxu.State.WALKING))?-passenger.getVelocity().nor().x:relativeVel.x;
+                passenger.getBody().applyLinearImpulse(relativeVel.scl(-4.5f), passenger.getBody().getWorldCenter(), true);
+            }
+        }
+
     }
 
     @Override

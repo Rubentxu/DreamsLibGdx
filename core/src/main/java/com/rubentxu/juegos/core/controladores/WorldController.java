@@ -102,6 +102,7 @@ public class WorldController implements ContactListener, ContactFilter {
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
+        contact.resetFriction();
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 

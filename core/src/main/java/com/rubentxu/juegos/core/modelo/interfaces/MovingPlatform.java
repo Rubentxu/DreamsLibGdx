@@ -12,6 +12,7 @@ public class MovingPlatform extends Platform{
 
     private final Vector2 pVelocity;
     private final float maxDist;
+    public  float speed;
     private float distance=0;
     public Boolean enabled=true;
     public Boolean waitForPassenger=false;
@@ -31,7 +32,8 @@ public class MovingPlatform extends Platform{
         super(nombre, grupo, body);
         start= new Vector2(x,y);
         end= new Vector2(ex,ey);
-        this.pVelocity=end.cpy().sub(start).nor().scl(speed);
+        this.speed=speed;
+        this.pVelocity=end.cpy().sub(start).nor().scl(this.speed);
         this.maxDist=start.dst(end);
         this.setDistance(0f);
         body.setTransform(start,0);
