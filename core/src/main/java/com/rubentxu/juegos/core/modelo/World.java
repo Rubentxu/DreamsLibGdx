@@ -9,8 +9,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
@@ -30,16 +28,22 @@ public class World {
         createMovingPlatform();
     }
     private void createMovingPlatform(){
-        Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.5f, 1);
+        Body body1 = createBox(BodyDef.BodyType.KinematicBody, 5, 0.5f, 1);
         Body body2 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);
-        MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body1,
-                68,5,64,9,4);
+        Body body3 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);
 
-        MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body2,
-                77,3,80,9 ,3);
+        MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body1,
+                77,3,82,9 ,6);
+
+        MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body2,
+                68,3,64,9,5);
+
+        MovingPlatform m3= new MovingPlatform("M3", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body3,
+                62,3,67,9 ,3);
         MovingPlatformplatforms= new HashSet<MovingPlatform>();
-        //MovingPlatformplatforms.add(m1);
+        MovingPlatformplatforms.add(m1);
         MovingPlatformplatforms.add(m2);
+        MovingPlatformplatforms.add(m3);
         platforms = new HashSet<Platform>();
 
 

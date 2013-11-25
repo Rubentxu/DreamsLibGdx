@@ -30,7 +30,6 @@ public class RubentxuManager implements IManager {
         applyImpulses(vel, pos);
     }
 
-
     public void processVelocity(Vector2 vel,float delta) {
 
         if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
@@ -89,15 +88,11 @@ public class RubentxuManager implements IManager {
                 ruben.getRubenPhysicsFixture().setFriction(0.4f);
                 ruben.getRubenSensorFixture().setFriction(0.4f);
             }
-
-           /* if(groundedPlatform != null && groundedPlatform.dist == 0) {
-                player.applyLinearImpulse(0, -24, pos.x, pos.y);
-            }*/
         }
     }
 
     @Override
-    public void handleBeginContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
+    public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
 
         if (contact.getFixtureA() == ruben.getRubenSensorFixture())
@@ -118,7 +113,7 @@ public class RubentxuManager implements IManager {
     }
 
     @Override
-    public void handleEndContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
+    public void handleEndContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "End contact");
 
         if (contact.getFixtureA() == ruben.getRubenSensorFixture())

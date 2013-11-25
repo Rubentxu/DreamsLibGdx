@@ -5,9 +5,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Platform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
-import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
+
 
 import java.util.HashSet;
 
@@ -16,6 +17,7 @@ public class PlatformManager implements IManager {
 
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> movingPlatforms;
+    private float mLastPlatformXPos=0, mLastPlatformYPos=0;
 
     public HashSet<Platform> getPlatforms() {
         return platforms;
@@ -67,33 +69,29 @@ public class PlatformManager implements IManager {
                 platform.setTime(0);
                 platform.setForward(!platform.getForward());
                 platform.setDistance(0);
-                /*for (Box2DPhysicsObject passenger : platform.getPassengers()) {
-                    if ( velocity.y <=0) {
-                        float forceY;
-                        if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)
-                                && ((Rubentxu) passenger).getState().equals(Rubentxu.State.JUMPING)) {
-                            forceY = 0;
-                        } else {
-                            forceY = (velocity.y / delta*0.9f) * passenger.getBody().getMass();
 
-                        }
+            }
+            for (Box2DPhysicsObject passenger : platform.getPassengers()) {
+                mLastPlatformXPos= platform.getBody().getTransform().getPosition().x;
+                mLastPlatformYPos= platform.getBody().getTransform().getPosition().y;
+                Vector2 v=new Vector2( passenger.getBody().getTransform().getPosition().x +
+                        (platform.getBody().getTransform().getPosition().x - mLastPlatformXPos),
+                        passenger.getBody().getTransform().getPosition().y + (platform.getBody().getTransform().getPosition().y-mLastPlatformYPos));
 
-                        passenger.getBody().applyLinearImpulse(0, -24, passenger.getBody().getWorldCenter().x,
-                                passenger.getBody().getWorldCenter().y, true);
-                    }
-                }*/
+
+                passenger.getBody().getTransform().setPosition(v);
+                System.out.println("Position add " +v.len());
             }
             platform.getBody().setLinearVelocity(velocity);
         }
     }
 
     @Override
-    public void handleBeginContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
-        System.out.println("Fricciones BeginContact : "+contact.getFixtureA().getFriction()+ "-- "+contact.getFixtureB().getFriction());
-        contact.resetFriction();
-        System.out.println("Fricciones BeginContact2 : "+contact.getFixtureA().getFriction()+ "-- "+contact.getFixtureB().getFriction());
+    public void handleBeginContact(Contact contact) {
 
-        System.out.println("Reset Friccion "+ contact.getFriction()+ " --" +contact.getFixtureA().getFriction()+ " --" +contact.getFixtureB().getFriction());
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
         if(box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)){
             float posPlatform = box2dPhysicsA.getBody().getPosition().y + box2dPhysicsB.getHeight() / 2 ;
             float posPassenger = box2dPhysicsB.getBody().getPosition().y - box2dPhysicsB.getHeight() / 1.9f;
@@ -103,7 +101,7 @@ public class PlatformManager implements IManager {
             //check if contact points are moving downward
             for (int i = 0; i < numPoints; i++) {
                 Vector2 pointVel = box2dPhysicsB.getBody().getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
-                if ( pointVel.y < 0 )
+                if ( pointVel.y > 0 )
                     return;//point is moving down, leave contact solid and exit
             }
             if(posPlatform< posPassenger) ((MovingPlatform) box2dPhysicsA).getPassengers().add(box2dPhysicsB);
@@ -117,8 +115,9 @@ public class PlatformManager implements IManager {
     }
 
     @Override
-    public void handleEndContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB) {
-
+    public void handleEndContact(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
         if(box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)){
             ((MovingPlatform) box2dPhysicsA).getPassengers().remove(box2dPhysicsB);
         }else {
@@ -133,7 +132,7 @@ public class PlatformManager implements IManager {
 
     @Override
     public void handlePreSolve(Contact contact, Manifold oldManifold) {
-        contact.resetFriction();
+
         for (Platform p : getPlatforms()) {
             if (p.isOneWay()) {
                 Box2DPhysicsObject collider = (Box2DPhysicsObject) ((p.equals(contact.getFixtureA().getUserData())) ? contact.getFixtureB().getUserData() : contact.getFixtureA().getUserData());

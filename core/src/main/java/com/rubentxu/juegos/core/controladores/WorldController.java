@@ -134,11 +134,11 @@ public class WorldController implements ContactListener, ContactFilter {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            getRubenManager().handleBeginContact(contact, box2dPhysicsA, box2dPhysicsB);
+            getRubenManager().handleBeginContact(contact);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
 
-            getPlatformManager().handleBeginContact(contact,box2dPhysicsA,box2dPhysicsB);
+            getPlatformManager().handleBeginContact(contact);
         }
     }
 
@@ -148,10 +148,10 @@ public class WorldController implements ContactListener, ContactFilter {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            getRubenManager().handleEndContact(contact,box2dPhysicsA, box2dPhysicsB);
+            getRubenManager().handleEndContact(contact);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            getPlatformManager().handleEndContact(contact, box2dPhysicsA, box2dPhysicsB);
+            getPlatformManager().handleEndContact(contact);
         }
     }
 

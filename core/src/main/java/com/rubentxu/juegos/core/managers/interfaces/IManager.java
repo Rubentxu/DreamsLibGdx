@@ -9,9 +9,9 @@ import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 
 public interface IManager {
 
-    public void handleBeginContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB);
+    public void handleBeginContact(Contact contact);
 
-    public void handleEndContact(Contact contact, Box2DPhysicsObject box2dPhysicsA, Box2DPhysicsObject box2dPhysicsB);
+    public void handleEndContact(Contact contact);
 
     public void handlePostSolve(Contact contact, ContactImpulse impulse);
 

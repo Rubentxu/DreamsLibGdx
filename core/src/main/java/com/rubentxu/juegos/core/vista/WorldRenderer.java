@@ -13,7 +13,7 @@ import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
 import com.rubentxu.juegos.core.modelo.World;
-import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
+import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;

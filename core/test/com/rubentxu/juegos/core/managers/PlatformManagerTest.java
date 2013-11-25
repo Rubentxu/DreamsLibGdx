@@ -11,15 +11,12 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
-import com.rubentxu.juegos.core.modelo.interfaces.MovingPlatform;
+import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.easymock.EasyMock.createNiceMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

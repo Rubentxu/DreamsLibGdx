@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.core.modelo.interfaces;
+package com.rubentxu.juegos.core.modelo;
 
 
 import com.badlogic.gdx.math.Vector2;
