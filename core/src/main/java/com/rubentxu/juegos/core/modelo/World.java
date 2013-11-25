@@ -36,10 +36,10 @@ public class World {
                 77,3,82,9 ,6);
 
         MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body2,
-                68,3,64,9,5);
+                68,3,65,9,5);
 
         MovingPlatform m3= new MovingPlatform("M3", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body3,
-                62,3,67,9 ,3);
+                60,3,65,9 ,3);
         MovingPlatformplatforms= new HashSet<MovingPlatform>();
         MovingPlatformplatforms.add(m1);
         MovingPlatformplatforms.add(m2);

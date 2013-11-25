@@ -71,24 +71,14 @@ public class PlatformManager implements IManager {
                 platform.setDistance(0);
 
             }
-            for (Box2DPhysicsObject passenger : platform.getPassengers()) {
-                mLastPlatformXPos= platform.getBody().getTransform().getPosition().x;
-                mLastPlatformYPos= platform.getBody().getTransform().getPosition().y;
-                Vector2 v=new Vector2( passenger.getBody().getTransform().getPosition().x +
-                        (platform.getBody().getTransform().getPosition().x - mLastPlatformXPos),
-                        passenger.getBody().getTransform().getPosition().y + (platform.getBody().getTransform().getPosition().y-mLastPlatformYPos));
 
-
-                passenger.getBody().getTransform().setPosition(v);
-                System.out.println("Position add " +v.len());
-            }
             platform.getBody().setLinearVelocity(velocity);
         }
     }
 
     @Override
     public void handleBeginContact(Contact contact) {
-
+        System.out.println("Friccion2 "+ contact.getFriction());
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
@@ -105,6 +95,7 @@ public class PlatformManager implements IManager {
                     return;//point is moving down, leave contact solid and exit
             }
             if(posPlatform< posPassenger) ((MovingPlatform) box2dPhysicsA).getPassengers().add(box2dPhysicsB);
+
 
         }else {
             float posPassenger = box2dPhysicsA.getBody().getPosition().y - box2dPhysicsB.getHeight() / 1.9f;
@@ -154,8 +145,11 @@ public class PlatformManager implements IManager {
             movingPlatform= (MovingPlatform) box2dPhysicsB;
             passenger= box2dPhysicsA;
         }
+        if(passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES) &&
+                !((Rubentxu) passenger).getState().equals(Rubentxu.State.WALKING)){
+            contact.setFriction(100f);
 
-
+        }
 
         for ( Vector2 point  :contact.getWorldManifold().getPoints()) {
 
