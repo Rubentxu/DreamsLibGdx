@@ -15,8 +15,6 @@ import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
 
 public class WorldController implements ContactListener, ContactFilter {
 
-
-    private World physics;
     private RubentxuManager rubenManager;
     private PlatformManager platformManager;
 

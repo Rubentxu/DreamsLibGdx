@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import static com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -63,11 +64,11 @@ public class PlatformManagerTest {
     public void setup(){
         Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.5f, 1);
         Body body2 = createBox(BodyDef.BodyType.KinematicBody, 4, 1, 1);
-        m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body1,
-                68,5,64,9);
+        m1= new MovingPlatform("M1", PLATAFORMAS_MOVILES, body1,
+                68,5,64,9,4);
 
-        m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body2,
-                78,4,80,9 );
+        m2= new MovingPlatform("M2", PLATAFORMAS_MOVILES,body2,
+                78,4,80,9,4 );
     }
 
     /* Test sobre el metodo applyImpulses */

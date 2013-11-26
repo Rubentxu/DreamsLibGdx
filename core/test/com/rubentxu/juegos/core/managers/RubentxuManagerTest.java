@@ -235,7 +235,7 @@ public class RubentxuManagerTest {
         expect(contact.getFixtureB()).andReturn(fixMock).anyTimes();
         replay(contact);
 
-        rubentxuManager.handleBeginContact(contact, box2dPhysicsA, box2dPhysicsB);
+        rubentxuManager.handleBeginContact(contact);
         assertTrue(r.getGrounContacts().contains(fixMock));
         assertTrue(r.isGround());
 
@@ -247,7 +247,7 @@ public class RubentxuManagerTest {
         expect(contact.getFixtureA()).andReturn(fixMock).anyTimes();
         replay(contact);
 
-        rubentxuManager.handleBeginContact(contact, box2dPhysicsA, box2dPhysicsB);
+        rubentxuManager.handleBeginContact(contact);
         assertTrue(r.getGrounContacts().contains(fixMock));
         assertTrue(r.isGround());
     }
@@ -257,7 +257,7 @@ public class RubentxuManagerTest {
         expect(contact.getFixtureA()).andReturn(fixMock).anyTimes();
         replay(contact);
         r.getGrounContacts().clear();
-        rubentxuManager.handleBeginContact(contact, box2dPhysicsA, box2dPhysicsB);
+        rubentxuManager.handleBeginContact(contact);
         assertTrue(r.getGrounContacts().isEmpty());
     }
 

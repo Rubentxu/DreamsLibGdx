@@ -57,12 +57,7 @@ public class Rubentxu extends Box2DPhysicsObject  {
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width,height);
 
-        FixtureDef fixtureDef=new FixtureDef();
-        fixtureDef.density=1;
-        fixtureDef.shape=poly;
-        fixtureDef.friction=5;
-        rubenPhysicsFixture = super.getBody().createFixture(fixtureDef);
-
+        rubenPhysicsFixture = super.getBody().createFixture(poly,1);
         rubenPhysicsFixture.setUserData(this);
         poly.dispose();
 
@@ -70,15 +65,12 @@ public class Rubentxu extends Box2DPhysicsObject  {
         CircleShape circle = new CircleShape();
         circle.setRadius(0.6f);
         circle.setPosition(new Vector2(0, -height*0.9f));
-        fixtureDef.density=0.3f;
-        fixtureDef.shape=circle;
-        rubenSensorFixture = super.getBody().createFixture(fixtureDef);
+        rubenSensorFixture = super.getBody().createFixture(circle, 0);
         rubenSensorFixture.setSensor(true);
         rubenSensorFixture.setUserData(this);
         circle.dispose();
 
         super.getBody().setBullet(true);
-
 
     }
 
