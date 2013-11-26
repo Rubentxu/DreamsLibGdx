@@ -63,7 +63,7 @@ public class Rubentxu extends Box2DPhysicsObject  {
 
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(0.6f);
+        circle.setRadius(0.67f);
         circle.setPosition(new Vector2(0, -height*0.9f));
         rubenSensorFixture = super.getBody().createFixture(circle, 0);
         rubenSensorFixture.setSensor(true);
