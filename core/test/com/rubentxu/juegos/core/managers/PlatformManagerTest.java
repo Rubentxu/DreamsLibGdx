@@ -2,15 +2,9 @@ package com.rubentxu.juegos.core.managers;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import org.junit.Before;
@@ -19,6 +13,8 @@ import org.junit.Test;
 
 import static com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES;
 import static org.easymock.EasyMock.createNiceMock;
+import static org.easymock.EasyMock.expect;
+import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -30,17 +26,24 @@ public class PlatformManagerTest {
     private static World physic;
     private Vector2 velocity;
     private Contact contact;
-    private Fixture fixMock;
+    private Fixture fixture;
     private MovingPlatform m1;
     private MovingPlatform m2;
     private static Rubentxu r;
+    private WorldManifold manifold;
 
 
-    private class MyContact extends Contact {
-        public MyContact(World physic, Long addr) {
-            super(physic, addr);
+    private class Manifold extends WorldManifold{}
+    private class Fix extends Fixture{
+        /**
+         * Constructs a new fixture
+         *
+         * @param addr the address of the fixture
+         */
+        protected Fix(Body body, long addr) {
+            super(body, addr);
         }
-    }
+    };
 
     @BeforeClass
     public static void testSetup() {
@@ -67,14 +70,20 @@ public class PlatformManagerTest {
         Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.5f, 1);
         Body body2 = createBox(BodyDef.BodyType.KinematicBody, 4, 1, 1);
         contact = createNiceMock(Contact.class);
-        fixMock= createNiceMock(Fixture.class);
+        fixture = new Fix(body1,1l);
+        manifold= new Manifold();
         m1= new MovingPlatform("M1", PLATAFORMAS_MOVILES, body1,
-                68,5,64,9,4);
+                0,0,3,5,4);
 
         m2= new MovingPlatform("M2", PLATAFORMAS_MOVILES,body2,
-                78,4,80,9,4 );
+                5,-1,8,5,4 );
         r = new Rubentxu(physic);
-        r.createRubenxu(0,0,0.7f,1.8f);
+        r.createRubenxu(0,1.2f,0.7f,1.8f);
+        r.setVelocity(new Vector2(1.2F,1.5F));
+        fixture.setUserData(m1);
+        manifold.getPoints()[0].x=0f;
+        manifold.getPoints()[0].y=0.8f;
+
     }
 
 
@@ -111,6 +120,19 @@ public class PlatformManagerTest {
         System.out.println("Distance3: "+ m1.getDistance());
     }
 
+    @Test
+    public void testhandleBeginContact() {
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        expect(contact.getWorldManifold()).andReturn(manifold).anyTimes();
+
+        replay(contact);
+        platformManager.updateMovingPlatform(m1,0.5f);
+        platformManager.handleBeginContact(contact);
+        assertTrue(m1.getPassengers().size()>0);
+
+
+    }
 
 
 }

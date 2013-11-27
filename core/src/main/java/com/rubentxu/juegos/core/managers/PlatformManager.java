@@ -2,10 +2,7 @@ package com.rubentxu.juegos.core.managers;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.*;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
@@ -90,14 +87,14 @@ public class PlatformManager implements IManager {
             movingPlatform = (MovingPlatform) box2dPhysicsB;
             passenger = box2dPhysicsA;
         }
-
-        for (Vector2 point : contact.getWorldManifold().getPoints()) {
+        WorldManifold manifold = contact.getWorldManifold();
+        for (Vector2 point : manifold.getPoints()) {
             float posPlatform = movingPlatform.getBody().getPosition().y + box2dPhysicsB.getHeight() / 2 ;
             float posPassenger = passenger.getBody().getPosition().y ;
             Vector2 velMovingPlatform = movingPlatform.getBody().getLinearVelocityFromWorldPoint(point);
             Vector2 velPassenger =
                     passenger.getBody().getLinearVelocityFromWorldPoint(point);
-            Vector2 relativeVel = movingPlatform.getBody().getLocalVector(velPassenger.sub(velMovingPlatform));
+            Vector2 relativeVel = movingPlatform.getBody().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
 
             if (relativeVel.y < -1 && posPlatform< posPassenger) //if moving down faster than 1 m/s, handle as before
             {
@@ -121,34 +118,8 @@ public class PlatformManager implements IManager {
 
         }
 
-        //no points are moving into platform, contact should not be solid
         enabledContac = false;
         contact.setEnabled(enabledContac);
-
-
-/*
-        if(box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)){
-            float posPlatform = box2dPhysicsA.getBody().getPosition().y + box2dPhysicsB.getHeight() / 2 ;
-            float posPassenger = box2dPhysicsB.getBody().getPosition().y - box2dPhysicsB.getHeight() / 1.9f;
-            int numPoints = contact.getWorldManifold().getNumberOfContactPoints();
-            WorldManifold worldManifold = contact.getWorldManifold();
-
-            //check if contact points are moving downward
-            for (int i = 0; i < numPoints; i++) {
-                Vector2 pointVel = box2dPhysicsB.getBody().getLinearVelocityFromWorldPoint(worldManifold.getPoints()[i]);
-                if ( pointVel.y > 0 )
-                    return;
-            }
-            if(posPlatform< posPassenger) ((MovingPlatform) box2dPhysicsA).getPassengers().add(box2dPhysicsB);
-
-
-        }else {
-            float posPassenger = box2dPhysicsA.getBody().getPosition().y - box2dPhysicsB.getHeight() / 1.9f;
-            float posPlatform = box2dPhysicsB.getBody().getPosition().y + box2dPhysicsB.getHeight() / 2;
-
-            if(posPlatform< posPassenger) ((MovingPlatform) box2dPhysicsB).getPassengers().add(box2dPhysicsA);
-        }*/
-
     }
 
     @Override

@@ -30,13 +30,6 @@ public class RubentxuManagerTest {
     private Contact contact;
     private Fixture fixMock;
 
-
-    private class MyContact extends Contact {
-        public MyContact(World physic, Long addr) {
-            super(physic, addr);
-        }
-    }
-
     @BeforeClass
     public static void testSetup() {
         GdxNativesLoader.load();
