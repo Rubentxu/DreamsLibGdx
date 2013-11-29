@@ -5,6 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import org.junit.Before;
@@ -12,11 +13,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES;
+import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 
 public class PlatformManagerTest {
@@ -33,7 +36,12 @@ public class PlatformManagerTest {
     private WorldManifold manifold;
 
 
-    private class Manifold extends WorldManifold{}
+    private class WorldManifoldMock extends WorldManifold{}
+    private class ManifoldMock extends Manifold{
+        protected ManifoldMock(long addr) {
+            super(addr);
+        }
+    }
     private class Fix extends Fixture{
         /**
          * Constructs a new fixture
@@ -71,18 +79,18 @@ public class PlatformManagerTest {
         Body body2 = createBox(BodyDef.BodyType.KinematicBody, 4, 1, 1);
         contact = createNiceMock(Contact.class);
         fixture = new Fix(body1,1l);
-        manifold= new Manifold();
+        manifold= new WorldManifoldMock();
         m1= new MovingPlatform("M1", PLATAFORMAS_MOVILES, body1,
                 0,0,3,5,4);
 
         m2= new MovingPlatform("M2", PLATAFORMAS_MOVILES,body2,
                 5,-1,8,5,4 );
         r = new Rubentxu(physic);
-        r.createRubenxu(0,1.2f,0.7f,1.8f);
+        r.createRubenxu(0, 1.2f, 0.7f, 1.8f);
         r.setVelocity(new Vector2(1.2F,1.5F));
         fixture.setUserData(m1);
-        manifold.getPoints()[0].x=0f;
-        manifold.getPoints()[0].y=0.8f;
+        manifold.getPoints()[0].x=13f;
+        manifold.getPoints()[0].y=12f;
 
     }
 
@@ -121,7 +129,55 @@ public class PlatformManagerTest {
     }
 
     @Test
-    public void testhandleBeginContact() {
+    public void testGetMovingPlatform() {
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        replay(contact);
+
+        MovingPlatform platformResult = platformManager.getMovingPlatform(contact);
+        assertEquals(m1,platformResult);
+    }
+
+    @Test
+    public void testGetMovingPlatform2() {
+        expect(contact.getFixtureB()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureA()).andReturn(fixture).anyTimes();
+        replay(contact);
+
+        MovingPlatform platformResult = platformManager.getMovingPlatform(contact);
+        assertEquals(m1,platformResult);
+    }
+
+    @Test
+    public void testGetPassenger() {
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        replay(contact);
+
+        Box2DPhysicsObject passenger = platformManager.getPassenger(contact);
+        assertEquals(r, passenger);
+    }
+
+    @Test
+    public void testGetPassenger2() {
+        expect(contact.getFixtureB()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureA()).andReturn(fixture).anyTimes();
+        replay(contact);
+
+        Box2DPhysicsObject passenger = platformManager.getPassenger(contact);
+        assertEquals(r, passenger);
+    }
+
+    @Test
+    public void testGetRelativeVelocity() {
+        platformManager.updateMovingPlatform(m1,0.4f);
+        Vector2 velRelative = platformManager.getRelativeVelocity(m1, r, manifold.getPoints()[0]);
+        System.out.println("Velocity Relative: "+ velRelative);
+        assertTrue(velRelative.y < r.getBody().getLinearVelocity().y);
+    }
+
+    @Test
+    public void testHandleBeginContact() {
         expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
         expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
         expect(contact.getWorldManifold()).andReturn(manifold).anyTimes();
@@ -130,6 +186,70 @@ public class PlatformManagerTest {
         platformManager.updateMovingPlatform(m1,0.5f);
         platformManager.handleBeginContact(contact);
         assertTrue(m1.getPassengers().size()>0);
+
+
+    }
+    @Test
+    public void testHandleBeginContactVelRelative() {
+        r.setVelocity(new Vector2(3.2F,4F));
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        expect(contact.getWorldManifold()).andReturn(manifold).anyTimes();
+
+        replay(contact);
+        platformManager.updateMovingPlatform(m1,0.5f);
+        platformManager.handleBeginContact(contact);
+        assertTrue(m1.getPassengers().size()>0);
+
+
+    }
+
+    @Test
+    public void testHandleBeginContactVelRelative2() {
+        r.setVelocity(new Vector2(3.2F,5F));
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        expect(contact.getWorldManifold()).andReturn(manifold).anyTimes();
+
+        replay(contact);
+        platformManager.updateMovingPlatform(m1,0.5f);
+        platformManager.handleBeginContact(contact);
+        assertTrue("Num Pasenger: "+m1.getPassengers().size(),m1.getPassengers().size()==0);
+
+
+    }
+
+    @Test
+    public void testHandleEndContact() {
+
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        expect(contact.getWorldManifold()).andReturn(manifold).anyTimes();
+        m1.getPassengers().add(r);
+
+        replay(contact);
+        platformManager.handleEndContact(contact);
+        assertTrue("Num Pasenger: "+m1.getPassengers().size(),m1.getPassengers().size()==0);
+
+
+    }
+
+    @Test
+    public void testHandlePresolve() {
+        r.setVelocity(new Vector2(3.2F, 4F));
+        expect(contact.getFixtureA()).andReturn(r.getRubenSensorFixture()).anyTimes();
+        expect(contact.getFixtureB()).andReturn(fixture).anyTimes();
+        expect(contact.getWorldManifold()).andReturn(manifold).anyTimes();
+        expect(contact.isEnabled()).andReturn(true).anyTimes();
+
+        replay(contact);
+
+        platformManager.updateMovingPlatform(m1, 0.5f);
+        platformManager.setEnabledContac(true);
+        platformManager.handlePreSolve(contact, new ManifoldMock(1l));
+        assertTrue("Contact is Enabled? " + contact.isEnabled(), contact.isEnabled());
+        //assertEquals(100f, contact.getFriction(), 0f);
+
 
 
     }

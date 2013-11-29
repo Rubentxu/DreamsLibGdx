@@ -2,7 +2,11 @@ package com.rubentxu.juegos.core.managers;
 
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.WorldManifold;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
@@ -72,102 +76,98 @@ public class PlatformManager implements IManager {
         }
     }
 
-    @Override
-    public void handleBeginContact(Contact contact) {
-        MovingPlatform movingPlatform;
-        Box2DPhysicsObject passenger;
-
+    public MovingPlatform getMovingPlatform(Contact contact) {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) {
-            movingPlatform = (MovingPlatform) box2dPhysicsA;
-            passenger = box2dPhysicsB;
+            return (MovingPlatform) box2dPhysicsA;
         } else {
-            movingPlatform = (MovingPlatform) box2dPhysicsB;
-            passenger = box2dPhysicsA;
+            return (MovingPlatform) box2dPhysicsB;
         }
+    }
+
+    public Box2DPhysicsObject getPassenger(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (!box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) {
+            return box2dPhysicsA;
+        } else {
+            return box2dPhysicsB;
+        }
+    }
+
+    public Vector2 getRelativeVelocity(MovingPlatform movingPlatform, Box2DPhysicsObject passenger, Vector2 point) {
+        Vector2 velMovingPlatform = movingPlatform.getBody().getLinearVelocityFromWorldPoint(point);
+        Vector2 velPassenger = passenger.getBody().getLinearVelocityFromWorldPoint(point);
+        return movingPlatform.getBody().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
+    }
+
+
+    @Override
+    public void handleBeginContact(Contact contact) {
+        MovingPlatform movingPlatform = getMovingPlatform(contact);
+        Box2DPhysicsObject passenger = getPassenger(contact);
+
         WorldManifold manifold = contact.getWorldManifold();
         for (Vector2 point : manifold.getPoints()) {
-            float posPlatform = movingPlatform.getBody().getPosition().y + box2dPhysicsB.getHeight() / 2 ;
-            float posPassenger = passenger.getBody().getPosition().y ;
-            Vector2 velMovingPlatform = movingPlatform.getBody().getLinearVelocityFromWorldPoint(point);
-            Vector2 velPassenger =
-                    passenger.getBody().getLinearVelocityFromWorldPoint(point);
-            Vector2 relativeVel = movingPlatform.getBody().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
+            float posPlatform = movingPlatform.getBody().getPosition().y + movingPlatform.getHeight() / 2;
+            float posPassenger = passenger.getBody().getPosition().y;
+            Vector2 relativeVel = getRelativeVelocity(movingPlatform, passenger, point);
 
-            if (relativeVel.y < -1 && posPlatform< posPassenger) //if moving down faster than 1 m/s, handle as before
-            {
+            if (relativeVel.y < -1 && posPlatform < posPassenger) {
                 movingPlatform.getPassengers().add(passenger);
-                return;//point is moving into platform, leave contact solid and exit
-            } else if (relativeVel.y < 1 && posPlatform< posPassenger) { //if moving slower than 1 m/s
-                //borderline case, moving only slightly out of platform
+                return;
+            } else if (relativeVel.y < 1 && posPlatform < posPassenger) { //if moving slower than 1 m/s
+
                 Vector2 relativePoint = movingPlatform.getBody().getLocalPoint(point);
-                float platformFaceY = 0.5f;//front of platform, from fixture definition :(
-                if (relativePoint.y > platformFaceY - 0.05 ) {
+                float platformFaceY = 0.5f;
+                if (relativePoint.y > platformFaceY - 0.05) {
                     movingPlatform.getPassengers().add(passenger);
-                    return;//contact point is less than 5cm inside front face of platfrom
+                    return;
                 }
-
-
             }
         }
         if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES) &&
                 !((Rubentxu) passenger).getState().equals(Rubentxu.State.WALKING)) {
             contact.setFriction(100f);
-
         }
-
-        enabledContac = false;
-        contact.setEnabled(enabledContac);
+        setEnabledContac(false);
+        contact.setEnabled(getEnabledContac());
     }
+
 
     @Override
     public void handleEndContact(Contact contact) {
-        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
-        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
-        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) {
-            ((MovingPlatform) box2dPhysicsA).getPassengers().remove(box2dPhysicsB);
-        } else {
-            ((MovingPlatform) box2dPhysicsB).getPassengers().remove(box2dPhysicsA);
-        }
-        enabledContac = true;
-        contact.setEnabled(enabledContac);
+        MovingPlatform movingPlatform = getMovingPlatform(contact);
+        Box2DPhysicsObject passenger = getPassenger(contact);
+        movingPlatform.getPassengers().remove(passenger);
+        setEnabledContac(true);
+        contact.setEnabled(getEnabledContac());
     }
 
     @Override
     public void handlePostSolve(Contact contact, ContactImpulse impulse) {
-        contact.setEnabled(enabledContac);
+        contact.setEnabled(getEnabledContac());
     }
 
     @Override
     public void handlePreSolve(Contact contact, Manifold oldManifold) {
-        contact.setEnabled(enabledContac);
+        contact.setEnabled(getEnabledContac());
 
         if (contact.isEnabled()) {
-            Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
-            Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
-            MovingPlatform movingPlatform;
-            Box2DPhysicsObject passenger;
-
-            if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) {
-                movingPlatform = (MovingPlatform) box2dPhysicsA;
-                passenger = box2dPhysicsB;
-            } else {
-                movingPlatform = (MovingPlatform) box2dPhysicsB;
-                passenger = box2dPhysicsA;
-            }
+            MovingPlatform movingPlatform = getMovingPlatform(contact);
+            Box2DPhysicsObject passenger = getPassenger(contact);
             if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES) &&
                     !((Rubentxu) passenger).getState().equals(Rubentxu.State.WALKING)) {
                 contact.setFriction(100f);
-
             }
             for (Vector2 point : contact.getWorldManifold().getPoints()) {
 
                 Vector2 pointVelPlatform = movingPlatform.getBody().getLinearVelocityFromWorldPoint(point);
                 Vector2 pointVelOther = passenger.getBody().getLinearVelocityFromWorldPoint(point);
                 Vector2 relativeVel = movingPlatform.getBody().getLocalVector(pointVelOther.sub(pointVelPlatform));
-                Vector2 relativeVelP = passenger.getBody().getLocalVector(pointVelPlatform.sub(pointVelOther));
                 if (relativeVel.y > 0 && passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)
                         && !((Rubentxu) passenger).getState().equals(Rubentxu.State.JUMPING)) {
                     relativeVel.x = (((Rubentxu) passenger).getState().equals(Rubentxu.State.WALKING)) ? -passenger.getVelocity().nor().x : relativeVel.x;
@@ -181,5 +181,13 @@ public class PlatformManager implements IManager {
     @Override
     public boolean handleShouldCollide(Fixture fixtureA, Fixture fixtureB) {
         return false;
+    }
+
+    public Boolean getEnabledContac() {
+        return enabledContac;
+    }
+
+    public void setEnabledContac(Boolean enabledContac) {
+        this.enabledContac = enabledContac;
     }
 }
