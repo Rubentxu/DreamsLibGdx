@@ -39,11 +39,11 @@ public class Water extends Box2DPhysicsObject {
     //
     // Default values
     //
-    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 1f); // point up
-    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,2f); // zero velocity / no current
-    public static final Vector2 DEFAULT_FLUID_GRAVITY = new Vector2(0, -9f); // standard gravity
-    public static final float DEFAULT_LINEAR_DRAG = 0.7f;
-    public static final float DEFAULT_ANGULAR_DRAG = 0.3f;
+    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 2f); // point up
+    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,5f); // zero velocity / no current
+    public static final Vector2 DEFAULT_FLUID_GRAVITY = new Vector2(0, -9.8f); // standard gravity
+    public static final float DEFAULT_LINEAR_DRAG = 5f;
+    public static final float DEFAULT_ANGULAR_DRAG = 2f;
 
     public static final boolean DEBUG_BUOYANCY = false;
 

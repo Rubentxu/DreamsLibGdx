@@ -107,7 +107,7 @@ public class World {
         poly.setAsBox(width, height);
         FixtureDef fixDef = new FixtureDef();
         fixDef.shape=poly;
-        fixDef.friction= 2f;
+        fixDef.friction= 1f;
         box.createFixture(fixDef);
         poly.dispose();
 
