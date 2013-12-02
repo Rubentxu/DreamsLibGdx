@@ -53,6 +53,8 @@ public class Rubentxu extends Box2DPhysicsObject  {
         def.position.y = y;
         setBody(box2D.createBody(def));
         getBody().setFixedRotation(true);
+        getBody().setUserData(this);
+
 
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width,height);

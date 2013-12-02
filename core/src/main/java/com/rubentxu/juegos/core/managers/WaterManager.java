@@ -1,184 +1,184 @@
 package com.rubentxu.juegos.core.managers;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
+import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.Water;
+import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
 
-import java.util.*;
+import java.util.HashSet;
 
 
 public class WaterManager implements IManager {
 
-    private Map<Fixture, Fixture> fixturesPair;
-    private final static float EPSILON = 0.001f;
-
-    public WaterManager() {
-        this.fixturesPair = new HashMap<Fixture, Fixture>();
-
-    }
+    private HashSet<Water> waterSensors;
 
     @Override
     public void handleBeginContact(Contact contact) {
+        Water w = getWater(contact);
+        w.addBody(getSubmergedBody(contact).getBody());
 
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-
-
-        if (fixtureA.isSensor() && fixtureB.getBody().getType() == BodyDef.BodyType.DynamicBody)
-            fixturesPair.put(make_pair(fixtureA, fixtureB));
-        else if (fixtureB.isSensor() && fixtureA.getBody().getType() == BodyDef.BodyType.DynamicBody)
-            fixturesPair.put(make_pair(fixtureB, fixtureA));
     }
 
 
     @Override
     public void handleEndContact(Contact contact) {
-        Fixture fixtureA = contact.getFixtureA();
-        Fixture fixtureB = contact.getFixtureB();
-
-        if (fixtureA.isSensor() && fixtureB.getBody().getType() == BodyDef.BodyType.DynamicBody)
-            fixturesPair.remove(make_pair(fixtureA, fixtureB));
-        else if (fixtureB.isSensor() && fixtureA.getBody().getType() == BodyDef.BodyType.DynamicBody)
-            fixturesPair.remove(make_pair(fixtureB, fixtureA));
+        Water w = getWater(contact);
+        w.removeBody(getSubmergedBody(contact).getBody());
     }
 
     @Override
     public void handlePostSolve(Contact contact, ContactImpulse impulse) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
     @Override
     public void handlePreSolve(Contact contact, Manifold oldManifold) {
-        //To change body of implemented methods use File | Settings | File Templates.
+
     }
 
     @Override
     public boolean handleShouldCollide(Fixture fixtureA, Fixture fixtureB) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;
+    }
+
+    public Box2DPhysicsObject getSubmergedBody(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (!box2dPhysicsA.getGrupo().equals(GRUPOS.AGUA)) {
+            return box2dPhysicsA;
+        } else {
+            return box2dPhysicsB;
+        }
+    }
+
+    public Water getWater(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (box2dPhysicsA.getGrupo().equals(GRUPOS.AGUA)) {
+            return (Water) box2dPhysicsA;
+        } else {
+            return (Water) box2dPhysicsB;
+        }
     }
 
     @Override
     public void update(float delta) {
-
-        Iterator<Map.Entry<Fixture, Fixture>> itFixt = fixturesPair.entrySet().iterator();
-        while (itFixt.hasNext()) {
-            Map.Entry<Fixture, Fixture> it = itFixt.next();
-            //fixtureA is the fluid
-            Fixture fixtureA = it.getKey();
-            Fixture fixtureB = it.getValue();
-
-            float density = fixtureA.getDensity();
-
-            Vector2 intersectionPoints= findIntersectionOfFixtures(fixtureA, fixtureB);
-            if (intersectionPoints!=null) {
-
-                //find centroid
-                float area = 0;
-                Vector2 centroid = ComputeCentroid(intersectionPoints, area);
-
-                Vector2 gravity=new Vector2( 0, -10 );
-
-                //apply buoyancy force (fixtureA is the fluid)
-                float displacedMass = fixtureA.getDensity() * area;
-                Vector2 buoyancyForce = gravity.cpy().scl(-1).scl(displacedMass);
-                fixtureB.getBody().applyForce(buoyancyForce, centroid, true);
-            }
-
-        }
-    }
-
-    private Vector2 ComputeCentroid(Vector2[] intersectionPoints, float area) {
-        Vector2 c= new Vector2(0.0f,0.0f);
-        area = 0.0f;
-
-        // pRef is the reference point for forming triangles.
-        // It's location doesn't change the result (except for rounding error).
-
-        Vector2 pRef= new Vector2(0.0f,0.0f);
-
-        final float inv3 = 1.0f / 3.0f;
-
-        for (int i = 0; i < intersectionPoints.length; ++i)
-        {
-            // Triangle vertices.
-            Vector2 p1 = pRef;
-            Vector2 p2 = intersectionPoints[i];
-            Vector2 p3 = (i + 1 < intersectionPoints.length )? intersectionPoints[i+1] : intersectionPoints[0];
-
-            Vector2 e1 = p2.cpy().sub( p1);
-            Vector2 e2 = p3.cpy().sub( p1);
-
-            float D = e1.crs( e2);
-
-            float triangleArea = 0.5f * D;
-            area += triangleArea;
-
-            // Area weighted centroid
-            c.add(p1.cpy().add(p2).add(p3)).scl(inv3).scl(triangleArea);
-        }
-
-        // Centroid
-        if (area > EPSILON)
-            c.scl( 1.0f / area);
-        else
-            area = 0;
-        return c;
-    }
-
-    private List<Vector2> findIntersectionOfFixtures(Fixture fA, Fixture fB, List<Vector2> outputVertices) {
-        //currently this only handles polygon vs polygon
-        if ( fA.getShape().getType() != Shape.Type.Polygon ||
-                fB.getShape().getType() != Shape.Type.Polygon )
-        return null;
-
-        PolygonShape polyA = (PolygonShape)fA.getShape();
-        PolygonShape polyB = (PolygonShape)fB.getShape();
-
-        //fill 'subject polygon' from fixtureA polygon
-        for (int i = 0; i < polyA.getVertexCount(); i++)
-            outputVertices.add( fA.getBody().getWorldPoint(polyA.getVertex(i)) );
-
-        //fill 'clip polygon' from fixtureB polygon
-        List<Vector2> clipPolygon=new ArrayList<Vector2>();
-        for (int i = 0; i < polyB.getVertexCount(); i++)
-            clipPolygon.add( fB.getBody().getWorldPoint(polyB.getVertex(i)) );
-
-        ArrayList<Vector2> cp1 = new ArrayList<Vector2>(clipPolygon);
-        for (int j = 0; j < clipPolygon.size(); j++) {
-            Vector2 cp2 = clipPolygon.get(j);
-            if ( outputVertices.isEmpty() )
-                return null;
-
-            List<Vector2> inputList = outputVertices;
-            outputVertices.clear();
-            Vector2 s = inputList.get(inputList.size() - 1); //last on the input list
-            for (int i = 0; i < inputList.size(); i++) {
-                Vector2 e = inputList.get(i);
-                if (inside(cp1, cp2, e)) {
-                    if (!inside(cp1, cp2, s)) {
-                        outputVertices.add( intersection(cp1, cp2, s, e) );
+        for (Water w : waterSensors) {
+            for (int i = 0; i < w.m_bodyList.size; i++) {
+                System.out.println("Recorrer lista de objetos sumergidos...");
+                Array<Fixture> fixtureList = w.m_bodyList.get(i).getFixtureList();
+                for (int j = 0; j < fixtureList.size; j++) {
+                    System.out.println("Aplicar fuerzas de empuje...");
+                    Fixture fixture = fixtureList.get(j);
+                    if(!fixture.isSensor()){
+                        ApplyToFixture(fixture, w);
                     }
-                    outputVertices.add(e);
                 }
-                else if (inside(cp1, cp2, s)) {
-                    outputVertices.add(intersection(cp1, cp2, s, e));
-                }
-                s = e;
             }
-            cp1 = cp2;
+        }
+    }
+
+    private boolean ApplyToFixture(Fixture f, Water w) {
+        float shapeDensity = w.mUseDensity ? f.getDensity() : w.mFluidDensity;
+
+        // don't bother with buoyancy on sensors or fixtures with no density
+        if (f.isSensor() || (shapeDensity == 0)) {
+            return false;
+        }
+        Body body = f.getBody();
+        w.mAreac.set(Vector2.Zero);
+        w.mMassc.set(Vector2.Zero);
+        float area = 0;
+
+        // Get shape for displacement area calculations
+        Shape shape = f.getShape();
+
+        w.mSC.set(Vector2.Zero);
+        float sarea;
+        switch (shape.getType()) {
+            case Circle:
+                sarea = BuoyancyUtils.ComputeSubmergedArea((CircleShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
+                break;
+
+            case Chain:
+                sarea = BuoyancyUtils.ComputeSubmergedArea((ChainShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
+                break;
+
+            case Edge:
+                sarea = BuoyancyUtils.ComputeSubmergedArea((EdgeShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
+                break;
+
+            case Polygon:
+                sarea = BuoyancyUtils.ComputeSubmergedArea((PolygonShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
+                break;
+
+            default:
+                sarea = 0;
+                break;
         }
 
-        return (outputVertices.isEmpty())?null:outputVertices;
+        area += sarea;
+        w.mAreac.x += sarea * w.mSC.x;
+        w.mAreac.y += sarea * w.mSC.y;
+        float mass = sarea * shapeDensity;
+        w.mMassc.x += sarea * w.mSC.x * shapeDensity;
+        w.mMassc.y += sarea * w.mSC.y * shapeDensity;
+
+        w.mAreac.x /= area;
+        w.mAreac.y /= area;
+        w.mMassc.x /= mass;
+        w.mMassc.y /= mass;
+        if (area < Float.MIN_VALUE) {
+            return false;
+        }
+
+        if (w.DEBUG_BUOYANCY) {
+            // Run debug w/HCR to see the effects of different fluid densities / linear drag
+            w.mFluidDensity = 2f;
+            w.mLinearDrag = 5;
+            w.mAngularDrag = 2;
+        }
+
+        // buoyancy force.
+        w.mTmp.set(w.mGravity).scl(-w.mFluidDensity * area);
+        body.applyForce(w.mTmp, w.mMassc, true); // multiply by -density to invert gravity
+
+        // linear drag.
+        w.mTmp.set(body.getLinearVelocityFromWorldPoint(w.mAreac).sub(w.mFluidVelocity).scl(-w.mLinearDrag * area));
+        body.applyForce(w.mTmp, w.mAreac, true);
+
+        // angular drag.
+        float bodyMass = body.getMass();
+        if (bodyMass < 1) // prevent a huge torque from being generated...
+        {
+            bodyMass = 1;
+        }
+        float torque = -body.getInertia() / bodyMass * area * body.getAngularVelocity() * w.mAngularDrag;
+        body.applyTorque(torque, true);
+        return true;
     }
 
-    private Vector2 intersection(ArrayList<Vector2> cp1, Vector2 cp2, Vector2 s, Vector2 e) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+
+    public HashSet<Water> getWaterSensors() {
+        return waterSensors;
     }
 
-    private boolean inside(ArrayList<Vector2> cp1, Vector2 cp2, Vector2 e) {
-
-        return false;
+    public void setWaterSensors(HashSet<Water> waterSensors) {
+        this.waterSensors = waterSensors;
     }
-
-
 }

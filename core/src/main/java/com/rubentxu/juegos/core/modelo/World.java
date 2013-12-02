@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
@@ -22,32 +23,43 @@ public class World {
     private Box2DMapObjectParser parser;
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> MovingPlatformplatforms;
+    private HashSet<Water> waterSensors;
 
     public World() {
         createDreamsWorld();
         createMovingPlatform();
+        createWater();
     }
     private void createMovingPlatform(){
         Body body1 = createBox(BodyDef.BodyType.KinematicBody, 5, 0.5f, 1);
-        Body body2 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);
-        Body body3 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);
+       /* Body body2 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);
+        Body body3 = createBox(BodyDef.BodyType.KinematicBody, 7, 0.5f, 1);*/
 
         MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body1,
                 77,3,82,9 ,6);
 
-        MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body2,
+       /* MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body2,
                 68,3,65,9,5);
 
         MovingPlatform m3= new MovingPlatform("M3", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body3,
-                60,3,65,9 ,3);
+                60,3,65,9 ,3);*/
         MovingPlatformplatforms= new HashSet<MovingPlatform>();
         MovingPlatformplatforms.add(m1);
-        MovingPlatformplatforms.add(m2);
-        MovingPlatformplatforms.add(m3);
+        //MovingPlatformplatforms.add(m2);
+        //MovingPlatformplatforms.add(m3);
         platforms = new HashSet<Platform>();
 
 
     }
+
+    private void createWater(){
+        Water w= new Water("Estanque",createBoxWater(BodyType.StaticBody, 5, 7f, 1),68,1);
+        waterSensors=new HashSet<Water>();
+        getWaterSensors().add(w);
+    }
+
+
+
     private void createDreamsWorld() {
 
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
@@ -102,6 +114,24 @@ public class World {
         return box;
     }
 
+    private Body createBoxWater(BodyDef.BodyType type, float width, float height, float density) {
+        BodyDef def= new BodyDef();
+        def.type= type;
+        Body box = physics.createBody(def);
+
+        PolygonShape poly = new PolygonShape();
+        poly.setAsBox(width, height);
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape=poly;
+        fixDef.isSensor=true;
+        fixDef.friction=1;
+        fixDef.density=density;
+        box.createFixture(fixDef);
+        poly.dispose();
+
+        return box;
+    }
+
     public HashSet<Platform> getPlatforms() {
         return platforms;
     }
@@ -116,5 +146,13 @@ public class World {
 
     public void setMovingPlatformplatforms(HashSet<MovingPlatform> movingPlatformplatforms) {
         MovingPlatformplatforms = movingPlatformplatforms;
+    }
+
+    public HashSet<Water> getWaterSensors() {
+        return waterSensors;
+    }
+
+    public void setWaterSensors(HashSet<Water> waterSensors) {
+        this.waterSensors = waterSensors;
     }
 }

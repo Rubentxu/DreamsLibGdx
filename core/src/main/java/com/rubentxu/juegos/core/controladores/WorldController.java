@@ -6,9 +6,9 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.badlogic.gdx.physics.box2d.World;
 import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
+import com.rubentxu.juegos.core.managers.WaterManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
 
@@ -17,6 +17,7 @@ public class WorldController implements ContactListener, ContactFilter {
 
     private RubentxuManager rubenManager;
     private PlatformManager platformManager;
+    private WaterManager waterManager;
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
 
@@ -84,6 +85,14 @@ public class WorldController implements ContactListener, ContactFilter {
         this.platformManager = platformManager;
     }
 
+    public WaterManager getWaterManager() {
+        return waterManager;
+    }
+
+    public void setWaterManager(WaterManager waterManager) {
+        this.waterManager = waterManager;
+    }
+
     public static enum Keys {
         LEFT, RIGHT, JUMP, FIRE
     }
@@ -94,6 +103,7 @@ public class WorldController implements ContactListener, ContactFilter {
     public void update(float delta) {
         getRubenManager().update(delta);
         getPlatformManager().update(delta);
+        waterManager.update(delta);
     }
 
 
@@ -123,6 +133,9 @@ public class WorldController implements ContactListener, ContactFilter {
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
             getPlatformManager().handlePostSolve(contact, impulse);
         }
+        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
+            getPlatformManager().handlePostSolve(contact, impulse);
+        }
 
     }
 
@@ -138,6 +151,9 @@ public class WorldController implements ContactListener, ContactFilter {
 
             getPlatformManager().handleBeginContact(contact);
         }
+        if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
+            getWaterManager().handleBeginContact(contact);
+        }
     }
 
     @Override
@@ -150,6 +166,9 @@ public class WorldController implements ContactListener, ContactFilter {
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
             getPlatformManager().handleEndContact(contact);
+        }
+        if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
+            getWaterManager().handleEndContact(contact);
         }
     }
 

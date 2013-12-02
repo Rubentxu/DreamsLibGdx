@@ -7,6 +7,8 @@ import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
+import com.rubentxu.juegos.core.managers.WaterManager;
+import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
@@ -34,9 +36,13 @@ public class DreamsGame extends Game {
         platformManager.setMovingPlatforms(world.getMovingPlatformplatforms());
         platformManager.setPlatforms(world.getPlatforms());
 
+        WaterManager waterManager= new WaterManager();
+        waterManager.setWaterSensors(world.getWaterSensors());
+
         controller= new WorldController();
         controller.setRubenManager(rubenManager);
         controller.setPlatformManager(platformManager);
+        controller.setWaterManager(waterManager);
         world.getPhysics().setContactListener(controller);
 
 
