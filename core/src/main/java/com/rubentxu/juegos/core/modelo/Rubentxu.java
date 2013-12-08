@@ -20,8 +20,8 @@ public class Rubentxu extends Box2DPhysicsObject  {
         IDLE, WALKING, JUMPING, DYING, FALL
     }
 
-    public final static float MAX_VELOCITY = 7f;
-    public final static float JUMP_FORCE = 45f;
+    public final static float MAX_VELOCITY = 4f;
+    public final static float JUMP_FORCE = 14.5f;
     private boolean onGround = false;
     private State state = State.IDLE;
     boolean facingLeft = true;
@@ -65,7 +65,7 @@ public class Rubentxu extends Box2DPhysicsObject  {
 
 
         CircleShape circle = new CircleShape();
-        circle.setRadius(0.67f);
+        circle.setRadius(width);
         circle.setPosition(new Vector2(0, -height*0.9f));
         rubenSensorFixture = super.getBody().createFixture(circle, 0);
         rubenSensorFixture.setSensor(true);

@@ -87,6 +87,8 @@
 				<configuration>
 					<webappDirectory>${project.build.directory}/webapp</webappDirectory>
 					<runTarget>index.html</runTarget>
+                    <logLevel>DEBUG</logLevel>
+                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
 				</configuration>
 				<executions>
 					<execution>

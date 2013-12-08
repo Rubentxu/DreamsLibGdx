@@ -11,8 +11,18 @@ public class DreamsGameHtml extends GwtApplication {
 	public ApplicationListener getApplicationListener () {
 		return new DreamsGame();
 	}
-	
-	@Override
+
+    @Override
+    public void log(String tag, String message, Throwable exception) {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public int getLogLevel() {
+        return 1;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
 	public GwtApplicationConfiguration getConfig () {
 		return new GwtApplicationConfiguration(480, 320);
 	}

@@ -72,8 +72,8 @@ public class WorldRenderer {
     public void setSize(int w, int h) {
         this.setWidth(w);
         this.setHeight(h);
-        cam.viewportWidth = getWidth() / 25;
-        cam.viewportHeight = getHeight() / 25;
+        cam.viewportWidth = getWidth() / 42;
+        cam.viewportHeight = getHeight() / 42;
     }
 
     private void loadTextures() {
@@ -105,10 +105,10 @@ public class WorldRenderer {
         idleLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
 
         AnimationRuben = new AnimatedBox2DSprite(walkRightAnimation);
-        AnimationRuben.setSize(ruben.getWidth() * 2, ruben.getHeight());
+        AnimationRuben.setSize(ruben.getWidth()*1.3f , ruben.getHeight());
         AnimationRuben.setOrigin(AnimationRuben.getWidth() / 2, AnimationRuben.getHeight() / 1.9f);
-        AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
-                ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
+        AnimationRuben.setPosition(ruben.getBody().getPosition().x ,
+                ruben.getBody().getPosition().y );
 
 
     }
@@ -131,9 +131,11 @@ public class WorldRenderer {
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), 4, 4);
         ruben.getBody().setAwake(true);
-        cam.position.set(world.getRuben().getBody().getPosition().x, cam.viewportHeight / 2, 0);
+        cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y / 1.3f, 0);
         cam.update();
-
+        spriteBatch.begin();
+        world.getBackground().draw(spriteBatch);
+        spriteBatch.end();
         renderer.setView(cam);
         renderer.render();
 
