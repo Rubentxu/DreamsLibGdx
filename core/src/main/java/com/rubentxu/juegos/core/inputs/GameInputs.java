@@ -69,6 +69,9 @@ public class GameInputs implements InputProcessor {
         if (x > renderer.getWidth() / 2 && y > renderer.getHeight() / 2) {
             controller.rightPressed();
         }
+        if ( y < renderer.getHeight() / 2) {
+            controller.jumpPressed();
+        }
         return true;
     }
 
@@ -82,6 +85,10 @@ public class GameInputs implements InputProcessor {
         if (x > renderer.getWidth() / 2 && y > renderer.getHeight() / 2) {
             controller.rightReleased();
         }
+        if ( y < renderer.getHeight() / 2) {
+            controller.jumpReleased();
+        }
+
         return true;
     }
 
@@ -94,8 +101,8 @@ public class GameInputs implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         System.out.println("Height: " + world.getMap().getProperties().get("height", Integer.class));
-        renderer.getCam().position.x -= Gdx.input.getDeltaX();
-        renderer.getCam().position.y += Gdx.input.getDeltaY();
+       /* renderer.getCam().position.x -= Gdx.input.getDeltaX();
+        renderer.getCam().position.y += Gdx.input.getDeltaY();*/
         return true;
     }
 
