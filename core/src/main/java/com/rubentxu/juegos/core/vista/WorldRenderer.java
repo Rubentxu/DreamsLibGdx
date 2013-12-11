@@ -20,12 +20,14 @@ import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
 
+import java.util.HashMap;
+import java.util.Map;
+
 
 public class WorldRenderer {
 
 
     private static final float RUNNING_FRAME_DURATION = 0.02f;
-    private final MovingPlatform mp;
     /**
      * for debug rendering *
      */
@@ -60,9 +62,14 @@ public class WorldRenderer {
     private float timeIdle;
     private Rubentxu ruben;
     private Sprite m1,m2,w;
+    private ModelsAndViews modelsAndViews;
+
+
+
 
 
     public WorldRenderer(final World world, boolean debug) {
+        modelsAndViews=new ModelsAndViews();
         this.world = world;
         ruben = world.getRuben();
         debugRenderer = new Box2DDebugRenderer();
@@ -70,7 +77,6 @@ public class WorldRenderer {
         spriteBatch = renderer.getSpriteBatch();
         cam = new OrthographicCamera();
         loadTextures();
-        mp=world.getMovingPlatformplatforms().iterator().next();
 
         //final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
 
@@ -87,16 +93,16 @@ public class WorldRenderer {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
         TextureAtlas atlasVarios = new TextureAtlas(Gdx.files.internal("imagenes/texturas/varios2.pack"));
-        m2=new Sprite(atlasVarios.findRegion("plataformaMovil2"));
-        m1=new Sprite(atlasVarios.findRegion("plataformaMovil"));
-        m1.setSize(4,1);
-        m1.setOrigin(2, 0.5f);
-        m2.setSize(5, 1);
-        m1.setOrigin(2.5f, 0.5f);
+
+        for(MovingPlatform mvp :world.getMovingPlatformplatforms()){
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion(mvp.getNombre()));
+            if(viewSprite!=null){
+                modelsAndViews.addModelAndView(mvp,viewSprite);
+            }
+        }
+
         TextureAtlas.AtlasRegion t = atlasVarios.findRegion("agua2.jpeg");
-
         w=new Sprite(t);
-
 
         Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
         rubenJumpRight = atlas.findRegions("Saltando");
@@ -166,16 +172,7 @@ public class WorldRenderer {
         renderer.render();
 
         spriteBatch.begin();
-        for(MovingPlatform mvp :world.getMovingPlatformplatforms()){
-            if(mvp.getNombre().equals("M1")) {
-                m1.setPosition(mvp.getBody().getPosition().x-mvp.getWidth()/2 ,mvp.getBody().getPosition().y-mvp.getHeight()/2);
-                m1.draw(spriteBatch);
-            }
-            if(mvp.getNombre().equals("M2")) {
-                m2.setPosition(mvp.getBody().getPosition().x-mvp.getWidth()/2,mvp.getBody().getPosition().y-mvp.getHeight()/2);
-                m2.draw(spriteBatch);
-            }
-        }
+        modelsAndViews.render(spriteBatch);
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
         for(Water water :world.getWaterSensors()){

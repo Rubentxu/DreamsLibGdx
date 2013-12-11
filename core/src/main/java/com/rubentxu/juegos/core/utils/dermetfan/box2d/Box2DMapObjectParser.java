@@ -27,6 +27,8 @@ import com.badlogic.gdx.physics.box2d.joints.*;
 import com.badlogic.gdx.utils.*;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.MovingPlatform;
+import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.utils.dermetfan.math.*;
 
 import java.util.*;
@@ -74,6 +76,10 @@ public class Box2DMapObjectParser {
 
     /** the parsed {@link Joint Joints} */
     private ObjectMap<String, Joint> joints = new ObjectMap<String, Joint>();
+
+    private HashSet<MovingPlatform> movingPlatforms = new HashSet<MovingPlatform>();
+
+    private HashSet<Water> waterSensors=new HashSet<Water>();
 
     /** creates a new {@link Box2DMapObjectParser} with the default {@link Aliases} */
     public Box2DMapObjectParser() {
@@ -158,6 +164,15 @@ public class Box2DMapObjectParser {
         for(MapObject object : layer.getObjects()) {
             if(!ignoreMapUnitScale)
                 unitScale = getProperty(layer.getProperties(), aliases.unitScale, unitScale);
+            if(object.getProperties().get("type", "", String.class).equals(aliases.modelObject)) {
+                createModelObject(world,object);
+
+            }
+        }
+
+        for(MapObject object : layer.getObjects()) {
+            if(!ignoreMapUnitScale)
+                unitScale = getProperty(layer.getProperties(), aliases.unitScale, unitScale);
             if(object.getProperties().get("type", "", String.class).equals(aliases.object)) {
                 createBody(world, object);
                 createFixtures(object);
@@ -186,6 +201,107 @@ public class Box2DMapObjectParser {
         }
 
         return world;
+    }
+
+    private void createModelObject(World world, MapObject object) {
+        if(object.getProperties().get(aliases.typeModelObject).equals(aliases.movingPlatform))
+            createMovingPlatform(world,object);
+        if(object.getProperties().get(aliases.typeModelObject).equals(aliases.water))
+            createWater(world, object);
+
+    }
+
+    private void createWater(World world, MapObject object) {
+        MapProperties properties = object.getProperties();
+        BodyDef def= new BodyDef();
+        def.type= BodyType.StaticBody;
+        Body box = world.createBody(def);
+
+
+        if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
+            PolygonShape shape = new PolygonShape();
+            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            rectangle.x *= unitScale;
+            rectangle.y *= unitScale;
+            rectangle.width *= unitScale;
+            rectangle.height *= unitScale;
+            shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
+                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
+
+            FixtureDef fixDef = new FixtureDef();
+            fixDef.shape=shape;
+            fixDef.friction= 1f;
+            fixDef.isSensor=true;
+            fixDef.density=getProperty(properties, aliases.density, fixDef.density);
+            Fixture fixBox=box.createFixture(fixDef);
+            shape.dispose();
+
+            String name = object.getName();
+            if(bodies.containsKey(name)) {
+                int duplicate = 1;
+                while(bodies.containsKey(name + duplicate))
+                    duplicate++;
+                name += duplicate;
+            }
+
+            Water w1= new Water(name,box);
+            getWaterSensors().add(w1);
+            box.setUserData(w1);
+            fixBox.setUserData(w1);
+            bodies.put(name, box);
+
+        } else {
+            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \""  + aliases.typeModelObject + "\"");
+        }
+
+
+
+    }
+
+    private void createMovingPlatform(World world, MapObject object){
+        MapProperties properties = object.getProperties();
+        BodyDef def= new BodyDef();
+        def.type= BodyType.KinematicBody;
+        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
+        Body box = world.createBody(def);
+
+
+        if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
+            PolygonShape shape = new PolygonShape();
+            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            rectangle.x *= unitScale;
+            rectangle.y *= unitScale;
+            rectangle.width *= unitScale;
+            rectangle.height *= unitScale;
+            shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
+                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
+
+            FixtureDef fixDef = new FixtureDef();
+            fixDef.shape=shape;
+            fixDef.friction= 1f;
+            Fixture fixBox=box.createFixture(fixDef);
+            shape.dispose();
+            box.setBullet(true);
+
+            String name = object.getName();
+            if(bodies.containsKey(name)) {
+                int duplicate = 1;
+                while(bodies.containsKey(name + duplicate))
+                    duplicate++;
+                name += duplicate;
+            }
+
+            MovingPlatform m1= new MovingPlatform(name, Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,box,properties.get(aliases.movingPlatformDistX,Float.class).floatValue()
+                    ,properties.get(aliases.movingPlatformDistY,Float.class).floatValue(), properties.get(aliases.movingPlatformSpeed,Float.class).floatValue());
+            movingPlatforms.add(m1);
+            box.setUserData(m1);
+            fixBox.setUserData(m1);
+            bodies.put(name, box);
+
+        } else {
+            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \""  + aliases.typeModelObject + "\"");
+        }
+
     }
 
     /**
@@ -657,6 +773,22 @@ public class Box2DMapObjectParser {
         return joints;
     }
 
+    public HashSet<MovingPlatform> getMovingPlatforms() {
+        return movingPlatforms;
+    }
+
+    public void setMovingPlatforms(HashSet<MovingPlatform> movingPlatforms) {
+        this.movingPlatforms = movingPlatforms;
+    }
+
+    public HashSet<Water> getWaterSensors() {
+        return waterSensors;
+    }
+
+    public void setWaterSensors(HashSet<Water> waterSensors) {
+        this.waterSensors = waterSensors;
+    }
+
     /** defines the {@link #aliases} to use when parsing */
     public static class Aliases {
 
@@ -737,6 +869,13 @@ public class Box2DMapObjectParser {
                 upperAngle = "upperAngle",
                 maxLength = "maxLength",
                 object = "object",
+                modelObject = "modelObject",
+                typeModelObject = "typeModelObject",
+                movingPlatform = "MovingPlatform",
+                movingPlatformDistY = "movingPlatformDistY",
+                movingPlatformDistX = "movingPlatformDistX",
+                movingPlatformSpeed = "movingPlatformSpeed",
+                water = "Water",
                 unitScale = "unitScale";
     }
 

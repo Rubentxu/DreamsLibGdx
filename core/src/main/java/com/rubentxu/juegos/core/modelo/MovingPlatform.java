@@ -10,8 +10,8 @@ import java.util.HashSet;
 
 public class MovingPlatform extends Platform{
 
-    private final Vector2 pVelocity;
-    private final float maxDist;
+    private  Vector2 pVelocity,start;
+    private  float maxDist;
     public  float speed;
     private float distance=0;
     public Boolean enabled=true;
@@ -19,27 +19,26 @@ public class MovingPlatform extends Platform{
     private Boolean forward= false;
     private HashSet<Box2DPhysicsObject> passengers= new HashSet<Box2DPhysicsObject>();
     private float time=0;
-    private Vector2 start;
     private Vector2 end;
 
     public MovingPlatform(Body body, Vector2 pVelocity){
         super("Platform",GRUPOS.PLATAFORMAS_MOVILES,body);
         this.pVelocity = pVelocity;
-        this.maxDist=0;
+        //this.maxDist=0;
     }
 
-    public MovingPlatform(String nombre, GRUPOS grupo, Body body,float x, float y, float ex, float ey,float speed) {
+    public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
         super(nombre, grupo, body);
-        start= new Vector2(x,y);
-        end= new Vector2(ex,ey);
+        end= new Vector2(dstX,dstY);
         this.speed=speed;
-        this.pVelocity=end.cpy().sub(start).nor().scl(this.speed);
+        this.pVelocity=end.nor().scl(this.speed);
+        this.start=body.getPosition();
         this.maxDist=start.dst(end);
         this.setDistance(0f);
-        body.setTransform(start,0);
-        body.getFixtureList().get(0).setUserData(this);
-        body.setUserData(this);
+
     }
+
+
 
     public Boolean getForward() {
         return forward;

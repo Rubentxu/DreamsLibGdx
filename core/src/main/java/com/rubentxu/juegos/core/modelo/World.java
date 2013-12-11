@@ -29,36 +29,9 @@ public class World {
 
     public World() {
         createDreamsWorld();
-        createMovingPlatform();
-        createWater();
+        MovingPlatformplatforms = parser.getMovingPlatforms();
+        waterSensors= parser.getWaterSensors();
     }
-    private void createMovingPlatform(){
-        Body body1 = createBox(BodyDef.BodyType.KinematicBody, 5, 1, 1);
-        Body body2 = createBox(BodyDef.BodyType.KinematicBody,5, 1, 1);
-
-        MovingPlatform m1= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body1,
-                3,4,8,15 ,4);
-
-        MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body2,
-                28,3,29,9,2);
-
-
-        MovingPlatformplatforms= new HashSet<MovingPlatform>();
-        MovingPlatformplatforms.add(m1);
-        MovingPlatformplatforms.add(m2);
-
-        platforms = new HashSet<Platform>();
-
-
-    }
-
-    private void createWater(){
-        Water w= new Water("Estanque",createBoxWater(BodyType.StaticBody, 5, 2.5f, 1),19,5.5f);
-        waterSensors=new HashSet<Water>();
-        getWaterSensors().add(w);
-    }
-
-
 
     private void createDreamsWorld() {
 
@@ -100,40 +73,6 @@ public class World {
 
     public Box2DMapObjectParser getParser() {
         return parser;
-    }
-
-    private Body createBox(BodyDef.BodyType type, float width, float height, float density){
-        BodyDef def= new BodyDef();
-        def.type= type;
-        Body box = physics.createBody(def);
-
-        PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width/2, height/2);
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape=poly;
-        fixDef.friction= 1f;
-        box.createFixture(fixDef);
-        poly.dispose();
-        box.setBullet(true);
-        return box;
-    }
-
-    private Body createBoxWater(BodyDef.BodyType type, float width, float height, float density) {
-        BodyDef def= new BodyDef();
-        def.type= type;
-        Body box = physics.createBody(def);
-
-        PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width, height);
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape=poly;
-        fixDef.isSensor=true;
-        fixDef.friction=1;
-        fixDef.density=density;
-        box.createFixture(fixDef);
-        poly.dispose();
-
-        return box;
     }
 
     public HashSet<Platform> getPlatforms() {

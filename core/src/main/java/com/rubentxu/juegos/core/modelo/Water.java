@@ -48,14 +48,14 @@ public class Water extends Box2DPhysicsObject {
     public static final boolean DEBUG_BUOYANCY = false;
 
 
-    public Water(String nombre, Body body,float x, float y) {
+    public Water(String nombre, Body body) {
         this(nombre, body, DEFAULT_SURFACE_NORMAL, DEFAULT_FLUID_VELOCITY, DEFAULT_FLUID_GRAVITY,
-                Box2DUtils.height(body), body.getFixtureList().get(0).getDensity(), DEFAULT_LINEAR_DRAG, DEFAULT_ANGULAR_DRAG,x,y);
+                Box2DUtils.height(body), body.getFixtureList().get(0).getDensity(), DEFAULT_LINEAR_DRAG, DEFAULT_ANGULAR_DRAG);
 
     }
 
     public Water(String nombre, Body body, Vector2 surfaceNormal, Vector2 fluidVelocity, Vector2 gravity,
-                 float surfaceHeight, float fluidDensity, float linearDrag, float angularDrag, float x, float y) {
+                 float surfaceHeight, float fluidDensity, float linearDrag, float angularDrag) {
         super(nombre, GRUPOS.AGUA, body);
         mSurfaceNormal.set(surfaceNormal);
         mFluidVelocity.set(fluidVelocity);
@@ -64,9 +64,6 @@ public class Water extends Box2DPhysicsObject {
         mFluidDensity = fluidDensity;
         mLinearDrag = linearDrag;
         mAngularDrag = angularDrag;
-        body.setTransform(x,y,0);
-        body.getFixtureList().get(0).setUserData(this);
-        body.setUserData(this);
         m_bodyList = new Array<Body>();
 
     }
