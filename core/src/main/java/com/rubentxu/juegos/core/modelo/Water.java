@@ -39,11 +39,11 @@ public class Water extends Box2DPhysicsObject {
     //
     // Default values
     //
-    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 0.68f); // point up
-    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,6f); // zero velocity / no current
+    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 0.75f); // point up
+    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,5f); // zero velocity / no current
     public static final Vector2 DEFAULT_FLUID_GRAVITY = new Vector2(0, -9.8f); // standard gravity
-    public static final float DEFAULT_LINEAR_DRAG = 5f;
-    public static final float DEFAULT_ANGULAR_DRAG = 2f;
+    public static final float DEFAULT_LINEAR_DRAG = 3f;
+    public static final float DEFAULT_ANGULAR_DRAG = 1f;
 
     public static final boolean DEBUG_BUOYANCY = false;
 
@@ -72,14 +72,12 @@ public class Water extends Box2DPhysicsObject {
 
 
         if (m_bodyList.contains(body, false) == false) {
-            System.out.println("Añadido body..."+((Box2DPhysicsObject) body.getUserData()).getGrupo());
             m_bodyList.add(body);
         }
     }
 
     public void removeBody(Body body) {
         if (m_bodyList != null) {
-            System.out.println("Eliminado body..."+((Box2DPhysicsObject) body.getUserData()).getGrupo());
             m_bodyList.removeValue(body, true);
         }
     }

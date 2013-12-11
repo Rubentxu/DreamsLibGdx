@@ -215,6 +215,7 @@ public class Box2DMapObjectParser {
         MapProperties properties = object.getProperties();
         BodyDef def= new BodyDef();
         def.type= BodyType.StaticBody;
+        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
         Body box = world.createBody(def);
 
 
@@ -225,6 +226,7 @@ public class Box2DMapObjectParser {
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;
             rectangle.height *= unitScale;
+            System.out.println("Rectangle "+rectangle);
             shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
@@ -291,8 +293,8 @@ public class Box2DMapObjectParser {
                 name += duplicate;
             }
 
-            MovingPlatform m1= new MovingPlatform(name, Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,box,properties.get(aliases.movingPlatformDistX,Float.class).floatValue()
-                    ,properties.get(aliases.movingPlatformDistY,Float.class).floatValue(), properties.get(aliases.movingPlatformSpeed,Float.class).floatValue());
+            MovingPlatform m1= new MovingPlatform(name, Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,box,Float.parseFloat(properties.get(aliases.movingPlatformDistX, String.class))
+                    ,Float.parseFloat(properties.get(aliases.movingPlatformDistY,String.class)),Float.parseFloat( properties.get(aliases.movingPlatformSpeed,String.class)));
             movingPlatforms.add(m1);
             box.setUserData(m1);
             fixBox.setUserData(m1);
@@ -870,7 +872,7 @@ public class Box2DMapObjectParser {
                 maxLength = "maxLength",
                 object = "object",
                 modelObject = "modelObject",
-                typeModelObject = "typeModelObject",
+                    typeModelObject = "typeModelObject",
                 movingPlatform = "MovingPlatform",
                 movingPlatformDistY = "movingPlatformDistY",
                 movingPlatformDistX = "movingPlatformDistX",

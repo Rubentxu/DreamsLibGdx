@@ -20,9 +20,6 @@ import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
 
-import java.util.HashMap;
-import java.util.Map;
-
 
 public class WorldRenderer {
 
@@ -100,9 +97,13 @@ public class WorldRenderer {
                 modelsAndViews.addModelAndView(mvp,viewSprite);
             }
         }
-
-        TextureAtlas.AtlasRegion t = atlasVarios.findRegion("agua2.jpeg");
-        w=new Sprite(t);
+        for(Water w :world.getWaterSensors()){
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion(w.getNombre()));
+            if(viewSprite!=null){
+                System.out.println("Creado Sprite "+w.getNombre());
+                modelsAndViews.addModelAndView(w,viewSprite);
+            }
+        }
 
         Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
         rubenJumpRight = atlas.findRegions("Saltando");
@@ -175,13 +176,7 @@ public class WorldRenderer {
         modelsAndViews.render(spriteBatch);
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
-        for(Water water :world.getWaterSensors()){
 
-                w.setSize(water.getWidth(),water.getHeight());
-                w.setPosition(water.getBody().getPosition().x - water.getWidth() / 2, water.getBody().getPosition().y - water.getHeight() / 2);
-                w.draw(spriteBatch,0.4f);
-
-        }
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
             DebugWindow.myLabel.setText(ruben.toString());

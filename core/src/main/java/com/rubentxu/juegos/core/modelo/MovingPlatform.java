@@ -3,8 +3,6 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.Platform;
 
 import java.util.HashSet;
 
@@ -31,9 +29,9 @@ public class MovingPlatform extends Platform{
         super(nombre, grupo, body);
         end= new Vector2(dstX,dstY);
         this.speed=speed;
-        this.pVelocity=end.nor().scl(this.speed);
-        this.start=body.getPosition();
-        this.maxDist=start.dst(end);
+        this.pVelocity=end.cpy().nor().scl(this.speed);
+        this.start=body.getPosition().cpy();
+        this.maxDist=end.len();
         this.setDistance(0f);
 
     }

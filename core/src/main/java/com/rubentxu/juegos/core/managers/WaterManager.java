@@ -83,10 +83,8 @@ public class WaterManager implements IManager {
     public void update(float delta) {
         for (Water w : waterSensors) {
             for (int i = 0; i < w.m_bodyList.size; i++) {
-                System.out.println("Recorrer lista de objetos sumergidos...");
                 Array<Fixture> fixtureList = w.m_bodyList.get(i).getFixtureList();
                 for (int j = 0; j < fixtureList.size; j++) {
-                    System.out.println("Aplicar fuerzas de empuje...");
                     Fixture fixture = fixtureList.get(j);
                     if(!fixture.isSensor()){
                         ApplyToFixture(fixture, w);

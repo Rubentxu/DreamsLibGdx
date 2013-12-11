@@ -19,16 +19,16 @@ public class ModelsAndViews {
             Map.Entry mav = (Map.Entry)it.next();
             Sprite sprite=(Sprite) mav.getValue();
             Box2DPhysicsObject box2DPhysicsObject=(Box2DPhysicsObject)mav.getKey();
-            updateModelPosition(box2DPhysicsObject,sprite);
+            if(box2DPhysicsObject.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) updateModelPosition(box2DPhysicsObject,sprite);
             sprite.draw(spriteBatch);
-            it.next();
+
         }
     }
 
     private void updateModelPosition(Box2DPhysicsObject box2DPhysicsObject, Sprite sprite){
-        System.out.println(box2DPhysicsObject + " = " + sprite);
-        sprite.setPosition(box2DPhysicsObject.getBody().getPosition().x-box2DPhysicsObject.getWidth()/2 ,
-                box2DPhysicsObject.getBody().getPosition().y-box2DPhysicsObject.getHeight()/2);
+        //System.out.println(box2DPhysicsObject.getNombre() + " = " + sprite);
+        sprite.setPosition(box2DPhysicsObject.getBody().getPosition().x ,
+                box2DPhysicsObject.getBody().getPosition().y);
     }
 
     public Map<Box2DPhysicsObject, Sprite> getModelsAndViews() {
@@ -38,6 +38,8 @@ public class ModelsAndViews {
     public void addModelAndView (Box2DPhysicsObject box2DPhysicsObject, Sprite sprite) {
         sprite.setSize(box2DPhysicsObject.getWidth(),box2DPhysicsObject.getHeight());
         sprite.setOrigin(box2DPhysicsObject.getWidth() / 2, box2DPhysicsObject.getHeight() / 2);
+        sprite.setPosition(box2DPhysicsObject.getBody().getPosition().x,box2DPhysicsObject.getBody().getPosition().y);
+        System.out.println("Tipo: "+box2DPhysicsObject.getNombre()+" Position: "+box2DPhysicsObject.getBody().getPosition());
         this.modelsAndViews.put(box2DPhysicsObject,sprite);
     }
 }
