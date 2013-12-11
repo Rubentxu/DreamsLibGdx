@@ -33,10 +33,10 @@ public class World {
         createWater();
     }
     private void createMovingPlatform(){
-        Body body1 = createBox(BodyDef.BodyType.KinematicBody, 4, 0.7f, 1);
-        Body body2 = createBox(BodyDef.BodyType.KinematicBody,4, 0.7f, 1);
+        Body body1 = createBox(BodyDef.BodyType.KinematicBody, 5, 1, 1);
+        Body body2 = createBox(BodyDef.BodyType.KinematicBody,5, 1, 1);
 
-        MovingPlatform m1= new MovingPlatform("M1", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body1,
+        MovingPlatform m1= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,body1,
                 3,4,8,15 ,4);
 
         MovingPlatform m2= new MovingPlatform("M2", Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES, body2,
@@ -114,7 +114,7 @@ public class World {
         fixDef.friction= 1f;
         box.createFixture(fixDef);
         poly.dispose();
-
+        box.setBullet(true);
         return box;
     }
 

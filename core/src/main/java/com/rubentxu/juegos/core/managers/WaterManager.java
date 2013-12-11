@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
 
@@ -28,7 +29,9 @@ public class WaterManager implements IManager {
     @Override
     public void handleBeginContact(Contact contact) {
         Water w = getWater(contact);
-        w.addBody(getSubmergedBody(contact).getBody());
+        Body b = getSubmergedBody(contact).getBody();
+        w.addBody(b);
+        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPOS.HEROES)) ((Rubentxu)b.getUserData()).setState(Rubentxu.State.SWIMMING);
 
     }
 

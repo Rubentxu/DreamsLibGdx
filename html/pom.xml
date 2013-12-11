@@ -89,6 +89,9 @@
 					<runTarget>index.html</runTarget>
                     <logLevel>DEBUG</logLevel>
                     <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
+                    <failOnError>true</failOnError>
+                    <noserver>true</noserver>
+                    <strict>true</strict>
 				</configuration>
 				<executions>
 					<execution>

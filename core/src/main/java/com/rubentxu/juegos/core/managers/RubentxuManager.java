@@ -9,7 +9,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 
 
@@ -73,13 +72,13 @@ public class RubentxuManager implements IManager {
             if (ruben.getVelocity().y <= 0 || !ruben.getState().equals(Rubentxu.State.JUMPING))
                 ruben.setState(Rubentxu.State.FALL);
         } else {
-            ruben.setState(Rubentxu.State.IDLE);
-            if (WorldController.keys.get(Keys.LEFT)) {
+            if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.IDLE);
+            if (WorldController.keys.get(Keys.LEFT)  ) {
                 ruben.setFacingLeft(true);
-                ruben.setState(Rubentxu.State.WALKING);
-            } else if (WorldController.keys.get(Keys.RIGHT)) {
+                if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.WALKING);
+            } else if (WorldController.keys.get(Keys.RIGHT) ) {
                 ruben.setFacingLeft(false);
-                ruben.setState(Rubentxu.State.WALKING);
+                if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.WALKING);
             }
             if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 0.2) {
                 ruben.getRubenPhysicsFixture().setFriction(100f);

@@ -3,6 +3,7 @@ package com.rubentxu.juegos.core.vista;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -10,10 +11,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
+import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
-import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
@@ -37,6 +39,7 @@ public class WorldRenderer {
     private Array<TextureAtlas.AtlasRegion> rubenJumpRight;
     private Array<TextureAtlas.AtlasRegion> rubenFallRight;
     private Array<TextureAtlas.AtlasRegion> rubenIdleRight;
+    private Array<TextureAtlas.AtlasRegion> rubenSwimmingRight;
     /**
      * Animations *
      */
@@ -49,11 +52,15 @@ public class WorldRenderer {
     private AnimatedSprite fallLeftAnimation;
     private AnimatedSprite idleRightAnimation;
     private AnimatedSprite idleLeftAnimation;
+    private AnimatedSprite swimmingRightAnimation;
+    private AnimatedSprite swimmingLeftAnimation;
     private SpriteBatch spriteBatch;
     private int width;
     private int height;
     private float timeIdle;
     private Rubentxu ruben;
+    private Sprite m1,m2,w;
+
 
     public WorldRenderer(final World world, boolean debug) {
         this.world = world;
@@ -79,10 +86,23 @@ public class WorldRenderer {
     private void loadTextures() {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
+        TextureAtlas atlasVarios = new TextureAtlas(Gdx.files.internal("imagenes/texturas/varios2.pack"));
+        m2=new Sprite(atlasVarios.findRegion("plataformaMovil2"));
+        m1=new Sprite(atlasVarios.findRegion("plataformaMovil"));
+        m1.setSize(4,1);
+        m1.setOrigin(2, 0.5f);
+        m2.setSize(5, 1);
+        m1.setOrigin(2.5f, 0.5f);
+        TextureAtlas.AtlasRegion t = atlasVarios.findRegion("agua2.jpeg");
+
+        w=new Sprite(t);
+
+
         Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
         rubenJumpRight = atlas.findRegions("Saltando");
         rubenFallRight = atlas.findRegions("Cayendo");
         rubenIdleRight = atlas.findRegions("Parado");
+        rubenSwimmingRight = atlasVarios.findRegions("nadando");
 
         Animation walkRight = new Animation(RUNNING_FRAME_DURATION, rubenRight);
         walkRight.setPlayMode(Animation.LOOP);
@@ -97,15 +117,21 @@ public class WorldRenderer {
         idleRight.setPlayMode(Animation.LOOP);
         idleRightAnimation = new AnimatedSprite(idleRight);
 
+        Animation swimmingRight = new Animation(RUNNING_FRAME_DURATION * 4, rubenSwimmingRight);
+        swimmingRight.setPlayMode(Animation.LOOP);
+        swimmingRightAnimation = new AnimatedSprite(swimmingRight);
+
         walkLeftAnimation = convertToLeft(rubenRight, 1);
         walkLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
         jumpLeftAnimation = convertToLeft(rubenJumpRight, 7);
         fallLeftAnimation = convertToLeft(rubenFallRight, 5);
         idleLeftAnimation = convertToLeft(rubenIdleRight, 4);
         idleLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
+        swimmingLeftAnimation = convertToLeft(rubenSwimmingRight, 4);
+        swimmingLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
 
         AnimationRuben = new AnimatedBox2DSprite(walkRightAnimation);
-        AnimationRuben.setSize(ruben.getWidth()*1.3f , ruben.getHeight());
+        AnimationRuben.setSize(ruben.getWidth()*1.5f , ruben.getHeight());
         AnimationRuben.setOrigin(AnimationRuben.getWidth() / 2, AnimationRuben.getHeight() / 1.9f);
         AnimationRuben.setPosition(ruben.getBody().getPosition().x ,
                 ruben.getBody().getPosition().y );
@@ -140,11 +166,28 @@ public class WorldRenderer {
         renderer.render();
 
         spriteBatch.begin();
+        for(MovingPlatform mvp :world.getMovingPlatformplatforms()){
+            if(mvp.getNombre().equals("M1")) {
+                m1.setPosition(mvp.getBody().getPosition().x-mvp.getWidth()/2 ,mvp.getBody().getPosition().y-mvp.getHeight()/2);
+                m1.draw(spriteBatch);
+            }
+            if(mvp.getNombre().equals("M2")) {
+                m2.setPosition(mvp.getBody().getPosition().x-mvp.getWidth()/2,mvp.getBody().getPosition().y-mvp.getHeight()/2);
+                m2.draw(spriteBatch);
+            }
+        }
         AnimationRuben.update();
         AnimationRuben.draw(spriteBatch);
+        for(Water water :world.getWaterSensors()){
+
+                w.setSize(water.getWidth(),water.getHeight());
+                w.setPosition(water.getBody().getPosition().x - water.getWidth() / 2, water.getBody().getPosition().y - water.getHeight() / 2);
+                w.draw(spriteBatch,0.4f);
+
+        }
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
-            DebugWindow.myLabel.setText(mp.toString());
+            DebugWindow.myLabel.setText(ruben.toString());
             DebugWindow.getInstance().pack();
             DebugWindow.getInstance().draw(spriteBatch, 0.8f);
 
@@ -188,6 +231,8 @@ public class WorldRenderer {
             fallLeftAnimation.setTime(0);
             idleLeftAnimation.setTime(0);
             idleRightAnimation.setTime(0);
+            swimmingLeftAnimation.setTime(0);
+            swimmingRightAnimation.setTime(0);
 
             if (ruben.isFacingLeft()) {
                 AnimationRuben.setAnimatedSprite(walkLeftAnimation);
@@ -206,6 +251,12 @@ public class WorldRenderer {
                 AnimationRuben.setAnimatedSprite(fallLeftAnimation);
             } else {
                 AnimationRuben.setAnimatedSprite(fallRightAnimation);
+            }
+        }   else if (ruben.getState().equals(State.SWIMMING)) {
+            if (ruben.isFacingLeft()) {
+                AnimationRuben.setAnimatedSprite(swimmingLeftAnimation);
+            } else {
+                AnimationRuben.setAnimatedSprite(swimmingRightAnimation);
             }
         }
 

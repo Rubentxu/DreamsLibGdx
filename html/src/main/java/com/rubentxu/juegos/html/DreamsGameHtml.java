@@ -24,6 +24,9 @@ public class DreamsGameHtml extends GwtApplication {
 
     @Override
 	public GwtApplicationConfiguration getConfig () {
-		return new GwtApplicationConfiguration(480, 320);
+
+        GwtApplicationConfiguration config = new GwtApplicationConfiguration(800, 600);
+        config.stencil = true;
+        return config;
 	}
 }
