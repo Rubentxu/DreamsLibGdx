@@ -51,14 +51,14 @@ public class PlatformManager implements IManager {
     }
 
     public void updateMovingPlatform(MovingPlatform platform, float delta) {
-        Vector2 velocity = platform.getpVelocity().cpy();
+
 
         if ((platform.waitForPassenger && platform.getPassengers().size() == 0) || !platform.enabled) {
-            velocity = new Vector2(0f, 0f);
+            platform.getBody().setLinearVelocity(new Vector2(0f, 0f));
         } else {
 
 
-            platform.setTime(platform.getTime() + delta);
+            /*platform.setTime(platform.getTime() + delta);
             platform.setDistance(platform.getDistance() + velocity.len() * delta);
 
 
@@ -70,9 +70,9 @@ public class PlatformManager implements IManager {
                 platform.setForward(!platform.getForward());
                 platform.setDistance(0);
 
-            }
-
-            platform.getBody().setLinearVelocity(velocity);
+            }*/
+            platform.getPath().updatePath(platform.getBody().getPosition(),delta);
+            platform.getBody().setLinearVelocity(platform.getPath().getVelocity());
         }
     }
 

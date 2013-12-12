@@ -179,7 +179,7 @@ public class WorldRenderer {
 
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
-            DebugWindow.myLabel.setText(ruben.toString());
+            DebugWindow.myLabel.setText(world.getMovingPlatformplatforms().toArray()[0].toString());
             DebugWindow.getInstance().pack();
             DebugWindow.getInstance().draw(spriteBatch, 0.8f);
 

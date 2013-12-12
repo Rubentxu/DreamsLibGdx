@@ -9,15 +9,15 @@ import java.util.HashSet;
 public class MovingPlatform extends Platform{
 
     private  Vector2 pVelocity,start;
-    private  float maxDist;
-    public  float speed;
+
     private float distance=0;
     public Boolean enabled=true;
     public Boolean waitForPassenger=false;
     private Boolean forward= false;
     private HashSet<Box2DPhysicsObject> passengers= new HashSet<Box2DPhysicsObject>();
-    private float time=0;
-    private Vector2 end;
+
+
+    private Path path;
 
     public MovingPlatform(Body body, Vector2 pVelocity){
         super("Platform",GRUPOS.PLATAFORMAS_MOVILES,body);
@@ -25,7 +25,7 @@ public class MovingPlatform extends Platform{
         //this.maxDist=0;
     }
 
-    public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
+   /* public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
         super(nombre, grupo, body);
         end= new Vector2(dstX,dstY);
         this.speed=speed;
@@ -33,6 +33,17 @@ public class MovingPlatform extends Platform{
         this.start=body.getPosition().cpy();
         this.maxDist=end.len();
         this.setDistance(0f);
+
+    }*/
+
+    public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
+        super(nombre, grupo, body);
+        path=new Path(speed);
+        path.addPoint(body.getPosition());
+        path.addPoint(new Vector2(body.getPosition().x + dstX, body.getPosition().x + dstY));
+        //path.addPoint(new Vector2(body.getPosition().x + dstX-dstY, body.getPosition().x + dstY-dstX));
+        path.reset();
+        this.start=body.getPosition().cpy();
 
     }
 
@@ -58,9 +69,6 @@ public class MovingPlatform extends Platform{
         return pVelocity;
     }
 
-    public float getMaxDist() {
-        return maxDist;
-    }
 
     public float getDistance() {
         return distance;
@@ -70,12 +78,13 @@ public class MovingPlatform extends Platform{
         this.distance = distance;
     }
 
-    public float getTime() {
-        return time;
+
+    public Path getPath() {
+        return path;
     }
 
-    public void setTime(float time) {
-        this.time = time;
+    public void setPath(Path path) {
+        this.path = path;
     }
 
     @Override
@@ -83,15 +92,16 @@ public class MovingPlatform extends Platform{
         return
                 "\nSin Pasajeros?= " + passengers.isEmpty()+
                 "\nPosicion Comienzo= " + start+
-                "\nPosicion Final= " + end+
                 "\nPosicion Actual= " + this.getBody().getPosition()+
-                "\nVelocidad= " + this.pVelocity+
-                "\nDiferencia Vector= " +  this.end.cpy().sub(start)+
-                "\nMaxDistancia = " + this.getMaxDist() +
-                "\nDistacia = " + this.getDistance() +
-                "\nTiempo = " + this.time +
-                "\nForward= " +  forward +
+                "\nVelocidad= " + path.getVelocity()+
+
+                "\nMaxDistancia = " + path.getMaxDist() +
+                "\nDistacia = " + path.getDistance() +
+
+                "\nDireccion= " +  path.getDirection() +
                 "\nPasajeros= " + passengers.size() ;
 
     }
+
+
 }
