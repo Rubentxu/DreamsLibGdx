@@ -7,15 +7,15 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Path;
 
 import java.util.HashSet;
 
 
-public class Rubentxu extends Box2DPhysicsObject {
-
+public class Enemy extends Box2DPhysicsObject {
 
     public enum State {
-        IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING
+        IDLE, WALKING, JUMPING, DYING, FALL
     }
 
     public final static float MAX_VELOCITY = 4f;
@@ -28,23 +28,23 @@ public class Rubentxu extends Box2DPhysicsObject {
     private float hurtVelocityY = 10f;
     private float hurtVelocityX = 6f;
     private float springOffEnemy = -1f;
-    private HashSet<Fixture> grounContacts;
-    private float combinedGroundAngle = 0f;
-    private Fixture rubenPhysicsFixture;
-    private Fixture rubenSensorFixture;
+    private HashSet<Fixture> grounContacts;   
+    private Fixture enemyPhysicsFixture;
+    private Fixture enemySensorFixture;
+    private Path path;
 
-    public Rubentxu(World physics) {
-        super("Heroe", GRUPOS.HEROES, physics);
+    public Enemy(World physics) {
+        super("Enemigo", GRUPOS.ENEMIGOS, physics);
         setGrounContacts(new HashSet<Fixture>());
     }
 
-    public Rubentxu(World physics, float x, float y, float width, float height) {
-        super("Heroe", GRUPOS.HEROES, physics, x, y, width, height, 0);
+    public Enemy(World physics, float x, float y, float width, float height) {
+        super("Enemigo", GRUPOS.ENEMIGOS, physics, x, y, width, height, 0);
         setGrounContacts(new HashSet<Fixture>());
-        createRubenxu( x, y, width, height);
+        createEnemy( x, y, width, height);
     }
 
-    public void createRubenxu( float x, float y, float width, float height) {
+    public void createEnemy( float x, float y, float width, float height) {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.x = x;
@@ -53,24 +53,20 @@ public class Rubentxu extends Box2DPhysicsObject {
         getBody().setFixedRotation(true);
         getBody().setUserData(this);
 
-
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width,height);
 
-        rubenPhysicsFixture = super.getBody().createFixture(poly,1);
-        rubenPhysicsFixture.setUserData(this);
+        enemyPhysicsFixture = super.getBody().createFixture(poly,1);
+        enemyPhysicsFixture.setUserData(this);
         poly.dispose();
-
 
         CircleShape circle = new CircleShape();
         circle.setRadius(width);
         circle.setPosition(new Vector2(0, -height*0.9f));
-        rubenSensorFixture = super.getBody().createFixture(circle, 0);
-        rubenSensorFixture.setSensor(true);
-        rubenSensorFixture.setUserData(this);
+        enemySensorFixture = super.getBody().createFixture(circle, 0);
+        enemySensorFixture.setSensor(true);
+        enemySensorFixture.setUserData(this);
         circle.dispose();
-
-        super.getBody().setBullet(true);
 
     }
 
@@ -108,12 +104,12 @@ public class Rubentxu extends Box2DPhysicsObject {
         this.state = newState;
     }
 
-    public Fixture getRubenPhysicsFixture() {
-        return rubenPhysicsFixture;
+    public Fixture getEnemyPhysicsFixture() {
+        return enemyPhysicsFixture;
     }
 
-    public Fixture getRubenSensorFixture() {
-        return rubenSensorFixture;
+    public Fixture getEnemySensorFixture() {
+        return enemySensorFixture;
     }
 
     public boolean isGround() {
@@ -137,6 +133,15 @@ public class Rubentxu extends Box2DPhysicsObject {
         hurt = true;
 
     }
+
+    public Path getPath() {
+        return path;
+    }
+
+    public void setPath(Path path) {
+        this.path = path;
+    }
+
     @Override
     public String toString() {
         return

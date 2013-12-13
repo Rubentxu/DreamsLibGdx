@@ -9,8 +9,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 
 
 public class WorldController implements ContactListener, ContactFilter {

@@ -8,7 +8,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.WorldManifold;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Platform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
@@ -72,7 +72,7 @@ public class PlatformManager implements IManager {
 
             }*/
             platform.getPath().updatePath(platform.getBody().getPosition(),delta);
-            platform.getBody().setLinearVelocity(platform.getPath().getVelocity());
+            platform.getBody().setLinearVelocity(platform.getPath().getVelocity().cpy());
         }
     }
 

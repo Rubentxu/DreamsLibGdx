@@ -3,7 +3,7 @@ package com.rubentxu.juegos.core.vista;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 import java.util.HashMap;
 import java.util.Iterator;

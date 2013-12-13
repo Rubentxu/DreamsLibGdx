@@ -5,14 +5,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import static com.rubentxu.juegos.core.modelo.Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES;
+import static com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES;
 import static org.easymock.EasyMock.createMock;
 import static org.easymock.EasyMock.createNiceMock;
 import static org.easymock.EasyMock.expect;

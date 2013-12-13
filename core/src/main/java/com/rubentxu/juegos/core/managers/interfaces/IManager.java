@@ -5,7 +5,6 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.modelo.Box2DPhysicsObject;
 
 public interface IManager {
 

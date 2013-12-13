@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.core.modelo;
+package com.rubentxu.juegos.core.modelo.base;
 
 import com.badlogic.gdx.math.Vector2;
 import java.util.ArrayList;
@@ -23,21 +23,29 @@ public class Path{
     }
 
     public void addPoint(Vector2 pos){
-        getPositions().add(pos);
+        getPositions().add(pos.cpy());
+
     }
 
     public void reset(){
         currentPointIndex=0;
         nextPointIndex=getNextPoint();
         setNextPointVelocity();
-        setMaxDist(getPositions().get(nextPointIndex).dst(getPositions().get(currentPointIndex)));
+        setMaxDist(getCurrentPoint().cpy().dst(getNext2Point()));
+        System.out.println(getCurrentPoint()+"--"+getNext2Point()+"-dist"+getNext2Point().dst(getCurrentPoint()));
     }
 
     public Vector2 getCurrentPoint(){
-        return getPositions().get(currentPointIndex);
+        return getPositions().get(currentPointIndex).cpy();
     }
 
+    public Vector2 getNext2Point(){
+        return getPositions().get(nextPointIndex).cpy();
+    }
+
+
     public boolean updatePath(Vector2 bodyPosition,float delta){
+        System.out.println(getCurrentPoint()+"--"+getNext2Point()+"-dist"+getNext2Point().dst(getCurrentPoint())+"recorrido: "+getDistance());
         Vector2 nextPointPosition= getPositions().get(nextPointIndex);
         setDistance(getDistance() + getVelocity().len() * delta);
         if(getDistance() > getMaxDist() ){
@@ -45,8 +53,8 @@ public class Path{
             currentPointIndex=nextPointIndex;
             nextPointIndex=getNextPoint();
             setNextPointVelocity();
-            setMaxDist(getPositions().get(nextPointIndex).dst(nextPointPosition));
-            System.out.println(getPositions().get(nextPointIndex).toString()+"--"+nextPointPosition);
+            setMaxDist(getCurrentPoint().cpy().dst(getNext2Point()));
+
             return true;
         } /*else if(distance>maxDist*2) {
             direction= (direction==FORWARD)?REVERSE:FORWARD;
@@ -59,23 +67,23 @@ public class Path{
 
 
     int getNextPoint(){
-        int nextPoint=currentPointIndex+ getDirection();
-        if(nextPoint== getPositions().size()){
+        int nextPoint=currentPointIndex+direction;
+        if(nextPoint >= getPositions().size()){
             setDirection(REVERSE);
-        }else if(nextPoint==-1){
+        }else if(nextPoint<=-1){
             setDirection(FORWARD);
         }
         return currentPointIndex+ getDirection();
     }
 
     void setNextPointVelocity(){
-        Vector2 nextPosition= getPositions().get(nextPointIndex);
-        Vector2 currentPosition= getPositions().get(currentPointIndex);
-        setVelocity(nextPosition.cpy().sub(currentPosition).nor().scl(this.getSpeed()));
+        Vector2 nextPosition= getNext2Point();
+        Vector2 currentPosition= getCurrentPoint();
+        setVelocity(nextPosition.sub(currentPosition).nor().scl(this.getSpeed()));
     }
     public Vector2 getVelocity(){
         if (direction==REVERSE) velocity.scl(-1f);
-        return velocity;
+        return velocity.cpy();
     }
 
     public ArrayList<Vector2> getPositions() {
