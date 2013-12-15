@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
+import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 
 public class RubentxuManager implements IManager {
@@ -80,7 +82,7 @@ public class RubentxuManager implements IManager {
                 ruben.setFacingLeft(false);
                 if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.WALKING);
             }
-            if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 0.2) {
+            if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 1 ) {
                 ruben.getRubenPhysicsFixture().setFriction(100f);
                 ruben.getRubenSensorFixture().setFriction(100f);
             } else {
@@ -90,22 +92,93 @@ public class RubentxuManager implements IManager {
         }
     }
 
+    public Enemy getEnemy(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)) {
+            return (Enemy) box2dPhysicsA;
+        } else if(box2dPhysicsB.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)){
+            return (Enemy) box2dPhysicsB;
+        } else {
+            return null;
+        }
+    }
+
+    public Rubentxu getRuben(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)) {
+            return (Rubentxu) box2dPhysicsA;
+        } else {
+            return (Rubentxu) box2dPhysicsB;
+        }
+    }
+
+    public Boolean existSensor (Contact contact) {
+
+        if (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
+                contact.getFixtureB() == ruben.getRubenSensorFixture()){
+            return true;
+        }
+
+        return false;
+    }
+
+
+    public Vector2 getRelativeVelocity(Rubentxu ruben, Box2DPhysicsObject enemy, Vector2 point) {
+        Vector2 velMovingPlatform = ruben.getBody().getLinearVelocityFromWorldPoint(point);
+        Vector2 velPassenger = enemy.getBody().getLinearVelocityFromWorldPoint(point);
+        return ruben.getBody().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
+    }
+
     @Override
     public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
 
-        if (contact.getFixtureA() == ruben.getRubenSensorFixture())
+        if (contact.getFixtureA() == ruben.getRubenSensorFixture()){
             ruben.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
+        }
 
-        if (contact.getFixtureB() == ruben.getRubenSensorFixture())
+
+        if (contact.getFixtureB() == ruben.getRubenSensorFixture()) {
             ruben.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
+        }
+
 
         if (ruben.getGrounContacts().size() > 0) {
             ruben.setGround(true);
             contact.setEnabled(true);
             ruben.getRubenPhysicsFixture().setFriction(0.2f);
             ruben.getRubenSensorFixture().setFriction(0.2f);
+
            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
+        }
+        Enemy enemy=getEnemy(contact);
+        if(enemy!=null && existSensor(contact)) {
+            Vector2[] points = contact.getWorldManifold().getPoints();
+            Vector2 vel=getRelativeVelocity(ruben,enemy,points[0]);
+            Vector2 force;
+            if (vel.x < 0 ) {
+                force=new Vector2(-30,vel.y*4);
+            }else {
+                force=new Vector2(30,vel.y*4);
+            }
+            System.out.println("Fuerza colision Enemigo: "+force +" Vel: "+vel+" Sensor exist");
+            ruben.getBody().applyLinearImpulse(force,ruben.getBody().getWorldCenter(),true);
+        }
+        if(enemy!=null && !existSensor(contact)) {
+            Vector2[] points = contact.getWorldManifold().getPoints();
+            Vector2 vel=getRelativeVelocity(ruben,enemy,points[0]);
+            Vector2 force;
+            if (vel.x < 0 ) {
+                force=new Vector2(-30,0);
+            }else {
+                force=new Vector2(30,0);
+            }
+            System.out.println("Fuerza colision Enemigo: "+force +" Vel: "+vel+" Sensor no exist");
+            ruben.getBody().applyLinearImpulse(force,ruben.getBody().getWorldCenter(),true);
         }
 
 
@@ -121,6 +194,7 @@ public class RubentxuManager implements IManager {
         if (contact.getFixtureB() == ruben.getRubenSensorFixture())
             ruben.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
 
+
         if (ruben.getGrounContacts().size() == 0) {
             ruben.setGround(false);
             contact.resetFriction();
@@ -130,6 +204,8 @@ public class RubentxuManager implements IManager {
 
     @Override
     public void handlePostSolve(Contact contact, ContactImpulse impulse) {
+        float impulseN = impulse.getNormalImpulses()[0];
+
 
     }
 

@@ -46,7 +46,7 @@
    <polyline points="0,0 -2,-196"/>
   </object>
   <object name="techo" type="object" x="314" y="-50" width="336" height="66"/>
-  <object name="plataformaMovil2" type="modelObject" x="70" y="1024" width="256" height="64">
+  <object name="plataformaMovil2" type="modelObject" x="190" y="785" width="256" height="64">
    <properties>
     <property name="movingPlatformDistX" value="6"/>
     <property name="movingPlatformDistY" value="8"/>
@@ -59,12 +59,34 @@
     <property name="typeModelObject" value="Water"/>
    </properties>
   </object>
-  <object name="plataformaMovil" type="modelObject" x="2116" y="1024" width="378" height="60">
+  <object name="plataformaMovil" type="modelObject" x="1856" y="1028" width="378" height="60">
    <properties>
     <property name="movingPlatformDistX" value="-4"/>
     <property name="movingPlatformDistY" value="5"/>
     <property name="movingPlatformSpeed" value="2.3"/>
     <property name="typeModelObject" value="MovingPlatform"/>
+   </properties>
+  </object>
+  <object name="plataformaMovil" type="modelObject" x="1598" y="128" width="378" height="60">
+   <properties>
+    <property name="movingPlatformDistX" value="5"/>
+    <property name="movingPlatformDistY" value="0"/>
+    <property name="movingPlatformSpeed" value="4"/>
+    <property name="typeModelObject" value="MovingPlatform"/>
+   </properties>
+  </object>
+  <object name="enemigo" type="modelObject" x="569" y="1065" width="71" height="84">
+   <properties>
+    <property name="pointX" value="2"/>
+    <property name="pointY" value="3"/>
+    <property name="typeModelObject" value="Enemy"/>
+   </properties>
+  </object>
+  <object name="enemigo" type="modelObject" x="1492" y="171" width="71" height="84">
+   <properties>
+    <property name="pointX" value="18"/>
+    <property name="pointY" value="17"/>
+    <property name="typeModelObject" value="Enemy"/>
    </properties>
   </object>
  </objectgroup>

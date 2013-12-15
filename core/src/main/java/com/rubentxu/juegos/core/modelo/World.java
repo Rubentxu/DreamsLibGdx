@@ -6,16 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
 
 public class World {
+
 
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;
@@ -25,12 +21,14 @@ public class World {
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> MovingPlatformplatforms;
     private HashSet<Water> waterSensors;
+    private HashSet<Enemy> enemies;
     private Sprite background;
 
     public World() {
         createDreamsWorld();
         MovingPlatformplatforms = parser.getMovingPlatforms();
         waterSensors= parser.getWaterSensors();
+        enemies=parser.getEnemies();
     }
 
     private void createDreamsWorld() {
@@ -105,5 +103,13 @@ public class World {
 
     public void setBackground(Sprite background) {
         this.background = background;
+    }
+
+    public HashSet<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(HashSet<Enemy> enemies) {
+        this.enemies = enemies;
     }
 }

@@ -111,8 +111,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
         setFixtureDef(new FixtureDef());
         getFixtureDef().shape = shape;
         getFixtureDef().density = 1;
-//        getFixtureDef().friction = 0.6f;
-//        getFixtureDef().restitution = 0.3f;
         //fixtureDef.filter.categoryBits=  PhysicsCollisionCategories.Get("Level");
         //fixtureDef.filter.maskBits = PhysicsCollisionCategories.GetAll();
 

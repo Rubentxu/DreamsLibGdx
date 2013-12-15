@@ -45,23 +45,22 @@ public class Path{
 
 
     public boolean updatePath(Vector2 bodyPosition,float delta){
-        System.out.println(getCurrentPoint()+"--"+getNext2Point()+"-dist"+getNext2Point().dst(getCurrentPoint())+"recorrido: "+getDistance());
         Vector2 nextPointPosition= getPositions().get(nextPointIndex);
-        setDistance(getDistance() + getVelocity().len() * delta);
+        distance+=  getVelocity().len() * delta;
         if(getDistance() > getMaxDist() ){
-            setDistance(0);
+            distance=0;
             currentPointIndex=nextPointIndex;
             nextPointIndex=getNextPoint();
             setNextPointVelocity();
             setMaxDist(getCurrentPoint().cpy().dst(getNext2Point()));
 
             return true;
-        } /*else if(distance>maxDist*2) {
+        } else if(distance>maxDist*2) {
             direction= (direction==FORWARD)?REVERSE:FORWARD;
             nextPointIndex=getNextPoint();
             setNextPointVelocity();
             maxDist=positions.get(nextPointIndex).dst2(bodyPosition);
-        }*/
+        }
         return false;
     }
 
@@ -79,10 +78,9 @@ public class Path{
     void setNextPointVelocity(){
         Vector2 nextPosition= getNext2Point();
         Vector2 currentPosition= getCurrentPoint();
-        setVelocity(nextPosition.sub(currentPosition).nor().scl(this.getSpeed()));
+        velocity=nextPosition.sub(currentPosition).nor().scl(this.getSpeed());
     }
     public Vector2 getVelocity(){
-        if (direction==REVERSE) velocity.scl(-1f);
         return velocity.cpy();
     }
 
@@ -120,6 +118,10 @@ public class Path{
 
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
+    }
+
+    public Vector2 getForce(float mass){
+        return velocity.cpy().scl(mass);
     }
 
     public int getDirection() {

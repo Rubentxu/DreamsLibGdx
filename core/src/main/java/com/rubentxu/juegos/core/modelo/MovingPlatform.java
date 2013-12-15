@@ -27,29 +27,16 @@ public class MovingPlatform extends Platform{
         //this.maxDist=0;
     }
 
-   /* public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
-        super(nombre, grupo, body);
-        end= new Vector2(dstX,dstY);
-        this.speed=speed;
-        this.pVelocity=end.cpy().nor().scl(this.speed);
-        this.start=body.getPosition().cpy();
-        this.maxDist=end.len();
-        this.setDistance(0f);
-
-    }*/
-
     public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
         super(nombre, grupo, body);
         path=new Path(speed);
-        path.addPoint(body.getPosition());
-        path.addPoint(new Vector2(body.getPosition().x + dstX, body.getPosition().x + dstY));
-        //path.addPoint(new Vector2(body.getPosition().x + dstX-dstY, body.getPosition().x + dstY-dstX));
+        Vector2 pos= body.getPosition().cpy();
+        path.addPoint(pos);
+        path.addPoint(new Vector2(pos.x + dstX, pos.y + dstY));
         path.reset();
         this.start=body.getPosition().cpy();
 
     }
-
-
 
     public Boolean getForward() {
         return forward;

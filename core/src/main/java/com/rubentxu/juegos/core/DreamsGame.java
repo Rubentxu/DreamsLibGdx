@@ -3,12 +3,12 @@ package com.rubentxu.juegos.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.inputs.GameInputs;
+import com.rubentxu.juegos.core.managers.EnemyManager;
 import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
-import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
@@ -39,10 +39,14 @@ public class DreamsGame extends Game {
         WaterManager waterManager= new WaterManager();
         waterManager.setWaterSensors(world.getWaterSensors());
 
+        EnemyManager enemyManager= new EnemyManager();
+        enemyManager.setEnemies(world.getEnemies());
+
         controller= new WorldController();
         controller.setRubenManager(rubenManager);
         controller.setPlatformManager(platformManager);
         controller.setWaterManager(waterManager);
+        controller.setEnemyManager(enemyManager);
         world.getPhysics().setContactListener(controller);
 
 

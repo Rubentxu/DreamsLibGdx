@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.rubentxu.juegos.core.managers.EnemyManager;
 import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
@@ -18,6 +19,7 @@ public class WorldController implements ContactListener, ContactFilter {
     private RubentxuManager rubenManager;
     private PlatformManager platformManager;
     private WaterManager waterManager;
+    private EnemyManager enemyManager;
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
 
@@ -93,6 +95,14 @@ public class WorldController implements ContactListener, ContactFilter {
         this.waterManager = waterManager;
     }
 
+    public EnemyManager getEnemyManager() {
+        return enemyManager;
+    }
+
+    public void setEnemyManager(EnemyManager enemyManager) {
+        this.enemyManager = enemyManager;
+    }
+
     public static enum Keys {
         LEFT, RIGHT, JUMP, FIRE
     }
@@ -104,6 +114,7 @@ public class WorldController implements ContactListener, ContactFilter {
         getRubenManager().update(delta);
         getPlatformManager().update(delta);
         waterManager.update(delta);
+        enemyManager.update(delta);
     }
 
 

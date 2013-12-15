@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
@@ -25,7 +26,7 @@ public class WorldRenderer {
 
 
     private static final float RUNNING_FRAME_DURATION = 0.02f;
-    private final MovingPlatform mvp;
+
 
     /**
      * for debug rendering *
@@ -60,12 +61,7 @@ public class WorldRenderer {
     private int height;
     private float timeIdle;
     private Rubentxu ruben;
-    private Sprite m1,m2,w;
     private ModelsAndViews modelsAndViews;
-
-
-
-
 
     public WorldRenderer(final World world, boolean debug) {
         modelsAndViews=new ModelsAndViews();
@@ -76,7 +72,6 @@ public class WorldRenderer {
         spriteBatch = renderer.getSpriteBatch();
         cam = new OrthographicCamera();
         loadTextures();
-        mvp=(MovingPlatform)world.getMovingPlatformplatforms().toArray()[0];
 
         //final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
 
@@ -92,21 +87,32 @@ public class WorldRenderer {
     private void loadTextures() {
 
         TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
-        TextureAtlas atlasVarios = new TextureAtlas(Gdx.files.internal("imagenes/texturas/varios2.pack"));
+        TextureAtlas atlasVarios = new TextureAtlas(Gdx.files.internal("imagenes/texturas/varios.pack"));
 
         for(MovingPlatform mvp :world.getMovingPlatformplatforms()){
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion(mvp.getNombre()));
+            String nombreRegion= (atlasVarios.findRegion(mvp.getNombre())!=null)? mvp.getNombre(): mvp.getGrupo().toString();
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
             if(viewSprite!=null){
                 modelsAndViews.addModelAndView(mvp,viewSprite);
             }
         }
         for(Water w :world.getWaterSensors()){
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion(w.getNombre()));
+            String nombreRegion= (atlasVarios.findRegion(w.getNombre())!=null)? w.getNombre(): w.getGrupo().toString();
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
             if(viewSprite!=null){
                 System.out.println("Creado Sprite "+w.getNombre());
                 modelsAndViews.addModelAndView(w,viewSprite);
             }
         }
+
+        for(Enemy e :world.getEnemies()){
+            String nombreRegion= (atlasVarios.findRegion(e.getNombre())!=null)? e.getNombre(): e.getGrupo().toString();
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
+            if(viewSprite!=null){
+                modelsAndViews.addModelAndView(e,viewSprite);
+            }
+        }
+
 
         Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
         rubenJumpRight = atlas.findRegions("Saltando");
@@ -182,7 +188,7 @@ public class WorldRenderer {
 
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
-            DebugWindow.myLabel.setText(mvp.toString());
+            DebugWindow.myLabel.setText(ruben.toString());
             DebugWindow.getInstance().pack();
             DebugWindow.getInstance().draw(spriteBatch, 0.8f);
 

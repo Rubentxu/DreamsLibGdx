@@ -12,7 +12,6 @@ public class Platform extends Box2DPhysicsObject {
         super(nombre, grupo, body);
     }
 
-
     public Boolean isOneWay() {
         return oneWay;
     }

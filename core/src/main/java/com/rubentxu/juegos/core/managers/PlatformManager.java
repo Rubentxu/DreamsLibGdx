@@ -20,7 +20,7 @@ public class PlatformManager implements IManager {
 
     private HashSet<Platform> platforms;
     private HashSet<MovingPlatform> movingPlatforms;
-    private Boolean enabledContac = false;
+    private Boolean enabledContac = true;
 
     public HashSet<Platform> getPlatforms() {
         return platforms;
@@ -57,20 +57,6 @@ public class PlatformManager implements IManager {
             platform.getBody().setLinearVelocity(new Vector2(0f, 0f));
         } else {
 
-
-            /*platform.setTime(platform.getTime() + delta);
-            platform.setDistance(platform.getDistance() + velocity.len() * delta);
-
-
-            if (platform.getForward()) velocity.scl(-1f);
-
-
-            if (platform.getDistance() > platform.getMaxDist()) {
-                platform.setTime(0);
-                platform.setForward(!platform.getForward());
-                platform.setDistance(0);
-
-            }*/
             platform.getPath().updatePath(platform.getBody().getPosition(),delta);
             platform.getBody().setLinearVelocity(platform.getPath().getVelocity().cpy());
         }

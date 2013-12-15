@@ -1,83 +1,65 @@
 package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Path;
 
 import java.util.HashSet;
+import java.util.List;
 
 
 public class Enemy extends Box2DPhysicsObject {
 
-    public enum State {
-        IDLE, WALKING, JUMPING, DYING, FALL
-    }
-
     public final static float MAX_VELOCITY = 4f;
     public final static float JUMP_FORCE = 14.5f;
-    private boolean onGround = false;
-    private State state = State.IDLE;
     boolean facingLeft = true;
+    private boolean onGround = false;
+    private State state = State.WALKING;
     private float killVelocity;
     private Boolean hurt;
     private float hurtVelocityY = 10f;
     private float hurtVelocityX = 6f;
     private float springOffEnemy = -1f;
-    private HashSet<Fixture> grounContacts;   
+    private HashSet<Fixture> grounContacts = new HashSet<Fixture>();
     private Fixture enemyPhysicsFixture;
     private Fixture enemySensorFixture;
     private Path path;
 
     public Enemy(World physics) {
         super("Enemigo", GRUPOS.ENEMIGOS, physics);
-        setGrounContacts(new HashSet<Fixture>());
     }
 
-    public Enemy(World physics, float x, float y, float width, float height) {
-        super("Enemigo", GRUPOS.ENEMIGOS, physics, x, y, width, height, 0);
-        setGrounContacts(new HashSet<Fixture>());
-        createEnemy( x, y, width, height);
+    public Enemy(String name, Body body, List<Vector2> points) {
+        super(name, GRUPOS.ENEMIGOS, body);
+        path = new Path(MAX_VELOCITY);
+        Vector2 pos = body.getPosition().cpy();
+        path.addPoint(pos);
+        for (Vector2 v : points) {
+            path.addPoint(v);
+        }
+        path.reset();
     }
-
-    public void createEnemy( float x, float y, float width, float height) {
-        BodyDef def = new BodyDef();
-        def.type = BodyDef.BodyType.DynamicBody;
-        def.position.x = x;
-        def.position.y = y;
-        setBody(box2D.createBody(def));
-        getBody().setFixedRotation(true);
-        getBody().setUserData(this);
-
-        PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width,height);
-
-        enemyPhysicsFixture = super.getBody().createFixture(poly,1);
-        enemyPhysicsFixture.setUserData(this);
-        poly.dispose();
-
-        CircleShape circle = new CircleShape();
-        circle.setRadius(width);
-        circle.setPosition(new Vector2(0, -height*0.9f));
-        enemySensorFixture = super.getBody().createFixture(circle, 0);
-        enemySensorFixture.setSensor(true);
-        enemySensorFixture.setUserData(this);
-        circle.dispose();
-
-    }
-
 
     public void velocityLimit() {
         Vector2 vel = this.getBody().getLinearVelocity();
 
-        if (Math.abs(vel.x) > this.MAX_VELOCITY){
+        if (Math.abs(vel.x) > this.MAX_VELOCITY) {
             vel.x = Math.signum(vel.x) * this.MAX_VELOCITY;
             this.setVelocity(new Vector2(vel.x, vel.y));
         }
+
+        if (this.path.getVelocity().x < -0) {
+            this.setFacingLeft(true);
+
+            this.getBody().applyForce(this.getPath().getForce(this.getBody().getMass()).scl( 1.4f),this.getBody().getWorldCenter(),true);
+        } else if (this.path.getVelocity().x > 0) {
+            this.setFacingLeft(false);
+            this.getBody().applyForce(this.getPath().getForce(this.getBody().getMass()).scl(1.4f),this.getBody().getWorldCenter(),true);
+        }
+
     }
 
     public boolean isFacingLeft() {
@@ -93,7 +75,7 @@ public class Enemy extends Box2DPhysicsObject {
     }
 
     public void setVelocity(Vector2 velocity) {
-         super.getBody().setLinearVelocity(velocity);
+        super.getBody().setLinearVelocity(velocity);
     }
 
     public State getState() {
@@ -108,8 +90,16 @@ public class Enemy extends Box2DPhysicsObject {
         return enemyPhysicsFixture;
     }
 
+    public void setEnemyPhysicsFixture(Fixture enemyPhysicsFixture) {
+        this.enemyPhysicsFixture = enemyPhysicsFixture;
+    }
+
     public Fixture getEnemySensorFixture() {
         return enemySensorFixture;
+    }
+
+    public void setEnemySensorFixture(Fixture enemySensorFixture) {
+        this.enemySensorFixture = enemySensorFixture;
     }
 
     public boolean isGround() {
@@ -128,7 +118,6 @@ public class Enemy extends Box2DPhysicsObject {
         this.grounContacts = grounContacts;
     }
 
-
     public void hurt() {
         hurt = true;
 
@@ -146,26 +135,30 @@ public class Enemy extends Box2DPhysicsObject {
     public String toString() {
         return
                 "onGround=" + onGround +
-                "\nstate=" + state +
-                "\nfacingLeft=" + facingLeft +
-                "\nisActive= " + getBody().isActive() +
-                "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
-                "\nisAwake=" + getBody().isAwake()+
-                "\nAngle=" + getBody().getAngle()+
-                "\nAngularDamping=" + getBody().getAngularDamping()+
-                "\nAngularVelocity=" + getBody().getAngularVelocity()+
-                "\nGravityScale=" + getBody().getGravityScale()+
-                "\nInertia=" + getBody().getInertia()+
-                "\nMass=" + getBody().getMass()+
-                "\nisBullet=" + getBody().isBullet()+
-                "\nisFixedRotation=" + getBody().isFixedRotation()+
-                "\nLinearDamping=" + getBody().getLinearDamping()+
-                "\nLinearVelocity=" + getBody().getLinearVelocity().toString()+
-                "\nPosition=" + getBody().getPosition().toString()+
-                "\nLocalCenter=" + getBody().getLocalCenter().toString()+
-                "\nWidth=" +getWidth()+
-                "\nHeight=" + getHeight()+
-                "\nWorldCenter=" + getBody().getWorldCenter().toString();
+                        "\nstate=" + state +
+                        "\nfacingLeft=" + facingLeft +
+                        "\nisActive= " + getBody().isActive() +
+                        "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
+                        "\nisAwake=" + getBody().isAwake() +
+                        "\nAngle=" + getBody().getAngle() +
+                        "\nAngularDamping=" + getBody().getAngularDamping() +
+                        "\nAngularVelocity=" + getBody().getAngularVelocity() +
+                        "\nGravityScale=" + getBody().getGravityScale() +
+                        "\nInertia=" + getBody().getInertia() +
+                        "\nMass=" + getBody().getMass() +
+                        "\nisBullet=" + getBody().isBullet() +
+                        "\nisFixedRotation=" + getBody().isFixedRotation() +
+                        "\nLinearDamping=" + getBody().getLinearDamping() +
+                        "\nLinearVelocity=" + getBody().getLinearVelocity().toString() +
+                        "\nPosition=" + getBody().getPosition().toString() +
+                        "\nLocalCenter=" + getBody().getLocalCenter().toString() +
+                        "\nWidth=" + getWidth() +
+                        "\nHeight=" + getHeight() +
+                        "\nWorldCenter=" + getBody().getWorldCenter().toString();
+    }
+
+    public enum State {
+        IDLE, WALKING, JUMPING, DYING, FALL
     }
 }
 

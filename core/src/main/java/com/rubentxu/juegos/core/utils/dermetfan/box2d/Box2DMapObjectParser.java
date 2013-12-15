@@ -16,24 +16,66 @@
 
 package com.rubentxu.juegos.core.utils.dermetfan.box2d;
 
-import com.badlogic.gdx.*;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.maps.*;
-import com.badlogic.gdx.maps.objects.*;
-import com.badlogic.gdx.math.*;
-import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.physics.box2d.BodyDef.*;
-import com.badlogic.gdx.physics.box2d.joints.*;
-import com.badlogic.gdx.utils.*;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.CircleMapObject;
+import com.badlogic.gdx.maps.objects.EllipseMapObject;
+import com.badlogic.gdx.maps.objects.PolygonMapObject;
+import com.badlogic.gdx.maps.objects.PolylineMapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.objects.TextureMapObject;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.EarClippingTriangulator;
+import com.badlogic.gdx.math.Ellipse;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Polyline;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
+import com.badlogic.gdx.physics.box2d.ChainShape;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Joint;
+import com.badlogic.gdx.physics.box2d.JointDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
+import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
+import com.badlogic.gdx.physics.box2d.joints.GearJointDef;
+import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
+import com.badlogic.gdx.physics.box2d.joints.PulleyJointDef;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.badlogic.gdx.physics.box2d.joints.RopeJointDef;
+import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
+import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.ObjectMap;
+import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
-import com.rubentxu.juegos.core.utils.dermetfan.math.*;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.utils.dermetfan.math.BayazitDecomposer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 
-import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.*;
+import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.areVerticesClockwise;
+import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.isConvex;
+import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.toFloatArray;
+import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.toPolygonArray;
+import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.toVector2Array;
 
 /**
  * An utility class that parses {@link MapObjects} from a {@link Map} and generates Box2D {@link Body Bodies}, {@link Fixture Fixtures} and {@link Joint Joints} from it.<br/>
@@ -78,6 +120,8 @@ public class Box2DMapObjectParser {
     private ObjectMap<String, Joint> joints = new ObjectMap<String, Joint>();
 
     private HashSet<MovingPlatform> movingPlatforms = new HashSet<MovingPlatform>();
+
+    private HashSet<Enemy> enemies = new HashSet<Enemy>();
 
     private HashSet<Water> waterSensors=new HashSet<Water>();
 
@@ -208,6 +252,8 @@ public class Box2DMapObjectParser {
             createMovingPlatform(world,object);
         if(object.getProperties().get(aliases.typeModelObject).equals(aliases.water))
             createWater(world, object);
+        if(object.getProperties().get(aliases.typeModelObject).equals(aliases.enemy))
+            createEnemy(world, object);
 
     }
 
@@ -298,6 +344,61 @@ public class Box2DMapObjectParser {
             movingPlatforms.add(m1);
             box.setUserData(m1);
             fixBox.setUserData(m1);
+            bodies.put(name, box);
+
+        } else {
+            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \""  + aliases.typeModelObject + "\"");
+        }
+
+    }
+
+    private void createEnemy (World world, MapObject object) {
+        MapProperties properties = object.getProperties();
+        BodyDef def= new BodyDef();
+        def.type= BodyDef.BodyType.DynamicBody;
+        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
+        Body box = world.createBody(def);
+        box.setFixedRotation(true);
+
+        if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
+            PolygonShape shape = new PolygonShape();
+            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            rectangle.x *= unitScale;
+            rectangle.y *= unitScale;
+            rectangle.width *= unitScale;
+            rectangle.height *= unitScale;
+            shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
+                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
+
+
+            Fixture enemyPhysicsFixture = box.createFixture(shape, 1);
+            shape.dispose();
+            CircleShape circle = new CircleShape();
+            circle.setRadius(rectangle.width/2);
+            circle.setPosition(new Vector2(rectangle.width/2, rectangle.height/5));
+            Fixture enemySensorFixture = box.createFixture(circle, 0);
+            enemySensorFixture.setSensor(true);
+            circle.dispose();
+
+            String name = object.getName();
+            if(bodies.containsKey(name)) {
+                int duplicate = 1;
+                while(bodies.containsKey(name + duplicate))
+                    duplicate++;
+                name += duplicate;
+            }
+            List<Vector2> points= new ArrayList<Vector2>();
+            Vector2 point= new Vector2( Float.parseFloat(properties.get(aliases.pointX, String.class)),
+                    Float.parseFloat(properties.get(aliases.pointY, String.class)));
+            points.add(point);
+
+            Enemy enemy= new Enemy(name,box,points);
+            enemy.setEnemyPhysicsFixture(enemyPhysicsFixture);
+            enemy.setEnemySensorFixture(enemySensorFixture);
+            enemies.add(enemy);
+            box.setUserData(enemy);
+            enemyPhysicsFixture.setUserData(enemy);
+            enemySensorFixture.setUserData(enemy);
             bodies.put(name, box);
 
         } else {
@@ -791,6 +892,14 @@ public class Box2DMapObjectParser {
         this.waterSensors = waterSensors;
     }
 
+    public HashSet<Enemy> getEnemies() {
+        return enemies;
+    }
+
+    public void setEnemies(HashSet<Enemy> enemies) {
+        this.enemies = enemies;
+    }
+
     /** defines the {@link #aliases} to use when parsing */
     public static class Aliases {
 
@@ -872,12 +981,15 @@ public class Box2DMapObjectParser {
                 maxLength = "maxLength",
                 object = "object",
                 modelObject = "modelObject",
-                    typeModelObject = "typeModelObject",
+                typeModelObject = "typeModelObject",
                 movingPlatform = "MovingPlatform",
                 movingPlatformDistY = "movingPlatformDistY",
                 movingPlatformDistX = "movingPlatformDistX",
                 movingPlatformSpeed = "movingPlatformSpeed",
                 water = "Water",
+                enemy = "Enemy",
+                pointX = "pointX",
+                pointY = "pointY",
                 unitScale = "unitScale";
     }
 

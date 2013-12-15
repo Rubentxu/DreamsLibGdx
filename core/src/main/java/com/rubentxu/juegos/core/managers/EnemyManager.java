@@ -7,29 +7,29 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.interfaces.IManager;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.State;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 
 public class EnemyManager implements IManager {
 
-    private ArrayList<Enemy> enemies;
+    private HashSet<Enemy> enemies;
 
-    public EnemyManager(ArrayList<Enemy> enemies) {
-        this.enemies = enemies;
-    }
 
     public void update(float delta) {
         for(Enemy enemy:enemies){
+            enemy.getPath().updatePath(enemy.getBody().getPosition(),delta);
+            enemy.getBody().applyForce(enemy.getPath().getForce(enemy.getBody().getMass()),enemy.getBody().getWorldCenter(),true);
             Vector2 vel = enemy.getVelocity();
             Vector2 pos = enemy.getBody().getPosition();
             processVelocity(vel,enemy);
             processContactGround(enemy);
             applyImpulses(vel, pos,enemy);
+
         }
     }
 
@@ -44,12 +44,12 @@ public class EnemyManager implements IManager {
     public void applyImpulses(Vector2 vel, Vector2 pos,Enemy enemy) {
         // apply left impulse, but only if max velocity is not reached yet
         if (enemy.getState().equals(State.WALKING) && enemy.isFacingLeft() && vel.x > -enemy.MAX_VELOCITY) {
-            enemy.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
+            enemy.getBody().applyLinearImpulse(-4f, 0f, pos.x, pos.y, true);
         }
 
         // apply right impulse, but only if max velocity is not reached yet
         if (enemy.getState().equals(State.WALKING) && !enemy.isFacingLeft() && vel.x < enemy.MAX_VELOCITY) {
-            enemy.getBody().applyLinearImpulse(2f, 0, pos.x, pos.y, true);
+            enemy.getBody().applyLinearImpulse(4f, 0, pos.x, pos.y, true);
         }
 
         // jump, but only when grounded
@@ -69,7 +69,7 @@ public class EnemyManager implements IManager {
             if (enemy.getVelocity().y <= 0 || !enemy.getState().equals(Enemy.State.JUMPING))
                 enemy.setState(Enemy.State.FALL);
         } else {
-            enemy.setState(Enemy.State.IDLE);
+            //enemy.setState(Enemy.State.IDLE);
             if (enemy.getState().equals(State.IDLE)) {
                 enemy.getEnemyPhysicsFixture().setFriction(100f);
                 enemy.getEnemySensorFixture().setFriction(100f);
@@ -157,4 +157,7 @@ public class EnemyManager implements IManager {
         return true;
     }
 
+    public void setEnemies(HashSet<Enemy> enemies) {
+        this.enemies = enemies;
+    }
 }
