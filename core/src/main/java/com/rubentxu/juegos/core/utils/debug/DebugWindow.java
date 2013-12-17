@@ -1,16 +1,13 @@
 package com.rubentxu.juegos.core.utils.debug;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rubentxu.juegos.core.modelo.World;
 
 public class DebugWindow extends Window{
@@ -25,8 +22,8 @@ public class DebugWindow extends Window{
 
     public static Window createWindowDebug(){
 
-        BitmapFont font = (BitmapFont) World.assets.get("fonts/DreamOfMe-12.fnt");
-        font.setScale(1 / 62F);
+        BitmapFont font = (BitmapFont) World.assets.get("fonts/DreamOfMe-32.fnt");
+        font.setScale(1 / 64F);
         font.setUseIntegerPositions(false);
         Window.WindowStyle style = new Window.WindowStyle();
         //style.background = background;
@@ -44,12 +41,8 @@ public class DebugWindow extends Window{
         window.setFillParent(true);
 
         Label.LabelStyle labelStyle= new Label.LabelStyle(font,new Color(1, 1, 1, 1)) ;
-
         myLabel= new Label("",labelStyle);
-
-
         window.add(myLabel).pad(0.2f).width(8);
-
 
         return window;
     }

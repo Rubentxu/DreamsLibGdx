@@ -1,14 +1,9 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
@@ -38,16 +33,13 @@ public class World {
     }
 
     private void createDreamsWorld() {
-
+        assets.loadAssetsScreen(assets.SCREEN_GAME);
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        map = new TmxMapLoader().load("maps/EscenarioDePruebas.tmx");
+        map =  assets.get("maps/EscenarioDePruebas.tmx");
         parser = new Box2DMapObjectParser();
         System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
         ruben = new Rubentxu(this.physics, 8, 6, 0.45f, 1);
-
-        assets.loadAssetsScreen(assets.SCREEN_GAME);
-
 
         background=new Sprite((Texture) assets.get("maps/background.png"));
         background.setSize(40, 20);
