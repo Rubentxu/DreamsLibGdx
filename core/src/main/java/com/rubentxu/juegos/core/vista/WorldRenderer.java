@@ -73,8 +73,6 @@ public class WorldRenderer {
         cam = new OrthographicCamera();
         loadTextures();
 
-        //final int tileWidth = world.getMap().getProperties().get("tilewidth", Integer.class), tileHeight = world.getMap().getProperties().get("tileheight", Integer.class);
-
     }
 
     public void setSize(int w, int h) {
@@ -86,8 +84,8 @@ public class WorldRenderer {
 
     private void loadTextures() {
 
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("imagenes/texturas/sprites.pack"));
-        TextureAtlas atlasVarios = new TextureAtlas(Gdx.files.internal("imagenes/texturas/varios.pack"));
+        TextureAtlas atlas = world.getAssets().get("imagenes/texturas/sprites.pack");
+        TextureAtlas atlasVarios = world.getAssets().get("imagenes/texturas/varios.pack");
 
         for(MovingPlatform mvp :world.getMovingPlatformplatforms()){
             String nombreRegion= (atlasVarios.findRegion(mvp.getNombre())!=null)? mvp.getNombre(): mvp.getGrupo().toString();

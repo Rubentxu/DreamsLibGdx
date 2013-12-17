@@ -25,7 +25,7 @@ public class DebugWindow extends Window{
 
     public static Window createWindowDebug(){
 
-        BitmapFont font = new BitmapFont();
+        BitmapFont font = (BitmapFont) World.assets.get("fonts/DreamOfMe-12.fnt");
         font.setScale(1 / 62F);
         font.setUseIntegerPositions(false);
         Window.WindowStyle style = new Window.WindowStyle();

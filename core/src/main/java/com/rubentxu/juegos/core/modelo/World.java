@@ -1,11 +1,16 @@
 package com.rubentxu.juegos.core.modelo;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.math.Vector2;
+import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
@@ -15,7 +20,7 @@ public class World {
 
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;
-    public static AssetManager assets = null;
+    public static Assets assets = null;
     private Rubentxu ruben;
     private Box2DMapObjectParser parser;
     private HashSet<Platform> platforms;
@@ -24,7 +29,8 @@ public class World {
     private HashSet<Enemy> enemies;
     private Sprite background;
 
-    public World() {
+    public World(Assets assets) {
+        this.assets= assets;
         createDreamsWorld();
         MovingPlatformplatforms = parser.getMovingPlatforms();
         waterSensors= parser.getWaterSensors();
@@ -39,18 +45,18 @@ public class World {
         System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
         ruben = new Rubentxu(this.physics, 8, 6, 0.45f, 1);
-        assets = new AssetManager();
-        assets.load("imagenes/texturas/debug.jpg", Texture.class);
-        assets.load("maps/background.png", Texture.class);
-        assets.finishLoading();
+
+        assets.loadAssetsScreen(assets.SCREEN_GAME);
+
+
         background=new Sprite((Texture) assets.get("maps/background.png"));
         background.setSize(40, 20);
         background.setOrigin(0, 0);
     }
 
     public void dispose() {
-        getMap().dispose();
-        getAssets().dispose();
+        map.dispose();
+        assets.dispose();
     }
 
     public TiledMap getMap() {

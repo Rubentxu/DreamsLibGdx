@@ -11,6 +11,7 @@ import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
+import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 public class DreamsGame extends Game {
@@ -28,7 +29,7 @@ public class DreamsGame extends Game {
     @Override
 	public void create () {
         log = new FPSLogger();
-        world = new World();
+        world = new World(new Assets());
         renderer=new WorldRenderer(world, true);
 
         RubentxuManager rubenManager = new RubentxuManager(world.getRuben());

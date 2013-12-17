@@ -2,64 +2,45 @@ package com.rubentxu.juegos.core.servicios;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-public abstract class Assets {
+public class Assets extends AssetManager{
 
-	public static final AssetManager manager = new AssetManager();
+    public static final int SCREEN_MENU= 1;
+    public static final int SCREEN_GAME= 2;
+    public static final int SCREEN_SPLASH= 3;
 
-	public static Texture ball, someImage, japanischeFlagge, bruteWithTcng, drop, luigiFront, luigiSide, particle, player, animationTest, tank, tankCannon;
 
-	static {
-		manager.load("imagenes/test/ball.png", Texture.class);
+    public Assets() {
+        super();
+    }
 
-		manager.load("imagenes/test/japanischeFlagge.jpg", Texture.class);
-		/*manager.load("imagenes/test/bruteWithTcng.png", Texture.class);
-		manager.load("imagenes/test/drop.png", Texture.class);
-		manager.load("imagenes/test/luigi front.png", Texture.class);
-		manager.load("imagenes/test/luigi side.png", Texture.class);
-		manager.load("imagenes/test/particle.png", Texture.class);
-		manager.load("imagenes/test/player.png", Texture.class);
-		manager.load("imagenes/test/animationTest.png", Texture.class);
-		manager.load("imagenes/test/tank.png", Texture.class);
-		manager.load("imagenes/test/tankCannon.png", Texture.class);*/
-	}
+    public void loadAssetsScreen(int screen){
+        switch (screen) {
+            case SCREEN_MENU:
+                break;
 
-	public static boolean update() {
-		if(manager.update()) {
-			set();
-			return true;
-		}
-		return false;
-	}
+            case SCREEN_GAME:
+                loadAssetsGame();
+                break;
+            case SCREEN_SPLASH:
+                break;
+        }
 
-	public static void set() {
-		ball = manager.get("imagenes/test/ball.png", Texture.class);
+    }
 
-		japanischeFlagge = manager.get("imagenes/test/japanischeFlagge.jpg", Texture.class);
-		/*bruteWithTcng = manager.get("imagenes/test/bruteWithTcng.png", Texture.class);
-		drop = manager.get("imagenes/test/drop.png", Texture.class);
-		luigiFront = manager.get("imagenes/test/luigi front.png", Texture.class);
-		luigiSide = manager.get("imagenes/test/luigi side.png", Texture.class);
-		particle = manager.get("imagenes/test/particle.png", Texture.class);
-		player = manager.get("imagenes/test/player.png", Texture.class);
-		animationTest = manager.get("imagenes/test/animationTest.png", Texture.class);
-		tank = manager.get("imagenes/test/tank.png", Texture.class);
-		tankCannon = manager.get("imagenes/test/tankCannon.png", Texture.class);*/
-	}
+    private void loadAssetsGame() {
+        this.load("fonts/DreamOfMe-12.fnt", BitmapFont.class);
+        this.load("imagenes/texturas/debug.jpg", Texture.class);
+        this.load("maps/background.png", Texture.class);
+        this.load("imagenes/texturas/sprites.pack", TextureAtlas.class);
+        this.load("imagenes/texturas/varios.pack", TextureAtlas.class);
+        this.finishLoading();
+    }
 
-	public static void dispose() {
-		ball.dispose();
-
-		japanischeFlagge.dispose();
-		/*bruteWithTcng.dispose();
-		drop.dispose();
-		luigiFront.dispose();
-		luigiSide.dispose();
-		particle.dispose();
-		player.dispose();
-		animationTest.dispose();
-		tank.dispose();
-		tankCannon.dispose();*/
+	public void dispose() {
+        this.dispose();
 	}
 
 }
