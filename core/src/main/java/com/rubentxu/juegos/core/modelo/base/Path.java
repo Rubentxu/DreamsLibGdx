@@ -53,14 +53,15 @@ public class Path{
             nextPointIndex=getNextPoint();
             setNextPointVelocity();
             setMaxDist(getCurrentPoint().cpy().dst(getNext2Point()));
-
             return true;
         } else if(distance>maxDist*2) {
             direction= (direction==FORWARD)?REVERSE:FORWARD;
             nextPointIndex=getNextPoint();
             setNextPointVelocity();
             maxDist=positions.get(nextPointIndex).dst2(bodyPosition);
+            return true;
         }
+
         return false;
     }
 
@@ -131,4 +132,6 @@ public class Path{
     public void setDirection(int direction) {
         this.direction = direction;
     }
+
+
 }

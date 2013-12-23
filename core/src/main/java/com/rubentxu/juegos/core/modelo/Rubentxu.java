@@ -80,7 +80,7 @@ public class Rubentxu extends Box2DPhysicsObject {
 
         if (Math.abs(vel.x) > this.MAX_VELOCITY){
             vel.x = Math.signum(vel.x) * this.MAX_VELOCITY;
-           // this.setVelocity(new Vector2(vel.x, vel.y));
+            this.setVelocity(new Vector2(vel.x, vel.y));
         }
     }
 
@@ -151,7 +151,8 @@ public class Rubentxu extends Box2DPhysicsObject {
                 "\nAngularVelocity=" + getBody().getAngularVelocity()+
                 "\nGravityScale=" + getBody().getGravityScale()+
                 "\nInertia=" + getBody().getInertia()+
-                "\nMass=" + getBody().getMass()+
+                "\nMasa=" + getBody().getMass()+
+                "\nPeso=" + getBody().getMass()*9.8f+
                 "\nisBullet=" + getBody().isBullet()+
                 "\nisFixedRotation=" + getBody().isFixedRotation()+
                 "\nLinearDamping=" + getBody().getLinearDamping()+

@@ -46,7 +46,7 @@ public class Assets extends AssetManager{
     }
 
 	public void dispose() {
-        this.dispose();
+        super.dispose();
 	}
 
 }

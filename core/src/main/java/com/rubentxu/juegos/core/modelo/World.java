@@ -39,7 +39,7 @@ public class World {
         parser = new Box2DMapObjectParser();
         System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
-        ruben = new Rubentxu(this.physics, 8, 6, 0.45f, 1);
+        ruben = new Rubentxu(this.physics, 21, 28, 0.45f, 1);
 
         background=new Sprite((Texture) assets.get("maps/background.png"));
         background.setSize(40, 20);

@@ -31,7 +31,8 @@ public class WaterManager implements IManager {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBody();
         w.addBody(b);
-        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPOS.HEROES)) ((Rubentxu)b.getUserData()).setState(Rubentxu.State.SWIMMING);
+        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPOS.HEROES))
+            ((Rubentxu)b.getUserData()).setState(Rubentxu.State.SWIMMING);
 
     }
 

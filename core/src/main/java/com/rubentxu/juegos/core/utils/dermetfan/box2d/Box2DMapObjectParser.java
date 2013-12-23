@@ -280,7 +280,7 @@ public class Box2DMapObjectParser {
             fixDef.shape=shape;
             fixDef.friction= 1f;
             fixDef.isSensor=true;
-            fixDef.density=getProperty(properties, aliases.density, fixDef.density);
+            fixDef.density=getProperty(properties, aliases.density, 2);
             Fixture fixBox=box.createFixture(fixDef);
             shape.dispose();
 
@@ -326,7 +326,6 @@ public class Box2DMapObjectParser {
 
             FixtureDef fixDef = new FixtureDef();
             fixDef.shape=shape;
-            fixDef.friction= 1f;
             Fixture fixBox=box.createFixture(fixDef);
             shape.dispose();
             box.setBullet(true);

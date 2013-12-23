@@ -78,8 +78,14 @@ public class WorldRenderer {
     public void setSize(int w, int h) {
         this.setWidth(w);
         this.setHeight(h);
-        cam.viewportWidth = getWidth() / 42;
-        cam.viewportHeight = getHeight() / 42;
+        if(w>1024){
+            cam.viewportWidth = getWidth() * world.getParser().getUnitScale();
+            cam.viewportHeight = getHeight() * world.getParser().getUnitScale();
+        } else {
+            cam.viewportWidth = getWidth() * world.getParser().getUnitScale()*2;
+            cam.viewportHeight = getHeight() * world.getParser().getUnitScale()*2;
+        }
+
     }
 
     private void loadTextures() {
@@ -171,7 +177,7 @@ public class WorldRenderer {
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), 4, 4);
         ruben.getBody().setAwake(true);
-        cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y / 1.3f, 0);
+        cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y , 0);
         cam.update();
         spriteBatch.begin();
         world.getBackground().draw(spriteBatch);
@@ -260,7 +266,7 @@ public class WorldRenderer {
         }
 
         AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
-                ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 1.9f);
+                ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 2);
 
     }
 

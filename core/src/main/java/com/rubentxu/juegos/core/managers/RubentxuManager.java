@@ -46,12 +46,12 @@ public class RubentxuManager implements IManager {
     public void applyImpulses(Vector2 vel, Vector2 pos) {
         // apply left impulse, but only if max velocity is not reached yet
         if (WorldController.keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
-            ruben.getBody().applyLinearImpulse(-2f, 0f, pos.x, pos.y, true);
+            ruben.getBody().applyLinearImpulse(-3f, 0f, pos.x, pos.y, true);
         }
 
         // apply right impulse, but only if max velocity is not reached yet
         if (WorldController.keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
-            ruben.getBody().applyLinearImpulse(2f, 0, pos.x, pos.y, true);
+            ruben.getBody().applyLinearImpulse(3f, 0, pos.x, pos.y, true);
         }
 
         // jump, but only when grounded
@@ -136,7 +136,7 @@ public class RubentxuManager implements IManager {
     @Override
     public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
-
+        contact.resetFriction();
         if (contact.getFixtureA() == ruben.getRubenSensorFixture()){
             ruben.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
         }
@@ -197,7 +197,7 @@ public class RubentxuManager implements IManager {
 
         if (ruben.getGrounContacts().size() == 0) {
             ruben.setGround(false);
-            contact.resetFriction();
+
             //Gdx.app.log(DreamsGame.LOG, "OnGroun False");
         }
     }

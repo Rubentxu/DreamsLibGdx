@@ -40,11 +40,11 @@ public class Water extends Box2DPhysicsObject {
     //
     // Default values
     //
-    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 0.75f); // point up
-    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,5f); // zero velocity / no current
+    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 0.35f); // point up
+    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,2.5f); // zero velocity / no current
     public static final Vector2 DEFAULT_FLUID_GRAVITY = new Vector2(0, -9.8f); // standard gravity
-    public static final float DEFAULT_LINEAR_DRAG = 3f;
-    public static final float DEFAULT_ANGULAR_DRAG = 1f;
+    public static final float DEFAULT_LINEAR_DRAG = 5f;
+    public static final float DEFAULT_ANGULAR_DRAG = 2f;
 
     public static final boolean DEBUG_BUOYANCY = false;
 
@@ -58,7 +58,9 @@ public class Water extends Box2DPhysicsObject {
     public Water(String nombre, Body body, Vector2 surfaceNormal, Vector2 fluidVelocity, Vector2 gravity,
                  float surfaceHeight, float fluidDensity, float linearDrag, float angularDrag) {
         super(nombre, GRUPOS.AGUA, body);
-        mSurfaceNormal.set(surfaceNormal);
+        System.out.println("AGUA CREADA tilesHeight :"+(1.4f-0.055f*( body.getPosition().y+Box2DUtils.height(body))));
+
+        mSurfaceNormal.set(new Vector2(0 ,1.345f-0.055f*(body.getPosition().y+Box2DUtils.height(body))));
         mFluidVelocity.set(fluidVelocity);
         mGravity.set(gravity);
         mSurfaceHeight = surfaceHeight;
