@@ -136,7 +136,6 @@ public class RubentxuManager implements IManager {
     @Override
     public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
-        contact.resetFriction();
         if (contact.getFixtureA() == ruben.getRubenSensorFixture()){
             ruben.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
         }

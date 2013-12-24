@@ -26,7 +26,8 @@ public class WorldRenderer {
 
 
     private static final float RUNNING_FRAME_DURATION = 0.02f;
-
+    private int velocityIterations = 10;
+    private int positionIterations = 8;
 
     /**
      * for debug rendering *
@@ -175,7 +176,7 @@ public class WorldRenderer {
         TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
         drawRubentxu();
 
-        world.getPhysics().step(Gdx.graphics.getDeltaTime(), 4, 4);
+        world.getPhysics().step(Gdx.graphics.getDeltaTime(), velocityIterations, positionIterations);
         ruben.getBody().setAwake(true);
         cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y , 0);
         cam.update();

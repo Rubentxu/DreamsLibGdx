@@ -17,8 +17,6 @@ public class MovingPlatform extends Platform{
     public Boolean waitForPassenger=false;
     private Boolean forward= false;
     private HashSet<Box2DPhysicsObject> passengers= new HashSet<Box2DPhysicsObject>();
-
-
     private Path path;
 
     public MovingPlatform(Body body, Vector2 pVelocity){

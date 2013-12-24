@@ -59,7 +59,7 @@ public class Path{
             nextPointIndex=getNextPoint();
             setNextPointVelocity();
             maxDist=positions.get(nextPointIndex).dst2(bodyPosition);
-            return true;
+
         }
 
         return false;

@@ -2,7 +2,6 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -60,15 +59,13 @@ public class Rubentxu extends Box2DPhysicsObject {
         rubenPhysicsFixture = super.getBody().createFixture(poly,1);
         rubenPhysicsFixture.setUserData(this);
         poly.dispose();
+        PolygonShape poly2 = new PolygonShape();
+        poly2.setAsBox(width,height/10,new Vector2(0, -height),0);
 
-
-        CircleShape circle = new CircleShape();
-        circle.setRadius(width);
-        circle.setPosition(new Vector2(0, -height*0.9f));
-        rubenSensorFixture = super.getBody().createFixture(circle, 0);
+        rubenSensorFixture = super.getBody().createFixture(poly2, 0);
         rubenSensorFixture.setSensor(true);
         rubenSensorFixture.setUserData(this);
-        circle.dispose();
+        poly2.dispose();
 
         super.getBody().setBullet(true);
 
