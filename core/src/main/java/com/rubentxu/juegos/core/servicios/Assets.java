@@ -14,6 +14,8 @@ public class Assets extends AssetManager{
     public static final int SCREEN_GAME= 2;
     public static final int SCREEN_SPLASH= 3;
 
+    public static final String GUI_ATLAS="gui/gui.pack";
+
 
     public Assets() {
         super();
@@ -39,7 +41,7 @@ public class Assets extends AssetManager{
         this.load("maps/background.png", Texture.class);
         this.load("imagenes/texturas/sprites.pack", TextureAtlas.class);
         this.load("imagenes/texturas/varios.pack", TextureAtlas.class);
-        this.load("gui/tex.atlas", TextureAtlas.class);
+        this.load(GUI_ATLAS, TextureAtlas.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.load("maps/EscenarioDePruebas.tmx", TiledMap.class);
 
