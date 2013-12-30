@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
@@ -19,6 +20,8 @@ public class GameScreen implements Screen {
         this.controller= controller;
         this.renderer= renderer;
     }
+
+
 
     @Override
     public void show() {

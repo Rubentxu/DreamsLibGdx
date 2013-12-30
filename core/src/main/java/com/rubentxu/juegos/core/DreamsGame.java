@@ -2,7 +2,9 @@ package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.managers.EnemyManager;
@@ -11,6 +13,7 @@ import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
+import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.SplashScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
@@ -25,12 +28,17 @@ public class DreamsGame extends Game {
     private WorldRenderer renderer;
     private WorldController controller;
     public GameScreen gameScreen;
+    public MenuScreen menuScreen;
     private GameInputs gameInputs;
+    public Assets assets;
+
 
     @Override
 	public void create () {
+
         log = new FPSLogger();
-        world = new World(new Assets());
+        assets=new Assets();
+        world = new World(assets);
         renderer=new WorldRenderer(world, true);
 
         RubentxuManager rubenManager = new RubentxuManager(world.getRuben());
@@ -51,11 +59,18 @@ public class DreamsGame extends Game {
         controller.setEnemyManager(enemyManager);
         world.getPhysics().setContactListener(controller);
 
-
-        gameScreen= new GameScreen( world,controller,renderer);
         gameInputs = new GameInputs(world, controller, renderer);
-        Gdx.input.setInputProcessor(gameInputs);
-        setScreen(new SplashScreen(this));
+        gameScreen= new GameScreen( world,controller,renderer);
+
+        Stage stage= new Stage(0, 0, true);
+
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(gameInputs);
+        Gdx.input.setInputProcessor(multiplexer);
+        menuScreen=new MenuScreen(this,assets,stage);
+
+        setScreen(new SplashScreen(this,assets,new Stage(0, 0, true)));
 	}
 
     @Override

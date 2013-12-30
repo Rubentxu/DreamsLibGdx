@@ -23,11 +23,11 @@ public class Assets extends AssetManager{
         switch (screen) {
             case SCREEN_MENU:
                 break;
-
             case SCREEN_GAME:
                 loadAssetsGame();
                 break;
             case SCREEN_SPLASH:
+                loadSplash();
                 break;
         }
 
@@ -39,6 +39,7 @@ public class Assets extends AssetManager{
         this.load("maps/background.png", Texture.class);
         this.load("imagenes/texturas/sprites.pack", TextureAtlas.class);
         this.load("imagenes/texturas/varios.pack", TextureAtlas.class);
+        this.load("gui/tex.atlas", TextureAtlas.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.load("maps/EscenarioDePruebas.tmx", TiledMap.class);
 

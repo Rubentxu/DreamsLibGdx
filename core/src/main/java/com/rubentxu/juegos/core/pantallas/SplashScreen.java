@@ -2,16 +2,14 @@ package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.servicios.Assets;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
@@ -24,8 +22,8 @@ public class SplashScreen extends BaseScreen {
     private Image splashImage;
     private Texture splashTexture;
 
-    public SplashScreen(DreamsGame dreamsGame) {
-        super(dreamsGame);
+    public SplashScreen(DreamsGame dreamsGame,Assets assets,Stage stage) {
+        super(dreamsGame, assets,stage);
     }
 
 
@@ -49,10 +47,10 @@ public class SplashScreen extends BaseScreen {
         splashImage.setHeight(height);
         splashImage.getColor().a = 0f;
 
-        splashImage.addAction(sequence(fadeIn(2), delay(1.75f, fadeOut(0.75f)), run(new Runnable() {
+        splashImage.addAction(sequence(fadeIn(1.75f), delay(2f, fadeOut(1.75f)), run(new Runnable() {
             public void run() {
                 System.out.println("Action complete!");
-                game.setScreen(game.gameScreen);
+                game.setScreen(game.menuScreen);
             }
         })));
 

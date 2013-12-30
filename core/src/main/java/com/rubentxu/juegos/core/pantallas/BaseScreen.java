@@ -6,8 +6,10 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.servicios.Styles;
 
 public abstract class BaseScreen implements Screen
 {
@@ -15,14 +17,18 @@ public abstract class BaseScreen implements Screen
     protected final BitmapFont font;
     protected final SpriteBatch batch;
     protected final Stage stage;
+    protected final Styles styles;
     protected Assets assets;
+    protected final Table mainTable = new Table();
+    protected float width,height;
 
-    public BaseScreen(DreamsGame game)
+    public BaseScreen(DreamsGame game, Assets assets,Stage stage)
     {
+        this.styles= new Styles(assets);
         this.game = game;
-        this.font = new BitmapFont();
+        this.font = styles.font;
         this.batch = new SpriteBatch();
-        this.stage = new Stage(0, 0, true);
+        this.stage = stage;
     }
 
     protected String getName() {
@@ -38,6 +44,8 @@ public abstract class BaseScreen implements Screen
 
     @Override
     public void resize(int width, int height) {
+        this.width=width;
+        this.height=height;
         Gdx.app.log(DreamsGame.LOG, "Resizing screen: " + getName() + " to: " + width + " x " + height);
         stage.setViewport(width, height, true);
     }
