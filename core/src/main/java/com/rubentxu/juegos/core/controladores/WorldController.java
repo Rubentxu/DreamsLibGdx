@@ -165,6 +165,9 @@ public class WorldController implements ContactListener, ContactFilter {
         if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
             getWaterManager().handleBeginContact(contact);
         }
+        if (GRUPOS.ENEMIGOS.equals(box2dPhysicsA.getGrupo()) || GRUPOS.ENEMIGOS.equals(box2dPhysicsB.getGrupo())) {
+            getEnemyManager().handleBeginContact(contact);
+        }
     }
 
     @Override
@@ -180,6 +183,9 @@ public class WorldController implements ContactListener, ContactFilter {
         }
         if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
             getWaterManager().handleEndContact(contact);
+        }
+        if (GRUPOS.ENEMIGOS.equals(box2dPhysicsA.getGrupo()) || GRUPOS.ENEMIGOS.equals(box2dPhysicsB.getGrupo())) {
+            getEnemyManager().handleEndContact(contact);
         }
     }
 

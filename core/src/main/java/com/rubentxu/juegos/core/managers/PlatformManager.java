@@ -56,7 +56,7 @@ public class PlatformManager implements IManager {
             platform.getBody().setLinearVelocity(new Vector2(0f, 0f));
         } else {
 
-            boolean check = platform.getPath().updatePath(platform.getBody().getPosition(), delta);
+            boolean check = platform.getPath().update(platform.getBody().getPosition(), delta);
             Vector2 velPlatform = platform.getPath().getVelocity().cpy();
 
             if (check && velPlatform.y < 0) {

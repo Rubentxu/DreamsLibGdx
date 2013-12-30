@@ -31,7 +31,6 @@ public class MovingPlatform extends Platform{
         Vector2 pos= body.getPosition().cpy();
         path.addPoint(pos);
         path.addPoint(new Vector2(pos.x + dstX, pos.y + dstY));
-        path.reset();
         this.start=body.getPosition().cpy();
 
     }
@@ -81,11 +80,6 @@ public class MovingPlatform extends Platform{
                 "\nPosicion Comienzo= " + start+
                 "\nPosicion Actual= " + this.getBody().getPosition()+
                 "\nVelocidad= " + path.getVelocity()+
-                "\nPos.current= " + path.getCurrentPoint()+
-                "\nPos.next= " + path.getNext2Point()+
-                "\nMaxDistancia = " + path.getMaxDist() +
-                "\nDistacia = " + path.getDistance() +
-                "\nDireccion= " +  path.getDirection() +
                 "\nPasajeros= " + passengers.size() ;
 
     }

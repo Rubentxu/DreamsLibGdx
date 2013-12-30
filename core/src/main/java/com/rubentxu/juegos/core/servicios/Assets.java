@@ -45,6 +45,13 @@ public class Assets extends AssetManager{
         this.finishLoading();
     }
 
+    public Texture loadSplash(){
+        this.load("maps/background.png", Texture.class);
+       // this.load("imagenes/splash.jpg", Texture.class);
+        this.finishLoading();
+        return this.get("maps/background.png") ;
+    }
+
 	public void dispose() {
         super.dispose();
 	}

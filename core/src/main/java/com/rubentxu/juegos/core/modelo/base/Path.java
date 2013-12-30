@@ -1,136 +1,78 @@
 package com.rubentxu.juegos.core.modelo.base;
 
 import com.badlogic.gdx.math.Vector2;
+
 import java.util.ArrayList;
 
-public class Path{
-    private static final int FORWARD=1;
-    private static final int REVERSE=-1;
-
-    private ArrayList<Vector2>  positions;
-    private  float maxDist;
+public class Path {
+    private static final int FORWARD = 1;
+    private static final int REVERSE = -1;
+    private ArrayList<Vector2> points;
+    public int waypoint = 0;
+    private float maxDist = 0;
     private float speed;
-    private float distance=0;
+    private float distance = 0;
     private Vector2 velocity;
-    int currentPointIndex;
-    int nextPointIndex;
-    private int direction=FORWARD;
+    private int direction = FORWARD;
 
-    public Path(float speed){
-        setPositions(new ArrayList<Vector2>());
-        this.setSpeed(speed);
-
-    }
-
-    public void addPoint(Vector2 pos){
-        getPositions().add(pos.cpy());
-
-    }
-
-    public void reset(){
-        currentPointIndex=0;
-        nextPointIndex=getNextPoint();
-        setNextPointVelocity();
-        setMaxDist(getCurrentPoint().cpy().dst(getNext2Point()));
-        System.out.println(getCurrentPoint()+"--"+getNext2Point()+"-dist"+getNext2Point().dst(getCurrentPoint()));
-    }
-
-    public Vector2 getCurrentPoint(){
-        return getPositions().get(currentPointIndex).cpy();
-    }
-
-    public Vector2 getNext2Point(){
-        return getPositions().get(nextPointIndex).cpy();
-    }
-
-
-    public boolean updatePath(Vector2 bodyPosition,float delta){
-        Vector2 nextPointPosition= getPositions().get(nextPointIndex);
-        distance+=  getVelocity().len() * delta;
-        if(getDistance() > getMaxDist() ){
-            distance=0;
-            currentPointIndex=nextPointIndex;
-            nextPointIndex=getNextPoint();
-            setNextPointVelocity();
-            setMaxDist(getCurrentPoint().cpy().dst(getNext2Point()));
-            return true;
-        } else if(distance>maxDist*2) {
-            direction= (direction==FORWARD)?REVERSE:FORWARD;
-            nextPointIndex=getNextPoint();
-            setNextPointVelocity();
-            maxDist=positions.get(nextPointIndex).dst2(bodyPosition);
-
-        }
-
-        return false;
-    }
-
-
-    int getNextPoint(){
-        int nextPoint=currentPointIndex+direction;
-        if(nextPoint >= getPositions().size()){
-            setDirection(REVERSE);
-        }else if(nextPoint<=-1){
-            setDirection(FORWARD);
-        }
-        return currentPointIndex+ getDirection();
-    }
-
-    void setNextPointVelocity(){
-        Vector2 nextPosition= getNext2Point();
-        Vector2 currentPosition= getCurrentPoint();
-        velocity=nextPosition.sub(currentPosition).nor().scl(this.getSpeed());
-    }
-    public Vector2 getVelocity(){
-        return velocity.cpy();
-    }
-
-    public ArrayList<Vector2> getPositions() {
-        return positions;
-    }
-
-    public void setPositions(ArrayList<Vector2> positions) {
-        this.positions = positions;
-    }
-
-    public float getMaxDist() {
-        return maxDist;
-    }
-
-    public void setMaxDist(float maxDist) {
-        this.maxDist = maxDist;
-    }
-
-    public float getSpeed() {
-        return speed;
-    }
-
-    public void setSpeed(float speed) {
+    public Path(float speed) {
+        points = new ArrayList<Vector2>();
+        velocity = new Vector2();
         this.speed = speed;
     }
 
-    public float getDistance() {
-        return distance;
+    public void addPoint(Vector2 pos) {
+        points.add(pos.cpy());
     }
 
-    public void setDistance(float distance) {
-        this.distance = distance;
+    public boolean update(Vector2 bodyPosition, float delta) {
+
+        boolean checkChange = false;
+        if (maxDist == 0) maxDist = points.get(waypoint).dst2(bodyPosition);
+        distance += getVelocity().len() * delta;
+        if (isWaypointReached(bodyPosition, delta) ) {
+            distance = 0;
+            int tempPoint=waypoint;
+            waypoint = getNextPoint();
+            maxDist = points.get(tempPoint).dst2(points.get(waypoint));
+            checkChange = true;
+        }
+
+        float angle = (float) Math.atan2(points.get(waypoint).y - bodyPosition.y, points.get(waypoint).x - bodyPosition.x);
+        velocity.set((float) Math.cos(angle) * speed, (float) Math.sin(angle) * speed);
+        return checkChange;
     }
 
-    public void setVelocity(Vector2 velocity) {
-        this.velocity = velocity;
+    public boolean isWaypointReached(Vector2 bodyPosition, float delta) {
+        return Math.abs(points.get(waypoint).x - bodyPosition.x) <= speed * delta ;
     }
 
-    public Vector2 getForce(float mass){
-        return velocity.cpy().scl(mass);
+    int getNextPoint() {
+        int nextPoint = waypoint + direction;
+        if (nextPoint >= points.size()) {
+            direction = REVERSE;
+        } else if (nextPoint < 0) {
+            direction = FORWARD;
+        }
+        return waypoint + direction;
     }
 
-    public int getDirection() {
-        return direction;
+    public Vector2 getVelocity() {
+        return velocity.cpy();
     }
 
-    public void setDirection(int direction) {
-        this.direction = direction;
+    public void setPoints(ArrayList<Vector2> points) {
+        this.points = points;
+    }
+
+    public ArrayList<Vector2> getPoints() {
+        return points;
+    }
+
+    public Vector2 getForce(float mass) {
+        Vector2 v=velocity.cpy().nor().scl(mass);
+        v.y=0;
+        return v;
     }
 
 

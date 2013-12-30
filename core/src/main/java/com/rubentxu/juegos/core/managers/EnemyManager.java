@@ -22,11 +22,10 @@ public class EnemyManager implements IManager {
 
     public void update(float delta) {
         for(Enemy enemy:enemies){
-            enemy.getPath().updatePath(enemy.getBody().getPosition(),delta);
-            enemy.getBody().applyForce(enemy.getPath().getForce(enemy.getBody().getMass()),enemy.getBody().getWorldCenter(),true);
+            enemy.getPath().update(enemy.getBody().getPosition(),delta);
             Vector2 vel = enemy.getVelocity();
             Vector2 pos = enemy.getBody().getPosition();
-            processVelocity(vel,enemy);
+            //processVelocity(vel,enemy);
             processContactGround(enemy);
             applyImpulses(vel, pos,enemy);
 
@@ -38,21 +37,15 @@ public class EnemyManager implements IManager {
         if (enemy.getState().equals(State.IDLE)) {
             enemy.getBody().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
         }
-        enemy.velocityLimit();
+
     }
 
     public void applyImpulses(Vector2 vel, Vector2 pos,Enemy enemy) {
-        // apply left impulse, but only if max velocity is not reached yet
-        if (enemy.getState().equals(State.WALKING) && enemy.isFacingLeft() && vel.x > -enemy.MAX_VELOCITY) {
-            enemy.getBody().applyLinearImpulse(-4f, 0f, pos.x, pos.y, true);
+        enemy.velocityLimit();
+        if (enemy.getState().equals(State.WALKING)) {
+            enemy.getBody().applyLinearImpulse(enemy.getPath().getForce(enemy.getBody().getMass()),enemy.getBody().getWorldCenter(),true);
         }
 
-        // apply right impulse, but only if max velocity is not reached yet
-        if (enemy.getState().equals(State.WALKING) && !enemy.isFacingLeft() && vel.x < enemy.MAX_VELOCITY) {
-            enemy.getBody().applyLinearImpulse(4f, 0, pos.x, pos.y, true);
-        }
-
-        // jump, but only when grounded
         if ((enemy.getState().equals(State.JUMPING))) {
             if (enemy.isGround()) {
                 enemy.getBody().setLinearVelocity(vel.x, 0);
@@ -66,10 +59,10 @@ public class EnemyManager implements IManager {
         if (!enemy.isGround()) {
             enemy.getEnemyPhysicsFixture().setFriction(0f);
             enemy.getEnemySensorFixture().setFriction(0f);
-            if (enemy.getVelocity().y <= 0 || !enemy.getState().equals(Enemy.State.JUMPING))
+            if (enemy.getVelocity().y < 0 || !enemy.getState().equals(Enemy.State.JUMPING))
                 enemy.setState(Enemy.State.FALL);
         } else {
-            //enemy.setState(Enemy.State.IDLE);
+            enemy.setState(State.WALKING);
             if (enemy.getState().equals(State.IDLE)) {
                 enemy.getEnemyPhysicsFixture().setFriction(100f);
                 enemy.getEnemySensorFixture().setFriction(100f);
@@ -109,18 +102,16 @@ public class EnemyManager implements IManager {
         Box2DPhysicsObject other = getOther(contact);
 
         if (contact.getFixtureA() == enemy.getEnemySensorFixture())
-            enemy.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
+            enemy.getGrounContacts().add(contact.getFixtureB());
 
         if (contact.getFixtureB() == enemy.getEnemySensorFixture())
-            enemy.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
+            enemy.getGrounContacts().add(contact.getFixtureA());
 
         if (enemy.getGrounContacts().size() > 0) {
             enemy.setGround(true);
+            System.out.println("Enemy Ground");
             contact.setEnabled(true);
-            enemy.getEnemyPhysicsFixture().setFriction(0.2f);
-            enemy.getEnemySensorFixture().setFriction(0.2f);
         }
-
 
     }
 
@@ -129,16 +120,15 @@ public class EnemyManager implements IManager {
         Enemy enemy = getEnemy(contact);
         Box2DPhysicsObject other = getOther(contact);
 
-
         if (contact.getFixtureA() == enemy.getEnemySensorFixture())
-            enemy.getGrounContacts().remove(contact.getFixtureB());//A is foot so B is ground
+            enemy.getGrounContacts().remove(contact.getFixtureB());
 
         if (contact.getFixtureB() == enemy.getEnemySensorFixture())
-            enemy.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
+            enemy.getGrounContacts().remove(contact.getFixtureA());
 
         if (enemy.getGrounContacts().size() == 0) {
+            System.out.println("Enemy UnGround");
             enemy.setGround(false);
-            contact.resetFriction();
         }
     }
 

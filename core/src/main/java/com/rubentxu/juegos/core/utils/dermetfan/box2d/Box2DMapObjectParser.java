@@ -387,9 +387,10 @@ public class Box2DMapObjectParser {
                 name += duplicate;
             }
             List<Vector2> points= new ArrayList<Vector2>();
-            Vector2 point= new Vector2( Float.parseFloat(properties.get(aliases.pointX, String.class)),
-                    Float.parseFloat(properties.get(aliases.pointY, String.class)));
-            points.add(point);
+            points.add(box.getPosition().cpy());
+            points.add(new Vector2(Float.parseFloat(properties.get(aliases.pointX, String.class)),
+                    Float.parseFloat(properties.get(aliases.pointY, String.class))));
+
 
             Enemy enemy= new Enemy(name,box,points);
             enemy.setEnemyPhysicsFixture(enemyPhysicsFixture);

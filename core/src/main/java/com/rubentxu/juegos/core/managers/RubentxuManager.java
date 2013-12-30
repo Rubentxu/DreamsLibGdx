@@ -17,18 +17,27 @@ import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 public class RubentxuManager implements IManager {
 
     private Rubentxu ruben;
-    private int stillTime = 0;
+    private float stillTime = 0;
+    private float hurtTime = 0;
 
     public RubentxuManager(Rubentxu ruben) {
         this.ruben = ruben;
     }
 
     public void update(float delta) {
+        hurtTime += delta;
         Vector2 vel = ruben.getVelocity();
         Vector2 pos = ruben.getBody().getPosition();
-        processVelocity(vel,delta);
-        processContactGround();
-        applyImpulses(vel, pos);
+        if(!ruben.getState().equals(Rubentxu.State.HURT) && hurtTime>1.5f){
+            processVelocity(vel, delta);
+            processContactGround();
+            applyImpulses(vel, pos);
+
+        }
+
+            if(hurtTime>2)hurtTime=2;
+
+        System.out.println("HurtTIme "+hurtTime+" Delta "+delta);
     }
 
     public void processVelocity(Vector2 vel,float delta) {
@@ -68,6 +77,7 @@ public class RubentxuManager implements IManager {
     }
 
     public void processContactGround() {
+
         if (!ruben.isGround()) {
             ruben.getRubenPhysicsFixture().setFriction(0f);
             ruben.getRubenSensorFixture().setFriction(0f);
@@ -82,7 +92,8 @@ public class RubentxuManager implements IManager {
                 ruben.setFacingLeft(false);
                 if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.WALKING);
             }
-            if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 1 ) {
+            if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 1
+                    && !ruben.getState().equals(Rubentxu.State.HURT)) {
                 ruben.getRubenPhysicsFixture().setFriction(100f);
                 ruben.getRubenSensorFixture().setFriction(100f);
             } else {
@@ -127,11 +138,6 @@ public class RubentxuManager implements IManager {
     }
 
 
-    public Vector2 getRelativeVelocity(Rubentxu ruben, Box2DPhysicsObject enemy, Vector2 point) {
-        Vector2 velMovingPlatform = ruben.getBody().getLinearVelocityFromWorldPoint(point);
-        Vector2 velPassenger = enemy.getBody().getLinearVelocityFromWorldPoint(point);
-        return ruben.getBody().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
-    }
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -149,34 +155,20 @@ public class RubentxuManager implements IManager {
         if (ruben.getGrounContacts().size() > 0) {
             ruben.setGround(true);
             contact.setEnabled(true);
-            ruben.getRubenPhysicsFixture().setFriction(0.2f);
-            ruben.getRubenSensorFixture().setFriction(0.2f);
 
            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
-        Enemy enemy=getEnemy(contact);
-        if(enemy!=null && existSensor(contact)) {
+        if(getEnemy(contact)!=null) {
+            ruben.setState(Rubentxu.State.HURT);
+            hurtTime=0;
             Vector2[] points = contact.getWorldManifold().getPoints();
-            Vector2 vel=getRelativeVelocity(ruben,enemy,points[0]);
             Vector2 force;
-            if (vel.x < 0 ) {
-                force=new Vector2(-30,vel.y*4);
+            if (points[0].x < ruben.getBody().getPosition().x ) {
+                force=new Vector2(9,15);
             }else {
-                force=new Vector2(30,vel.y*4);
+                force=new Vector2(-9,15);
             }
-            System.out.println("Fuerza colision Enemigo: "+force +" Vel: "+vel+" Sensor exist");
-            ruben.getBody().applyLinearImpulse(force,ruben.getBody().getWorldCenter(),true);
-        }
-        if(enemy!=null && !existSensor(contact)) {
-            Vector2[] points = contact.getWorldManifold().getPoints();
-            Vector2 vel=getRelativeVelocity(ruben,enemy,points[0]);
-            Vector2 force;
-            if (vel.x < 0 ) {
-                force=new Vector2(-30,0);
-            }else {
-                force=new Vector2(30,0);
-            }
-            System.out.println("Fuerza colision Enemigo: "+force +" Vel: "+vel+" Sensor no exist");
+            System.out.println("Fuerza colision Enemigo: "+force +" Sensor no exist");
             ruben.getBody().applyLinearImpulse(force,ruben.getBody().getWorldCenter(),true);
         }
 
@@ -198,6 +190,9 @@ public class RubentxuManager implements IManager {
             ruben.setGround(false);
 
             //Gdx.app.log(DreamsGame.LOG, "OnGroun False");
+        }
+        if(getEnemy(contact)!=null) {
+            ruben.setState(Rubentxu.State.IDLE);
         }
     }
 

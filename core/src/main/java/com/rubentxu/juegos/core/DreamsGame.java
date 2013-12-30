@@ -11,6 +11,7 @@ import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
+import com.rubentxu.juegos.core.pantallas.SplashScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
@@ -23,7 +24,7 @@ public class DreamsGame extends Game {
     private World world;
     private WorldRenderer renderer;
     private WorldController controller;
-    private GameScreen gameScreen;
+    public GameScreen gameScreen;
     private GameInputs gameInputs;
 
     @Override
@@ -54,7 +55,7 @@ public class DreamsGame extends Game {
         gameScreen= new GameScreen( world,controller,renderer);
         gameInputs = new GameInputs(world, controller, renderer);
         Gdx.input.setInputProcessor(gameInputs);
-        setScreen(gameScreen);
+        setScreen(new SplashScreen(this));
 	}
 
     @Override

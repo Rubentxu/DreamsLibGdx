@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Path;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
@@ -35,12 +36,8 @@ public class Enemy extends Box2DPhysicsObject {
     public Enemy(String name, Body body, List<Vector2> points) {
         super(name, GRUPOS.ENEMIGOS, body);
         path = new Path(MAX_VELOCITY);
-        Vector2 pos = body.getPosition().cpy();
-        path.addPoint(pos);
-        for (Vector2 v : points) {
-            path.addPoint(v);
-        }
-        path.reset();
+        path.setPoints((ArrayList<Vector2>) points);
+
     }
 
     public void velocityLimit() {
@@ -51,15 +48,11 @@ public class Enemy extends Box2DPhysicsObject {
             this.setVelocity(new Vector2(vel.x, vel.y));
         }
 
-        if (this.path.getVelocity().x < -0) {
+        if (vel.x < -0.5f) {
             this.setFacingLeft(true);
-
-            this.getBody().applyForce(this.getPath().getForce(this.getBody().getMass()).scl( 1.4f),this.getBody().getWorldCenter(),true);
-        } else if (this.path.getVelocity().x > 0) {
+        } else if (vel.x > 0.5f) {
             this.setFacingLeft(false);
-            this.getBody().applyForce(this.getPath().getForce(this.getBody().getMass()).scl(1.4f),this.getBody().getWorldCenter(),true);
         }
-
     }
 
     public boolean isFacingLeft() {
@@ -140,11 +133,10 @@ public class Enemy extends Box2DPhysicsObject {
                         "\nisActive= " + getBody().isActive() +
                         "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
                         "\nisAwake=" + getBody().isAwake() +
-                        "\nAngle=" + getBody().getAngle() +
-                        "\nAngularDamping=" + getBody().getAngularDamping() +
-                        "\nAngularVelocity=" + getBody().getAngularVelocity() +
-                        "\nGravityScale=" + getBody().getGravityScale() +
-                        "\nInertia=" + getBody().getInertia() +
+                        "\nWayPoint0=" + this.getPath().getPoints().toArray()[0] +
+                        "\nWayPoint1=" + this.getPath().getPoints().toArray()[1] +
+                        "\nWayPointSize=" + this.getPath().getPoints().size() +
+                        "\nWayPointIndex=" + this.getPath().waypoint +
                         "\nMass=" + getBody().getMass() +
                         "\nisBullet=" + getBody().isBullet() +
                         "\nisFixedRotation=" + getBody().isFixedRotation() +
