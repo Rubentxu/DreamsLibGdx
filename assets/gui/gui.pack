@@ -1,672 +1,141 @@
+
 gui.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
-bocadillo
+background04
   rotate: false
-  xy: 326, 106
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: 7
-btnR02
-  rotate: false
-  xy: 122, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-win07
-  rotate: false
-  xy: 269, 785
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn10
-  rotate: false
-  xy: 335, 278
-  size: 46, 46
-  orig: 46, 46
-  offset: 0, 0
-  index: -1
-bocadillo
-  rotate: false
-  xy: 1, 106
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 2
-win12
-  rotate: false
-  xy: 135, 852
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btnR10
-  rotate: false
-  xy: 51, 564
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-btnSolid04
-  rotate: false
-  xy: 72, 635
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn26
-  rotate: false
-  xy: 382, 278
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn_default_normal_blue.9
-  rotate: false
-  xy: 395, 635
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btnSolid07
-  rotate: false
-  xy: 285, 635
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn09
-  rotate: false
-  xy: 288, 278
-  size: 46, 46
-  orig: 46, 46
-  offset: 0, 0
-  index: -1
-btn_default_normal.9
-  rotate: false
-  xy: 356, 635
-  size: 38, 74
-  orig: 38, 74
+  xy: 1, 133
+  size: 110, 102
+  split: 19, 18, 14, 12
+  orig: 110, 102
   offset: 0, 0
   index: -1
 background02
   rotate: false
-  xy: 1, 1
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: 1
-btn14
-  rotate: false
-  xy: 143, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn02
-  rotate: false
-  xy: 68, 211
-  size: 52, 52
-  orig: 52, 52
-  offset: 0, 0
-  index: -1
-btn01_s
-  rotate: false
-  xy: 1, 211
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-win04
-  rotate: false
-  xy: 68, 785
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-background04
-  rotate: false
-  xy: 114, 1
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: 2
-btn18
-  rotate: false
-  xy: 427, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btnR13
-  rotate: false
-  xy: 201, 564
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-btn04_s
-  rotate: false
-  xy: 361, 211
-  size: 66, 66
-  split: 4, 4, 4, 4
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn23
-  rotate: false
-  xy: 285, 422
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn06
-  rotate: false
-  xy: 68, 278
-  size: 52, 52
-  orig: 52, 52
-  offset: 0, 0
-  index: -1
-btn_default_normal_lblue.9
-  rotate: false
-  xy: 79, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btnR09
-  rotate: false
-  xy: 1, 564
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-win08
-  rotate: false
-  xy: 336, 785
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn11
-  rotate: false
-  xy: 382, 278
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btnR16
-  rotate: false
-  xy: 122, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-bocadillo
-  rotate: false
-  xy: 34, 106
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 3
-win13
-  rotate: false
-  xy: 202, 852
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btnSolid05
-  rotate: false
-  xy: 143, 635
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn27
-  rotate: false
-  xy: 1, 493
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn_default_normal_disable.9
-  rotate: false
-  xy: 473, 635
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btnSolid08
-  rotate: false
-  xy: 372, 564
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-win01
-  rotate: false
-  xy: 313, 710
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btnR05
-  rotate: false
-  xy: 272, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-btn15
-  rotate: false
-  xy: 214, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btnR12
-  rotate: false
-  xy: 151, 564
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-btn20
-  rotate: false
-  xy: 72, 422
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn_default_normal_yellow.9
-  rotate: false
-  xy: 196, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btnSolid01
-  rotate: false
-  xy: 301, 564
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn03
-  rotate: false
-  xy: 188, 211
-  size: 52, 52
-  orig: 52, 52
-  offset: 0, 0
-  index: -1
-btnR08
-  rotate: false
-  xy: 422, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-win05
-  rotate: false
-  xy: 135, 785
-  size: 66, 66
-  orig: 66, 66
+  xy: 1, 29
+  size: 110, 102
+  split: 19, 18, 14, 12
+  orig: 110, 102
   offset: 0, 0
   index: -1
 background03
   rotate: false
-  xy: 227, 1
-  size: 112, 104
-  split: 40, 40, 40, 40
-  orig: 112, 104
-  offset: 0, 0
-  index: 3
-btn_default_normal_pink.9
-  rotate: false
-  xy: 118, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-bocadillo
-  rotate: false
-  xy: 67, 106
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 4
-btnR01
-  rotate: false
-  xy: 72, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-win10
-  rotate: false
-  xy: 1, 852
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn19
-  rotate: false
-  xy: 1, 422
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btnSolid02
-  rotate: false
-  xy: 372, 564
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn24
-  rotate: false
-  xy: 356, 422
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn02_s
-  rotate: false
-  xy: 121, 211
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn_default_normal_brown.9
-  rotate: false
-  xy: 434, 635
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btn_default_pressed.9
-  rotate: false
-  xy: 235, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btn07
-  rotate: false
-  xy: 194, 278
-  size: 46, 46
-  orig: 46, 46
-  offset: 0, 0
-  index: -1
-btnR04
-  rotate: false
-  xy: 222, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-win09
-  rotate: false
-  xy: 403, 785
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn12
-  rotate: false
-  xy: 1, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn05_s
-  rotate: false
-  xy: 1, 278
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-win14
-  rotate: false
-  xy: 1, 785
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-btn_default_normal_green.9
-  rotate: false
-  xy: 40, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btn_default_normal_red.9
-  rotate: false
-  xy: 157, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-win02
-  rotate: false
-  xy: 380, 710
-  size: 66, 66
-  orig: 66, 66
-  offset: 0, 0
-  index: -1
-bocadillo
-  rotate: false
-  xy: 453, 1
-  size: 32, 32
-  orig: 32, 32
-  offset: 0, 0
-  index: 1
-btn16
-  rotate: false
-  xy: 285, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn21
-  rotate: false
-  xy: 143, 422
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn04
-  rotate: false
-  xy: 308, 211
-  size: 52, 52
-  orig: 52, 52
-  offset: 0, 0
-  index: -1
-btnR07
-  rotate: false
-  xy: 372, 493
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-bocadillo
-  rotate: false
-  xy: 213, 106
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: 6
-win06
-  rotate: false
-  xy: 202, 785
-  size: 66, 66
-  orig: 66, 66
+  xy: 113, 133
+  size: 110, 102
+  split: 19, 18, 14, 12
+  orig: 110, 102
   offset: 0, 0
   index: -1
 background01
   rotate: false
-  xy: 340, 1
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: 4
-bocadillo
-  rotate: false
-  xy: 100, 106
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: 5
-win11
-  rotate: false
-  xy: 68, 852
-  size: 66, 66
-  orig: 66, 66
+  xy: 113, 29
+  size: 110, 102
+  split: 19, 18, 14, 12
+  orig: 110, 102
   offset: 0, 0
   index: -1
-btnR15
+btn23
   rotate: false
-  xy: 72, 493
-  size: 49, 49
-  orig: 49, 49
+  xy: 225, 167
+  size: 68, 68
+  split: 5, 5, 5, 5
+  orig: 68, 68
   offset: 0, 0
   index: -1
-btnSolid03
+btn21
   rotate: false
-  xy: 1, 635
-  size: 70, 70
-  orig: 70, 70
+  xy: 225, 97
+  size: 68, 68
+  split: 5, 5, 5, 5
+  orig: 68, 68
   offset: 0, 0
   index: -1
-btn25
+win14
   rotate: false
-  xy: 427, 422
-  size: 70, 70
-  orig: 70, 70
+  xy: 295, 171
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btnSolid06
+win08
   rotate: false
-  xy: 214, 635
-  size: 70, 70
-  orig: 70, 70
+  xy: 225, 31
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btn08
+win09
   rotate: false
-  xy: 241, 278
-  size: 46, 46
-  orig: 46, 46
+  xy: 295, 105
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btnR03
+win06
   rotate: false
-  xy: 172, 493
-  size: 49, 49
-  orig: 49, 49
+  xy: 361, 171
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btn13
+btn04_s
   rotate: false
-  xy: 72, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-win15
-  rotate: false
-  xy: 269, 852
-  size: 112, 104
-  orig: 112, 104
-  offset: 0, 0
-  index: -1
-btnR11
-  rotate: false
-  xy: 101, 564
-  size: 49, 49
-  orig: 49, 49
+  xy: 361, 105
+  size: 64, 64
+  split: 31, 32, 15, 48
+  orig: 64, 64
   offset: 0, 0
   index: -1
 btn03_s
   rotate: false
-  xy: 241, 211
-  size: 66, 66
-  split: 4, 4, 4, 4
-  orig: 66, 66
+  xy: 427, 171
+  size: 64, 64
+  split: 31, 32, 15, 48
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btn01
+win10
   rotate: false
-  xy: 439, 106
-  size: 46, 46
-  orig: 46, 46
+  xy: 427, 105
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btnR06
+btn05_s
   rotate: false
-  xy: 322, 493
-  size: 49, 49
-  orig: 49, 49
+  xy: 295, 39
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-btn_default_selected.9
+win11
   rotate: false
-  xy: 274, 710
-  size: 38, 74
-  orig: 38, 74
+  xy: 361, 39
+  size: 64, 64
+  split: 31, 32, 33, 30
+  orig: 64, 64
   offset: 0, 0
   index: -1
-win03
+btn03
   rotate: false
-  xy: 1, 785
-  size: 66, 66
-  orig: 66, 66
+  xy: 427, 53
+  size: 50, 50
+  split: 24, 25, 10, 10
+  orig: 50, 50
   offset: 0, 0
   index: -1
-btn06_s
+btn04
   rotate: false
-  xy: 121, 278
-  size: 72, 72
-  orig: 72, 72
-  offset: 0, 0
-  index: -1
-btn17
-  rotate: false
-  xy: 356, 351
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btnR14
-  rotate: false
-  xy: 251, 564
-  size: 49, 49
-  orig: 49, 49
-  offset: 0, 0
-  index: -1
-btn22
-  rotate: false
-  xy: 214, 422
-  size: 70, 70
-  orig: 70, 70
-  offset: 0, 0
-  index: -1
-btn_default_normal_disable_focused.9
-  rotate: false
-  xy: 1, 710
-  size: 38, 74
-  orig: 38, 74
-  offset: 0, 0
-  index: -1
-btn05
-  rotate: false
-  xy: 428, 211
-  size: 52, 52
-  orig: 52, 52
+  xy: 427, 1
+  size: 50, 50
+  split: 24, 25, 10, 10
+  orig: 50, 50
   offset: 0, 0
   index: -1

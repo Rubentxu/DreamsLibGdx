@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 public class Styles {
         public BitmapFont font;
+        public BitmapFont font2;
         public Skin skin;
 
     public Styles(Assets assets) {
@@ -19,9 +20,11 @@ public class Styles {
     }
 
     private void createStyles(Assets assets) {
-        font = assets.get("fonts/DreamOfMe-32.fnt");
+        font = assets.get("fonts/DreamOfMe-40.fnt");
+        font2 = assets.get("fonts/Bedbug-18.fnt");
         skin = new Skin();
         skin.add("default", font);
+        skin.add("header", font2);
 
         skin.add("lt-blue", new Color(.62f, .76f, .99f, 1f));
         skin.add("lt-green", new Color(.39f, .9f, .6f, 1f));
@@ -29,7 +32,7 @@ public class Styles {
 
         NinePatchDrawable btn1up = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn03_s"));
         NinePatchDrawable btn1down = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn04_s"));
-        NinePatch window1patch = ((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("background03");
+        NinePatch window1patch = ((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn23");
         skin.add("btn1up", btn1up);
         skin.add("btn1down", btn1down);
         skin.add("window1", window1patch);

@@ -70,7 +70,8 @@ public class DreamsGame extends Game {
         Gdx.input.setInputProcessor(multiplexer);
         menuScreen=new MenuScreen(this,assets,stage);
 
-        setScreen(new SplashScreen(this,assets,new Stage(0, 0, true)));
+        //setScreen(new SplashScreen(this,assets,new Stage(0, 0, true)));
+        setScreen(menuScreen);
 	}
 
     @Override
