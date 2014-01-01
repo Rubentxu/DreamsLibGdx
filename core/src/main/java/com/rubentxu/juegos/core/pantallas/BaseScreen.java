@@ -14,20 +14,18 @@ import com.rubentxu.juegos.core.servicios.Styles;
 public abstract class BaseScreen implements Screen
 {
     protected final DreamsGame game;
-    protected final BitmapFont font;
-    protected final SpriteBatch batch;
+    protected  BitmapFont font;
+    protected  SpriteBatch batch;
     protected final Stage stage;
-    protected final Styles styles;
+    protected  Styles styles;
     protected Assets assets;
     protected final Table mainTable = new Table();
     protected float width,height;
 
-    public BaseScreen(DreamsGame game, Assets assets,Stage stage)
+    public BaseScreen(DreamsGame game, Stage stage)
     {
-        this.styles= new Styles(assets);
+
         this.game = game;
-        this.font = styles.font;
-        this.batch = new SpriteBatch();
         this.stage = stage;
     }
 
@@ -38,8 +36,12 @@ public abstract class BaseScreen implements Screen
     @Override
     public void show()
     {
-        assets = new Assets();
         Gdx.app.log(DreamsGame.LOG, "Showing screen: " + getName());
+        assets = new Assets();
+        this.styles= new Styles(assets);
+        this.font = styles.font;
+        this.batch = new SpriteBatch();
+
     }
 
     @Override
@@ -81,6 +83,7 @@ public abstract class BaseScreen implements Screen
     {
         Gdx.app.log( DreamsGame.LOG, "Disposing screen: " + getName() );
         stage.dispose();
+        assets.dispose();
         font.dispose();
         batch.dispose();
     }

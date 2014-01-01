@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
@@ -13,6 +14,7 @@ import java.util.HashSet;
 public class World {
 
 
+    private final DreamsGame dreamsGame;
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;
     public static Assets assets = null;
@@ -24,7 +26,8 @@ public class World {
     private HashSet<Enemy> enemies;
     private Sprite background;
 
-    public World(Assets assets) {
+    public World(DreamsGame dreamsGame, Assets assets) {
+        this.dreamsGame=dreamsGame;
         this.assets= assets;
         createDreamsWorld();
         MovingPlatformplatforms = parser.getMovingPlatforms();
@@ -109,5 +112,9 @@ public class World {
 
     public void setEnemies(HashSet<Enemy> enemies) {
         this.enemies = enemies;
+    }
+
+    public DreamsGame getDreamsGame() {
+        return dreamsGame;
     }
 }

@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.modelo.Enemy;
@@ -17,6 +23,7 @@ import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.servicios.Styles;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
@@ -63,6 +70,8 @@ public class WorldRenderer {
     private float timeIdle;
     private Rubentxu ruben;
     private ModelsAndViews modelsAndViews;
+    private Stage stage;
+    private Styles styles;
 
     public WorldRenderer(final World world, boolean debug) {
         modelsAndViews=new ModelsAndViews();
@@ -86,6 +95,7 @@ public class WorldRenderer {
             cam.viewportWidth = getWidth() * world.getParser().getUnitScale()*2;
             cam.viewportHeight = getHeight() * world.getParser().getUnitScale()*2;
         }
+        stage.setViewport(w,h);
 
     }
 
@@ -198,10 +208,12 @@ public class WorldRenderer {
             DebugWindow.getInstance().draw(spriteBatch, 0.8f);
 
         }
+        stage.draw();
         spriteBatch.end();
         if (DreamsGame.DEBUG) {
             debugRenderer.render(world.getPhysics(), cam.combined);
         }
+
 
     }
 
@@ -271,8 +283,45 @@ public class WorldRenderer {
 
     }
 
+    public void buildGui () {
+
+        Table layerControlsLeft =  new Table();
+        layerControlsLeft.left().bottom();
+        TextButton btnUpLeft = new TextButton("^",styles.skin);
+        //btnUpLeft.setBackground(styles.skin.getDrawable("window1"));
+        layerControlsLeft.add(btnUpLeft);
+        btnUpLeft.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+
+            }
+        });
+        layerControlsLeft.row();
+
+        TextButton btnLeft = new TextButton( "<",styles.skin);
+       // btnLeft.setBackground(styles.skin.getDrawable("window1"));
+        layerControlsLeft.add(btnLeft);
+        btnLeft.addListener(new ChangeListener() {
+            @Override
+            public void changed (ChangeEvent event, Actor actor) {
+
+            }
+        });
+        Table layerControlsRight=  new Table();
+        layerControlsRight.right().bottom();
+
+        stage.clear();
+        Stack stack = new Stack();
+        stage.addActor(stack);
+        stack.setSize(width,height);
+        stack.add(layerControlsLeft);
+        stack.add(layerControlsRight);
+
+    }
+
     public void dispose() {
         renderer.dispose();
+        stage.dispose();
     }
 
     public OrthographicCamera getCam() {
@@ -293,5 +342,17 @@ public class WorldRenderer {
 
     public void setHeight(int height) {
         this.height = height;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
+    public Stage getStage() {
+        return stage;
+    }
+
+    public void setStyles(Styles styles) {
+        this.styles = styles;
     }
 }

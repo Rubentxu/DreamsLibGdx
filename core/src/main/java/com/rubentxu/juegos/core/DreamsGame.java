@@ -38,7 +38,7 @@ public class DreamsGame extends Game {
 
         log = new FPSLogger();
         assets=new Assets();
-        world = new World(assets);
+        world = new World(this,assets);
         renderer=new WorldRenderer(world, true);
 
         RubentxuManager rubenManager = new RubentxuManager(world.getRuben());
@@ -60,23 +60,27 @@ public class DreamsGame extends Game {
         world.getPhysics().setContactListener(controller);
 
         gameInputs = new GameInputs(world, controller, renderer);
-        gameScreen= new GameScreen( world,controller,renderer);
-
         Stage stage= new Stage(0, 0, true);
-
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(gameInputs);
         Gdx.input.setInputProcessor(multiplexer);
-        menuScreen=new MenuScreen(this,assets,stage);
+        renderer.setStage(stage);
 
-        //setScreen(new SplashScreen(this,assets,new Stage(0, 0, true)));
-        setScreen(menuScreen);
+        gameScreen= new GameScreen( this,world,controller,renderer);
+
+
+
+        menuScreen=new MenuScreen(this,stage);
+
+        setScreen(new SplashScreen(this,new Stage(0, 0, true)));
+        //setScreen(menuScreen);
 	}
 
     @Override
     public void dispose() {
         super.dispose();
+
     }
 
     @Override

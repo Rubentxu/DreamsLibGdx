@@ -1,31 +1,35 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
-public class GameScreen implements Screen {
+public class GameScreen extends BaseScreen {
 
     private World world;
     private WorldRenderer renderer;
     private WorldController controller;
 
-    public  GameScreen(World world,WorldController controller, WorldRenderer renderer){
+    public  GameScreen(DreamsGame dreamsGame, World world, WorldController controller, WorldRenderer renderer){
+        super(dreamsGame,renderer.getStage());
         this.world= world;
         this.controller= controller;
         this.renderer= renderer;
+
     }
 
 
 
     @Override
     public void show() {
-
+        super.show();
+        assets.loadAssetsScreen(assets.SCREEN_GAME);
+        renderer.setStyles(styles);
+        renderer.buildGui();
     }
 
     @Override

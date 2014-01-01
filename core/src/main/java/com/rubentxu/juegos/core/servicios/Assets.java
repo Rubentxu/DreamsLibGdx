@@ -40,6 +40,7 @@ public class Assets extends AssetManager{
         this.load("fonts/DreamOfMe-40.fnt", BitmapFont.class);
         this.load("fonts/Bedbug-18.fnt", BitmapFont.class);
         this.load("imagenes/texturas/debug.jpg", Texture.class);
+        this.load("imagenes/menu-backgroud.jpg", Texture.class);
         this.load("maps/background.png", Texture.class);
         this.load("imagenes/texturas/sprites.pack", TextureAtlas.class);
         this.load("imagenes/texturas/varios.pack", TextureAtlas.class);
