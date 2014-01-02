@@ -1,13 +1,9 @@
 package com.rubentxu.juegos.core.inputs;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Application.ApplicationType;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
@@ -60,36 +56,13 @@ public class GameInputs implements InputProcessor {
     }
 
     @Override
-    public boolean touchDown(int x, int y, int pointer, int button) {
-        if (!Gdx.app.getType().equals(ApplicationType.Android))
-            return false;
-        if (x < renderer.getWidth() / 2 && y > renderer.getHeight() / 2) {
-            controller.leftPressed();
-        }
-        if (x > renderer.getWidth() / 2 && y > renderer.getHeight() / 2) {
-            controller.rightPressed();
-        }
-        if ( y < renderer.getHeight() / 2) {
-            controller.jumpPressed();
-        }
-        return true;
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
     }
 
     @Override
-    public boolean touchUp(int x, int y, int pointer, int button) {
-        if (!Gdx.app.getType().equals(Application.ApplicationType.Android))
-            return false;
-        if (x < renderer.getWidth() / 2 && y > renderer.getHeight() / 2) {
-            controller.leftReleased();
-        }
-        if (x > renderer.getWidth() / 2 && y > renderer.getHeight() / 2) {
-            controller.rightReleased();
-        }
-        if ( y < renderer.getHeight() / 2) {
-            controller.jumpReleased();
-        }
-
-        return true;
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
     }
 
 

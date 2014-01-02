@@ -1,7 +1,5 @@
 package com.rubentxu.juegos.core.vista;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Application.ApplicationType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,15 +9,12 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
@@ -295,31 +290,35 @@ public class WorldRenderer {
     }
 
     public void buildGui (final WorldController controller) {
-
+        stage.clear();
         Table layerControlsLeft =  new Table();
         layerControlsLeft.left().bottom();
-        layerControlsLeft.row().width(55);
+
+        layerControlsLeft.row().height(getHeight()*2/3);
         TextButton btnUpLeft = new TextButton("U",styles.skin,"controls");
-        layerControlsLeft.add(btnUpLeft).expandY().fill();
+        layerControlsLeft.add(btnUpLeft).width(getWidth()/10).expandY().fill();
         input in=new input(controller);
         btnUpLeft.addListener(in);
-        layerControlsLeft.row().width(55);
+
+        layerControlsLeft.row().height(getHeight()*1/3);
         TextButton btnLeft = new TextButton( "L",styles.skin,"controls");
-        layerControlsLeft.add(btnLeft).expandY().fill();
+        layerControlsLeft.add(btnLeft).width(getWidth()/10).expandY().fill();
         btnLeft.addListener(in);
-        layerControlsLeft.debugTable();
+       // layerControlsLeft.debugTable();
 
         Table layerControlsRight=  new Table();
         layerControlsRight.right().bottom();
-        layerControlsRight.row().width(55);
+
+        layerControlsRight.row().height(getHeight()*2/3);
 
         TextButton btnUpRight = new TextButton("U",styles.skin,"controls");
-        layerControlsRight.add(btnUpRight).expandY().fill();
+        layerControlsRight.add(btnUpRight).width(getWidth()/10).expandY().fill();
         btnUpRight.addListener(in);
-        layerControlsRight.row().width(55);
+
+        layerControlsRight.row().height(getHeight()*1/3);
 
         TextButton btnRight = new TextButton( "R",styles.skin,"controls");
-        layerControlsRight.add(btnRight).expandY().fill();
+        layerControlsRight.add(btnRight).width(getWidth()/10).expandY().fill();
         btnRight.addListener(in);
 
         Stack stack = new Stack();
@@ -384,13 +383,13 @@ public class WorldRenderer {
             /* if (!Gdx.app.getType().equals(ApplicationType.Android))
                 return false;*/
             System.out.println("TouchDown"+ event.getStageX() +" y " +event.getStageY()+" pointer "+pointer+" button "+button);
-            if (event.getStageX() < stage.getWidth() / 2 && event.getStageY() < stage.getHeight() / 2) {
+            if (event.getStageX() < stage.getWidth() /2 && event.getStageY() < stage.getHeight() * 1/3) {
                 controller.leftPressed();
             }
-            if (event.getStageX() >stage.getWidth() / 2 && event.getStageY() < stage.getHeight()/ 2) {
+            if (event.getStageX() >stage.getWidth() /2 && event.getStageY() < stage.getHeight()* 1/3) {
                 controller.rightPressed();
             }
-            if ( event.getStageY() > stage.getHeight()/ 2) {
+            if ( event.getStageY() > stage.getHeight()* 1/3) {
                 controller.jumpPressed();
             }
             return true;
@@ -402,13 +401,13 @@ public class WorldRenderer {
           /*  if (!Gdx.app.getType().equals(Application.ApplicationType.Android))
                 return false;*/
             System.out.println("TouchUp "+ event.getStageX() +" y " +event.getStageY()+" pointer "+pointer+" button "+button);
-            if (event.getStageX() < stage.getWidth() / 2 && event.getStageY() < stage.getHeight() / 2) {
+            if (event.getStageX() < stage.getWidth() /2 && event.getStageY() < stage.getHeight() * 1/3) {
                 controller.leftReleased();
             }
-            if (event.getStageX() > stage.getWidth() / 2 && event.getStageY() < stage.getHeight() / 2) {
+            if (event.getStageX() > stage.getWidth() /2 && event.getStageY() < stage.getHeight()* 1/3) {
                 controller.rightReleased();
             }
-            if ( event.getStageY() > stage.getHeight() / 2) {
+            if ( event.getStageY()> stage.getHeight()* 1/3) {
                 controller.jumpReleased();
             }
 

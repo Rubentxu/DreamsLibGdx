@@ -74,8 +74,8 @@ public class DreamsGame extends Game {
         gameScreen= new GameScreen(world,controller,renderer);
         menuScreen=new MenuScreen(this,stage);
 
-        //setScreen(new SplashScreen(this,new Stage(0, 0, true)));
-        setScreen(gameScreen);
+        setScreen(new SplashScreen(this,new Stage(0, 0, true)));
+        //setScreen(gameScreen);
 	}
 
     @Override
