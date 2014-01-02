@@ -37,7 +37,7 @@ public class RubentxuManager implements IManager {
 
             if(hurtTime>2)hurtTime=2;
 
-        System.out.println("HurtTIme "+hurtTime+" Delta "+delta);
+       // System.out.println("HurtTIme "+hurtTime+" Delta "+delta);
     }
 
     public void processVelocity(Vector2 vel,float delta) {

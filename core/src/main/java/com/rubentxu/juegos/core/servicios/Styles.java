@@ -20,8 +20,8 @@ public class Styles {
     }
 
     private void createStyles(Assets assets) {
-        font = assets.get("fonts/DreamOfMe-40.fnt");
-        font2 = assets.get("fonts/Bedbug-18.fnt");
+        font = assets.get(assets.DEFAULT_FONT);
+        font2 = assets.get(assets.HEADER_FONT);
         skin = new Skin();
         skin.add("default", font);
         skin.add("header", font2);
@@ -32,6 +32,8 @@ public class Styles {
 
         NinePatchDrawable btn1up = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn03_s"));
         NinePatchDrawable btn1down = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn04_s"));
+        NinePatchDrawable btn2up = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn21"));
+        NinePatchDrawable btn2down = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn23"));
         NinePatch window1patch = ((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btn23");
         skin.add("btn1up", btn1up);
         skin.add("btn1down", btn1down);
@@ -43,10 +45,17 @@ public class Styles {
         lbs.fontColor = Color.WHITE;
         skin.add("default", lbs);
 
-        TextButtonStyle tbs = new TextButtonStyle(btn1up, btn1down, btn1down, font);
+        TextButtonStyle tbs = new TextButtonStyle(btn1up, btn1down, btn1up, font);
         tbs.fontColor = skin.getColor("dark-blue");
         tbs.pressedOffsetX = Math.round(1f * Gdx.graphics.getDensity());
         tbs.pressedOffsetY = tbs.pressedOffsetX * -1f;
+
+        TextButtonStyle tbs2 = new TextButtonStyle(btn2up, btn2down, btn2up, font);
+        tbs.fontColor = skin.getColor("dark-blue");
+        tbs.pressedOffsetX = Math.round(1f * Gdx.graphics.getDensity());
+        tbs.pressedOffsetY = tbs.pressedOffsetX * -1f;
+
         skin.add("default", tbs);
+        skin.add("controls", tbs2);
     }
 }

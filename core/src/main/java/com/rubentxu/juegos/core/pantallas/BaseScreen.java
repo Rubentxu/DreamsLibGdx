@@ -17,14 +17,13 @@ public abstract class BaseScreen implements Screen
     protected  BitmapFont font;
     protected  SpriteBatch batch;
     protected final Stage stage;
-    protected  Styles styles;
     protected Assets assets;
     protected final Table mainTable = new Table();
     protected float width,height;
+    public static int CURRENT_SCREEN=0;
 
     public BaseScreen(DreamsGame game, Stage stage)
     {
-
         this.game = game;
         this.stage = stage;
     }
@@ -36,11 +35,9 @@ public abstract class BaseScreen implements Screen
     @Override
     public void show()
     {
-        Gdx.app.log(DreamsGame.LOG, "Showing screen: " + getName());
+        Gdx.app.log(DreamsGame.LOG, "Showing screen: " + getName()+" Current_Screen "+CURRENT_SCREEN);
         assets = new Assets();
-        this.styles= new Styles(assets);
-        this.font = styles.font;
-        this.batch = new SpriteBatch();
+        assets.loadAssetsScreen(CURRENT_SCREEN);
 
     }
 

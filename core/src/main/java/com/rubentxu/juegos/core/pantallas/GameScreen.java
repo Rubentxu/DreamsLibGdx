@@ -1,35 +1,39 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.servicios.Styles;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
-public class GameScreen extends BaseScreen {
+public class GameScreen implements Screen {
 
     private World world;
     private WorldRenderer renderer;
     private WorldController controller;
+    private Styles styles;
+    private Assets assets;
 
-    public  GameScreen(DreamsGame dreamsGame, World world, WorldController controller, WorldRenderer renderer){
-        super(dreamsGame,renderer.getStage());
+    public  GameScreen( World world, WorldController controller, WorldRenderer renderer){
         this.world= world;
         this.controller= controller;
         this.renderer= renderer;
-
     }
 
 
 
     @Override
     public void show() {
-        super.show();
+        assets = new Assets();
         assets.loadAssetsScreen(assets.SCREEN_GAME);
+        this.styles= new Styles(assets);
         renderer.setStyles(styles);
-        renderer.buildGui();
+
     }
 
     @Override
@@ -44,6 +48,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         renderer.setSize(width, height);
+        renderer.buildGui(controller);
     }
 
     @Override
@@ -65,6 +70,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         Gdx.input.setInputProcessor(null);
+        assets.dispose();
         world.dispose();
         renderer.dispose();
         controller.dispose();

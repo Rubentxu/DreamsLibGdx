@@ -13,12 +13,12 @@ import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 public class GameInputs implements InputProcessor {
 
-    private World world;
+
     private WorldController controller;
     private WorldRenderer renderer;
 
-    public GameInputs(World world, WorldController controller, WorldRenderer renderer) {
-        this.world=world;
+    public GameInputs( WorldController controller, WorldRenderer renderer) {
+
         this.controller=controller;
         this.renderer=renderer;
     }
@@ -100,7 +100,6 @@ public class GameInputs implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        System.out.println("Height: " + world.getMap().getProperties().get("height", Integer.class));
        /* renderer.getCam().position.x -= Gdx.input.getDeltaX();
         renderer.getCam().position.y += Gdx.input.getDeltaY();*/
         return true;

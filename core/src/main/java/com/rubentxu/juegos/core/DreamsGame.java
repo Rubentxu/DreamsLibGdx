@@ -20,7 +20,7 @@ import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 public class DreamsGame extends Game {
 
-    public static final String VERSION = "0.1 Pre-Alpha";
+    public static final String VERSION = "0.2 Pre-Alpha";
     public static final String LOG = "Rubentxu Dreams";
     public static boolean DEBUG = false;
     FPSLogger log;
@@ -39,7 +39,7 @@ public class DreamsGame extends Game {
         log = new FPSLogger();
         assets=new Assets();
         world = new World(this,assets);
-        renderer=new WorldRenderer(world, true);
+
 
         RubentxuManager rubenManager = new RubentxuManager(world.getRuben());
         PlatformManager platformManager = new PlatformManager();
@@ -58,23 +58,24 @@ public class DreamsGame extends Game {
         controller.setWaterManager(waterManager);
         controller.setEnemyManager(enemyManager);
         world.getPhysics().setContactListener(controller);
+        renderer=new WorldRenderer(world, true);
 
-        gameInputs = new GameInputs(world, controller, renderer);
+        gameInputs = new GameInputs( controller, renderer);
         Stage stage= new Stage(0, 0, true);
+
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
         multiplexer.addProcessor(gameInputs);
         Gdx.input.setInputProcessor(multiplexer);
         renderer.setStage(stage);
 
-        gameScreen= new GameScreen( this,world,controller,renderer);
 
 
-
+        gameScreen= new GameScreen(world,controller,renderer);
         menuScreen=new MenuScreen(this,stage);
 
-        setScreen(new SplashScreen(this,new Stage(0, 0, true)));
-        //setScreen(menuScreen);
+        //setScreen(new SplashScreen(this,new Stage(0, 0, true)));
+        setScreen(gameScreen);
 	}
 
     @Override

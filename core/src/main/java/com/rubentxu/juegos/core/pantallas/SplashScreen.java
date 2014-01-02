@@ -23,12 +23,12 @@ public class SplashScreen extends BaseScreen {
 
     public SplashScreen(DreamsGame dreamsGame, Stage stage) {
         super(dreamsGame,stage);
+        CURRENT_SCREEN=0;
     }
 
     @Override
     public void show() {
         super.show();
-        assets.loadSplash();
         splashTexture = assets.get("imagenes/splash.jpg") ;
         splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
