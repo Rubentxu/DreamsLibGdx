@@ -18,6 +18,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.inputs.GuiInput;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
@@ -72,7 +73,7 @@ public class WorldRenderer {
     private Rubentxu ruben;
     private ModelsAndViews modelsAndViews;
     private Stage stage;
-    private Styles styles;
+
 
     public WorldRenderer(final World world, boolean debug) {
         modelsAndViews=new ModelsAndViews();
@@ -289,48 +290,6 @@ public class WorldRenderer {
 
     }
 
-    public void buildGui (final WorldController controller) {
-        stage.clear();
-        Table layerControlsLeft =  new Table();
-        layerControlsLeft.left().bottom();
-
-        layerControlsLeft.row().height(getHeight()*2/3);
-        TextButton btnUpLeft = new TextButton("U",styles.skin,"controls");
-        layerControlsLeft.add(btnUpLeft).width(getWidth()/10).expandY().fill();
-        input in=new input(controller);
-        btnUpLeft.addListener(in);
-
-        layerControlsLeft.row().height(getHeight()*1/3);
-        TextButton btnLeft = new TextButton( "L",styles.skin,"controls");
-        layerControlsLeft.add(btnLeft).width(getWidth()/10).expandY().fill();
-        btnLeft.addListener(in);
-       // layerControlsLeft.debugTable();
-
-        Table layerControlsRight=  new Table();
-        layerControlsRight.right().bottom();
-
-        layerControlsRight.row().height(getHeight()*2/3);
-
-        TextButton btnUpRight = new TextButton("U",styles.skin,"controls");
-        layerControlsRight.add(btnUpRight).width(getWidth()/10).expandY().fill();
-        btnUpRight.addListener(in);
-
-        layerControlsRight.row().height(getHeight()*1/3);
-
-        TextButton btnRight = new TextButton( "R",styles.skin,"controls");
-        layerControlsRight.add(btnRight).width(getWidth()/10).expandY().fill();
-        btnRight.addListener(in);
-
-        Stack stack = new Stack();
-        stack.setSize(getWidth() ,getHeight() );
-        System.out.println("Stack size: "+stack.getWidth()+"--"+stack.getHeight());
-        stack.add(layerControlsLeft);
-        stack.add(layerControlsRight);
-        stage.addActor(stack);
-
-
-
-    }
 
     public void dispose() {
         renderer.dispose();
@@ -365,52 +324,4 @@ public class WorldRenderer {
         return stage;
     }
 
-    public void setStyles(Styles styles) {
-        this.styles = styles;
-    }
-
-    private class input extends InputListener {
-        private WorldController controller;
-
-
-        private input(WorldController controller) {
-            this.controller = controller;
-        }
-
-
-        @Override
-        public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-            /* if (!Gdx.app.getType().equals(ApplicationType.Android))
-                return false;*/
-            System.out.println("TouchDown"+ event.getStageX() +" y " +event.getStageY()+" pointer "+pointer+" button "+button);
-            if (event.getStageX() < stage.getWidth() /2 && event.getStageY() < stage.getHeight() * 1/3) {
-                controller.leftPressed();
-            }
-            if (event.getStageX() >stage.getWidth() /2 && event.getStageY() < stage.getHeight()* 1/3) {
-                controller.rightPressed();
-            }
-            if ( event.getStageY() > stage.getHeight()* 1/3) {
-                controller.jumpPressed();
-            }
-            return true;
-        }
-
-        @Override
-        public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-
-          /*  if (!Gdx.app.getType().equals(Application.ApplicationType.Android))
-                return false;*/
-            System.out.println("TouchUp "+ event.getStageX() +" y " +event.getStageY()+" pointer "+pointer+" button "+button);
-            if (event.getStageX() < stage.getWidth() /2 && event.getStageY() < stage.getHeight() * 1/3) {
-                controller.leftReleased();
-            }
-            if (event.getStageX() > stage.getWidth() /2 && event.getStageY() < stage.getHeight()* 1/3) {
-                controller.rightReleased();
-            }
-            if ( event.getStageY()> stage.getHeight()* 1/3) {
-                controller.jumpReleased();
-            }
-
-        }
-}
 }

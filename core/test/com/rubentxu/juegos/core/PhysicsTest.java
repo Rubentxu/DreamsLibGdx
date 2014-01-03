@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -16,9 +16,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.utils.Array;
 
-public class PhysicsTest extends InputAdapter implements ApplicationListener {
+public class PhysicsTest /*extends InputAdapter implements ApplicationListener*/ {
 
-    final static float MAX_VELOCITY = 7f;
+    /*final static float MAX_VELOCITY = 7f;
     boolean jump = false;
     World world;
     Body player;
@@ -346,5 +346,5 @@ public class PhysicsTest extends InputAdapter implements ApplicationListener {
 
             platform.setLinearVelocity(dir);
         }
-    }
+    } */
 }

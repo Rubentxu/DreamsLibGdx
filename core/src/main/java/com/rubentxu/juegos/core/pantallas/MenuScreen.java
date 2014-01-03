@@ -63,14 +63,11 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
                 game.setScreen(game.gameScreen);
-                button.setChecked(true);
             }
         });
-        //mainTable.setSize(600, 480);
-        //mainTable.setPosition(width / 2, height / 2);
+
         mainTable.setFillParent(true);
         mainTable.defaults().pad(16f);
-        mainTable.setBackground(styles.skin.getDrawable("window1"));
         mainTable.add(label("Rubentxu Dreams", Color.CYAN,true));
         mainTable.row();
         mainTable.add(button);
@@ -82,8 +79,6 @@ public class MenuScreen extends BaseScreen {
         mainTable.add(label("Pulsa en comenzar, para iniciar la partida.", Color.LIGHT_GRAY,false));
         mainTable.getColor().a = 0f;
         mainTable.addAction(fadeIn(2f));
-
-
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get("imagenes/menu-backgroud.jpg"))));
 
 

@@ -8,6 +8,7 @@ import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.servicios.Styles;
+import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
@@ -32,7 +33,6 @@ public class GameScreen implements Screen {
         assets = new Assets();
         assets.loadAssetsScreen(assets.SCREEN_GAME);
         this.styles= new Styles(assets);
-        renderer.setStyles(styles);
 
     }
 
@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         renderer.setSize(width, height);
-        renderer.buildGui(controller);
+        GuiBuilder.buildGui(renderer.getStage(),styles,controller);
     }
 
     @Override

@@ -24,7 +24,7 @@ import static org.junit.Assert.assertTrue;
 
 public class PlatformManagerTest {
 
-    private static PlatformManager platformManager;
+   /* private static PlatformManager platformManager;
     private static WorldController controller;
     private static World physic;
     private Vector2 velocity;
@@ -43,11 +43,11 @@ public class PlatformManagerTest {
         }
     }
     private class Fix extends Fixture{
-        /**
+        *//**
          * Constructs a new fixture
          *
          * @param addr the address of the fixture
-         */
+         *//*
         protected Fix(Body body, long addr) {
             super(body, addr);
         }
@@ -253,6 +253,6 @@ public class PlatformManagerTest {
 
 
     }
-
+*/
 
 }

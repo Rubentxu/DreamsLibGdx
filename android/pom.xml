@@ -13,11 +13,10 @@
 	<name>DreamsGame Android</name>
 
 	<properties>
-		<keystore.path>game.keystore</keystore.path>
-		<keystore.alias>game</keystore.alias>
-		<!-- you can pass these on the command line as -Dkeystore.password=foo etc. -->
-		<keystore.password></keystore.password>
-		<key.password>${keystore.password}</key.password>
+		<keystore.path>${sign.keystore}</keystore.path>
+		<keystore.alias>${sign.alias}</keystore.alias>
+		<keystore.password>${sign.storepass}</keystore.password>
+		<key.password>${sign.keypass}</key.password>
 	</properties>
 
 	<dependencies>
