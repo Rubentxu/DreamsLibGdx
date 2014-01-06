@@ -14,7 +14,6 @@ import com.rubentxu.juegos.core.managers.WaterManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
-import com.rubentxu.juegos.core.pantallas.SplashScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
@@ -74,8 +73,8 @@ public class DreamsGame extends Game {
         gameScreen= new GameScreen(world,controller,renderer);
         menuScreen=new MenuScreen(this,stage);
 
-        setScreen(new SplashScreen(this,new Stage(0, 0, true)));
-        //setScreen(gameScreen);
+        //setScreen(new SplashScreen(this,new Stage(0, 0, true)));
+        setScreen(gameScreen);
 	}
 
     @Override

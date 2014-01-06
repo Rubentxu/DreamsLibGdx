@@ -2,7 +2,6 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.rubentxu.juegos.core.DreamsGame;
@@ -24,7 +23,7 @@ public class World {
     private HashSet<MovingPlatform> MovingPlatformplatforms;
     private HashSet<Water> waterSensors;
     private HashSet<Enemy> enemies;
-    private Sprite background;
+    private Texture background;
 
     public World(DreamsGame dreamsGame, Assets assets) {
         this.dreamsGame=dreamsGame;
@@ -44,9 +43,9 @@ public class World {
         parser.load(getPhysics(), map);
         ruben = new Rubentxu(this.physics, 3, 3, 0.45f, 1);
 
-        background=new Sprite((Texture) assets.get("maps/background.png"));
-        background.setSize(40, 20);
-        background.setOrigin(0, 0);
+        background=(Texture) assets.get("maps/background.png");
+
+
     }
 
     public void dispose() {
@@ -98,11 +97,11 @@ public class World {
         this.waterSensors = waterSensors;
     }
 
-    public Sprite getBackground() {
+    public Texture getBackground() {
         return background;
     }
 
-    public void setBackground(Sprite background) {
+    public void setBackground(Texture background) {
         this.background = background;
     }
 

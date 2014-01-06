@@ -3,32 +3,29 @@ package com.rubentxu.juegos.core.vista;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.DreamsGame;
-import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.inputs.GuiInput;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Rubentxu.State;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
-import com.rubentxu.juegos.core.servicios.Styles;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
+import com.rubentxu.juegos.core.utils.parallax.ParallaxBackground;
+import com.rubentxu.juegos.core.utils.parallax.ParallaxLayer;
 
 
 public class WorldRenderer {
@@ -66,6 +63,9 @@ public class WorldRenderer {
     private AnimatedSprite idleLeftAnimation;
     private AnimatedSprite swimmingRightAnimation;
     private AnimatedSprite swimmingLeftAnimation;
+
+
+    public ParticleEffect dustParticles = new ParticleEffect();
     private SpriteBatch spriteBatch;
     private float width;
     private float height;
@@ -73,6 +73,7 @@ public class WorldRenderer {
     private Rubentxu ruben;
     private ModelsAndViews modelsAndViews;
     private Stage stage;
+    private ParallaxBackground background;
 
 
     public WorldRenderer(final World world, boolean debug) {
@@ -82,7 +83,7 @@ public class WorldRenderer {
         ruben = world.getRuben();
         debugRenderer = new Box2DDebugRenderer();
         renderer = new OrthogonalTiledMapRenderer(world.getMap(), world.getParser().getUnitScale());
-        spriteBatch = renderer.getSpriteBatch();
+        spriteBatch = (SpriteBatch) renderer.getSpriteBatch();
         cam = new OrthographicCamera();
         loadTextures();
 
@@ -100,10 +101,17 @@ public class WorldRenderer {
             cam.viewportHeight = getHeight() * world.getParser().getUnitScale()*2;
 
         }
+
         stage.setViewport(getWidth() ,getHeight() );
     }
 
     private void loadTextures() {
+
+        background=new ParallaxBackground(new ParallaxLayer[]{new ParallaxLayer(world.getBackground(),new Vector2(0.5f,0.2f),new Vector2(0, 500))
+        }, 800, 480);
+        // Particles
+        dustParticles.load(Gdx.files.internal("particles/dust.pfx"),
+                Gdx.files.internal("particles"));
 
         TextureAtlas atlas = world.getAssets().get("imagenes/texturas/sprites.pack");
         TextureAtlas atlasVarios = world.getAssets().get("imagenes/texturas/varios.pack");
@@ -187,6 +195,8 @@ public class WorldRenderer {
 
     public void render() {
 
+        background.render(ruben.getVelocity().cpy());
+
         TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
         drawRubentxu();
 
@@ -194,15 +204,16 @@ public class WorldRenderer {
         ruben.getBody().setAwake(true);
         cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y , 0);
         cam.update();
-        spriteBatch.begin();
-        world.getBackground().draw(spriteBatch);
-        spriteBatch.end();
+
+
         renderer.setView(cam);
         renderer.render();
 
         spriteBatch.begin();
         modelsAndViews.render(spriteBatch);
         AnimationRuben.update();
+        dustParticles.update(Gdx.graphics.getDeltaTime());
+        dustParticles.draw(spriteBatch);
         AnimationRuben.draw(spriteBatch);
 
         if (DreamsGame.DEBUG) {
@@ -224,14 +235,18 @@ public class WorldRenderer {
 
     }
 
-    private void drawRubentxu() {
 
+
+    private void drawRubentxu() {
+        dustParticles.setPosition(ruben.getBody().getPosition().x ,
+                ruben.getBody().getPosition().y - ruben.getHeight() / 2.2f);
         if (ruben.isFacingLeft()) {
             AnimationRuben.setAnimatedSprite(walkLeftAnimation);
         } else {
             AnimationRuben.setAnimatedSprite(walkRightAnimation);
         }
         if (ruben.getState().equals(State.IDLE)) {
+            dustParticles.allowCompletion();
             if (walkRightAnimation.getTime() == 0 && walkLeftAnimation.getTime() == 0) AnimationRuben.stop();
             timeIdle += Gdx.graphics.getDeltaTime();
             walkRightAnimation.setTime(0);
@@ -248,6 +263,8 @@ public class WorldRenderer {
         }
 
         if (ruben.getState().equals(State.WALKING)) {
+
+            if (dustParticles.isComplete()) dustParticles.reset();
             timeIdle = 0;
             AnimationRuben.play();
             jumpRightAnimation.setTime(0);
@@ -265,7 +282,7 @@ public class WorldRenderer {
                 AnimationRuben.setAnimatedSprite(walkRightAnimation);
             }
         } else if (ruben.getState().equals(State.JUMPING)) {
-
+            //dustParticles.allowCompletion();
             if (ruben.isFacingLeft()) {
                 AnimationRuben.setAnimatedSprite(jumpLeftAnimation);
             } else {
@@ -323,5 +340,6 @@ public class WorldRenderer {
     public Stage getStage() {
         return stage;
     }
+
 
 }
