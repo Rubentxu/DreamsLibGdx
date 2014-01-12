@@ -6,10 +6,11 @@ Nuevo intento de juego de plataformas, en este caso con la libreria LibGdx en Ja
 Este juego estara basado en el patron MVC (al menos lo intenta), utiliza maven para gestionar las dependencias y la compilacion.
 Gracias al arquetipo creado para tal fin, pongo enlace para interesados: http://code.google.com/p/libgdx/wiki/MavenProjectSetup.
 
-Para ejecutar utiliza mvn clean install -Pdesktop , por ahora solo he probado en desktop.
-Como esta en cambio constante no aseguro que funcione, cuando tenga algo mas o menos decente creare un Tag, 
-para que se pueda ir observando los avances.
+Para ejecutar utiliza mvn clean install -Pdesktop (Para Desktop), mvn clean install -Pandroid (Para instalar en un dispositivo Android).
+Ya esta disponible una demo en Google Play para descargar llamado "RubentxuDreams".
 
-Una muestra en un video de lo que llevo hecho por ahora, https://www.facebook.com/photo.php?v=10201835705632741&l=8805765887770945281
+Espero que os guste y reporteis fallos y sugerencias.
 
+Una muestra en un video de lo que llevo hecho por ahora:
 
+http://www.youtube.com/watch?v=ZwkyH0R30xc&list=PLCLsIrPIRTHsVAX8Kv7TlJOimtvHi-Eps&feature=mh_lolz
