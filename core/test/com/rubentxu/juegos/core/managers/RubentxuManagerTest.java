@@ -8,7 +8,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class RubentxuManagerTest {
         r.getRubenPhysicsFixture().setFriction(0);
         r.getRubenSensorFixture().setFriction(0);
         rubentxuManager = new RubentxuManager(r);
-        controller=new WorldController();
+        controller=new WorldController(world);
     }
 
     @Before

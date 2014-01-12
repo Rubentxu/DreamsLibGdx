@@ -18,36 +18,38 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public class SplashScreen extends BaseScreen {
 
-    private Image splashImage;
+
     private Texture splashTexture;
 
-    public SplashScreen(DreamsGame dreamsGame, Stage stage) {
-        super(dreamsGame,stage);
-        CURRENT_SCREEN=0;
+    public SplashScreen(DreamsGame dreamsGame) {
+        super(dreamsGame, new Stage());
     }
 
     @Override
     public void show() {
         super.show();
-        splashTexture = assets.get("imagenes/splash.jpg") ;
+        splashTexture = assets.get(assets.SPLASH);
         splashTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-
     }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+
         stage.clear();
 
-        splashImage = new Image(new SpriteDrawable(new Sprite(splashTexture)), Scaling.stretch, Align.bottom | Align.left);
+        Image splashImage = new Image(new SpriteDrawable(new Sprite(splashTexture)), Scaling.stretch, Align.bottom | Align.left);
         splashImage.setWidth(width);
         splashImage.setHeight(height);
         splashImage.getColor().a = 0f;
 
-        splashImage.addAction(sequence(fadeIn(2.5f), delay(3f, fadeOut(2.5f)), run(new Runnable() {
+        splashImage.addAction(sequence(fadeIn(2.5f), run(new Runnable() {
             public void run() {
-                System.out.println("Action complete!");
-                game.setScreen(game.menuScreen);
+                game.menuScreen = new MenuScreen(game);
+            }
+        }), delay(3f, fadeOut(2.5f)), run(new Runnable() {
+            public void run() {
+                game.setScreen(DreamsGame.menuScreen);
             }
         })));
 

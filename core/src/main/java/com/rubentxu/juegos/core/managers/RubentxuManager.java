@@ -32,12 +32,11 @@ public class RubentxuManager implements IManager {
             processVelocity(vel, delta);
             processContactGround();
             applyImpulses(vel, pos);
-
         }
 
             if(hurtTime>2)hurtTime=2;
 
-       // System.out.println("HurtTIme "+hurtTime+" Delta "+delta);
+
     }
 
     public void processVelocity(Vector2 vel,float delta) {

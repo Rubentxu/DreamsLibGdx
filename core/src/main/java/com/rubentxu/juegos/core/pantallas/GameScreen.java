@@ -1,38 +1,30 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.modelo.World;
-import com.rubentxu.juegos.core.servicios.Assets;
-import com.rubentxu.juegos.core.servicios.Styles;
 import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
-public class GameScreen implements Screen {
+public class GameScreen extends BaseScreen {
 
     private World world;
     private WorldRenderer renderer;
     private WorldController controller;
-    private Styles styles;
-    private Assets assets;
 
-    public  GameScreen( World world, WorldController controller, WorldRenderer renderer){
-        this.world= world;
-        this.controller= controller;
-        this.renderer= renderer;
-    }
-
-
-
-    @Override
-    public void show() {
-        assets = new Assets();
-        assets.loadAssetsScreen(assets.SCREEN_GAME);
-        this.styles= new Styles(assets);
+    public GameScreen(DreamsGame dreamsGame) {
+        super(dreamsGame,new Stage(0, 0, true));
+        CURRENT_SCREEN= BaseScreen.SCREEN.MENU;
+        world = new World();
+        controller = new WorldController(world);
+        world.getPhysics().setContactListener(controller);
+        renderer = new WorldRenderer(world, true);
 
     }
 
@@ -47,8 +39,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        GameInputs gameInputs = new GameInputs(controller, renderer);
+        renderer.setStage(stage);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(gameInputs);
+        Gdx.input.setInputProcessor(multiplexer);
         renderer.setSize(width, height);
-        GuiBuilder.buildGui(renderer.getStage(),styles,controller);
+        GuiBuilder.buildGui(renderer.getStage(), styles, controller);
     }
 
     @Override
@@ -75,8 +73,6 @@ public class GameScreen implements Screen {
         renderer.dispose();
         controller.dispose();
     }
-
-
 
 
 }

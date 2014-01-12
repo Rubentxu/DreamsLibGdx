@@ -61,13 +61,13 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
+import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 import com.rubentxu.juegos.core.utils.dermetfan.math.BayazitDecomposer;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 
@@ -95,6 +95,7 @@ import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.toVect
  */
 public class Box2DMapObjectParser {
 
+    private com.rubentxu.juegos.core.modelo.World worldEntity;
     /** @see Aliases */
     private Aliases aliases;
 
@@ -119,23 +120,21 @@ public class Box2DMapObjectParser {
     /** the parsed {@link Joint Joints} */
     private ObjectMap<String, Joint> joints = new ObjectMap<String, Joint>();
 
-    private HashSet<MovingPlatform> movingPlatforms = new HashSet<MovingPlatform>();
 
-    private HashSet<Enemy> enemies = new HashSet<Enemy>();
-
-    private HashSet<Water> waterSensors=new HashSet<Water>();
 
     /** creates a new {@link Box2DMapObjectParser} with the default {@link Aliases} */
-    public Box2DMapObjectParser() {
-        this(new Aliases());
+    public Box2DMapObjectParser(com.rubentxu.juegos.core.modelo.World worldEntity) {
+        this(new Aliases(),worldEntity);
+
     }
 
     /**
      * creates a new {@link Box2DMapObjectParser} using the given {@link Aliases}
      * @param aliases the {@link Aliases} to use
      */
-    public Box2DMapObjectParser(Aliases aliases) {
+    public Box2DMapObjectParser(Aliases aliases,com.rubentxu.juegos.core.modelo.World worldEntity) {
         this.aliases = aliases;
+        this.worldEntity=worldEntity;
     }
 
     /**
@@ -248,6 +247,8 @@ public class Box2DMapObjectParser {
     }
 
     private void createModelObject(World world, MapObject object) {
+        if(object.getProperties().get(aliases.typeModelObject).equals(aliases.hero))
+            createHero(world, object);
         if(object.getProperties().get(aliases.typeModelObject).equals(aliases.movingPlatform))
             createMovingPlatform(world,object);
         if(object.getProperties().get(aliases.typeModelObject).equals(aliases.water))
@@ -255,6 +256,16 @@ public class Box2DMapObjectParser {
         if(object.getProperties().get(aliases.typeModelObject).equals(aliases.enemy))
             createEnemy(world, object);
 
+
+    }
+
+    private void createHero(World world, MapObject object) {
+        Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+        rectangle.x *= unitScale;
+        rectangle.y *= unitScale;
+        rectangle.width *= unitScale;
+        rectangle.height *= unitScale;
+        worldEntity.setRuben(new Rubentxu(world, rectangle.x, rectangle.y, 0.45f, 1));
     }
 
     private void createWater(World world, MapObject object) {
@@ -293,7 +304,7 @@ public class Box2DMapObjectParser {
             }
 
             Water w1= new Water(name,box);
-            getWaterSensors().add(w1);
+            worldEntity.getWaterSensors().add(w1);
             box.setUserData(w1);
             fixBox.setUserData(w1);
             bodies.put(name, box);
@@ -340,7 +351,7 @@ public class Box2DMapObjectParser {
 
             MovingPlatform m1= new MovingPlatform(name, Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,box,Float.parseFloat(properties.get(aliases.movingPlatformDistX, String.class))
                     ,Float.parseFloat(properties.get(aliases.movingPlatformDistY,String.class)),Float.parseFloat( properties.get(aliases.movingPlatformSpeed,String.class)));
-            movingPlatforms.add(m1);
+            worldEntity.getMovingPlatforms().add(m1);
             box.setUserData(m1);
             fixBox.setUserData(m1);
             bodies.put(name, box);
@@ -395,7 +406,7 @@ public class Box2DMapObjectParser {
             Enemy enemy= new Enemy(name,box,points);
             enemy.setEnemyPhysicsFixture(enemyPhysicsFixture);
             enemy.setEnemySensorFixture(enemySensorFixture);
-            enemies.add(enemy);
+            worldEntity.getEnemies().add(enemy);
             box.setUserData(enemy);
             enemyPhysicsFixture.setUserData(enemy);
             enemySensorFixture.setUserData(enemy);
@@ -876,29 +887,6 @@ public class Box2DMapObjectParser {
         return joints;
     }
 
-    public HashSet<MovingPlatform> getMovingPlatforms() {
-        return movingPlatforms;
-    }
-
-    public void setMovingPlatforms(HashSet<MovingPlatform> movingPlatforms) {
-        this.movingPlatforms = movingPlatforms;
-    }
-
-    public HashSet<Water> getWaterSensors() {
-        return waterSensors;
-    }
-
-    public void setWaterSensors(HashSet<Water> waterSensors) {
-        this.waterSensors = waterSensors;
-    }
-
-    public HashSet<Enemy> getEnemies() {
-        return enemies;
-    }
-
-    public void setEnemies(HashSet<Enemy> enemies) {
-        this.enemies = enemies;
-    }
 
     /** defines the {@link #aliases} to use when parsing */
     public static class Aliases {
@@ -988,6 +976,7 @@ public class Box2DMapObjectParser {
                 movingPlatformSpeed = "movingPlatformSpeed",
                 water = "Water",
                 enemy = "Enemy",
+                hero = "Hero",
                 pointX = "pointX",
                 pointY = "pointY",
                 unitScale = "unitScale";

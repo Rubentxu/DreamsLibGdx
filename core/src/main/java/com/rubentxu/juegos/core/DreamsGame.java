@@ -1,80 +1,25 @@
 package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.FPSLogger;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.inputs.GameInputs;
-import com.rubentxu.juegos.core.managers.EnemyManager;
-import com.rubentxu.juegos.core.managers.PlatformManager;
-import com.rubentxu.juegos.core.managers.RubentxuManager;
-import com.rubentxu.juegos.core.managers.WaterManager;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
-import com.rubentxu.juegos.core.servicios.Assets;
-import com.rubentxu.juegos.core.vista.WorldRenderer;
+import com.rubentxu.juegos.core.pantallas.SplashScreen;
 
 public class DreamsGame extends Game {
 
-    public static final String VERSION = "0.2 Pre-Alpha";
-    public static final String LOG = "Rubentxu Dreams";
     public static boolean DEBUG = false;
     FPSLogger log;
-    private World world;
-    private WorldRenderer renderer;
-    private WorldController controller;
-    public GameScreen gameScreen;
-    public MenuScreen menuScreen;
-    private GameInputs gameInputs;
-    public Assets assets;
 
+    public static GameScreen gameScreen;
+    public static MenuScreen menuScreen;
 
     @Override
 	public void create () {
 
         log = new FPSLogger();
-        assets=new Assets();
-        world = new World(this,assets);
-
-
-        RubentxuManager rubenManager = new RubentxuManager(world.getRuben());
-        PlatformManager platformManager = new PlatformManager();
-        platformManager.setMovingPlatforms(world.getMovingPlatformplatforms());
-        platformManager.setPlatforms(world.getPlatforms());
-
-        WaterManager waterManager= new WaterManager();
-        waterManager.setWaterSensors(world.getWaterSensors());
-
-        EnemyManager enemyManager= new EnemyManager();
-        enemyManager.setEnemies(world.getEnemies());
-
-        controller= new WorldController();
-        controller.setRubenManager(rubenManager);
-        controller.setPlatformManager(platformManager);
-        controller.setWaterManager(waterManager);
-        controller.setEnemyManager(enemyManager);
-        world.getPhysics().setContactListener(controller);
-        renderer=new WorldRenderer(world, true);
-
-        gameInputs = new GameInputs( controller, renderer);
-        Stage stage= new Stage(0, 0, true);
-
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(gameInputs);
-        Gdx.input.setInputProcessor(multiplexer);
-        renderer.setStage(stage);
-
-
-
-        gameScreen= new GameScreen(world,controller,renderer);
-        menuScreen=new MenuScreen(this,stage);
-
-        //setScreen(new SplashScreen(this,new Stage(0, 0, true)));
-        setScreen(gameScreen);
+        setScreen(new SplashScreen(this));
+        //setScreen(gameScreen);
 	}
 
     @Override

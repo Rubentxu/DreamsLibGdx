@@ -18,7 +18,7 @@ public class WorldControllerUpdateTest {
 	public void setUp() throws Exception {
 		rubentxuMock = new RubentxuManagerMock();
 		platformMock = new PlatformManagerMock();
-		worldController = new WorldController();
+		worldController = new WorldController(world);
 
         worldController.setRubenManager(rubentxuMock);
         worldController.setPlatformManager(platformMock);

@@ -1,13 +1,8 @@
 package com.rubentxu.juegos.core.controladores;
 
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
-import com.rubentxu.juegos.core.managers.RubentxuManager;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -20,7 +15,7 @@ public class WorldControllerTest {
 
     @Before
     public void testSetup() {
-        worldController = new WorldController();
+        worldController = new WorldController(world);
     }
 
     @Test

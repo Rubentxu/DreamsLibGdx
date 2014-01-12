@@ -10,6 +10,7 @@ import com.rubentxu.juegos.core.managers.EnemyManager;
 import com.rubentxu.juegos.core.managers.PlatformManager;
 import com.rubentxu.juegos.core.managers.RubentxuManager;
 import com.rubentxu.juegos.core.managers.WaterManager;
+import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 
@@ -28,6 +29,19 @@ public class WorldController implements ContactListener, ContactFilter {
         keys.put(WorldController.Keys.RIGHT, false);
         keys.put(WorldController.Keys.JUMP, false);
         keys.put(WorldController.Keys.FIRE, false);
+    }
+
+    public WorldController(World world) {
+        rubenManager = new RubentxuManager(world.getRuben());
+        platformManager = new PlatformManager();
+        platformManager.setMovingPlatforms(world.getMovingPlatforms());
+        platformManager.setPlatforms(world.getPlatforms());
+
+        waterManager = new WaterManager();
+        waterManager.setWaterSensors(world.getWaterSensors());
+
+        enemyManager = new EnemyManager();
+        enemyManager.setEnemies(world.getEnemies());
     }
 
 

@@ -5,22 +5,21 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
-import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.pantallas.BaseScreen;
 
 public class Assets extends AssetManager{
 
-    public static final int SCREEN_SPLASH= 0;
-    public static final int SCREEN_MENU= 1;
-    public static final int SCREEN_GAME= 2;
-
-
+    private static Assets instance=new Assets();
 
     public static final String GUI_ATLAS="gui/gui.pack";
     public static final String SPRITE_ATLAS="imagenes/texturas/sprites.pack";
     public static final String VARIOS_ATLAS="imagenes/texturas/varios.pack";
+    public static final String SPLASH="imagenes/splash.jpg";
     public static final String DEFAULT_FONT="fonts/DreamOfMe-32.fnt";
     public static final String BIG_FONT="fonts/DreamOfMe-40.fnt";
     public static final String HEADER_FONT="fonts/Bedbug-18.fnt";
@@ -28,31 +27,37 @@ public class Assets extends AssetManager{
     public static final String MENU_BACKGROUND="imagenes/menu-backgroud.jpg";
     public static final String GAME_BACKGROUND="maps/background.png";
     public static final String MAP_DEFAULT="maps/EscenarioDePruebas.tmx";
+    public static final String PARTICLE_EFFECT="particles/dust.pfx";
 
-
-
-
-    public Assets() {
+    private Assets() {
         super();
     }
 
-    public void loadAssetsScreen(int screen){
+    public static Assets getInstance() {
+        return instance;
+    }
+
+    public void loadAssetsScreen(BaseScreen.SCREEN screen){
         switch (screen) {
-            case SCREEN_MENU:
+            case MENU:
                 loadAssetsGame();
                 break;
-            case SCREEN_GAME:
-                loadAssetsGame();
-                break;
-            case SCREEN_SPLASH:
+            case SPLASH:
                 loadSplash();
+                break;
+            case GAME:
+                loadAssetsGame();
+                break;
+            case OPTIONS:
+                break;
+            case CREDITS:
                 break;
         }
 
     }
 
     private void loadAssetsGame() {
-        Gdx.app.log(DreamsGame.LOG, "Loada Assets Game");
+        Gdx.app.log(Constants.LOG, "Loada Assets Game");
         this.load(DEFAULT_FONT, BitmapFont.class);
         this.load(BIG_FONT, BitmapFont.class);
         this.load(HEADER_FONT, BitmapFont.class);
@@ -62,6 +67,7 @@ public class Assets extends AssetManager{
         this.load(SPRITE_ATLAS, TextureAtlas.class);
         this.load(VARIOS_ATLAS, TextureAtlas.class);
         this.load(GUI_ATLAS, TextureAtlas.class);
+        this.load(PARTICLE_EFFECT,ParticleEffect.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.load(MAP_DEFAULT, TiledMap.class);
 
@@ -69,7 +75,7 @@ public class Assets extends AssetManager{
     }
 
     public void loadSplash(){
-        this.load("imagenes/splash.jpg", Texture.class);
+        this.load(SPLASH, Texture.class);
         this.finishLoading();
     }
 

@@ -1,56 +1,46 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
-import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.pantallas.BaseScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
 
 public class World {
-
-
-    private final DreamsGame dreamsGame;
+   
     private TiledMap map;
-    private com.badlogic.gdx.physics.box2d.World physics;
-    public static Assets assets = null;
+    private com.badlogic.gdx.physics.box2d.World physics;    
     private Rubentxu ruben;
     private Box2DMapObjectParser parser;
-    private HashSet<Platform> platforms;
-    private HashSet<MovingPlatform> MovingPlatformplatforms;
-    private HashSet<Water> waterSensors;
-    private HashSet<Enemy> enemies;
+    private HashSet<Platform> platforms=new HashSet<Platform>();
+    private HashSet<MovingPlatform> movingPlatforms=new HashSet<MovingPlatform>();
+    private HashSet<Water> waterSensors= new HashSet<Water>();
+    private HashSet<Enemy> enemies=new HashSet<Enemy>();
     private Texture background;
 
-    public World(DreamsGame dreamsGame, Assets assets) {
-        this.dreamsGame=dreamsGame;
-        this.assets= assets;
+    public World() {         
         createDreamsWorld();
-        MovingPlatformplatforms = parser.getMovingPlatforms();
-        waterSensors= parser.getWaterSensors();
-        enemies=parser.getEnemies();
     }
 
     private void createDreamsWorld() {
-        assets.loadAssetsScreen(assets.SCREEN_GAME);
+        Assets.getInstance().loadAssetsScreen(BaseScreen.SCREEN.GAME);
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        map =  assets.get("maps/EscenarioDePruebas.tmx");
-        parser = new Box2DMapObjectParser();
+        map =  Assets.getInstance().get("maps/EscenarioDePruebas.tmx");
+        parser = new Box2DMapObjectParser(this);
         System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
-        ruben = new Rubentxu(this.physics, 3, 3, 0.45f, 1);
 
-        background=(Texture) assets.get("maps/background.png");
+        background=(Texture) Assets.getInstance().get("maps/background.png");
 
 
     }
 
     public void dispose() {
         map.dispose();
-        assets.dispose();
+        Assets.getInstance().dispose();
     }
 
     public TiledMap getMap() {
@@ -61,12 +51,12 @@ public class World {
         return physics;
     }
 
-    public AssetManager getAssets() {
-        return assets;
-    }
-
     public Rubentxu getRuben() {
         return ruben;
+    }
+
+    public void setRuben(Rubentxu ruben){
+        this.ruben=ruben;
     }
 
     public Box2DMapObjectParser getParser() {
@@ -77,24 +67,12 @@ public class World {
         return platforms;
     }
 
-    public void setPlatforms(HashSet<Platform> platforms) {
-        this.platforms = platforms;
-    }
-
-    public HashSet<MovingPlatform> getMovingPlatformplatforms() {
-        return MovingPlatformplatforms;
-    }
-
-    public void setMovingPlatformplatforms(HashSet<MovingPlatform> movingPlatformplatforms) {
-        MovingPlatformplatforms = movingPlatformplatforms;
+    public HashSet<MovingPlatform> getMovingPlatforms() {
+        return movingPlatforms;
     }
 
     public HashSet<Water> getWaterSensors() {
         return waterSensors;
-    }
-
-    public void setWaterSensors(HashSet<Water> waterSensors) {
-        this.waterSensors = waterSensors;
     }
 
     public Texture getBackground() {
@@ -109,11 +87,4 @@ public class World {
         return enemies;
     }
 
-    public void setEnemies(HashSet<Enemy> enemies) {
-        this.enemies = enemies;
-    }
-
-    public DreamsGame getDreamsGame() {
-        return dreamsGame;
-    }
 }
