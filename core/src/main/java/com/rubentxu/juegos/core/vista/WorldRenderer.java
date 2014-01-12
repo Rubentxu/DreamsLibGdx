@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -57,7 +56,7 @@ public class WorldRenderer {
     public void setSize(int w, int h) {
         this.setWidth(w);
         this.setHeight(h);
-
+        stage.clear();
         cam.viewportWidth = Constants.VIEWPORT_WIDTH;
         cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
 
@@ -69,7 +68,7 @@ public class WorldRenderer {
         background=new ParallaxBackground(new ParallaxLayer[]{new ParallaxLayer(world.getBackground(),new Vector2(0.5f,0.2f),new Vector2(0, 500))
         }, 800, 480);
 
-        TextureAtlas atlasVarios = Assets.getInstance().get("imagenes/texturas/varios.pack");
+        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
         modelsAndViews.addModelAndBuildView(world.getRuben());
 
@@ -102,7 +101,7 @@ public class WorldRenderer {
 
         background.render(world.getRuben().getVelocity().cpy());
 
-        TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
+        //TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
         cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y , 0);
@@ -119,7 +118,7 @@ public class WorldRenderer {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
             DebugWindow.myLabel.setText("Modo Debug:\n\n"+world.getRuben().toString());
             DebugWindow.getInstance().pack();
-            DebugWindow.getInstance().draw(spriteBatch, 0.8f);
+            DebugWindow.getInstance().draw(spriteBatch, 1f);
 
         }
 

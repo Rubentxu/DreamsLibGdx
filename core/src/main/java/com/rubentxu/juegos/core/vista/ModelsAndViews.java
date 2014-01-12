@@ -92,8 +92,8 @@ public class ModelsAndViews {
     }
 
     public void addModelAndBuildView(Rubentxu ruben){
-        TextureAtlas atlas = Assets.getInstance().get("imagenes/texturas/sprites.pack");
-        TextureAtlas atlasVarios = Assets.getInstance().get("imagenes/texturas/varios.pack");
+        TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
+        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
         this.ruben=ruben;
         // Particles
         dustParticles = Assets.getInstance().get(Assets.PARTICLE_EFFECT);
@@ -200,6 +200,7 @@ public class ModelsAndViews {
                 AnimationRuben.setAnimatedSprite(jumpRightAnimation);
             }
         } else if (ruben.getState().equals(Rubentxu.State.FALL)) {
+            dustParticles.allowCompletion();
             if (ruben.isFacingLeft()) {
                 AnimationRuben.setAnimatedSprite(fallLeftAnimation);
             } else {

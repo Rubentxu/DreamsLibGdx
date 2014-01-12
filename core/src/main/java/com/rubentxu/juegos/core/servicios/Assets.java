@@ -17,15 +17,15 @@ public class Assets extends AssetManager{
     private static Assets instance=new Assets();
 
     public static final String GUI_ATLAS="gui/gui.pack";
-    public static final String SPRITE_ATLAS="imagenes/texturas/sprites.pack";
-    public static final String VARIOS_ATLAS="imagenes/texturas/varios.pack";
-    public static final String SPLASH="imagenes/splash.jpg";
+    public static final String SPRITE_ATLAS="imagenes/animaciones/sprites.pack";
+    public static final String VARIOS_ATLAS="imagenes/varios/varios.pack";
+    public static final String SPLASH="imagenes/fondos/splash.jpg";
     public static final String DEFAULT_FONT="fonts/DreamOfMe-32.fnt";
     public static final String BIG_FONT="fonts/DreamOfMe-40.fnt";
     public static final String HEADER_FONT="fonts/Bedbug-18.fnt";
-    public static final String DEBUG_BACKGROUND="imagenes/texturas/debug.jpg";
-    public static final String MENU_BACKGROUND="imagenes/menu-backgroud.jpg";
-    public static final String GAME_BACKGROUND="maps/background.png";
+    public static final String DEBUG_BACKGROUND="imagenes/fondos/debug.jpg";
+    public static final String MENU_BACKGROUND="imagenes/fondos/menu-backgroud.jpg";
+    public static final String GAME_BACKGROUND="imagenes/fondos/background.jpg";
     public static final String MAP_DEFAULT="maps/EscenarioDePruebas.tmx";
     public static final String PARTICLE_EFFECT="particles/dust.pfx";
 

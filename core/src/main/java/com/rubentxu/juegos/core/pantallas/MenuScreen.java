@@ -65,7 +65,7 @@ public class MenuScreen extends BaseScreen {
         mainTable.add(label("Pulsa en comenzar, para iniciar la partida.", Color.LIGHT_GRAY, false));
         mainTable.getColor().a = 0f;
         mainTable.addAction(fadeIn(2f));
-        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get("imagenes/menu-backgroud.jpg"))));
+        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get(assets.MENU_BACKGROUND))));
 
         this.stage.addActor(mainTable);
 
