@@ -35,10 +35,10 @@ public class MenuScreen extends BaseScreen {
 
         final TextButton btnStart = new TextButton("Comenzar", styles.skin);
         btnStart.pad(30);
-        btnStart.setChecked(false);
         final TextButton btnOptions = new TextButton("Opciones", styles.skin);
         btnOptions.pad(30);
-        btnOptions.setChecked(false);
+        final TextButton btnScores = new TextButton("Puntuaciones", styles.skin);
+        btnScores.pad(30);
         final TextButton button3 = new TextButton("Creditos", styles.skin);
         button3.pad(30);
         button3.setChecked(false);
@@ -53,9 +53,17 @@ public class MenuScreen extends BaseScreen {
 
         btnOptions.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Click Comenzar...");
+                System.out.println("Click optionScreen...");
                 game.optionScreen= new OptionScreen(game);
                 game.setScreen(DreamsGame.optionScreen);
+            }
+        });
+
+        btnScores.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Click highScoreScreen...");
+                game.highScoreScreen= new HighScoresScreen(game);
+                game.setScreen(DreamsGame.highScoreScreen);
             }
         });
 
@@ -67,6 +75,8 @@ public class MenuScreen extends BaseScreen {
         mainTable.add(btnStart);
         mainTable.row();
         mainTable.add(btnOptions);
+        mainTable.row();
+        mainTable.add(btnScores);
         mainTable.row();
         mainTable.add(button3);
         mainTable.row();

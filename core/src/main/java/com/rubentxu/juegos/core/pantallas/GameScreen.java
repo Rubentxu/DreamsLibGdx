@@ -46,8 +46,11 @@ public class GameScreen extends BaseScreen {
         multiplexer.addProcessor(gameInputs);
         Gdx.input.setInputProcessor(multiplexer);
         renderer.setSize(width, height);
-        GuiBuilder.buildPadButtons(renderer.getStage(), styles, controller);
-        //GuiBuilder.buildTouchPad(renderer.getStage(), styles, controller);
+        if(game.getPreferencesManager().isTouchPadEnabled()){
+            GuiBuilder.buildTouchPad(renderer.getStage(), styles, controller);
+        } else {
+            GuiBuilder.buildPadButtons(renderer.getStage(), styles, controller);
+        }
     }
 
     @Override

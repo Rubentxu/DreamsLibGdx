@@ -36,8 +36,8 @@ public class OptionScreen extends BaseScreen {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.input.setInputProcessor(stage);
         super.resize(width, height);
+        Gdx.input.setInputProcessor(stage);
 
         mainTable.setFillParent(true);
         mainTable.defaults().pad(16f);
@@ -90,7 +90,7 @@ public class OptionScreen extends BaseScreen {
         mainTable.add(volumeValue);
         mainTable.row();
 
-        TextButton backButton = new TextButton("Back to main menu", styles.skin);
+        TextButton backButton = new TextButton("Volver Menu", styles.skin);
         backButton.pad(20);
         backButton.addListener(new ClickListener() {
             @Override

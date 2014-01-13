@@ -22,7 +22,7 @@ public abstract class BaseScreen implements Screen {
     protected float width, height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
 
-    public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, CREDITS}
+    public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, HIGHSCORES, CREDITS}
 
 
     public BaseScreen(DreamsGame game, Stage stage) {

@@ -3,7 +3,9 @@ package com.rubentxu.juegos.core;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.rubentxu.juegos.core.managers.game.PreferencesManager;
+import com.rubentxu.juegos.core.managers.game.ProfileManager;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
+import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
 import com.rubentxu.juegos.core.pantallas.SplashScreen;
@@ -17,10 +19,14 @@ public class DreamsGame extends Game {
     public static GameScreen gameScreen;
     public static MenuScreen menuScreen;
     public static OptionScreen optionScreen;
+    public static HighScoresScreen highScoreScreen;
+    private ProfileManager profileManager;
+
 
     @Override
     public void create() {
         preferencesManager = new PreferencesManager();
+        profileManager= new ProfileManager();
         log = new FPSLogger();
         setScreen(new SplashScreen(this));
         //setScreen(gameScreen);
@@ -58,4 +64,7 @@ public class DreamsGame extends Game {
     }
 
 
+    public ProfileManager getProfileManager() {
+        return profileManager;
+    }
 }
