@@ -36,8 +36,6 @@ public class SplashScreen extends BaseScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
 
-        stage.clear();
-
         Image splashImage = new Image(new SpriteDrawable(new Sprite(splashTexture)), Scaling.stretch, Align.bottom | Align.left);
         splashImage.setWidth(width);
         splashImage.setHeight(height);

@@ -10,13 +10,15 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.servicios.Styles;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+
 public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
     protected final Stage stage;
     protected Assets assets;
     protected Styles styles;
-    protected final Table mainTable = new Table();
+    protected Table mainTable;
     protected float width, height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
 
@@ -34,6 +36,7 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void show() {
+        mainTable= new Table();
         Gdx.app.log(Constants.LOG, "Showing screen: " + getName() + " Current_Screen " + CURRENT_SCREEN);
         assets = Assets.getInstance();
         assets.loadAssetsScreen(CURRENT_SCREEN);
@@ -46,6 +49,9 @@ public abstract class BaseScreen implements Screen {
         this.width = width;
         this.height = height;
         stage.setViewport(width, height, true);
+        stage.clear();
+        mainTable.getColor().a = 0f;
+        mainTable.addAction(fadeIn(1.2f));
     }
 
     @Override

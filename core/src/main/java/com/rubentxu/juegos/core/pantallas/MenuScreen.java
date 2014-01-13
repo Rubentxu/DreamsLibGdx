@@ -14,8 +14,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-
 public class MenuScreen extends BaseScreen {
 
     public MenuScreen(DreamsGame game) {
@@ -34,17 +32,18 @@ public class MenuScreen extends BaseScreen {
     public void resize(int width, int height) {
         Gdx.input.setInputProcessor(stage);
         super.resize(width, height);
-        stage.clear();
-        final TextButton button = new TextButton("Comenzar", styles.skin);
-        button.pad(30);
-        button.setChecked(false);
-        final TextButton button2 = new TextButton("Opciones", styles.skin);
-        button2.pad(30);
-        button2.setChecked(false);
+
+        final TextButton btnStart = new TextButton("Comenzar", styles.skin);
+        btnStart.pad(30);
+        btnStart.setChecked(false);
+        final TextButton btnOptions = new TextButton("Opciones", styles.skin);
+        btnOptions.pad(30);
+        btnOptions.setChecked(false);
         final TextButton button3 = new TextButton("Creditos", styles.skin);
         button3.pad(30);
         button3.setChecked(false);
-        button.addListener(new ClickListener() {
+
+        btnStart.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
                 game.gameScreen= new GameScreen(game);
@@ -52,19 +51,26 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
+        btnOptions.addListener(new ClickListener() {
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Click Comenzar...");
+                game.optionScreen= new OptionScreen(game);
+                game.setScreen(DreamsGame.optionScreen);
+            }
+        });
+
+
         mainTable.setFillParent(true);
         mainTable.defaults().pad(16f);
         mainTable.add(label("Rubentxu Dreams", Color.CYAN, true));
         mainTable.row();
-        mainTable.add(button);
+        mainTable.add(btnStart);
         mainTable.row();
-        mainTable.add(button2);
+        mainTable.add(btnOptions);
         mainTable.row();
         mainTable.add(button3);
         mainTable.row();
         mainTable.add(label("Pulsa en comenzar, para iniciar la partida.", Color.LIGHT_GRAY, false));
-        mainTable.getColor().a = 0f;
-        mainTable.addAction(fadeIn(2f));
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get(assets.MENU_BACKGROUND))));
 
         this.stage.addActor(mainTable);

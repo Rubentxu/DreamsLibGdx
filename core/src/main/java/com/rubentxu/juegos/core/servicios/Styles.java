@@ -4,9 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
@@ -46,6 +49,16 @@ public class Styles {
         TextureRegionDrawable touchpad_background = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_background"));
         TextureRegionDrawable touchpad_thumb = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_thumb"));
 
+        TextureRegionDrawable checkox_true = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-on"));
+
+        TextureRegionDrawable checkox_false = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-off"));
+
+        TextureRegionDrawable slider_knob = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("default-slider-knob"));
+        TextureRegionDrawable slider = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("default-slider"));
+
+        CheckBoxStyle checkBoxStyle=new CheckBox.CheckBoxStyle(checkox_false,checkox_true,font,Color.WHITE) ;
+
+        SliderStyle sliderStyle= new SliderStyle(slider,slider_knob);
 
         skin.add("btnMenu", btnMenu);
         skin.add("btnMenuPress", btnMenuPress);
@@ -82,5 +95,7 @@ public class Styles {
         skin.add("buttonRight", ImageButtonRight);
         skin.add("buttonUp", ImageButtonUp);
         skin.add("default", touchpadStyle);
+        skin.add("default",checkBoxStyle);
+        skin.add("default-horizontal",sliderStyle);
     }
 }

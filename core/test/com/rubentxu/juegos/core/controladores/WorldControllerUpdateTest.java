@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.rubentxu.juegos.core.managers.PlatformManager;
-import com.rubentxu.juegos.core.managers.RubentxuManager;
+import com.rubentxu.juegos.core.managers.world.PlatformManager;
+import com.rubentxu.juegos.core.managers.world.RubentxuManager;
 
 public class WorldControllerUpdateTest {
 

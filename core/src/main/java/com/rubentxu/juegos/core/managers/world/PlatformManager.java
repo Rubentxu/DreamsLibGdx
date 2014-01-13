@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.core.managers;
+package com.rubentxu.juegos.core.managers.world;
 
 
 import com.badlogic.gdx.math.Vector2;
@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.WorldManifold;
-import com.rubentxu.juegos.core.managers.interfaces.IManager;
+import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Platform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
@@ -15,7 +15,7 @@ import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 import java.util.HashSet;
 
-public class PlatformManager implements IManager {
+public class PlatformManager implements IWorldManager {
 
 
     private HashSet<Platform> platforms;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.GdxNativesLoader;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.managers.world.RubentxuManager;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import org.junit.Before;
 import org.junit.BeforeClass;

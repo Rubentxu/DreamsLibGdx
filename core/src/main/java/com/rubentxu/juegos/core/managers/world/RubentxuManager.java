@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.core.managers;
+package com.rubentxu.juegos.core.managers.world;
 
 
 import com.badlogic.gdx.math.Vector2;
@@ -8,13 +8,13 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
-import com.rubentxu.juegos.core.managers.interfaces.IManager;
+import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 
-public class RubentxuManager implements IManager {
+public class RubentxuManager implements IWorldManager {
 
     private Rubentxu ruben;
     private float stillTime = 0;

@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.core.managers;
+package com.rubentxu.juegos.core.managers.world;
 
 
 import com.badlogic.gdx.math.Vector2;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.managers.interfaces.IManager;
+import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.State;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
@@ -15,7 +15,7 @@ import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 import java.util.HashSet;
 
 
-public class EnemyManager implements IManager {
+public class EnemyManager implements IWorldManager {
 
     private HashSet<Enemy> enemies;
 

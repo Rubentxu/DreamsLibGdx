@@ -17,6 +17,7 @@ public class Assets extends AssetManager{
     private static Assets instance=new Assets();
 
     public static final String GUI_ATLAS="gui/gui.pack";
+    public static final String UISKIN_ATLAS="gui/uiskin.pack";
     public static final String SPRITE_ATLAS="imagenes/animaciones/sprites.pack";
     public static final String VARIOS_ATLAS="imagenes/varios/varios.pack";
     public static final String SPLASH="imagenes/fondos/splash.jpg";
@@ -67,9 +68,11 @@ public class Assets extends AssetManager{
         this.load(SPRITE_ATLAS, TextureAtlas.class);
         this.load(VARIOS_ATLAS, TextureAtlas.class);
         this.load(GUI_ATLAS, TextureAtlas.class);
+        this.load(UISKIN_ATLAS, TextureAtlas.class);
         this.load(PARTICLE_EFFECT,ParticleEffect.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.load(MAP_DEFAULT, TiledMap.class);
+
 
         this.finishLoading();
     }
