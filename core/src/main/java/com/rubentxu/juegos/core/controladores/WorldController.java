@@ -32,16 +32,10 @@ public class WorldController implements ContactListener, ContactFilter {
     }
 
     public WorldController(World world) {
-        rubenManager = new RubentxuManager(world.getRuben());
-        platformManager = new PlatformManager();
-        platformManager.setMovingPlatforms(world.getMovingPlatforms());
-        platformManager.setPlatforms(world.getPlatforms());
-
-        waterManager = new WaterManager();
-        waterManager.setWaterSensors(world.getWaterSensors());
-
-        enemyManager = new EnemyManager();
-        enemyManager.setEnemies(world.getEnemies());
+        rubenManager = new RubentxuManager(world);
+        platformManager = new PlatformManager(world);
+        waterManager = new WaterManager(world);
+        enemyManager = new EnemyManager(world);
     }
 
 
@@ -82,7 +76,8 @@ public class WorldController implements ContactListener, ContactFilter {
     public void dispose() {
         setRubenManager(null);
         setPlatformManager(null);
-
+        enemyManager=null;
+        waterManager=null;
     }
 
     public RubentxuManager getRubenManager() {
@@ -125,8 +120,8 @@ public class WorldController implements ContactListener, ContactFilter {
      * The main update method *
      */
     public void update(float delta) {
-        getRubenManager().update(delta);
-        getPlatformManager().update(delta);
+        rubenManager.update(delta);
+        platformManager.update(delta);
         waterManager.update(delta);
         enemyManager.update(delta);
     }
