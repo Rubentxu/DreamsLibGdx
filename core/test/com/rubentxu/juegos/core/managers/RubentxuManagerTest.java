@@ -40,7 +40,7 @@ public class RubentxuManagerTest {
         r.getRubenPhysicsFixture().setFriction(0);
         r.getRubenSensorFixture().setFriction(0);
         rubentxuManager = new RubentxuManager(r);
-        controller=new WorldController(world);
+        controller=new WorldController(new com.rubentxu.juegos.core.modelo.World());
     }
 
     @Before

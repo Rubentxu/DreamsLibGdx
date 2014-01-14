@@ -20,18 +20,17 @@ public class Rubentxu extends Box2DPhysicsObject {
 
     public final static float MAX_VELOCITY = 4f;
     public final static float JUMP_FORCE = 14.5f;
-    private boolean onGround = false;
-    private State state = State.IDLE;
-    boolean facingLeft = true;
-    private float killVelocity;
-    private Boolean hurt;
-    private float hurtVelocityY = 10f;
-    private float hurtVelocityX = 6f;
-    private float springOffEnemy = -1f;
+
+
     private HashSet<Fixture> grounContacts;
-    private float combinedGroundAngle = 0f;
     private Fixture rubenPhysicsFixture;
     private Fixture rubenSensorFixture;
+
+    // Status
+    private boolean onGround = false;
+    private State state = State.IDLE;
+    private Boolean hurt;
+    boolean facingLeft = true;
 
     public Rubentxu(World physics) {
         super("Heroe", GRUPOS.HEROES, physics);

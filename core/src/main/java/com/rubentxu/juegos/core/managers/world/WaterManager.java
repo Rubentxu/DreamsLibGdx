@@ -12,19 +12,22 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
-import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Water;
+import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
 
-import java.util.HashSet;
+
+public class WaterManager extends AbstractWorldManager {
 
 
-public class WaterManager implements IWorldManager {
 
-    private HashSet<Water> waterSensors;
+    public WaterManager(World world) {
+        super(world);
+    }
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -82,7 +85,7 @@ public class WaterManager implements IWorldManager {
 
     @Override
     public void update(float delta) {
-        for (Water w : waterSensors) {
+        for (Water w : world.getWaterSensors()) {
             for (int i = 0; i < w.m_bodyList.size; i++) {
                 Array<Fixture> fixtureList = w.m_bodyList.get(i).getFixtureList();
                 for (int j = 0; j < fixtureList.size; j++) {
@@ -175,12 +178,4 @@ public class WaterManager implements IWorldManager {
         return true;
     }
 
-
-    public HashSet<Water> getWaterSensors() {
-        return waterSensors;
-    }
-
-    public void setWaterSensors(HashSet<Water> waterSensors) {
-        this.waterSensors = waterSensors;
-    }
 }

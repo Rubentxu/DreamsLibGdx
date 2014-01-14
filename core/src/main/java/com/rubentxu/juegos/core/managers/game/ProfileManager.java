@@ -10,12 +10,12 @@ import com.rubentxu.juegos.core.modelo.Profile;
 
 public class ProfileManager {
 
-    private static final String PROFILE_DATA_FILE = "data/profile.json";
+
     private Profile profile;
 
     public Profile retrieveProfile() {
 
-        FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+        FileHandle profileDataFile = Gdx.files.local(Constants.PROFILE_DATA_FILE);
         Gdx.app.log(Constants.LOG, "Retrieving profile from: " + profileDataFile.path());
 
         if (profile != null) return profile;
@@ -47,7 +47,7 @@ public class ProfileManager {
 
     protected void persist(Profile profile) {
 
-        FileHandle profileDataFile = Gdx.files.local(PROFILE_DATA_FILE);
+        FileHandle profileDataFile = Gdx.files.local(Constants.PROFILE_DATA_FILE);
         Gdx.app.log(Constants.LOG, "Persisting profile in: " + profileDataFile.path());
         Json json = new Json();
         String profileAsText = json.toJson(profile);

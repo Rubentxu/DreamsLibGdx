@@ -3,6 +3,9 @@ package com.rubentxu.juegos.core.modelo;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Array;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.pantallas.BaseScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
@@ -20,6 +23,7 @@ public class World {
     private HashSet<Water> waterSensors= new HashSet<Water>();
     private HashSet<Enemy> enemies=new HashSet<Enemy>();
     private Texture background;
+    private Array<Body> bodiesFlaggedDestroy=new Array<Body>();
 
     public World() {         
         createDreamsWorld();
@@ -34,6 +38,29 @@ public class World {
         parser.load(getPhysics(), map);
         background=(Texture) Assets.getInstance().get(Assets.getInstance().GAME_BACKGROUND);
 
+    }
+
+    public void destroyFlaggedEntities(){
+        for(Body b: bodiesFlaggedDestroy) {
+            Box2DPhysicsObject data = (Box2DPhysicsObject) b.getUserData();
+            if(data!=null && data.isFlaggedForDelete()){
+                b.setUserData(null);
+                physics.destroyBody(b);
+                switch (data.getGrupo()) {
+                    case ENEMIGOS:
+                        enemies.remove(data);
+                        break;
+                    case PLATAFORMAS_MOVILES:
+                        movingPlatforms.remove(data);
+                        break;
+                    case MONEDAS:
+                        break;
+
+                }
+                data=null;
+                b=null;
+            }
+        }
     }
 
     public void dispose() {
@@ -85,4 +112,7 @@ public class World {
         return enemies;
     }
 
+    public void addBodiesFlaggedDestroy(Body body) {
+        bodiesFlaggedDestroy.add(body);
+    }
 }

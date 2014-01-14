@@ -35,6 +35,7 @@ public class GameScreen extends BaseScreen {
 
         controller.update(delta);
         renderer.render();
+        world.destroyFlaggedEntities();
     }
 
     @Override

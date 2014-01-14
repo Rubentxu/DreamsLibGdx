@@ -1,14 +1,29 @@
 package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.physics.box2d.Body;
-import com.rubentxu.juegos.core.modelo.base.Sensor;
 
-public class Coin extends Sensor {
+public class Coin  extends Item {
 
-    private int value;
-    private int type;
+
 
     public Coin(String nombre, GRUPOS grupo, Body body) {
         super(nombre, grupo, body);
+        TYPE_ITEM=getType();
     }
+
+    @Override
+    public String getName() {
+        return null;
+    }
+
+    @Override
+    public int getValue() {
+        return 1;
+    }
+
+    @Override
+    public TYPE getType() {
+        return TYPE.COIN;
+    }
+
 }

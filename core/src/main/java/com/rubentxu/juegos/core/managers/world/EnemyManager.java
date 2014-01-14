@@ -6,22 +6,23 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
+import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.State;
+import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 
-import java.util.HashSet;
+
+public class EnemyManager extends AbstractWorldManager {
 
 
-public class EnemyManager implements IWorldManager {
-
-    private HashSet<Enemy> enemies;
-
+    public EnemyManager(World world) {
+        super(world);
+    }
 
     public void update(float delta) {
-        for(Enemy enemy:enemies){
+        for(Enemy enemy:world.getEnemies()){
             enemy.getPath().update(enemy.getBody().getPosition(),delta);
             Vector2 vel = enemy.getVelocity();
             Vector2 pos = enemy.getBody().getPosition();
@@ -147,7 +148,4 @@ public class EnemyManager implements IWorldManager {
         return true;
     }
 
-    public void setEnemies(HashSet<Enemy> enemies) {
-        this.enemies = enemies;
-    }
 }

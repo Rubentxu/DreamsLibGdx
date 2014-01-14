@@ -2,10 +2,10 @@ package com.rubentxu.juegos.core.controladores;
 
 
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
+import com.rubentxu.juegos.core.modelo.World;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -15,7 +15,8 @@ public class WorldControllerTest {
 
     @Before
     public void testSetup() {
-        worldController = new WorldController(world);
+
+        worldController = new WorldController(new World());
     }
 
     @Test

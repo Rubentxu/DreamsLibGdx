@@ -8,20 +8,22 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
-import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
+import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 
-public class RubentxuManager implements IWorldManager {
+public class RubentxuManager extends AbstractWorldManager {
 
     private Rubentxu ruben;
     private float stillTime = 0;
     private float hurtTime = 0;
 
-    public RubentxuManager(Rubentxu ruben) {
-        this.ruben = ruben;
+    public RubentxuManager(World world) {
+        super(world);
+        this.ruben = world.getRuben();
     }
 
     public void update(float delta) {
@@ -169,6 +171,7 @@ public class RubentxuManager implements IWorldManager {
             }
             System.out.println("Fuerza colision Enemigo: "+force +" Sensor no exist");
             ruben.getBody().applyLinearImpulse(force,ruben.getBody().getWorldCenter(),true);
+
         }
 
 

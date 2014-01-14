@@ -7,35 +7,18 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.WorldManifold;
-import com.rubentxu.juegos.core.managers.interfaces.IWorldManager;
+import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
-import com.rubentxu.juegos.core.modelo.Platform;
 import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
-import java.util.HashSet;
-
-public class PlatformManager implements IWorldManager {
+public class PlatformManager extends AbstractWorldManager {
 
 
-    private HashSet<Platform> platforms;
-    private HashSet<MovingPlatform> movingPlatforms;
+    public PlatformManager(World world) {
+        super(world);      }
 
-    public HashSet<Platform> getPlatforms() {
-        return platforms;
-    }
-
-    public void setPlatforms(HashSet<Platform> platforms) {
-        this.platforms = platforms;
-    }
-
-    public HashSet<MovingPlatform> getMovingPlatforms() {
-        return movingPlatforms;
-    }
-
-    public void setMovingPlatforms(HashSet<MovingPlatform> movingPlatforms) {
-        this.movingPlatforms = movingPlatforms;
-    }
 
     private Box2DPhysicsObject getCollider(MovingPlatform p, Contact contact) {
         return (Box2DPhysicsObject) ((p.equals(contact.getFixtureA().getUserData()) ? contact.getFixtureB().getUserData() : contact.getFixtureA().getUserData()));
@@ -44,7 +27,7 @@ public class PlatformManager implements IWorldManager {
 
     @Override
     public void update(float delta) {
-        for (MovingPlatform p : getMovingPlatforms()) {
+        for (MovingPlatform p : world.getMovingPlatforms()) {
             updateMovingPlatform(p, delta);
         }
     }

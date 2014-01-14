@@ -16,18 +16,17 @@ public class Enemy extends Box2DPhysicsObject {
 
     public final static float MAX_VELOCITY = 4f;
     public final static float JUMP_FORCE = 14.5f;
-    boolean facingLeft = true;
-    private boolean onGround = false;
-    private State state = State.WALKING;
-    private float killVelocity;
-    private Boolean hurt;
-    private float hurtVelocityY = 10f;
-    private float hurtVelocityX = 6f;
-    private float springOffEnemy = -1f;
+
     private HashSet<Fixture> grounContacts = new HashSet<Fixture>();
     private Fixture enemyPhysicsFixture;
     private Fixture enemySensorFixture;
     private Path path;
+
+    // Status
+    private boolean onGround = false;
+    private State state = State.WALKING;
+    private Boolean hurt;
+    boolean facingLeft = true;
 
     public Enemy(World physics) {
         super("Enemigo", GRUPOS.ENEMIGOS, physics);

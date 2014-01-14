@@ -107,7 +107,7 @@ public class OptionScreen extends BaseScreen {
 
     private void updateVolumeLabel() {
         float volume = (game.getPreferencesManager().getVolume() * 100);
-        volumeValue.setText(String.format("%1.0f%%", volume));
+        volumeValue.setText(Float.toString(volume));
     }
 
 }

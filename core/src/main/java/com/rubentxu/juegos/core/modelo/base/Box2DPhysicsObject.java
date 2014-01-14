@@ -32,6 +32,9 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     public Array points;
     public Array vertices;
 
+
+    private boolean isFlaggedForDelete=false;
+
     public Box2DPhysicsObject(String nombre, GRUPOS grupo, Body body) {
         this.nombre=nombre;
         this.grupo=grupo;
@@ -248,5 +251,14 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject {
     public void setVelocity(Vector2 velocity) {
         body.setLinearVelocity(velocity);
     }
+
+    public boolean isFlaggedForDelete() {
+        return isFlaggedForDelete;
+    }
+
+    public void setFlaggedForDelete(boolean isFlaggedForDelete) {
+        this.isFlaggedForDelete = isFlaggedForDelete;
+    }
+
 
 }
