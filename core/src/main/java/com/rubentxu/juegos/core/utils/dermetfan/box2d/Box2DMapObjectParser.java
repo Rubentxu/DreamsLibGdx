@@ -60,8 +60,8 @@ import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.rubentxu.juegos.core.modelo.Enemy;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
@@ -265,7 +265,7 @@ public class Box2DMapObjectParser {
         rectangle.y *= unitScale;
         rectangle.width *= unitScale;
         rectangle.height *= unitScale;
-        worldEntity.setRuben(new Rubentxu(world, rectangle.x, rectangle.y, 0.45f, 1));
+        worldEntity.setHero(new Hero(world, rectangle.x, rectangle.y, 0.45f, 1));
     }
 
     private void createWater(World world, MapObject object) {

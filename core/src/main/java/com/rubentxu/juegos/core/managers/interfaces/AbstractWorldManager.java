@@ -5,9 +5,10 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.World;
 
-public abstract class AbstractWorldManager {
+public abstract class AbstractWorldManager implements Disposable {
 
 
     protected final World world;

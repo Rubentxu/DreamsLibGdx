@@ -11,7 +11,7 @@ public class Constants {
     public static final int POSITION_ITERATIONS = 8;
     // Game attributes
     public static final String VERSION = "0.3 Alpha";
-    public static final String LOG = "Rubentxu Dreams";
+    public static final String LOG = "Hero Dreams";
     // Preferences
     public static final String PREFS_NAME = "DreamsGame";
     public static final String PREF_VOLUME = "volume";

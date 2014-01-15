@@ -70,7 +70,7 @@ public class WorldRenderer {
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
-        modelsAndViews.addModelAndBuildView(world.getRuben());
+        modelsAndViews.addModelAndBuildView(world.getHero());
 
         for(MovingPlatform mvp :world.getMovingPlatforms()){
             String nombreRegion= (atlasVarios.findRegion(mvp.getNombre())!=null)? mvp.getNombre(): mvp.getGrupo().toString();
@@ -99,12 +99,12 @@ public class WorldRenderer {
 
     public void render() {
 
-        background.render(world.getRuben().getVelocity().cpy());
+        background.render(world.getHero().getVelocity().cpy());
 
         //TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
-        cam.position.set(world.getRuben().getBody().getPosition().x, world.getRuben().getBody().getPosition().y , 0);
+        cam.position.set(world.getHero().getBody().getPosition().x, world.getHero().getBody().getPosition().y , 0);
         cam.update();
 
         renderer.setView(cam);
@@ -116,7 +116,7 @@ public class WorldRenderer {
 
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
-            DebugWindow.myLabel.setText("Modo Debug:\n\n"+world.getRuben().toString());
+            DebugWindow.myLabel.setText("Modo Debug:\n\n"+world.getHero().toString());
             DebugWindow.getInstance().pack();
             DebugWindow.getInstance().draw(spriteBatch, 1f);
 

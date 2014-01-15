@@ -70,7 +70,7 @@ public class MenuScreen extends BaseScreen {
 
         mainTable.setFillParent(true);
         mainTable.defaults().pad(16f);
-        mainTable.add(label("Rubentxu Dreams", Color.CYAN, true));
+        mainTable.add(label("Hero Dreams", Color.CYAN, true));
         mainTable.row();
         mainTable.add(btnStart);
         mainTable.row();

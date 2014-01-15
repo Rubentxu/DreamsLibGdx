@@ -16,7 +16,7 @@ public class World {
    
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;    
-    private Rubentxu ruben;
+    private Hero hero;
     private Box2DMapObjectParser parser;
     private HashSet<Platform> platforms=new HashSet<Platform>();
     private HashSet<MovingPlatform> movingPlatforms=new HashSet<MovingPlatform>();
@@ -76,12 +76,12 @@ public class World {
         return physics;
     }
 
-    public Rubentxu getRuben() {
-        return ruben;
+    public Hero getHero() {
+        return hero;
     }
 
-    public void setRuben(Rubentxu ruben){
-        this.ruben=ruben;
+    public void setHero(Hero hero){
+        this.hero=hero;
     }
 
     public Box2DMapObjectParser getParser() {

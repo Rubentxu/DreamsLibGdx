@@ -6,18 +6,19 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.managers.world.EnemyManager;
+import com.rubentxu.juegos.core.managers.world.HeroManager;
 import com.rubentxu.juegos.core.managers.world.PlatformManager;
-import com.rubentxu.juegos.core.managers.world.RubentxuManager;
 import com.rubentxu.juegos.core.managers.world.WaterManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 
 
-public class WorldController implements ContactListener, ContactFilter {
+public class WorldController implements ContactListener, ContactFilter ,Disposable{
 
-    private RubentxuManager rubenManager;
+    private HeroManager heroManager;
     private PlatformManager platformManager;
     private WaterManager waterManager;
     private EnemyManager enemyManager;
@@ -31,13 +32,17 @@ public class WorldController implements ContactListener, ContactFilter {
         keys.put(WorldController.Keys.FIRE, false);
     }
 
+    public static enum Keys {
+        LEFT, RIGHT, JUMP, FIRE
+    }
+
+
     public WorldController(World world) {
-        rubenManager = new RubentxuManager(world);
+        heroManager = new HeroManager(world);
         platformManager = new PlatformManager(world);
         waterManager = new WaterManager(world);
         enemyManager = new EnemyManager(world);
     }
-
 
     public void leftPressed() {
         keys.get(keys.put(WorldController.Keys.LEFT, true));
@@ -72,61 +77,15 @@ public class WorldController implements ContactListener, ContactFilter {
         keys.get(keys.put(WorldController.Keys.FIRE, false));
     }
 
-
-    public void dispose() {
-        setRubenManager(null);
-        setPlatformManager(null);
-        enemyManager=null;
-        waterManager=null;
-    }
-
-    public RubentxuManager getRubenManager() {
-        return rubenManager;
-    }
-
-    public void setRubenManager(RubentxuManager rubenManager) {
-        this.rubenManager = rubenManager;
-    }
-
-    public PlatformManager getPlatformManager() {
-        return platformManager;
-    }
-
-    public void setPlatformManager(PlatformManager platformManager) {
-        this.platformManager = platformManager;
-    }
-
-    public WaterManager getWaterManager() {
-        return waterManager;
-    }
-
-    public void setWaterManager(WaterManager waterManager) {
-        this.waterManager = waterManager;
-    }
-
-    public EnemyManager getEnemyManager() {
-        return enemyManager;
-    }
-
-    public void setEnemyManager(EnemyManager enemyManager) {
-        this.enemyManager = enemyManager;
-    }
-
-    public static enum Keys {
-        LEFT, RIGHT, JUMP, FIRE
-    }
-
     /**
      * The main update method *
      */
     public void update(float delta) {
-        rubenManager.update(delta);
+        heroManager.update(delta);
         platformManager.update(delta);
         waterManager.update(delta);
         enemyManager.update(delta);
     }
-
-
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
@@ -135,10 +94,10 @@ public class WorldController implements ContactListener, ContactFilter {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            getRubenManager().handlePreSolve(contact, oldManifold);
+            heroManager.handlePreSolve(contact, oldManifold);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            getPlatformManager().handlePreSolve(contact, oldManifold);
+            platformManager.handlePreSolve(contact, oldManifold);
         }
     }
 
@@ -148,13 +107,13 @@ public class WorldController implements ContactListener, ContactFilter {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            getRubenManager().handlePostSolve(contact, impulse);
+            heroManager.handlePostSolve(contact, impulse);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            getPlatformManager().handlePostSolve(contact, impulse);
+            platformManager.handlePostSolve(contact, impulse);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            getPlatformManager().handlePostSolve(contact, impulse);
+            platformManager.handlePostSolve(contact, impulse);
         }
 
     }
@@ -165,17 +124,17 @@ public class WorldController implements ContactListener, ContactFilter {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            getRubenManager().handleBeginContact(contact);
+            heroManager.handleBeginContact(contact);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
 
-            getPlatformManager().handleBeginContact(contact);
+            platformManager.handleBeginContact(contact);
         }
         if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
-            getWaterManager().handleBeginContact(contact);
+            waterManager.handleBeginContact(contact);
         }
         if (GRUPOS.ENEMIGOS.equals(box2dPhysicsA.getGrupo()) || GRUPOS.ENEMIGOS.equals(box2dPhysicsB.getGrupo())) {
-            getEnemyManager().handleBeginContact(contact);
+            enemyManager.handleBeginContact(contact);
         }
     }
 
@@ -185,21 +144,30 @@ public class WorldController implements ContactListener, ContactFilter {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            getRubenManager().handleEndContact(contact);
+            heroManager.handleEndContact(contact);
         }
         if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            getPlatformManager().handleEndContact(contact);
+            platformManager.handleEndContact(contact);
         }
         if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
-            getWaterManager().handleEndContact(contact);
+            waterManager.handleEndContact(contact);
         }
         if (GRUPOS.ENEMIGOS.equals(box2dPhysicsA.getGrupo()) || GRUPOS.ENEMIGOS.equals(box2dPhysicsB.getGrupo())) {
-            getEnemyManager().handleEndContact(contact);
+            enemyManager.handleEndContact(contact);
         }
     }
 
     @Override
     public boolean shouldCollide(Fixture fixtureA, Fixture fixtureB) {
         return true;
+    }
+
+
+    @Override
+    public void dispose() {
+        heroManager=null;
+        platformManager=null;
+        enemyManager=null;
+        waterManager=null;
     }
 }

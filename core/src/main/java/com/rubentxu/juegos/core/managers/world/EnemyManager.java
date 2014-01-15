@@ -148,4 +148,8 @@ public class EnemyManager extends AbstractWorldManager {
         return true;
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }

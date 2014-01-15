@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
@@ -25,14 +25,14 @@ public class ModelsAndViews {
     /**
      * Textures *
      */
-    private Array<TextureAtlas.AtlasRegion> rubenJumpRight;
-    private Array<TextureAtlas.AtlasRegion> rubenFallRight;
-    private Array<TextureAtlas.AtlasRegion> rubenIdleRight;
-    private Array<TextureAtlas.AtlasRegion> rubenSwimmingRight;
+    private Array<TextureAtlas.AtlasRegion> heroJumpRight;
+    private Array<TextureAtlas.AtlasRegion> heroFallRight;
+    private Array<TextureAtlas.AtlasRegion> heroIdleRight;
+    private Array<TextureAtlas.AtlasRegion> heroSwimmingRight;
     /**
      * Animations *
      */
-    private AnimatedBox2DSprite AnimationRuben;
+    private AnimatedBox2DSprite animationHero;
     private AnimatedSprite walkRightAnimation;
     private AnimatedSprite jumpRightAnimation;
     private AnimatedSprite fallRightAnimation;
@@ -48,7 +48,7 @@ public class ModelsAndViews {
     private Map<Box2DPhysicsObject,Sprite> modelsAndViews= new HashMap<Box2DPhysicsObject,Sprite>();
     private ParticleEffect dustParticles;
     private float timeIdle;
-    private Rubentxu ruben;
+    private Hero hero;
 
     public void render(SpriteBatch spriteBatch){
         Iterator it = modelsAndViews.entrySet().iterator();
@@ -64,9 +64,9 @@ public class ModelsAndViews {
 
 
         }
-        updateAnimationsRubentxu(ruben);
-        AnimationRuben.update();
-        AnimationRuben.draw(spriteBatch);
+        updateAnimationsRubentxu(hero);
+        animationHero.update();
+        animationHero.draw(spriteBatch);
         dustParticles.update(Gdx.graphics.getDeltaTime());
         dustParticles.draw(spriteBatch);
     }
@@ -91,50 +91,50 @@ public class ModelsAndViews {
         this.modelsAndViews.put(box2DPhysicsObject,sprite);
     }
 
-    public void addModelAndBuildView(Rubentxu ruben){
+    public void addModelAndBuildView(Hero hero){
         TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
-        this.ruben=ruben;
+        this.hero=hero;
         // Particles
         dustParticles = Assets.getInstance().get(Assets.PARTICLE_EFFECT);
 
-        Array<TextureAtlas.AtlasRegion> rubenRight = atlas.findRegions("Andando");
-        rubenJumpRight = atlas.findRegions("Saltando");
-        rubenFallRight = atlas.findRegions("Cayendo");
-        rubenIdleRight = atlas.findRegions("Parado");
-        rubenSwimmingRight = atlasVarios.findRegions("nadando");
+        Array<TextureAtlas.AtlasRegion> heroRight = atlas.findRegions("Andando");
+        heroJumpRight = atlas.findRegions("Saltando");
+        heroFallRight = atlas.findRegions("Cayendo");
+        heroIdleRight = atlas.findRegions("Parado");
+        heroSwimmingRight = atlasVarios.findRegions("nadando");
 
-        Animation walkRight = new Animation(Constants.RUNNING_FRAME_DURATION, rubenRight);
+        Animation walkRight = new Animation(Constants.RUNNING_FRAME_DURATION, heroRight);
         walkRight.setPlayMode(Animation.LOOP);
         walkRightAnimation = new AnimatedSprite(walkRight);
 
-        Animation jumpRight = new Animation(Constants.RUNNING_FRAME_DURATION * 7, rubenJumpRight);
+        Animation jumpRight = new Animation(Constants.RUNNING_FRAME_DURATION * 7, heroJumpRight);
         jumpRightAnimation = new AnimatedSprite(jumpRight);
-        Animation fallRight = new Animation(Constants.RUNNING_FRAME_DURATION * 5, rubenFallRight);
+        Animation fallRight = new Animation(Constants.RUNNING_FRAME_DURATION * 5, heroFallRight);
         fallRightAnimation = new AnimatedSprite(fallRight);
 
-        Animation idleRight = new Animation(Constants.RUNNING_FRAME_DURATION * 4, rubenIdleRight);
+        Animation idleRight = new Animation(Constants.RUNNING_FRAME_DURATION * 4, heroIdleRight);
         idleRight.setPlayMode(Animation.LOOP);
         idleRightAnimation = new AnimatedSprite(idleRight);
 
-        Animation swimmingRight = new Animation(Constants.RUNNING_FRAME_DURATION * 4, rubenSwimmingRight);
+        Animation swimmingRight = new Animation(Constants.RUNNING_FRAME_DURATION * 4, heroSwimmingRight);
         swimmingRight.setPlayMode(Animation.LOOP);
         swimmingRightAnimation = new AnimatedSprite(swimmingRight);
 
-        walkLeftAnimation = convertToLeft(rubenRight, 1);
+        walkLeftAnimation = convertToLeft(heroRight, 1);
         walkLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
-        jumpLeftAnimation = convertToLeft(rubenJumpRight, 7);
-        fallLeftAnimation = convertToLeft(rubenFallRight, 5);
-        idleLeftAnimation = convertToLeft(rubenIdleRight, 4);
+        jumpLeftAnimation = convertToLeft(heroJumpRight, 7);
+        fallLeftAnimation = convertToLeft(heroFallRight, 5);
+        idleLeftAnimation = convertToLeft(heroIdleRight, 4);
         idleLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
-        swimmingLeftAnimation = convertToLeft(rubenSwimmingRight, 4);
+        swimmingLeftAnimation = convertToLeft(heroSwimmingRight, 4);
         swimmingLeftAnimation.getAnimation().setPlayMode(Animation.LOOP);
 
-        AnimationRuben = new AnimatedBox2DSprite(walkRightAnimation);
-        AnimationRuben.setSize(ruben.getWidth()*1.5f , ruben.getHeight());
-        AnimationRuben.setOrigin(AnimationRuben.getWidth() / 2, AnimationRuben.getHeight() / 1.9f);
-        AnimationRuben.setPosition(ruben.getBody().getPosition().x ,
-                ruben.getBody().getPosition().y );
+        animationHero = new AnimatedBox2DSprite(walkRightAnimation);
+        animationHero.setSize(hero.getWidth()*1.5f , hero.getHeight());
+        animationHero.setOrigin(animationHero.getWidth() / 2, animationHero.getHeight() / 1.9f);
+        animationHero.setPosition(hero.getBody().getPosition().x ,
+                hero.getBody().getPosition().y );
 
     }
 
@@ -149,35 +149,35 @@ public class ModelsAndViews {
 
     }
 
-    private void updateAnimationsRubentxu(Rubentxu ruben) {
-        dustParticles.setPosition(ruben.getBody().getPosition().x ,
-                ruben.getBody().getPosition().y - ruben.getHeight() / 2.2f);
-        if (ruben.isFacingLeft()) {
-            AnimationRuben.setAnimatedSprite(walkLeftAnimation);
+    private void updateAnimationsRubentxu(Hero hero) {
+        dustParticles.setPosition(hero.getBody().getPosition().x ,
+                hero.getBody().getPosition().y - hero.getHeight() / 2.2f);
+        if (hero.isFacingLeft()) {
+            animationHero.setAnimatedSprite(walkLeftAnimation);
         } else {
-            AnimationRuben.setAnimatedSprite(walkRightAnimation);
+            animationHero.setAnimatedSprite(walkRightAnimation);
         }
-        if (ruben.getState().equals(Rubentxu.State.IDLE)) {
+        if (hero.getState().equals(Hero.State.IDLE)) {
             dustParticles.allowCompletion();
-            if (walkRightAnimation.getTime() == 0 && walkLeftAnimation.getTime() == 0) AnimationRuben.stop();
+            if (walkRightAnimation.getTime() == 0 && walkLeftAnimation.getTime() == 0) animationHero.stop();
             timeIdle += Gdx.graphics.getDeltaTime();
             walkRightAnimation.setTime(0);
             walkLeftAnimation.setTime(0);
 
             if (timeIdle > 2) {
-                if (ruben.isFacingLeft()) {
-                    AnimationRuben.setAnimatedSprite(idleLeftAnimation);
+                if (hero.isFacingLeft()) {
+                    animationHero.setAnimatedSprite(idleLeftAnimation);
                 } else {
-                    AnimationRuben.setAnimatedSprite(idleRightAnimation);
+                    animationHero.setAnimatedSprite(idleRightAnimation);
                 }
             }
         }
 
-        if (ruben.getState().equals(Rubentxu.State.WALKING)) {
+        if (hero.getState().equals(Hero.State.WALKING)) {
 
             if (dustParticles.isComplete()) dustParticles.start();
             timeIdle = 0;
-            AnimationRuben.play();
+            animationHero.play();
             jumpRightAnimation.setTime(0);
             fallRightAnimation.setTime(0);
             jumpLeftAnimation.setTime(0);
@@ -187,35 +187,35 @@ public class ModelsAndViews {
             swimmingLeftAnimation.setTime(0);
             swimmingRightAnimation.setTime(0);
 
-            if (ruben.isFacingLeft()) {
-                AnimationRuben.setAnimatedSprite(walkLeftAnimation);
+            if (hero.isFacingLeft()) {
+                animationHero.setAnimatedSprite(walkLeftAnimation);
             } else {
-                AnimationRuben.setAnimatedSprite(walkRightAnimation);
+                animationHero.setAnimatedSprite(walkRightAnimation);
             }
-        } else if (ruben.getState().equals(Rubentxu.State.JUMPING)) {
+        } else if (hero.getState().equals(Hero.State.JUMPING)) {
             dustParticles.allowCompletion();
-            if (ruben.isFacingLeft()) {
-                AnimationRuben.setAnimatedSprite(jumpLeftAnimation);
+            if (hero.isFacingLeft()) {
+                animationHero.setAnimatedSprite(jumpLeftAnimation);
             } else {
-                AnimationRuben.setAnimatedSprite(jumpRightAnimation);
+                animationHero.setAnimatedSprite(jumpRightAnimation);
             }
-        } else if (ruben.getState().equals(Rubentxu.State.FALL)) {
+        } else if (hero.getState().equals(Hero.State.FALL)) {
             dustParticles.allowCompletion();
-            if (ruben.isFacingLeft()) {
-                AnimationRuben.setAnimatedSprite(fallLeftAnimation);
+            if (hero.isFacingLeft()) {
+                animationHero.setAnimatedSprite(fallLeftAnimation);
             } else {
-                AnimationRuben.setAnimatedSprite(fallRightAnimation);
+                animationHero.setAnimatedSprite(fallRightAnimation);
             }
-        }   else if (ruben.getState().equals(Rubentxu.State.SWIMMING)) {
-            if (ruben.isFacingLeft()) {
-                AnimationRuben.setAnimatedSprite(swimmingLeftAnimation);
+        }   else if (hero.getState().equals(Hero.State.SWIMMING)) {
+            if (hero.isFacingLeft()) {
+                animationHero.setAnimatedSprite(swimmingLeftAnimation);
             } else {
-                AnimationRuben.setAnimatedSprite(swimmingRightAnimation);
+                animationHero.setAnimatedSprite(swimmingRightAnimation);
             }
         }
 
-        AnimationRuben.setPosition(ruben.getBody().getPosition().x - AnimationRuben.getWidth() / 2,
-                ruben.getBody().getPosition().y - AnimationRuben.getHeight() / 2);
+        animationHero.setPosition(hero.getBody().getPosition().x - animationHero.getWidth() / 2,
+                hero.getBody().getPosition().y - animationHero.getHeight() / 2);
 
     }
 

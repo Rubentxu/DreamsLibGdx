@@ -11,7 +11,7 @@ import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import java.util.HashSet;
 
 
-public class Rubentxu extends Box2DPhysicsObject {
+public class Hero extends Box2DPhysicsObject {
 
 
     public enum State {
@@ -23,8 +23,8 @@ public class Rubentxu extends Box2DPhysicsObject {
 
 
     private HashSet<Fixture> grounContacts;
-    private Fixture rubenPhysicsFixture;
-    private Fixture rubenSensorFixture;
+    private Fixture heroPhysicsFixture;
+    private Fixture heroSensorFixture;
 
     // Status
     private boolean onGround = false;
@@ -32,18 +32,18 @@ public class Rubentxu extends Box2DPhysicsObject {
     private Boolean hurt;
     boolean facingLeft = true;
 
-    public Rubentxu(World physics) {
+    public Hero(World physics) {
         super("Heroe", GRUPOS.HEROES, physics);
         setGrounContacts(new HashSet<Fixture>());
     }
 
-    public Rubentxu(World physics, float x, float y, float width, float height) {
+    public Hero(World physics, float x, float y, float width, float height) {
         super("Heroe", GRUPOS.HEROES, physics, x, y, width, height, 0);
         setGrounContacts(new HashSet<Fixture>());
-        createRubenxu( x, y, width, height);
+        createHero(x, y, width, height);
     }
 
-    public void createRubenxu( float x, float y, float width, float height) {
+    public void createHero(float x, float y, float width, float height) {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.x = x;
@@ -56,16 +56,16 @@ public class Rubentxu extends Box2DPhysicsObject {
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width,height);
 
-        rubenPhysicsFixture = super.getBody().createFixture(poly,1);
-        rubenPhysicsFixture.setUserData(this);
+        heroPhysicsFixture = super.getBody().createFixture(poly,1);
+        heroPhysicsFixture.setUserData(this);
         poly.dispose();
 
         CircleShape circle = new CircleShape();
         circle.setRadius(width);
         circle.setPosition(new Vector2(0, -height*0.9f));
-        rubenSensorFixture = super.getBody().createFixture(circle, 0);
-        rubenSensorFixture.setSensor(true);
-        rubenSensorFixture.setUserData(this);
+        heroSensorFixture = super.getBody().createFixture(circle, 0);
+        heroSensorFixture.setSensor(true);
+        heroSensorFixture.setUserData(this);
         circle.dispose();
 
         super.getBody().setBullet(true);
@@ -110,11 +110,11 @@ public class Rubentxu extends Box2DPhysicsObject {
     }
 
     public Fixture getRubenPhysicsFixture() {
-        return rubenPhysicsFixture;
+        return heroPhysicsFixture;
     }
 
     public Fixture getRubenSensorFixture() {
-        return rubenSensorFixture;
+        return heroSensorFixture;
     }
 
     public boolean isGround() {

@@ -1,7 +1,7 @@
 package com.rubentxu.juegos.core.controladores;
 
+import com.rubentxu.juegos.core.managers.world.HeroManager;
 import com.rubentxu.juegos.core.managers.world.PlatformManager;
-import com.rubentxu.juegos.core.managers.world.RubentxuManager;
 import com.rubentxu.juegos.core.modelo.World;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,12 +12,12 @@ import static org.junit.Assert.assertTrue;
 public class WorldControllerUpdateTest {
 
 	WorldController worldController;
-	RubentxuManagerMock rubentxuMock;
+	HeroManagerMock rubentxuMock;
 	PlatformManagerMock platformMock;
 
 	@Before
 	public void setUp() throws Exception {
-		rubentxuMock = new RubentxuManagerMock();
+		rubentxuMock = new HeroManagerMock();
 		platformMock = new PlatformManagerMock();
 		worldController = new WorldController(new World());
 
@@ -39,9 +39,9 @@ public class WorldControllerUpdateTest {
 
 	}
 
-	class RubentxuManagerMock extends RubentxuManager {
+	class HeroManagerMock extends HeroManager {
 
-		public RubentxuManagerMock() {
+		public HeroManagerMock() {
 			super(null);
 		}
 

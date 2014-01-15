@@ -11,7 +11,7 @@ public class PlatformManagerTest {
     private Fixture fixture;
     private MovingPlatform m1;
     private MovingPlatform m2;
-    private static Rubentxu r;
+    private static Hero r;
     private WorldManifold manifold;
 
 
@@ -64,8 +64,8 @@ public class PlatformManagerTest {
 
         m2= new MovingPlatform("M2", PLATAFORMAS_MOVILES,body2,
                 5,-1,8,5,4 );
-        r = new Rubentxu(physic);
-        r.createRubenxu(0, 1.2f, 0.7f, 1.8f);
+        r = new Hero(physic);
+        r.createHero(0, 1.2f, 0.7f, 1.8f);
         r.setVelocity(new Vector2(1.2F,1.5F));
         fixture.setUserData(m1);
         manifold.getPoints()[0].x=13f;

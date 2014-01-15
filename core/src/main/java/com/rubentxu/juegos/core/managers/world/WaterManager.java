@@ -13,7 +13,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
@@ -35,7 +35,7 @@ public class WaterManager extends AbstractWorldManager {
         Body b = getSubmergedBody(contact).getBody();
         w.addBody(b);
         if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPOS.HEROES))
-            ((Rubentxu)b.getUserData()).setState(Rubentxu.State.SWIMMING);
+            ((Hero)b.getUserData()).setState(Hero.State.SWIMMING);
 
     }
 
@@ -178,4 +178,8 @@ public class WaterManager extends AbstractWorldManager {
         return true;
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }

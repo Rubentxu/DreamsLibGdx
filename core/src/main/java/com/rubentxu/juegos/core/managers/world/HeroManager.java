@@ -10,27 +10,27 @@ import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
-import com.rubentxu.juegos.core.modelo.Rubentxu;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 
-public class RubentxuManager extends AbstractWorldManager {
+public class HeroManager extends AbstractWorldManager {
 
-    private Rubentxu ruben;
+    private Hero hero;
     private float stillTime = 0;
     private float hurtTime = 0;
 
-    public RubentxuManager(World world) {
+    public HeroManager(World world) {
         super(world);
-        this.ruben = world.getRuben();
+        this.hero = world.getHero();
     }
 
     public void update(float delta) {
         hurtTime += delta;
-        Vector2 vel = ruben.getVelocity();
-        Vector2 pos = ruben.getBody().getPosition();
-        if(!ruben.getState().equals(Rubentxu.State.HURT) && hurtTime>1.5f){
+        Vector2 vel = hero.getVelocity();
+        Vector2 pos = hero.getBody().getPosition();
+        if(!hero.getState().equals(Hero.State.HURT) && hurtTime>1.5f){
             processVelocity(vel, delta);
             processContactGround();
             applyImpulses(vel, pos);
@@ -45,61 +45,61 @@ public class RubentxuManager extends AbstractWorldManager {
 
         if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT)) {
             stillTime += delta;
-            ruben.getBody().setLinearVelocity(ruben.getVelocity().x * 0.9f, vel.y);
+            hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
         } else {
             setStillTime(0);
         }
 
-        ruben.velocityLimit();
+        hero.velocityLimit();
     }
 
     public void applyImpulses(Vector2 vel, Vector2 pos) {
         // apply left impulse, but only if max velocity is not reached yet
-        if (WorldController.keys.get(Keys.LEFT) && vel.x > -ruben.MAX_VELOCITY) {
-            ruben.getBody().applyLinearImpulse(-3f, 0f, pos.x, pos.y, true);
+        if (WorldController.keys.get(Keys.LEFT) && vel.x > -hero.MAX_VELOCITY) {
+            hero.getBody().applyLinearImpulse(-3f, 0f, pos.x, pos.y, true);
         }
 
         // apply right impulse, but only if max velocity is not reached yet
-        if (WorldController.keys.get(Keys.RIGHT) && vel.x < ruben.MAX_VELOCITY) {
-            ruben.getBody().applyLinearImpulse(3f, 0, pos.x, pos.y, true);
+        if (WorldController.keys.get(Keys.RIGHT) && vel.x < hero.MAX_VELOCITY) {
+            hero.getBody().applyLinearImpulse(3f, 0, pos.x, pos.y, true);
         }
 
         // jump, but only when grounded
         if (WorldController.keys.get(Keys.JUMP)) {
-            if (ruben.isGround()) {
-                ruben.setState(Rubentxu.State.JUMPING);
-                ruben.getBody().setLinearVelocity(vel.x, 0);
-                ruben.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-                ruben.getBody().applyLinearImpulse(0, ruben.JUMP_FORCE, pos.x, pos.y, true);
-            }else if(!ruben.getState().equals(Rubentxu.State.JUMPING)) {
-                ruben.setState(Rubentxu.State.FALL);
+            if (hero.isGround()) {
+                hero.setState(Hero.State.JUMPING);
+                hero.getBody().setLinearVelocity(vel.x, 0);
+                hero.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
+                hero.getBody().applyLinearImpulse(0, hero.JUMP_FORCE, pos.x, pos.y, true);
+            }else if(!hero.getState().equals(Hero.State.JUMPING)) {
+                hero.setState(Hero.State.FALL);
             }
         }
     }
 
     public void processContactGround() {
 
-        if (!ruben.isGround()) {
-            ruben.getRubenPhysicsFixture().setFriction(0f);
-            ruben.getRubenSensorFixture().setFriction(0f);
-            if (ruben.getVelocity().y <= 0 || !ruben.getState().equals(Rubentxu.State.JUMPING))
-                ruben.setState(Rubentxu.State.FALL);
+        if (!hero.isGround()) {
+            hero.getRubenPhysicsFixture().setFriction(0f);
+            hero.getRubenSensorFixture().setFriction(0f);
+            if (hero.getVelocity().y <= 0 || !hero.getState().equals(Hero.State.JUMPING))
+                hero.setState(Hero.State.FALL);
         } else {
-            if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.IDLE);
+            if(!hero.getState().equals(Hero.State.SWIMMING)) hero.setState(Hero.State.IDLE);
             if (WorldController.keys.get(Keys.LEFT)  ) {
-                ruben.setFacingLeft(true);
-                if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.WALKING);
+                hero.setFacingLeft(true);
+                if(!hero.getState().equals(Hero.State.SWIMMING)) hero.setState(Hero.State.WALKING);
             } else if (WorldController.keys.get(Keys.RIGHT) ) {
-                ruben.setFacingLeft(false);
-                if(!ruben.getState().equals(Rubentxu.State.SWIMMING)) ruben.setState(Rubentxu.State.WALKING);
+                hero.setFacingLeft(false);
+                if(!hero.getState().equals(Hero.State.SWIMMING)) hero.setState(Hero.State.WALKING);
             }
             if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 1
-                    && !ruben.getState().equals(Rubentxu.State.HURT)) {
-                ruben.getRubenPhysicsFixture().setFriction(100f);
-                ruben.getRubenSensorFixture().setFriction(100f);
+                    && !hero.getState().equals(Hero.State.HURT)) {
+                hero.getRubenPhysicsFixture().setFriction(100f);
+                hero.getRubenSensorFixture().setFriction(100f);
             } else {
-                ruben.getRubenPhysicsFixture().setFriction(0.2f);
-                ruben.getRubenSensorFixture().setFriction(0.2f);
+                hero.getRubenPhysicsFixture().setFriction(0.2f);
+                hero.getRubenSensorFixture().setFriction(0.2f);
             }
         }
     }
@@ -117,21 +117,21 @@ public class RubentxuManager extends AbstractWorldManager {
         }
     }
 
-    public Rubentxu getRuben(Contact contact) {
+    public Hero getRuben(Contact contact) {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)) {
-            return (Rubentxu) box2dPhysicsA;
+            return (Hero) box2dPhysicsA;
         } else {
-            return (Rubentxu) box2dPhysicsB;
+            return (Hero) box2dPhysicsB;
         }
     }
 
     public Boolean existSensor (Contact contact) {
 
-        if (contact.getFixtureA() == ruben.getRubenSensorFixture() ||
-                contact.getFixtureB() == ruben.getRubenSensorFixture()){
+        if (contact.getFixtureA() == hero.getRubenSensorFixture() ||
+                contact.getFixtureB() == hero.getRubenSensorFixture()){
             return true;
         }
 
@@ -143,34 +143,34 @@ public class RubentxuManager extends AbstractWorldManager {
     @Override
     public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
-        if (contact.getFixtureA() == ruben.getRubenSensorFixture()){
-            ruben.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
+        if (contact.getFixtureA() == hero.getRubenSensorFixture()){
+            hero.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
         }
 
 
-        if (contact.getFixtureB() == ruben.getRubenSensorFixture()) {
-            ruben.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
+        if (contact.getFixtureB() == hero.getRubenSensorFixture()) {
+            hero.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
         }
 
 
-        if (ruben.getGrounContacts().size() > 0) {
-            ruben.setGround(true);
+        if (hero.getGrounContacts().size() > 0) {
+            hero.setGround(true);
             contact.setEnabled(true);
 
            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
         if(getEnemy(contact)!=null) {
-            ruben.setState(Rubentxu.State.HURT);
+            hero.setState(Hero.State.HURT);
             hurtTime=0;
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
-            if (points[0].x < ruben.getBody().getPosition().x ) {
+            if (points[0].x < hero.getBody().getPosition().x ) {
                 force=new Vector2(9,15);
             }else {
                 force=new Vector2(-9,15);
             }
             System.out.println("Fuerza colision Enemigo: "+force +" Sensor no exist");
-            ruben.getBody().applyLinearImpulse(force,ruben.getBody().getWorldCenter(),true);
+            hero.getBody().applyLinearImpulse(force,hero.getBody().getWorldCenter(),true);
 
         }
 
@@ -181,20 +181,20 @@ public class RubentxuManager extends AbstractWorldManager {
     public void handleEndContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "End contact");
 
-        if (contact.getFixtureA() == ruben.getRubenSensorFixture())
-            ruben.getGrounContacts().remove(contact.getFixtureB());//A is foot so B is ground
+        if (contact.getFixtureA() == hero.getRubenSensorFixture())
+            hero.getGrounContacts().remove(contact.getFixtureB());//A is foot so B is ground
 
-        if (contact.getFixtureB() == ruben.getRubenSensorFixture())
-            ruben.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
+        if (contact.getFixtureB() == hero.getRubenSensorFixture())
+            hero.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
 
 
-        if (ruben.getGrounContacts().size() == 0) {
-            ruben.setGround(false);
+        if (hero.getGrounContacts().size() == 0) {
+            hero.setGround(false);
 
             //Gdx.app.log(DreamsGame.LOG, "OnGroun False");
         }
         if(getEnemy(contact)!=null) {
-            ruben.setState(Rubentxu.State.IDLE);
+            hero.setState(Hero.State.IDLE);
         }
     }
 
@@ -217,5 +217,10 @@ public class RubentxuManager extends AbstractWorldManager {
 
     public void setStillTime(int stillTime) {
         this.stillTime = stillTime;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 }

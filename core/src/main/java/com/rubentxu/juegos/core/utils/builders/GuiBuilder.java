@@ -38,6 +38,19 @@ public class GuiBuilder {
                 System.out.println("Event "+event.getType());
                 controller.leftReleased();
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                System.out.println("Event "+event.getType());
+                controller.leftPressed();
+                controller.rightReleased();
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                System.out.println("Event "+event.getType());
+                controller.leftReleased();
+            }
         });
 
 
@@ -58,6 +71,19 @@ public class GuiBuilder {
                 System.out.println("Event "+event.getType());
                 controller.rightReleased();
             }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                System.out.println("Event "+event.getType());
+                controller.rightPressed();
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                System.out.println("Event "+event.getType());
+                controller.rightReleased();
+                controller.leftReleased();
+            }
         });
 
         ImageButton btnUP = new ImageButton(styles.skin, "buttonUp");
@@ -73,6 +99,18 @@ public class GuiBuilder {
 
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("Event "+event.getType());
+                controller.jumpReleased();
+            }
+
+            @Override
+            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                System.out.println("Event "+event.getType());
+                controller.jumpPressed();
+            }
+
+            @Override
+            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                 System.out.println("Event "+event.getType());
                 controller.jumpReleased();
             }
