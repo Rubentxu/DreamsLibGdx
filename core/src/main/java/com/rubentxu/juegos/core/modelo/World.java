@@ -39,7 +39,6 @@ public class World implements Disposable{
         System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
         background=(Texture) Assets.getInstance().get(Assets.getInstance().GAME_BACKGROUND);
-        parser=null;
     }
 
     public void destroyFlaggedEntities(){
@@ -109,6 +108,8 @@ public class World implements Disposable{
     public Box2DMapObjectParser getParser() {
         return parser;
     }
+
+    public void removeParser(){parser=null;}
 
     public HashSet<Platform> getPlatforms() {
         return platforms;

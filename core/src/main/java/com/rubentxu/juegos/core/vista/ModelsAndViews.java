@@ -7,12 +7,15 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
 
@@ -44,11 +47,20 @@ public class ModelsAndViews {
     private AnimatedSprite swimmingRightAnimation;
     private AnimatedSprite swimmingLeftAnimation;
 
+    /**
+     * Stats Profile
+     */
+    private Table Score;
+
 
     private Map<Box2DPhysicsObject,Sprite> modelsAndViews= new HashMap<Box2DPhysicsObject,Sprite>();
     private ParticleEffect dustParticles;
     private float timeIdle;
     private Hero hero;
+
+    public ModelsAndViews(Stage stage) {
+
+    }
 
     public void render(SpriteBatch spriteBatch){
         Iterator it = modelsAndViews.entrySet().iterator();
@@ -92,6 +104,8 @@ public class ModelsAndViews {
     }
 
     public void addModelAndBuildView(Hero hero){
+        GuiBuilder.buildStats()
+
         TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
         this.hero=hero;

@@ -1,13 +1,18 @@
 package com.rubentxu.juegos.core.utils.builders;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.modelo.Profile;
 import com.rubentxu.juegos.core.servicios.Styles;
@@ -29,6 +34,7 @@ public class GuiBuilder {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Event "+event.getType());
+                super.touchDown(event,x,y,pointer,button);
                 controller.leftPressed();
                 controller.rightReleased();
                 return true;
@@ -37,20 +43,20 @@ public class GuiBuilder {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Event "+event.getType());
+                super.touchUp(event,x,y,pointer,button);
                 controller.leftReleased();
             }
 
             @Override
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                System.out.println("Event "+event.getType());
-                controller.leftPressed();
-                controller.rightReleased();
-            }
-
-            @Override
-            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                System.out.println("Event "+event.getType());
-                controller.leftReleased();
+            public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                System.out.println("Event- "+event.getType());
+                super.touchDragged(event,x,y,pointer);
+                if(isOver()){
+                    controller.rightReleased();
+                    controller.leftPressed();
+                }else {
+                    controller.leftReleased();
+                }
             }
         });
 
@@ -62,6 +68,7 @@ public class GuiBuilder {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Event "+event.getType());
+                super.touchDown(event,x,y,pointer,button);
                 controller.leftReleased();
                 controller.rightPressed();
                 return true;
@@ -70,20 +77,20 @@ public class GuiBuilder {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Event "+event.getType());
+                super.touchUp(event,x,y,pointer,button);
                 controller.rightReleased();
             }
 
             @Override
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                System.out.println("Event "+event.getType());
-                controller.rightPressed();
-            }
-
-            @Override
-            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                System.out.println("Event "+event.getType());
-                controller.rightReleased();
-                controller.leftReleased();
+            public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                System.out.println("Event- "+event.getType());
+                super.touchDragged(event, x, y, pointer);
+                if(isOver()){
+                    controller.rightPressed();
+                    controller.leftReleased();
+                }else {
+                    controller.rightReleased();
+                }
             }
         });
 
@@ -94,6 +101,7 @@ public class GuiBuilder {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Event "+event.getType());
+                super.touchDown(event,x,y,pointer,button);
                 controller.jumpPressed();
                 return true;
             }
@@ -101,19 +109,18 @@ public class GuiBuilder {
             @Override
             public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
                 System.out.println("Event "+event.getType());
+                super.touchUp(event,x,y,pointer,button);
                 controller.jumpReleased();
             }
-
             @Override
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                System.out.println("Event "+event.getType());
-                controller.jumpPressed();
-            }
-
-            @Override
-            public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-                System.out.println("Event "+event.getType());
-                controller.jumpReleased();
+            public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                System.out.println("Event- "+event.getType());
+                super.touchDragged(event, x, y, pointer);
+                if(isOver()){
+                    controller.jumpPressed();
+                }else {
+                    controller.jumpReleased();
+                }
             }
         });
         tableControlPad.pack();
@@ -158,7 +165,28 @@ public class GuiBuilder {
     }
 
     public static final Actor buildStats(Stage stage, Styles styles, Profile profile) {
-        return    null;
+
+        Table tableProfile = new Table();
+        tableProfile.left().top();
+        tableProfile.setBackground((Drawable) styles.skin.get("debug", NinePatchDrawable.class));
+
+        tableProfile.row().height(stage.getHeight() /7).pad(stage.getHeight()/100* 5);
+        Image live = new Image( styles.skin, "btnMenu");
+        live.setName("live1");
+        Image live2 = new Image( styles.skin, "btnMenu");
+        live2.setName("live2");
+        Image live3 = new Image( styles.skin, "btnMenu");
+        live3.setName("live3");
+        Label labelScore = new Label("Puntuacio: ", styles.skin, "default", Color.ORANGE);
+        labelScore.setName("labelScore");
+        Label score = new Label("000", styles.skin, "default", Color.ORANGE);
+        labelScore.setName("labelScore");
+        tableProfile.add(live);
+        tableProfile.add(live2);
+        tableProfile.add(live3);
+
+
+        return tableProfile;
     }
 
 }

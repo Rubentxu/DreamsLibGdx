@@ -41,12 +41,13 @@ public class WorldRenderer {
     private ParallaxBackground background;
 
 
-    public WorldRenderer(final World world, boolean debug) {
-        modelsAndViews=new ModelsAndViews();
+    public WorldRenderer(final World world,Stage stage,boolean debug) {
+        modelsAndViews=new ModelsAndViews(stage);
 
         this.world = world;
         debugRenderer = new Box2DDebugRenderer();
         renderer = new OrthogonalTiledMapRenderer(world.getMap(), world.getParser().getUnitScale());
+        world.removeParser();
         spriteBatch = (SpriteBatch) renderer.getSpriteBatch();
         cam = new OrthographicCamera();
         loadTextures();
@@ -134,7 +135,6 @@ public class WorldRenderer {
 
     public void dispose() {
         renderer.dispose();
-        stage.dispose();
     }
 
     public OrthographicCamera getCam() {

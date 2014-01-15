@@ -140,7 +140,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
     public void hurt() {
         hurt = true;
-
     }
 
     public Profile getProfile() {

@@ -25,7 +25,7 @@ public class GameScreen extends BaseScreen {
         world = new World();
         controller = new WorldController(world);
         world.getPhysics().setContactListener(controller);
-        renderer = new WorldRenderer(world, true);
+        renderer = new WorldRenderer(world,stage, true);
 
     }
 
