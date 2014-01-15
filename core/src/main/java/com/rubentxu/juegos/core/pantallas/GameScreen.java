@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Stack;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.inputs.GameInputs;
@@ -47,11 +48,16 @@ public class GameScreen extends BaseScreen {
         multiplexer.addProcessor(gameInputs);
         Gdx.input.setInputProcessor(multiplexer);
         renderer.setSize(width, height);
+        Stack stack= new Stack();
+
         if(game.getPreferencesManager().isTouchPadEnabled()){
-            GuiBuilder.buildTouchPad(renderer.getStage(), styles, controller);
+            stack.addActor(GuiBuilder.buildTouchPad(stage, styles, controller));
         } else {
-            GuiBuilder.buildPadButtons(renderer.getStage(), styles, controller);
+            stack.addActor(GuiBuilder.buildPadButtons(stage, styles, controller));
         }
+        stack.addActor(GuiBuilder.buildStats(stage, styles, world.getHero().getProfile()));
+
+        stage.addActor(stack);
     }
 
     @Override
@@ -72,8 +78,8 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void dispose() {
+        super.dispose();
         Gdx.input.setInputProcessor(null);
-        assets.dispose();
         world.dispose();
         renderer.dispose();
         controller.dispose();

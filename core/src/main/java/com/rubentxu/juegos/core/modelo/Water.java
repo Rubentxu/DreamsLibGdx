@@ -3,10 +3,11 @@ package com.rubentxu.juegos.core.modelo;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
-public class Water extends Box2DPhysicsObject {
+public class Water extends Box2DPhysicsObject implements Disposable{
 
     public Array<Body> m_bodyList;
 
@@ -97,4 +98,9 @@ public class Water extends Box2DPhysicsObject {
     }
 
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        m_bodyList=null;
+    }
 }

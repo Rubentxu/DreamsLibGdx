@@ -13,6 +13,7 @@ public class Profile implements Serializable {
     private int lives;
 
     public Profile() {
+        currentLevelId=
         credits = 0;
         lives=3;
         highScores = new HashMap<Integer, Integer>();

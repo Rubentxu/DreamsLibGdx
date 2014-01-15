@@ -15,7 +15,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
-    protected final Stage stage;
+    protected Stage stage;
     protected Assets assets;
     protected Styles styles;
     protected Table mainTable;
@@ -82,5 +82,10 @@ public abstract class BaseScreen implements Screen {
         Gdx.app.log(Constants.LOG, "Disposing screen: " + getName());
         stage.dispose();
         assets.dispose();
+        styles.dispose();
+        mainTable=null;
+        stage=null;
+        assets=null;
+        styles=null;
     }
 }

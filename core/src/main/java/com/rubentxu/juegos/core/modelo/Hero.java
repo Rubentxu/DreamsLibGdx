@@ -6,13 +6,13 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 
 import java.util.HashSet;
 
 
-public class Hero extends Box2DPhysicsObject {
-
+public class Hero extends Box2DPhysicsObject implements Disposable {
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, HURT
@@ -31,6 +31,8 @@ public class Hero extends Box2DPhysicsObject {
     private State state = State.IDLE;
     private Boolean hurt;
     boolean facingLeft = true;
+
+    private Profile profile;
 
     public Hero(World physics) {
         super("Heroe", GRUPOS.HEROES, physics);
@@ -69,6 +71,8 @@ public class Hero extends Box2DPhysicsObject {
         circle.dispose();
 
         super.getBody().setBullet(true);
+
+        setProfile(new Profile());
 
     }
 
@@ -138,6 +142,15 @@ public class Hero extends Box2DPhysicsObject {
         hurt = true;
 
     }
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
+
     @Override
     public String toString() {
         return
@@ -163,6 +176,15 @@ public class Hero extends Box2DPhysicsObject {
                 "\nWidth=" +getWidth()+
                 "\nHeight=" + getHeight()+
                 "\nWorldCenter=" + getBody().getWorldCenter().toString();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        grounContacts=null;
+        heroPhysicsFixture=null;
+        heroSensorFixture=null;
+        profile=null;
     }
 }
 

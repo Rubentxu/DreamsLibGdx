@@ -3,12 +3,13 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Path;
 
 import java.util.HashSet;
 
-public class MovingPlatform extends Platform{
+public class MovingPlatform extends Platform implements Disposable{
 
     private  Vector2 pVelocity,start;
 
@@ -85,4 +86,12 @@ public class MovingPlatform extends Platform{
     }
 
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        pVelocity=null;
+        start=null;
+        passengers=null;
+        path=null;
+    }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Path;
 
@@ -12,7 +13,11 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class Enemy extends Box2DPhysicsObject {
+public class Enemy extends Box2DPhysicsObject implements Disposable{
+
+    public enum State {
+        IDLE, WALKING, JUMPING, DYING, FALL
+    }
 
     public final static float MAX_VELOCITY = 4f;
     public final static float JUMP_FORCE = 14.5f;
@@ -148,9 +153,16 @@ public class Enemy extends Box2DPhysicsObject {
                         "\nWorldCenter=" + getBody().getWorldCenter().toString();
     }
 
-    public enum State {
-        IDLE, WALKING, JUMPING, DYING, FALL
+    @Override
+    public void dispose() {
+       super.dispose();
+       grounContacts=null;
+       enemyPhysicsFixture=null;
+       enemySensorFixture=null;
+       path=null;
     }
+
+
 }
 
 

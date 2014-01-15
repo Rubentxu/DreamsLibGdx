@@ -9,10 +9,11 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.pantallas.BaseScreen;
 
-public class Assets extends AssetManager{
+public class Assets extends AssetManager implements Disposable{
 
     private static Assets instance=new Assets();
 
@@ -73,7 +74,6 @@ public class Assets extends AssetManager{
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.load(MAP_DEFAULT, TiledMap.class);
 
-
         this.finishLoading();
     }
 
@@ -82,8 +82,10 @@ public class Assets extends AssetManager{
         this.finishLoading();
     }
 
+    @Override
 	public void dispose() {
         super.dispose();
+        instance=null;
 	}
 
 }

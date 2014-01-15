@@ -5,11 +5,21 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
-public class Box2DPhysicsObject implements IBox2DPhysicsObject {
+public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable{
 
+
+    @Override
+    public void dispose() {
+        bodyDef=null;
+        body=null;
+        fixtureDef=null;
+        fixture=null;
+        grupo=null;
+    }
 
     public static enum GRUPOS {
         HEROES, ENEMIGOS, PLATAFORMAS, PLATAFORMAS_MOVILES,

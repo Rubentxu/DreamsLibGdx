@@ -9,12 +9,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.modelo.Profile;
 import com.rubentxu.juegos.core.servicios.Styles;
 
 
 public class GuiBuilder {
 
-    public static final void buildPadButtons(Stage stage, Styles styles, final WorldController controller) {
+    public static final Actor buildPadButtons(Stage stage, Styles styles, final WorldController controller) {
         stage.clear();
         Table tableControlPad = new Table();
         tableControlPad.left().bottom();
@@ -117,13 +118,12 @@ public class GuiBuilder {
         });
         tableControlPad.pack();
 
-
-
-        stage.addActor(tableControlPad);
+        return tableControlPad;
 
     }
 
-    public static final void buildTouchPad(Stage stage, Styles styles, final WorldController controller) {
+
+    public static final Actor buildTouchPad(Stage stage, Styles styles, final WorldController controller) {
         stage.clear();
         Touchpad touchpad = new Touchpad(10, styles.skin);
         touchpad.setBounds(15, 15, stage.getWidth() / 6, stage.getWidth() / 6);
@@ -154,8 +154,11 @@ public class GuiBuilder {
             }
         });
 
-        stage.addActor(touchpad);
-
-
+        return touchpad;
     }
+
+    public static final Actor buildStats(Stage stage, Styles styles, Profile profile) {
+        return    null;
+    }
+
 }

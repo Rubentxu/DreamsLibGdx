@@ -24,4 +24,9 @@ public class Coin  extends Item {
         return TYPE.COIN;
     }
 
+    @Override
+    public void dispose(){
+        super.dispose();
+    }
+
 }

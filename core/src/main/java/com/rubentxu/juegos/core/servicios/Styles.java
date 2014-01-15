@@ -14,8 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Disposable;
 
-public class Styles {
+public class Styles implements Disposable{
         public BitmapFont font;
         public BitmapFont font2;
         public Skin skin;
@@ -97,5 +98,15 @@ public class Styles {
         skin.add("default", touchpadStyle);
         skin.add("default",checkBoxStyle);
         skin.add("default-horizontal",sliderStyle);
+    }
+
+    @Override
+    public void dispose() {
+        skin.dispose();
+        font.dispose();
+        font2.dispose();
+        skin=null;
+        font=null;
+        font2=null;
     }
 }
