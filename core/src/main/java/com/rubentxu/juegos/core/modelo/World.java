@@ -54,7 +54,8 @@ public class World implements Disposable{
                     case PLATAFORMAS_MOVILES:
                         movingPlatforms.remove(data);
                         break;
-                    case MONEDAS:
+                    case ITEMS:
+                        items.remove(data);
                         break;
 
                 }

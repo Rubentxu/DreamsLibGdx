@@ -50,7 +50,7 @@ public class GuiBuilder {
             public void touchDragged (InputEvent event, float x, float y, int pointer) {
                 System.out.println("Event- "+event.getType());
                 super.touchDragged(event,x,y,pointer);
-                if(isOver()){
+                if(isOver(event.getListenerActor(), x, y)){
                     controller.rightReleased();
                     controller.leftPressed();
                 }else {
@@ -84,7 +84,7 @@ public class GuiBuilder {
             public void touchDragged (InputEvent event, float x, float y, int pointer) {
                 System.out.println("Event- "+event.getType());
                 super.touchDragged(event, x, y, pointer);
-                if(isOver()){
+                if(isOver(event.getListenerActor(), x, y)){
                     controller.rightPressed();
                     controller.leftReleased();
                 }else {
@@ -115,7 +115,7 @@ public class GuiBuilder {
             public void touchDragged (InputEvent event, float x, float y, int pointer) {
                 System.out.println("Event- "+event.getType());
                 super.touchDragged(event, x, y, pointer);
-                if(isOver()){
+                if(isOver(event.getListenerActor(), x, y)){
                     controller.jumpPressed();
                 }else {
                     controller.jumpReleased();
