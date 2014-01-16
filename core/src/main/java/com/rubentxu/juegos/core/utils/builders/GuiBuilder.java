@@ -3,7 +3,6 @@ package com.rubentxu.juegos.core.utils.builders;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,21 +12,21 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.modelo.Profile;
 import com.rubentxu.juegos.core.servicios.Styles;
 
 
 public class GuiBuilder {
 
-    public static final Actor buildPadButtons(Stage stage, Styles styles, final WorldController controller) {
-        stage.clear();
-        Table tableControlPad = new Table();
-        tableControlPad.left().bottom();
+    public static final Table buildPadButtons(float width,float height, Styles styles, final WorldController controller) {
 
-        tableControlPad.row().height(stage.getHeight() /6);
+        Table tableControlPad = new Table();
+
+
+        tableControlPad.row().height(height /6);
         ImageButton btnUpLeft = new ImageButton( styles.skin, "buttonLeft");
-        tableControlPad.add(btnUpLeft).width(stage.getWidth() / 5).expandY().fill();
+        tableControlPad.add(btnUpLeft).width(width / 5).expandY().fill();
 
         btnUpLeft.addListener(new ClickListener() {
 
@@ -62,7 +61,7 @@ public class GuiBuilder {
 
 
         ImageButton btnRight = new ImageButton(styles.skin, "buttonRight");
-        tableControlPad.add(btnRight).width(stage.getWidth() / 5).expandY().fill().padRight((stage.getWidth() / 5)*2);
+        tableControlPad.add(btnRight).width(width / 5).expandY().fill().padRight((width / 5)*2);
         btnRight.addListener(new ClickListener() {
 
             @Override
@@ -95,7 +94,7 @@ public class GuiBuilder {
         });
 
         ImageButton btnUP = new ImageButton(styles.skin, "buttonUp");
-        tableControlPad.add(btnUP).width(stage.getWidth() / 5).expandY().fill();
+        tableControlPad.add(btnUP).width(width / 5).expandY().fill();
         btnUP.addListener(new ClickListener() {
 
             @Override
@@ -123,17 +122,16 @@ public class GuiBuilder {
                 }
             }
         });
-        tableControlPad.pack();
 
+        tableControlPad.setBounds(0,0,width,height /6);
         return tableControlPad;
 
     }
 
 
-    public static final Actor buildTouchPad(Stage stage, Styles styles, final WorldController controller) {
-        stage.clear();
+    public static final Touchpad buildTouchPad(float width,float height, Styles styles, final WorldController controller) {
         Touchpad touchpad = new Touchpad(10, styles.skin);
-        touchpad.setBounds(15, 15, stage.getWidth() / 6, stage.getWidth() / 6);
+        touchpad.setBounds(15, 15, width / 6, width / 6);
 
         touchpad.addListener(new ChangeListener() {
             @Override
@@ -164,29 +162,30 @@ public class GuiBuilder {
         return touchpad;
     }
 
-    public static final Actor buildStats(Stage stage, Styles styles, Profile profile) {
+    public static final Table buildStats(float width,float height, Styles styles) {
 
         Table tableProfile = new Table();
-        tableProfile.left().top();
-        tableProfile.setBackground((Drawable) styles.skin.get("debug", NinePatchDrawable.class));
 
-        tableProfile.row().height(stage.getHeight() /7).pad(stage.getHeight()/100* 5);
-        Image live = new Image( styles.skin, "btnMenu");
-        live.setName("live1");
-        Image live2 = new Image( styles.skin, "btnMenu");
-        live2.setName("live2");
-        Image live3 = new Image( styles.skin, "btnMenu");
-        live3.setName("live3");
-        Label labelScore = new Label("Puntuacio: ", styles.skin, "default", Color.ORANGE);
-        labelScore.setName("labelScore");
+        tableProfile.setBackground((Drawable) styles.skin.get("debug", NinePatchDrawable.class));
+        tableProfile.row().setWidgetHeight(height / 7);
+        tableProfile.setHeight(height /7);
+        tableProfile.pad(height / 100 * 5);
+        Image live = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
+        live.setName(Constants.NAME_LIVES1);
+        Image live2 = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
+        live2.setName(Constants.NAME_LIVES2);
+        Image live3 = new Image(styles.skin.get("buttonLeft", NinePatchDrawable.class));
+        live3.setName(Constants.NAME_LIVES3);
+        Label labelScore = new Label("Puntuacion: ", styles.skin, "default", Color.ORANGE);
+        labelScore.setName(Constants.NAME_LABEL_SCORE);
         Label score = new Label("000", styles.skin, "default", Color.ORANGE);
-        labelScore.setName("labelScore");
+        score.setName(Constants.NAME_SCORE);
         tableProfile.add(live);
         tableProfile.add(live2);
         tableProfile.add(live3);
-
+        tableProfile.add(labelScore);
+        tableProfile.add(score);
 
         return tableProfile;
     }
-
 }

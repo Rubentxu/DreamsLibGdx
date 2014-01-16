@@ -5,19 +5,37 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
+import com.rubentxu.juegos.core.modelo.Hero;
+import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.Profile;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
 
 
 public class ItemsManager extends AbstractWorldManager {
 
+    private Profile profileHero;
 
     public ItemsManager(World world) {
         super(world);
+        profileHero=world.getHero().getProfile();
     }
 
     @Override
     public void handleBeginContact(Contact contact) {
-
+        if(getHero(contact)!=null) {
+            Item item= getItem(contact);
+            switch (item.getType()){
+                case COIN:
+                    profileHero.addCredits(item.getValue());
+                    break;
+                case POWERUP:
+                    break;
+                case KEY:
+                    break;
+            }
+        }
     }
 
     @Override
@@ -48,5 +66,31 @@ public class ItemsManager extends AbstractWorldManager {
     @Override
     public void dispose() {
 
+    }
+
+    public Hero getHero(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)) {
+            return (Hero) box2dPhysicsA;
+        } else if(box2dPhysicsB.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)){
+            return (Hero) box2dPhysicsB;}
+        else {
+            return null;
+        }
+    }
+
+    public Item getItem(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (box2dPhysicsA.getGrupo().equals(GRUPOS.ITEMS)) {
+            return (Item) box2dPhysicsA;
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPOS.ITEMS)){
+            return (Item) box2dPhysicsB;}
+        else {
+            return null;
+        }
     }
 }

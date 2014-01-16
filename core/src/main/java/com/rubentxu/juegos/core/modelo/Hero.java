@@ -113,11 +113,11 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         this.state = newState;
     }
 
-    public Fixture getRubenPhysicsFixture() {
+    public Fixture getHeroPhysicsFixture() {
         return heroPhysicsFixture;
     }
 
-    public Fixture getRubenSensorFixture() {
+    public Fixture getHeroSensorFixture() {
         return heroSensorFixture;
     }
 

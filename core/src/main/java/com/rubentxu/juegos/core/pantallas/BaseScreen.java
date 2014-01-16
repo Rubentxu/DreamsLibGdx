@@ -19,8 +19,13 @@ public abstract class BaseScreen implements Screen {
     protected Assets assets;
     protected Styles styles;
     protected Table mainTable;
-    protected float width, height;
+    protected float width;
+    protected float height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
+
+    public DreamsGame getGame() {
+        return game;
+    }
 
     public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, HIGHSCORES, CREDITS}
 

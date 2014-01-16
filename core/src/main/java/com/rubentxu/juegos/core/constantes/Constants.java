@@ -21,5 +21,12 @@ public class Constants {
     // Profile
     public static final String PROFILE_DATA_FILE = "data/profile.json";
 
+    //Name elements GUI STATS
+    public static final String NAME_LABEL_SCORE= "Puntuacion";
+    public static final String NAME_SCORE= "Score";
+    public static final String NAME_LIVES1= "Live1";
+    public static final String NAME_LIVES2= "Live2";
+    public static final String NAME_LIVES3= "Live3";
+
 
 }

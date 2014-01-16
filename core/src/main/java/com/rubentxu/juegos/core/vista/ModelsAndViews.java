@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.constantes.Constants;
@@ -15,7 +14,6 @@ import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.servicios.Assets;
-import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
 
@@ -24,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class ModelsAndViews {
+
 
     /**
      * Textures *
@@ -58,9 +57,6 @@ public class ModelsAndViews {
     private float timeIdle;
     private Hero hero;
 
-    public ModelsAndViews(Stage stage) {
-
-    }
 
     public void render(SpriteBatch spriteBatch){
         Iterator it = modelsAndViews.entrySet().iterator();
@@ -72,8 +68,6 @@ public class ModelsAndViews {
                     || box2DPhysicsObject.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)) updateModelPosition(box2DPhysicsObject,sprite);
 
             sprite.draw(spriteBatch);
-
-
 
         }
         updateAnimationsRubentxu(hero);
@@ -104,7 +98,7 @@ public class ModelsAndViews {
     }
 
     public void addModelAndBuildView(Hero hero){
-        GuiBuilder.buildStats()
+
 
         TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
@@ -235,5 +229,8 @@ public class ModelsAndViews {
 
     public Map<Box2DPhysicsObject, Sprite> getModelsAndViews() {
         return modelsAndViews;
+    }
+
+    public void resize() {
     }
 }

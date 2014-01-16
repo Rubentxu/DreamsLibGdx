@@ -8,14 +8,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
+import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.parallax.ParallaxBackground;
@@ -28,6 +27,8 @@ public class WorldRenderer {
      * for debug rendering *
      */
     Box2DDebugRenderer debugRenderer;
+    private final GameScreen gameScreen;
+
     private World world;
     private OrthographicCamera cam;
     private OrthogonalTiledMapRenderer renderer;
@@ -37,31 +38,32 @@ public class WorldRenderer {
     private float height;
 
     private ModelsAndViews modelsAndViews;
-    private Stage stage;
+
     private ParallaxBackground background;
 
 
-    public WorldRenderer(final World world,Stage stage,boolean debug) {
-        modelsAndViews=new ModelsAndViews(stage);
 
-        this.world = world;
+    public WorldRenderer(GameScreen gameScreen) {
+        this.gameScreen= gameScreen;
+        this.world = gameScreen.getWorld();
+
+        modelsAndViews=new ModelsAndViews();
+
         debugRenderer = new Box2DDebugRenderer();
         renderer = new OrthogonalTiledMapRenderer(world.getMap(), world.getParser().getUnitScale());
         world.removeParser();
         spriteBatch = (SpriteBatch) renderer.getSpriteBatch();
         cam = new OrthographicCamera();
         loadTextures();
-
     }
 
-    public void setSize(int w, int h) {
+    public void resize(int w, int h) {
         this.setWidth(w);
         this.setHeight(h);
-        stage.clear();
+
         cam.viewportWidth = Constants.VIEWPORT_WIDTH;
         cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
 
-        stage.setViewport(getWidth() ,getHeight() );
     }
 
     private void loadTextures() {
@@ -124,8 +126,7 @@ public class WorldRenderer {
         }
 
         spriteBatch.end();
-        stage.draw();
-        Table.drawDebug(stage);
+
         if (DreamsGame.DEBUG) {
             debugRenderer.render(world.getPhysics(), cam.combined);
 
@@ -155,14 +156,6 @@ public class WorldRenderer {
 
     public void setHeight(int height) {
         this.height = height;
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-
-    public Stage getStage() {
-        return stage;
     }
 
 

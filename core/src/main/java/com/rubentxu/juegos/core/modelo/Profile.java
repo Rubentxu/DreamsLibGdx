@@ -48,6 +48,10 @@ public class Profile implements Serializable {
         return credits;
     }
 
+    public void addCredits(int credits){
+        this.credits+=credits;
+    }
+
     public String getCreditsAsText() {
         return String.valueOf(credits);
     }

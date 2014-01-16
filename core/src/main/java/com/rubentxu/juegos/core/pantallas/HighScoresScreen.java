@@ -22,7 +22,7 @@ public class HighScoresScreen extends BaseScreen {
     public void resize(int width, int height) {
 
         super.resize(width, height);
-        Profile profile = game.getProfileManager().retrieveProfile();
+        Profile profile = getGame().getProfileManager().retrieveProfile();
         Gdx.input.setInputProcessor(stage);
 
         mainTable.setFillParent(true);
@@ -54,7 +54,7 @@ public class HighScoresScreen extends BaseScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                game.setScreen(game.menuScreen);
+                getGame().setScreen(getGame().menuScreen);
             }
         });
         backButton.pad(20);

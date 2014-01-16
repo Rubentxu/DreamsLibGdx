@@ -47,12 +47,12 @@ public class OptionScreen extends BaseScreen {
 
         final CheckBox musicCheckbox = new CheckBox(" Music", styles.skin);
         musicCheckbox.align(Align.left);
-        musicCheckbox.setChecked(game.getPreferencesManager().isMusicEnabled());
+        musicCheckbox.setChecked(getGame().getPreferencesManager().isMusicEnabled());
         musicCheckbox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
-                game.getPreferencesManager().setMusicEnabled(enabled);
+                getGame().getPreferencesManager().setMusicEnabled(enabled);
             }
         });
         mainTable.add(musicCheckbox);
@@ -60,25 +60,25 @@ public class OptionScreen extends BaseScreen {
 
         final CheckBox touchPadCheckbox = new CheckBox(" TouchPad Control", styles.skin);
         touchPadCheckbox.align(Align.left);
-        touchPadCheckbox.setChecked(game.getPreferencesManager().isTouchPadEnabled());
+        touchPadCheckbox.setChecked(getGame().getPreferencesManager().isTouchPadEnabled());
         touchPadCheckbox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = touchPadCheckbox.isChecked();
-                game.getPreferencesManager().setTouchPadEnabled(enabled);
+                getGame().getPreferencesManager().setTouchPadEnabled(enabled);
             }
         });
         mainTable.add(touchPadCheckbox);
         mainTable.row();
 
         Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, styles.skin);
-        volumeSlider.setValue(game.getPreferencesManager().getVolume());
+        volumeSlider.setValue(getGame().getPreferencesManager().getVolume());
         volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Slider slider = (Slider) actor;
                 float value = slider.getValue();
-                game.getPreferencesManager().setVolume(value);
+                getGame().getPreferencesManager().setVolume(value);
                 updateVolumeLabel();
             }
 
@@ -95,7 +95,7 @@ public class OptionScreen extends BaseScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                game.setScreen(DreamsGame.menuScreen);
+                getGame().setScreen(DreamsGame.menuScreen);
             }
         });
 
@@ -106,7 +106,7 @@ public class OptionScreen extends BaseScreen {
     }
 
     private void updateVolumeLabel() {
-        float volume = (game.getPreferencesManager().getVolume() * 100);
+        float volume = (getGame().getPreferencesManager().getVolume() * 100);
         volumeValue.setText(Float.toString(volume));
     }
 

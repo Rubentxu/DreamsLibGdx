@@ -80,8 +80,8 @@ public class HeroManager extends AbstractWorldManager {
     public void processContactGround() {
 
         if (!hero.isGround()) {
-            hero.getRubenPhysicsFixture().setFriction(0f);
-            hero.getRubenSensorFixture().setFriction(0f);
+            hero.getHeroPhysicsFixture().setFriction(0f);
+            hero.getHeroSensorFixture().setFriction(0f);
             if (hero.getVelocity().y <= 0 || !hero.getState().equals(Hero.State.JUMPING))
                 hero.setState(Hero.State.FALL);
         } else {
@@ -95,11 +95,11 @@ public class HeroManager extends AbstractWorldManager {
             }
             if (!WorldController.keys.get(Keys.LEFT) && !WorldController.keys.get(Keys.RIGHT) && stillTime > 1
                     && !hero.getState().equals(Hero.State.HURT)) {
-                hero.getRubenPhysicsFixture().setFriction(100f);
-                hero.getRubenSensorFixture().setFriction(100f);
+                hero.getHeroPhysicsFixture().setFriction(100f);
+                hero.getHeroSensorFixture().setFriction(100f);
             } else {
-                hero.getRubenPhysicsFixture().setFriction(0.2f);
-                hero.getRubenSensorFixture().setFriction(0.2f);
+                hero.getHeroPhysicsFixture().setFriction(0.2f);
+                hero.getHeroSensorFixture().setFriction(0.2f);
             }
         }
     }
@@ -117,21 +117,23 @@ public class HeroManager extends AbstractWorldManager {
         }
     }
 
-    public Hero getRuben(Contact contact) {
+    public Hero getHero(Contact contact) {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)) {
             return (Hero) box2dPhysicsA;
-        } else {
-            return (Hero) box2dPhysicsB;
+        } else if(box2dPhysicsB.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)){
+            return (Hero) box2dPhysicsB;}
+        else {
+            return null;
         }
     }
 
     public Boolean existSensor (Contact contact) {
 
-        if (contact.getFixtureA() == hero.getRubenSensorFixture() ||
-                contact.getFixtureB() == hero.getRubenSensorFixture()){
+        if (contact.getFixtureA() == hero.getHeroSensorFixture() ||
+                contact.getFixtureB() == hero.getHeroSensorFixture()){
             return true;
         }
 
@@ -143,12 +145,12 @@ public class HeroManager extends AbstractWorldManager {
     @Override
     public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
-        if (contact.getFixtureA() == hero.getRubenSensorFixture()){
+
+        if (getEnemy(contact)==null && contact.getFixtureA() == hero.getHeroSensorFixture()){
             hero.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
         }
 
-
-        if (contact.getFixtureB() == hero.getRubenSensorFixture()) {
+        if (getEnemy(contact)==null &&  contact.getFixtureB() == hero.getHeroSensorFixture()) {
             hero.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
         }
 
@@ -181,10 +183,10 @@ public class HeroManager extends AbstractWorldManager {
     public void handleEndContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "End contact");
 
-        if (contact.getFixtureA() == hero.getRubenSensorFixture())
+        if (contact.getFixtureA() == hero.getHeroSensorFixture())
             hero.getGrounContacts().remove(contact.getFixtureB());//A is foot so B is ground
 
-        if (contact.getFixtureB() == hero.getRubenSensorFixture())
+        if (contact.getFixtureB() == hero.getHeroSensorFixture())
             hero.getGrounContacts().remove(contact.getFixtureA());//A is foot so B is ground
 
 

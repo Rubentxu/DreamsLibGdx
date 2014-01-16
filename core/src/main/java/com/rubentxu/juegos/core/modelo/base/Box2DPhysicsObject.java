@@ -23,7 +23,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable{
 
     public static enum GRUPOS {
         HEROES, ENEMIGOS, PLATAFORMAS, PLATAFORMAS_MOVILES,
-        MONEDAS, SENSORES, ESTATICOS, AGUA
+        ITEMS, SENSORES, ESTATICOS, AGUA
     }
 
     protected com.badlogic.gdx.physics.box2d.World box2D;

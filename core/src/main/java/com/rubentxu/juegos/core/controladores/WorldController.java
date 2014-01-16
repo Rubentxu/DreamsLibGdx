@@ -38,10 +38,12 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
 
 
     public WorldController(World world) {
+        world.getPhysics().setContactListener(this);
         heroManager = new HeroManager(world);
         platformManager = new PlatformManager(world);
         waterManager = new WaterManager(world);
         enemyManager = new EnemyManager(world);
+
     }
 
     public void leftPressed() {
