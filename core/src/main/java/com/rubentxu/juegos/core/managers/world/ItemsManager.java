@@ -29,6 +29,7 @@ public class ItemsManager extends AbstractWorldManager {
             switch (item.getType()){
                 case COIN:
                     profileHero.addCredits(item.getValue());
+                    item.setFlaggedForDelete(true);
                     world.addBodiesFlaggedDestroy(item.getBody());
                     break;
                 case POWERUP:

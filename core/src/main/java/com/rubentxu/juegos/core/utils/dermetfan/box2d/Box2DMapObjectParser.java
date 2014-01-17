@@ -257,6 +257,8 @@ public class Box2DMapObjectParser {
             createWater(world, object);
         if(object.getProperties().get(aliases.typeModelObject).equals(aliases.enemy))
             createEnemy(world, object);
+        if(object.getProperties().get(aliases.typeModelObject).equals(aliases.item))
+            createItem(world, object);
 
 
     }
@@ -427,7 +429,7 @@ public class Box2DMapObjectParser {
 
     }
 
-    private void createItems(World world, MapObject object){
+    private void createItem(World world, MapObject object){
         MapProperties properties = object.getProperties();
         BodyDef def= new BodyDef();
         def.type= BodyType.StaticBody;
@@ -441,8 +443,8 @@ public class Box2DMapObjectParser {
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;
             rectangle.height *= unitScale;
-            shape.setAsBox(1 / 2, 1 / 2, new Vector2(rectangle.x - box.getPosition().x
-                    + 1 / 2, rectangle.y - box.getPosition().y + 1 / 2), box.getAngle());
+            shape.setAsBox( rectangle.width / 2, rectangle.height, new Vector2(rectangle.x - box.getPosition().x
+                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
             FixtureDef fixDef = new FixtureDef();
             fixDef.shape=shape;

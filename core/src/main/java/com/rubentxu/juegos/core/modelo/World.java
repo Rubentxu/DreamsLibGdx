@@ -143,4 +143,7 @@ public class World implements Disposable{
     public void addBodiesFlaggedDestroy(Body body) {
         bodiesFlaggedDestroy.add(body);
     }
+    public Array<Body> getBodiesFlaggedDestroy(){
+        return bodiesFlaggedDestroy;
+    }
 }

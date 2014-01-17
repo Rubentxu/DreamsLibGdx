@@ -157,5 +157,29 @@
     <property name="typeModelObject" value="Hero"/>
    </properties>
   </object>
+  <object name="enemigo" type="modelObject" x="877" y="1514" width="71" height="84">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="enemigo" type="modelObject" x="1264" y="1372" width="71" height="84">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="enemigo" type="modelObject" x="1471" y="1370" width="71" height="84">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
+  <object name="enemigo" type="modelObject" x="719" y="1482" width="71" height="84">
+   <properties>
+    <property name="typeItem" value="coin"/>
+    <property name="typeModelObject" value="Item"/>
+   </properties>
+  </object>
  </objectgroup>
 </map>

@@ -149,6 +149,8 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
 
     @Override
     public void endContact(Contact contact) {
+        if (contact.getFixtureA() == null || contact.getFixtureB()==null ) return;
+
         AbstractWorldManager managerA=getManager(((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo());
         AbstractWorldManager managerB=getManager(((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo());
 

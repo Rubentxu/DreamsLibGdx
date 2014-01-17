@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
@@ -165,28 +164,29 @@ public class GuiBuilder {
     public static final Table buildStats(float width,float height, Styles styles) {
 
         Table tableProfile = new Table();
+        tableProfile.setBounds(0, 0, width , height /10);
+        NinePatchDrawable drawable= (NinePatchDrawable) styles.skin.get("debug", NinePatchDrawable.class);
+        drawable.getPatch().getColor().a=0.7f;
+        tableProfile.setBackground(drawable);
 
-        tableProfile.setBackground((Drawable) styles.skin.get("debug", NinePatchDrawable.class));
-        tableProfile.row().setWidgetHeight(height / 7);
-        tableProfile.setHeight(height /7);
-        tableProfile.pad(height / 100 * 5);
+
         Image imageLives = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
         imageLives.setName(Constants.IMAGE_LIVES);
 
-        Label lives = new Label("0", styles.skin, "default", Color.ORANGE);
+        Label lives = new Label("0", styles.skin, "header", Color.ORANGE);
         lives.setName(Constants.LIVES);
 
-        Label labelScore = new Label("Puntuacion: ", styles.skin, "default", Color.ORANGE);
+        Label labelScore = new Label("Puntuacion: ", styles.skin, "header", Color.ORANGE);
         labelScore.setName(Constants.LABEL_SCORE);
 
-        Label score = new Label("0000", styles.skin, "default", Color.ORANGE);
+        Label score = new Label("0000", styles.skin, "header", Color.ORANGE);
         score.setName(Constants.SCORE);
 
-        tableProfile.add(imageLives).setWidgetX(0);
-        tableProfile.add(lives);
+        tableProfile.add(imageLives).padRight(2);
+        tableProfile.add(lives).width(width / 5).expandY().fill();
 
-        tableProfile.add(labelScore);
-        tableProfile.add(score);
+        tableProfile.add(labelScore).right().expandY().fill();
+        tableProfile.add(score).right().expandY().fill();
 
         return tableProfile;
     }

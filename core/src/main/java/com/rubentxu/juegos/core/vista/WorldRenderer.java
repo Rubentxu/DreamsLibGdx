@@ -102,7 +102,7 @@ public class WorldRenderer {
 
         for(Item i :world.getItems()){
             String nombreRegion= (atlasVarios.findRegion(i.getNombre())!=null)? i.getNombre(): i.getGrupo().toString();
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion("agua2"));
             if(viewSprite!=null){
                 modelsAndViews.addModelAndView(i,viewSprite);
             }
@@ -123,6 +123,7 @@ public class WorldRenderer {
         renderer.render();
 
         spriteBatch.begin();
+        modelsAndViews.update(world);
         modelsAndViews.render(spriteBatch);
 
 
