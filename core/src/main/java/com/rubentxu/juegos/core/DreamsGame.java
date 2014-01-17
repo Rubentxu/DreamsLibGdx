@@ -28,7 +28,7 @@ public class DreamsGame extends Game {
 
     @Override
     public void create() {
-        preferencesManager = new PreferencesManager();
+        preferencesManager = PreferencesManager.instance;
         profileManager= new ProfileManager();
         log = new FPSLogger();
         setScreen(new SplashScreen(this));

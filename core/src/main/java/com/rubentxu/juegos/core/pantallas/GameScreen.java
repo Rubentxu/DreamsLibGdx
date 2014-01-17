@@ -69,7 +69,7 @@ public class GameScreen extends BaseScreen {
         stats.setBounds(0,height-height/7,width,height/7);
         stage.addActor(stats);
 
-        if(game.getPreferencesManager().isTouchPadEnabled()){
+        if(game.getPreferencesManager().touchPadEnabled){
             stage.addActor(GuiBuilder.buildTouchPad(stage.getWidth(), stage.getHeight(), styles, controller));
         } else {
             stage.addActor(GuiBuilder.buildPadButtons(stage.getWidth(), stage.getHeight(), styles, controller));

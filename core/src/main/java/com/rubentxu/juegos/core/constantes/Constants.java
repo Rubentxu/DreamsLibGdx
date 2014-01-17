@@ -14,7 +14,8 @@ public class Constants {
     public static final String LOG = "Hero Dreams";
     // Preferences
     public static final String PREFS_NAME = "DreamsGame";
-    public static final String PREF_VOLUME = "volume";
+    public static final String PREF_VOLUME_SOUND = "volume.music";
+    public static final String PREF_VOLUME_MUSIC = "volume.sound";
     public static final String PREF_MUSIC_ENABLED = "music.enabled";
     public static final String PREF_SOUND_ENABLED = "sound.enabled";
     public static final String PREF_TOUCHPAD_ENABLED = "touchpad.enabled";

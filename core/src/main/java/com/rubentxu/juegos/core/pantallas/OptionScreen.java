@@ -38,6 +38,7 @@ public class OptionScreen extends BaseScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         Gdx.input.setInputProcessor(stage);
+        game.getPreferencesManager().load();
 
         mainTable.setFillParent(true);
         mainTable.defaults().pad(16f);
@@ -47,12 +48,12 @@ public class OptionScreen extends BaseScreen {
 
         final CheckBox musicCheckbox = new CheckBox(" Music", styles.skin);
         musicCheckbox.align(Align.left);
-        musicCheckbox.setChecked(getGame().getPreferencesManager().isMusicEnabled());
+        musicCheckbox.setChecked(game.getPreferencesManager().music);
         musicCheckbox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
-                getGame().getPreferencesManager().setMusicEnabled(enabled);
+                game.getPreferencesManager().music=enabled;
             }
         });
         mainTable.add(musicCheckbox);
@@ -60,31 +61,46 @@ public class OptionScreen extends BaseScreen {
 
         final CheckBox touchPadCheckbox = new CheckBox(" TouchPad Control", styles.skin);
         touchPadCheckbox.align(Align.left);
-        touchPadCheckbox.setChecked(getGame().getPreferencesManager().isTouchPadEnabled());
+        touchPadCheckbox.setChecked(game.getPreferencesManager().touchPadEnabled);
         touchPadCheckbox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = touchPadCheckbox.isChecked();
-                getGame().getPreferencesManager().setTouchPadEnabled(enabled);
+                game.getPreferencesManager().touchPadEnabled=enabled;
             }
         });
         mainTable.add(touchPadCheckbox);
         mainTable.row();
 
-        Slider volumeSlider = new Slider(0f, 1f, 0.1f, false, styles.skin);
-        volumeSlider.setValue(getGame().getPreferencesManager().getVolume());
-        volumeSlider.addListener(new ChangeListener() {
+        Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, styles.skin);
+        volumeSliderMusic.setValue(game.getPreferencesManager().volMusic);
+        volumeSliderMusic.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Slider slider = (Slider) actor;
                 float value = slider.getValue();
-                getGame().getPreferencesManager().setVolume(value);
+                game.getPreferencesManager().volMusic = value;
                 updateVolumeLabel();
             }
 
         });
-        mainTable.add(volumeSlider);
+        mainTable.add(volumeSliderMusic);
         mainTable.row();
+        Slider volumeSliderSound = new Slider(0f, 1f, 0.1f, false, styles.skin);
+        volumeSliderSound.setValue(game.getPreferencesManager().volSound);
+        volumeSliderSound.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Slider slider = (Slider) actor;
+                float value = slider.getValue();
+                game.getPreferencesManager().volSound = value;
+                updateVolumeLabel();
+            }
+
+        });
+        mainTable.add(volumeSliderSound);
+        mainTable.row();
+
         volumeValue = new Label(" Volume ", styles.skin);
         updateVolumeLabel();
         mainTable.add(volumeValue);
@@ -95,6 +111,7 @@ public class OptionScreen extends BaseScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                game.getPreferencesManager().save();
                 game.setScreen(game.menuScreen);
             }
         });
@@ -106,7 +123,7 @@ public class OptionScreen extends BaseScreen {
     }
 
     private void updateVolumeLabel() {
-        float volume = (getGame().getPreferencesManager().getVolume() * 100);
+        float volume = (game.getPreferencesManager().volMusic * 100);
         volumeValue.setText(Float.toString(volume));
     }
 
