@@ -14,8 +14,9 @@ public class Item extends Sensor {
     private String name;
     private TYPE TYPE_ITEM=null ;
 
-    public Item(String nombre, GRUPO grupo, Body body,int value) {
+    public Item(String nombre, GRUPO grupo,TYPE tipo, Body body,int value) {
         super(nombre, grupo, body);
+        this.TYPE_ITEM=tipo;
         this.name=nombre;
         this.value=value;
     }
@@ -43,4 +44,6 @@ public class Item extends Sensor {
     public void setType(TYPE type) {
         this.TYPE_ITEM = type;
     }
+
+
 }

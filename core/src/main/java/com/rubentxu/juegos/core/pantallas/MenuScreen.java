@@ -47,7 +47,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
                 game.gameScreen= new GameScreen(game);
-                game.setScreen(DreamsGame.gameScreen);
+                game.setScreen(game.gameScreen);
             }
         });
 
@@ -55,7 +55,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click optionScreen...");
                 game.optionScreen= new OptionScreen(game);
-                game.setScreen(DreamsGame.optionScreen);
+                game.setScreen(game.optionScreen);
             }
         });
 
@@ -63,7 +63,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click highScoreScreen...");
                 game.highScoreScreen= new HighScoresScreen(game);
-                game.setScreen(DreamsGame.highScoreScreen);
+                game.setScreen(game.highScoreScreen);
             }
         });
 

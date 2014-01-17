@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.PreferencesManager;
 import com.rubentxu.juegos.core.managers.game.ProfileManager;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
@@ -16,11 +17,13 @@ public class DreamsGame extends Game {
     FPSLogger log;
     private PreferencesManager preferencesManager;
 
-    public static GameScreen gameScreen;
-    public static MenuScreen menuScreen;
-    public static OptionScreen optionScreen;
-    public static HighScoresScreen highScoreScreen;
+    public GameScreen gameScreen;
+    public MenuScreen menuScreen;
+    public OptionScreen optionScreen;
+    public HighScoresScreen highScoreScreen;
+    public static GameState gameState= GameState.GAME_RUNNING;
     private ProfileManager profileManager;
+
 
 
     @Override

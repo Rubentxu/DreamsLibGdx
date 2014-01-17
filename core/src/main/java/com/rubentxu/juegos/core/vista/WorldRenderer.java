@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
+import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
@@ -96,6 +97,14 @@ public class WorldRenderer {
             Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
             if(viewSprite!=null){
                 modelsAndViews.addModelAndView(e,viewSprite);
+            }
+        }
+
+        for(Item i :world.getItems()){
+            String nombreRegion= (atlasVarios.findRegion(i.getNombre())!=null)? i.getNombre(): i.getGrupo().toString();
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
+            if(viewSprite!=null){
+                modelsAndViews.addModelAndView(i,viewSprite);
             }
         }
     }

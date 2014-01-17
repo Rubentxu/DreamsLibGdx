@@ -60,6 +60,10 @@ public class Profile implements Serializable {
         return lives;
     }
 
+    public boolean removeLive(){
+        return --lives<=0;
+    }
+
     @Override
     public void read(Json json, JsonValue jsonData) {
 
@@ -84,5 +88,7 @@ public class Profile implements Serializable {
         json.writeValue("lives", highScores);
     }
 
-
+    public CharSequence getLivesAsText() {
+        return String.valueOf(lives);
+    }
 }

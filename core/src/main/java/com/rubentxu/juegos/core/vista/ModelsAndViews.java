@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core.vista;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -225,7 +226,11 @@ public class ModelsAndViews {
 
         animationHero.setPosition(hero.getBody().getPosition().x - animationHero.getWidth() / 2,
                 hero.getBody().getPosition().y - animationHero.getHeight() / 2);
-
+        if(hero.getState().equals(Hero.State.HURT)){
+            animationHero.setColor(new Color(1, 0.2f,  0.2f,  0.8f));
+        }else {
+            animationHero.setColor(Color.WHITE);
+        }
     }
 
     public Map<Box2DPhysicsObject, Sprite> getModelsAndViews() {

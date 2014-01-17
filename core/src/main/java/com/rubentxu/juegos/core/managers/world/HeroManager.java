@@ -6,6 +6,8 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
@@ -29,17 +31,21 @@ public class HeroManager extends AbstractWorldManager {
     }
 
     public void update(float delta) {
-        hurtTime += delta;
+
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBody().getPosition();
         if(!hero.getState().equals(Hero.State.HURT) && hurtTime>1.2f){
             processVelocity(vel, delta);
             processContactGround();
             applyImpulses(vel, pos);
+        } else if(hero.getState().equals(Hero.State.HURT) && hurtTime ==0)   {
+
+            if(hero.getProfile().removeLive()) DreamsGame.gameState=GameState.GAME_OVER;
+            System.out.println("Pierde vida: "+hero.getProfile().getLives()+" STATE GAME: "+ DreamsGame.gameState);
         }
 
         if(hurtTime>2)hurtTime=2;
-
+        hurtTime += delta;
 
     }
 
@@ -168,9 +174,9 @@ public class HeroManager extends AbstractWorldManager {
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
             if (points[0].x < hero.getBody().getPosition().x ) {
-                force=new Vector2(9,15);
+                force=new Vector2(4,7);
             }else {
-                force=new Vector2(-9,15);
+                force=new Vector2(-4,7);
             }
             System.out.println("Fuerza colision Enemigo: "+force +" Sensor no exist");
             hero.getBody().applyLinearImpulse(force,hero.getBody().getWorldCenter(),true);
@@ -203,9 +209,6 @@ public class HeroManager extends AbstractWorldManager {
 
     @Override
     public void handlePostSolve(Contact contact, ContactImpulse impulse) {
-        float impulseN = impulse.getNormalImpulses()[0];
-
-
     }
 
     @Override

@@ -95,7 +95,7 @@ public class OptionScreen extends BaseScreen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                getGame().setScreen(DreamsGame.menuScreen);
+                game.setScreen(game.menuScreen);
             }
         });
 

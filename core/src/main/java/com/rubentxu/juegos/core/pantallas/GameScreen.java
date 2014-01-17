@@ -49,8 +49,8 @@ public class GameScreen extends BaseScreen {
     }
 
     private void updateStats(){
-        stats.print();
-        ((Label)stats.findActor(Constants.NAME_SCORE)).setText(world.getHero().getProfile().getCreditsAsText());
+        ((Label)stats.findActor(Constants.SCORE)).setText(world.getHero().getProfile().getCreditsAsText());
+        ((Label)stats.findActor(Constants.LIVES)).setText(world.getHero().getProfile().getLivesAsText());
     }
 
     @Override

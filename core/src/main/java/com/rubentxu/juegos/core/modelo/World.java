@@ -124,6 +124,10 @@ public class World implements Disposable{
         return waterSensors;
     }
 
+    public HashSet<Item> getItems() {
+        return items;
+    }
+
     public Texture getBackground() {
         return background;
     }

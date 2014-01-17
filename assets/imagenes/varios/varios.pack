@@ -2,7 +2,7 @@ varios.png
 format: RGBA8888
 filter: Linear,Linear
 repeat: none
-PLATAFORMAS_MOVILES
+MOVING_PLATFORM
   rotate: false
   xy: 215, 1
   size: 267, 53
@@ -16,7 +16,7 @@ plataformaMovil2
   orig: 267, 53
   offset: 0, 0
   index: -1
-ENEMIGOS
+ENEMY
   rotate: false
   xy: 188, 168
   size: 156, 167

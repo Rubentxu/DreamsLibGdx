@@ -170,19 +170,21 @@ public class GuiBuilder {
         tableProfile.row().setWidgetHeight(height / 7);
         tableProfile.setHeight(height /7);
         tableProfile.pad(height / 100 * 5);
-        Image live = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
-        live.setName(Constants.NAME_LIVES1);
-        Image live2 = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
-        live2.setName(Constants.NAME_LIVES2);
-        Image live3 = new Image(styles.skin.get("buttonLeft", NinePatchDrawable.class));
-        live3.setName(Constants.NAME_LIVES3);
+        Image imageLives = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
+        imageLives.setName(Constants.IMAGE_LIVES);
+
+        Label lives = new Label("0", styles.skin, "default", Color.ORANGE);
+        lives.setName(Constants.LIVES);
+
         Label labelScore = new Label("Puntuacion: ", styles.skin, "default", Color.ORANGE);
-        labelScore.setName(Constants.NAME_LABEL_SCORE);
-        Label score = new Label("000", styles.skin, "default", Color.ORANGE);
-        score.setName(Constants.NAME_SCORE);
-        tableProfile.add(live);
-        tableProfile.add(live2);
-        tableProfile.add(live3);
+        labelScore.setName(Constants.LABEL_SCORE);
+
+        Label score = new Label("0000", styles.skin, "default", Color.ORANGE);
+        score.setName(Constants.SCORE);
+
+        tableProfile.add(imageLives).setWidgetX(0);
+        tableProfile.add(lives);
+
         tableProfile.add(labelScore);
         tableProfile.add(score);
 

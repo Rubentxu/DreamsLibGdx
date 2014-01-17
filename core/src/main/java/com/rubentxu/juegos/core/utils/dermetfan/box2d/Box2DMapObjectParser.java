@@ -61,6 +61,8 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
+import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.Item.TYPE;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
@@ -425,6 +427,61 @@ public class Box2DMapObjectParser {
 
     }
 
+    private void createItems(World world, MapObject object){
+        MapProperties properties = object.getProperties();
+        BodyDef def= new BodyDef();
+        def.type= BodyType.StaticBody;
+        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
+        Body box = world.createBody(def);
+
+        if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
+            PolygonShape shape = new PolygonShape();
+            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            rectangle.x *= unitScale;
+            rectangle.y *= unitScale;
+            rectangle.width *= unitScale;
+            rectangle.height *= unitScale;
+            shape.setAsBox(1 / 2, 1 / 2, new Vector2(rectangle.x - box.getPosition().x
+                    + 1 / 2, rectangle.y - box.getPosition().y + 1 / 2), box.getAngle());
+
+            FixtureDef fixDef = new FixtureDef();
+            fixDef.shape=shape;
+            fixDef.filter.categoryBits= GRUPO.ITEMS.getCategory();
+            fixDef.filter.maskBits=Box2DPhysicsObject.MASK_ITEMS;
+            Fixture fixBox=box.createFixture(fixDef);
+            shape.dispose();
+            box.setBullet(true);
+
+            String name = object.getName();
+            if(bodies.containsKey(name)) {
+                int duplicate = 1;
+                while(bodies.containsKey(name + duplicate))
+                    duplicate++;
+                name += duplicate;
+            }
+            Item item=null;
+            if(object.getProperties().get(aliases.typeItem).equals(aliases.coin)){
+                item=new Item(name,GRUPO.ITEMS, TYPE.COIN,box,1);
+
+            }else if(object.getProperties().get(aliases.typeItem).equals(aliases.powerup)) {
+                item=new Item(name,GRUPO.ITEMS, TYPE.POWERUP,box,1);
+            }else if(object.getProperties().get(aliases.typeItem).equals(aliases.key)) {
+                item=new Item(name,GRUPO.ITEMS, TYPE.KEY,box,1);
+            }
+
+            worldEntity.getItems().add(item);
+            box.setUserData(item);
+            fixBox.setUserData(item);
+            bodies.put(name, box);
+
+
+        } else {
+            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \""  + aliases.typeModelObject + "\"");
+        }
+
+    }
+
+
     /**
      * creates a {@link Body} in the given {@link World} from the given {@link MapObject}
      * @param world the {@link World} to create the {@link Body} in
@@ -552,19 +609,18 @@ public class Box2DMapObjectParser {
         } else
             assert false : mapObject + " is a not known subclass of " + MapObject.class.getName();
 
+
         fixtureDef.shape = shape;
         fixtureDef.density = getProperty(properties, aliases.density, fixtureDef.density);
-        fixtureDef.filter.categoryBits = getProperty(properties, aliases.categoryBits, fixtureDef.filter.categoryBits);
+        fixtureDef.filter.categoryBits = getProperty(properties, aliases.categoryBits, GRUPO.STATIC.getCategory());
         fixtureDef.filter.groupIndex = getProperty(properties, aliases.groupIndex, fixtureDef.filter.groupIndex);
-        fixtureDef.filter.maskBits = getProperty(properties, aliases.maskBits, fixtureDef.filter.maskBits);
+        fixtureDef.filter.maskBits =getProperty(properties, aliases.maskBits,Box2DPhysicsObject.MASK_STATIC);
         fixtureDef.friction = getProperty(properties, aliases.friciton, fixtureDef.friction);
         fixtureDef.isSensor = getProperty(properties, aliases.isSensor, fixtureDef.isSensor);
         fixtureDef.restitution = getProperty(properties, aliases.restitution, fixtureDef.restitution);
 
         Fixture fixture = body.createFixture(fixtureDef);
         fixture.setUserData(body.getUserData());
-        ((Box2DPhysicsObject) body.getUserData()).setFixtureDef(fixtureDef);
-        ((Box2DPhysicsObject) body.getUserData()).setFixture(fixture);
         shape.dispose();
 
         String name = mapObject.getName();
@@ -981,11 +1037,16 @@ public class Box2DMapObjectParser {
                 movingPlatformDistY = "movingPlatformDistY",
                 movingPlatformDistX = "movingPlatformDistX",
                 movingPlatformSpeed = "movingPlatformSpeed",
+                pointX = "pointX",
+                pointY = "pointY",
                 water = "Water",
                 enemy = "Enemy",
                 hero = "Hero",
-                pointX = "pointX",
-                pointY = "pointY",
+                item = "Item",
+                typeItem = "typeItem",
+                coin=   "coin",
+                powerup=   "powerup",
+                key= "key",
                 unitScale = "unitScale";
     }
 

@@ -47,7 +47,7 @@ public class SplashScreen extends BaseScreen {
             }
         }), delay(3f, fadeOut(0.5f)), run(new Runnable() {
             public void run() {
-                game.setScreen(DreamsGame.menuScreen);
+                game.setScreen(game.menuScreen);
             }
         })));
 
