@@ -58,8 +58,8 @@ public class Water extends Box2DPhysicsObject implements Disposable{
 
     public Water(String nombre, Body body, Vector2 surfaceNormal, Vector2 fluidVelocity, Vector2 gravity,
                  float surfaceHeight, float fluidDensity, float linearDrag, float angularDrag) {
-        super(nombre, GRUPOS.AGUA, body);
-        System.out.println("AGUA CREADA tilesHeight :"+(1.4f-0.055f*( body.getPosition().y+Box2DUtils.height(body))));
+        super(nombre, GRUPO.FLUID, body);
+        System.out.println("FLUID CREADA tilesHeight :"+(1.4f-0.055f*( body.getPosition().y+Box2DUtils.height(body))));
 
         mSurfaceNormal.set(new Vector2(0 ,1.345f-0.055f*(body.getPosition().y+Box2DUtils.height(body))));
         mFluidVelocity.set(fluidVelocity);

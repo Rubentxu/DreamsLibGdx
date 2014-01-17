@@ -17,7 +17,7 @@ import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
 
 
@@ -34,7 +34,7 @@ public class WaterManager extends AbstractWorldManager {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBody();
         w.addBody(b);
-        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPOS.HEROES))
+        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO))
             ((Hero)b.getUserData()).setState(Hero.State.SWIMMING);
 
     }
@@ -65,7 +65,7 @@ public class WaterManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (!box2dPhysicsA.getGrupo().equals(GRUPOS.AGUA)) {
+        if (!box2dPhysicsA.getGrupo().equals(GRUPO.FLUID)) {
             return box2dPhysicsA;
         } else {
             return box2dPhysicsB;
@@ -76,7 +76,7 @@ public class WaterManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(GRUPOS.AGUA)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.FLUID)) {
             return (Water) box2dPhysicsA;
         } else {
             return (Water) box2dPhysicsB;

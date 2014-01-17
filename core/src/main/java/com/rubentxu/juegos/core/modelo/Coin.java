@@ -4,9 +4,9 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public class Coin  extends Item {
 
-    public Coin(String nombre, GRUPOS grupo, Body body) {
-        super(nombre, grupo, body);
-        TYPE_ITEM=getType();
+    public Coin(String nombre, GRUPO grupo, Body body,int value) {
+        super(nombre, grupo, body,value);
+
     }
 
     @Override

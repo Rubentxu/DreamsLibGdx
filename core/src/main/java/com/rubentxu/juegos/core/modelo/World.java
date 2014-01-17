@@ -48,10 +48,10 @@ public class World implements Disposable{
                 b.setUserData(null);
                 physics.destroyBody(b);
                 switch (data.getGrupo()) {
-                    case ENEMIGOS:
+                    case ENEMY:
                         enemies.remove(data);
                         break;
-                    case PLATAFORMAS_MOVILES:
+                    case MOVING_PLATFORM:
                         movingPlatforms.remove(data);
                         break;
                     case ITEMS:

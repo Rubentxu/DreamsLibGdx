@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
@@ -35,12 +36,12 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     private Profile profile;
 
     public Hero(World physics) {
-        super("Heroe", GRUPOS.HEROES, physics);
+        super("Heroe", GRUPO.HERO, physics);
         setGrounContacts(new HashSet<Fixture>());
     }
 
     public Hero(World physics, float x, float y, float width, float height) {
-        super("Heroe", GRUPOS.HEROES, physics, x, y, width, height, 0);
+        super("Heroe", GRUPO.HERO, physics, x, y, width, height, 0);
         setGrounContacts(new HashSet<Fixture>());
         createHero(x, y, width, height);
     }
@@ -58,14 +59,20 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         PolygonShape poly = new PolygonShape();
         poly.setAsBox(width,height);
 
-        heroPhysicsFixture = super.getBody().createFixture(poly,1);
+
+        FixtureDef fixDef = new FixtureDef();
+        fixDef.shape=poly;
+        fixDef.filter.categoryBits= GRUPO.HERO.getCategory();
+        fixDef.filter.maskBits=Box2DPhysicsObject.MASK_HERO;
+        heroPhysicsFixture = super.getBody().createFixture(fixDef);
         heroPhysicsFixture.setUserData(this);
         poly.dispose();
 
         CircleShape circle = new CircleShape();
         circle.setRadius(width);
         circle.setPosition(new Vector2(0, -height*0.9f));
-        heroSensorFixture = super.getBody().createFixture(circle, 0);
+        fixDef.shape=circle;
+        heroSensorFixture = super.getBody().createFixture(fixDef);
         heroSensorFixture.setSensor(true);
         heroSensorFixture.setUserData(this);
         circle.dispose();

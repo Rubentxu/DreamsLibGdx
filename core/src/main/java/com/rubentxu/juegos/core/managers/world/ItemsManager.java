@@ -10,7 +10,7 @@ import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.Profile;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
 public class ItemsManager extends AbstractWorldManager {
@@ -29,6 +29,7 @@ public class ItemsManager extends AbstractWorldManager {
             switch (item.getType()){
                 case COIN:
                     profileHero.addCredits(item.getValue());
+                    world.addBodiesFlaggedDestroy(item.getBody());
                     break;
                 case POWERUP:
                     break;
@@ -72,9 +73,9 @@ public class ItemsManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)){
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
             return (Hero) box2dPhysicsB;}
         else {
             return null;
@@ -85,9 +86,9 @@ public class ItemsManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(GRUPOS.ITEMS)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.ITEMS)) {
             return (Item) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPOS.ITEMS)){
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.ITEMS)){
             return (Item) box2dPhysicsB;}
         else {
             return null;

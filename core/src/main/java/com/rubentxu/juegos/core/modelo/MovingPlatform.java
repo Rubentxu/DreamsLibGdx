@@ -21,12 +21,12 @@ public class MovingPlatform extends Platform implements Disposable{
     private Path path;
 
     public MovingPlatform(Body body, Vector2 pVelocity){
-        super("Platform",GRUPOS.PLATAFORMAS_MOVILES,body);
+        super("Platform", GRUPO.MOVING_PLATFORM,body);
         this.pVelocity = pVelocity;
         //this.maxDist=0;
     }
 
-    public MovingPlatform(String nombre, GRUPOS grupo, Body body, float dstX, float dstY,float speed) {
+    public MovingPlatform(String nombre, GRUPO grupo, Body body, float dstX, float dstY,float speed) {
         super(nombre, grupo, body);
         path=new Path(speed);
         Vector2 pos= body.getPosition().cpy();

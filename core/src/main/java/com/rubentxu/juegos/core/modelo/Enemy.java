@@ -34,11 +34,11 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
     boolean facingLeft = true;
 
     public Enemy(World physics) {
-        super("Enemigo", GRUPOS.ENEMIGOS, physics);
+        super("Enemigo", GRUPO.ENEMY, physics);
     }
 
     public Enemy(String name, Body body, List<Vector2> points) {
-        super(name, GRUPOS.ENEMIGOS, body);
+        super(name, GRUPO.ENEMY, body);
         path = new Path(MAX_VELOCITY);
         path.setPoints((ArrayList<Vector2>) points);
 

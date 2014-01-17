@@ -8,7 +8,7 @@ public class Platform extends Box2DPhysicsObject {
 
     private  Boolean oneWay=false;
 
-    public Platform(String nombre, GRUPOS grupo, Body body) {
+    public Platform(String nombre, GRUPO grupo, Body body) {
         super(nombre, grupo, body);
     }
 

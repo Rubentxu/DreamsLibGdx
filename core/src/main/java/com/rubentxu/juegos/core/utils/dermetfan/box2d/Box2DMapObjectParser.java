@@ -64,7 +64,7 @@ import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.utils.dermetfan.math.BayazitDecomposer;
 
 import java.util.ArrayList;
@@ -292,6 +292,8 @@ public class Box2DMapObjectParser {
             fixDef.friction= 1f;
             fixDef.isSensor=true;
             fixDef.density=getProperty(properties, aliases.density, 2);
+            fixDef.filter.categoryBits= GRUPO.FLUID.getCategory();
+            fixDef.filter.maskBits=Box2DPhysicsObject.MASK_FLUID;
             Fixture fixBox=box.createFixture(fixDef);
             shape.dispose();
 
@@ -337,6 +339,8 @@ public class Box2DMapObjectParser {
 
             FixtureDef fixDef = new FixtureDef();
             fixDef.shape=shape;
+            fixDef.filter.categoryBits= GRUPO.MOVING_PLATFORM.getCategory();
+            fixDef.filter.maskBits=Box2DPhysicsObject.MASK_MOVING_PLATFORM;
             Fixture fixBox=box.createFixture(fixDef);
             shape.dispose();
             box.setBullet(true);
@@ -349,7 +353,7 @@ public class Box2DMapObjectParser {
                 name += duplicate;
             }
 
-            MovingPlatform m1= new MovingPlatform(name, Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES,box,Float.parseFloat(properties.get(aliases.movingPlatformDistX, String.class))
+            MovingPlatform m1= new MovingPlatform(name, GRUPO.MOVING_PLATFORM,box,Float.parseFloat(properties.get(aliases.movingPlatformDistX, String.class))
                     ,Float.parseFloat(properties.get(aliases.movingPlatformDistY,String.class)),Float.parseFloat( properties.get(aliases.movingPlatformSpeed,String.class)));
             worldEntity.getMovingPlatforms().add(m1);
             box.setUserData(m1);
@@ -380,8 +384,11 @@ public class Box2DMapObjectParser {
             shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
-
-            Fixture enemyPhysicsFixture = box.createFixture(shape, 1);
+            FixtureDef fixDef = new FixtureDef();
+            fixDef.shape=shape;
+            fixDef.filter.categoryBits= GRUPO.ENEMY.getCategory();
+            fixDef.filter.maskBits=Box2DPhysicsObject.MASK_ENEMY;
+            Fixture enemyPhysicsFixture = box.createFixture(fixDef);
             shape.dispose();
             CircleShape circle = new CircleShape();
             circle.setRadius(rectangle.width/2);
@@ -455,7 +462,7 @@ public class Box2DMapObjectParser {
                 duplicate++;
             name += duplicate;
         }
-        Box2DPhysicsObject box2DPhysicsObject= new Box2DPhysicsObject(name, GRUPOS.ESTATICOS,body);
+        Box2DPhysicsObject box2DPhysicsObject= new Box2DPhysicsObject(name, GRUPO.STATIC,body);
         body.setUserData(box2DPhysicsObject);
         bodies.put(name, body);
 

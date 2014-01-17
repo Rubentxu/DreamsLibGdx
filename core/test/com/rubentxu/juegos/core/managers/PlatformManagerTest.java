@@ -59,10 +59,10 @@ public class PlatformManagerTest {
         contact = createNiceMock(Contact.class);
         fixture = new Fix(body1,1l);
         manifold= new WorldManifoldMock();
-        m1= new MovingPlatform("M1", PLATAFORMAS_MOVILES, body1,
+        m1= new MovingPlatform("M1", MOVING_PLATFORM, body1,
                 0,0,3,5,4);
 
-        m2= new MovingPlatform("M2", PLATAFORMAS_MOVILES,body2,
+        m2= new MovingPlatform("M2", MOVING_PLATFORM,body2,
                 5,-1,8,5,4 );
         r = new Hero(physic);
         r.createHero(0, 1.2f, 0.7f, 1.8f);

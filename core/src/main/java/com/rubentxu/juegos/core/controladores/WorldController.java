@@ -7,13 +7,15 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Disposable;
+import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.managers.world.EnemyManager;
 import com.rubentxu.juegos.core.managers.world.HeroManager;
+import com.rubentxu.juegos.core.managers.world.ItemsManager;
 import com.rubentxu.juegos.core.managers.world.PlatformManager;
 import com.rubentxu.juegos.core.managers.world.WaterManager;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
 public class WorldController implements ContactListener, ContactFilter ,Disposable{
@@ -22,6 +24,7 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
     private PlatformManager platformManager;
     private WaterManager waterManager;
     private EnemyManager enemyManager;
+    private ItemsManager itemsManager;
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
 
@@ -43,6 +46,7 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
         platformManager = new PlatformManager(world);
         waterManager = new WaterManager(world);
         enemyManager = new EnemyManager(world);
+        itemsManager= new ItemsManager(world);
 
     }
 
@@ -87,76 +91,70 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
         platformManager.update(delta);
         waterManager.update(delta);
         enemyManager.update(delta);
+        itemsManager.update(delta);
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
         contact.resetFriction();
-        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
-        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+        AbstractWorldManager managerA=getManager(((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo());
+        AbstractWorldManager managerB=getManager(((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo());
 
-        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            heroManager.handlePreSolve(contact, oldManifold);
-        }
-        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            platformManager.handlePreSolve(contact, oldManifold);
-        }
+        if(managerA!=null) managerA.handlePreSolve(contact, oldManifold);
+        if(managerB!=null) managerB.handlePreSolve(contact, oldManifold);
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
-        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+        AbstractWorldManager managerA=getManager(((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo());
+        AbstractWorldManager managerB=getManager(((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo());
 
-        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            heroManager.handlePostSolve(contact, impulse);
-        }
-        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            platformManager.handlePostSolve(contact, impulse);
-        }
-        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            platformManager.handlePostSolve(contact, impulse);
-        }
+        if(managerA!=null) managerA.handlePostSolve(contact, impulse);
+        if(managerB!=null) managerB.handlePostSolve(contact, impulse);
 
+    }
+
+    public AbstractWorldManager getManager(GRUPO grupo){
+        switch (grupo){
+            case ENEMY:
+                return enemyManager;
+
+            case ITEMS:
+                return itemsManager;
+            case FLUID:
+                return waterManager;
+            case HERO:
+                return heroManager;
+            case PLATFORM:
+                break;
+            case MOVING_PLATFORM:
+                return platformManager;
+            case SENSOR:
+                break;
+            case STATIC:
+                break;
+        }
+        return null;
     }
 
     @Override
     public void beginContact(Contact contact) {
-        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
-        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+        AbstractWorldManager managerA=getManager(((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo());
+        AbstractWorldManager managerB=getManager(((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo());
 
-        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            heroManager.handleBeginContact(contact);
-        }
-        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
+        if(managerA!=null) managerA.handleBeginContact(contact);
+        if(managerB!=null) managerB.handleBeginContact(contact);
 
-            platformManager.handleBeginContact(contact);
-        }
-        if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
-            waterManager.handleBeginContact(contact);
-        }
-        if (GRUPOS.ENEMIGOS.equals(box2dPhysicsA.getGrupo()) || GRUPOS.ENEMIGOS.equals(box2dPhysicsB.getGrupo())) {
-            enemyManager.handleBeginContact(contact);
-        }
     }
 
     @Override
     public void endContact(Contact contact) {
-        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
-        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+        AbstractWorldManager managerA=getManager(((Box2DPhysicsObject) contact.getFixtureA().getUserData()).getGrupo());
+        AbstractWorldManager managerB=getManager(((Box2DPhysicsObject) contact.getFixtureB().getUserData()).getGrupo());
 
-        if (GRUPOS.HEROES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.HEROES.equals(box2dPhysicsB.getGrupo())) {
-            heroManager.handleEndContact(contact);
-        }
-        if (GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsA.getGrupo()) || GRUPOS.PLATAFORMAS_MOVILES.equals(box2dPhysicsB.getGrupo())) {
-            platformManager.handleEndContact(contact);
-        }
-        if (GRUPOS.AGUA.equals(box2dPhysicsA.getGrupo()) || GRUPOS.AGUA.equals(box2dPhysicsB.getGrupo())) {
-            waterManager.handleEndContact(contact);
-        }
-        if (GRUPOS.ENEMIGOS.equals(box2dPhysicsA.getGrupo()) || GRUPOS.ENEMIGOS.equals(box2dPhysicsB.getGrupo())) {
-            enemyManager.handleEndContact(contact);
-        }
+        if(managerA!=null) managerA.handleEndContact(contact);
+        if(managerB!=null) managerB.handleEndContact(contact);
+
     }
 
     @Override

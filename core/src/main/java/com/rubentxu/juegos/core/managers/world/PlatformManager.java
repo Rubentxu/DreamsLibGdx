@@ -12,6 +12,7 @@ import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 public class PlatformManager extends AbstractWorldManager {
 
@@ -57,7 +58,7 @@ public class PlatformManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.MOVING_PLATFORM)) {
             return (MovingPlatform) box2dPhysicsA;
         } else {
             return (MovingPlatform) box2dPhysicsB;
@@ -68,7 +69,7 @@ public class PlatformManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (!box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)) {
+        if (!box2dPhysicsA.getGrupo().equals(GRUPO.MOVING_PLATFORM)) {
             return box2dPhysicsA;
         } else {
             return box2dPhysicsB;
@@ -109,10 +110,10 @@ public class PlatformManager extends AbstractWorldManager {
         MovingPlatform movingPlatform = getMovingPlatform(contact);
 
         if (contact.isEnabled()) {
-            if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES) &&
+            if (passenger.getGrupo().equals(GRUPO.HERO) &&
                     !((Hero) passenger).getState().equals(Hero.State.WALKING)) {
                 contact.setFriction(100f);
-            } else if (passenger.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES) &&
+            } else if (passenger.getGrupo().equals(GRUPO.HERO) &&
                     !((Hero) passenger).getState().equals(Hero.State.WALKING)) {
                 contact.setFriction(0);
             }

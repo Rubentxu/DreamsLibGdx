@@ -11,8 +11,10 @@ import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
+import com.rubentxu.juegos.core.modelo.Hero.State;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
 public class HeroManager extends AbstractWorldManager {
@@ -30,13 +32,13 @@ public class HeroManager extends AbstractWorldManager {
         hurtTime += delta;
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBody().getPosition();
-        if(!hero.getState().equals(Hero.State.HURT) && hurtTime>1.5f){
+        if(!hero.getState().equals(Hero.State.HURT) && hurtTime>1.2f){
             processVelocity(vel, delta);
             processContactGround();
             applyImpulses(vel, pos);
         }
 
-            if(hurtTime>2)hurtTime=2;
+        if(hurtTime>2)hurtTime=2;
 
 
     }
@@ -108,9 +110,9 @@ public class HeroManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.ENEMY)) {
             return (Enemy) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)){
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.ENEMY)){
             return (Enemy) box2dPhysicsB;
         } else {
             return null;
@@ -121,9 +123,9 @@ public class HeroManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(Box2DPhysicsObject.GRUPOS.HEROES)){
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
             return (Hero) box2dPhysicsB;}
         else {
             return null;
@@ -161,9 +163,8 @@ public class HeroManager extends AbstractWorldManager {
 
            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
-        if(getEnemy(contact)!=null) {
-            hero.setState(Hero.State.HURT);
-            hurtTime=0;
+        if(getEnemy(contact) != null && !hero.getState().equals(State.HURT)) {
+
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
             if (points[0].x < hero.getBody().getPosition().x ) {
@@ -174,9 +175,9 @@ public class HeroManager extends AbstractWorldManager {
             System.out.println("Fuerza colision Enemigo: "+force +" Sensor no exist");
             hero.getBody().applyLinearImpulse(force,hero.getBody().getWorldCenter(),true);
 
+            hero.setState(Hero.State.HURT);
+            hurtTime=0;
         }
-
-
     }
 
     @Override

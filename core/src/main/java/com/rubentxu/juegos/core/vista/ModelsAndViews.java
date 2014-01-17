@@ -13,6 +13,7 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
@@ -64,8 +65,8 @@ public class ModelsAndViews {
             Map.Entry mav = (Map.Entry)it.next();
             Sprite sprite=(Sprite) mav.getValue();
             Box2DPhysicsObject box2DPhysicsObject=(Box2DPhysicsObject)mav.getKey();
-            if(box2DPhysicsObject.getGrupo().equals(Box2DPhysicsObject.GRUPOS.PLATAFORMAS_MOVILES)
-                    || box2DPhysicsObject.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)) updateModelPosition(box2DPhysicsObject,sprite);
+            if(box2DPhysicsObject.getGrupo().equals(GRUPO.MOVING_PLATFORM)
+                    || box2DPhysicsObject.getGrupo().equals(GRUPO.ENEMY)) updateModelPosition(box2DPhysicsObject,sprite);
 
             sprite.draw(spriteBatch);
 
@@ -81,7 +82,7 @@ public class ModelsAndViews {
         sprite.setPosition(box2DPhysicsObject.getBody().getPosition().x ,
                 box2DPhysicsObject.getBody().getPosition().y);
 
-        if (box2DPhysicsObject.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS) ){
+        if (box2DPhysicsObject.getGrupo().equals(GRUPO.ENEMY) ){
             if(((Enemy)box2DPhysicsObject).isFacingLeft() && !sprite.isFlipX()) sprite.flip(true,false);
             if(!((Enemy)box2DPhysicsObject).isFacingLeft() && sprite.isFlipX()) sprite.flip(true,false);
         }

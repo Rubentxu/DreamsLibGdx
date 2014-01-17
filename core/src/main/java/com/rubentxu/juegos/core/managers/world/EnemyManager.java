@@ -11,7 +11,7 @@ import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.State;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPOS;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
 public class EnemyManager extends AbstractWorldManager {
@@ -78,7 +78,7 @@ public class EnemyManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(GRUPOS.ENEMIGOS)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.ENEMY)) {
             return  (Enemy) box2dPhysicsA;
         } else {
             return (Enemy) box2dPhysicsB;
@@ -89,7 +89,7 @@ public class EnemyManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (!box2dPhysicsA.getGrupo().equals(Box2DPhysicsObject.GRUPOS.ENEMIGOS)) {
+        if (!box2dPhysicsA.getGrupo().equals(GRUPO.ENEMY)) {
             return box2dPhysicsA;
         } else {
             return box2dPhysicsB;
