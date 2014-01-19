@@ -1,0 +1,25 @@
+fondos.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+fondoStats
+  rotate: false
+  xy: 2, 380
+  size: 960, 99
+  orig: 960, 99
+  offset: 0, 0
+  index: -1
+nubes
+  rotate: false
+  xy: 2, 481
+  size: 866, 241
+  orig: 866, 241
+  offset: 0, 0
+  index: -1
+fondo
+  rotate: false
+  xy: 2, 2
+  size: 960, 376
+  orig: 960, 376
+  offset: 0, 0
+  index: -1

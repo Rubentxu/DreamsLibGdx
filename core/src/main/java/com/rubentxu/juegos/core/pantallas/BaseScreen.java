@@ -17,7 +17,7 @@ public abstract class BaseScreen implements Screen {
     protected final DreamsGame game;
     protected Stage stage;
     protected Assets assets;
-    protected Styles styles;
+    public Styles styles;
     protected Table mainTable;
     protected float width;
     protected float height;

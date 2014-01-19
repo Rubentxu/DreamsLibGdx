@@ -50,6 +50,7 @@ public class Styles implements Disposable{
         TextureRegionDrawable touchpad_background = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_background"));
         TextureRegionDrawable touchpad_thumb = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_thumb"));
 
+
         TextureRegionDrawable checkox_true = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-on"));
 
         TextureRegionDrawable checkox_false = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-off"));
@@ -59,8 +60,12 @@ public class Styles implements Disposable{
 
         CheckBoxStyle checkBoxStyle=new CheckBox.CheckBoxStyle(checkox_false,checkox_true,font,Color.WHITE) ;
 
-        SliderStyle sliderStyle= new SliderStyle(slider,slider_knob);
 
+        TextureRegionDrawable stats = new TextureRegionDrawable(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS)).findRegion("fondoStats"));
+
+
+        SliderStyle sliderStyle= new SliderStyle(slider,slider_knob);
+        skin.add("stats", stats);
         skin.add("btnMenu", btnMenu);
         skin.add("btnMenuPress", btnMenuPress);
         skin.add("buttonLeft", buttonLeft);
@@ -91,6 +96,7 @@ public class Styles implements Disposable{
         touchpadStyle.background=touchpad_background;
         touchpadStyle.knob=touchpad_thumb;
 
+        skin.addRegions((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS));
         skin.add("default", tbs);
         skin.add("buttonLeft", ImageButtonLeft);
         skin.add("buttonRight", ImageButtonRight);

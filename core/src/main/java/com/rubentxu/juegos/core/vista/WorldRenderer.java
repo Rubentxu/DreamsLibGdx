@@ -69,8 +69,11 @@ public class WorldRenderer {
 
     private void loadTextures() {
 
-        background=new ParallaxBackground(new ParallaxLayer[]{new ParallaxLayer(world.getBackground(),new Vector2(0.5f,0.2f),new Vector2(0, 500))
-        }, 800, 480);
+
+        background=new ParallaxBackground(new ParallaxLayer[]{
+                new ParallaxLayer(world.getBackground(),new Vector2(),new Vector2(0, 0)),
+                new ParallaxLayer(world.getBackground2(),new Vector2(1.0f,1.0f),new Vector2(0, 500))
+        }, 800, 480,new Vector2(150,0));
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
@@ -111,7 +114,7 @@ public class WorldRenderer {
 
     public void render() {
 
-        background.render(world.getHero().getVelocity().cpy());
+        background.render(Gdx.graphics.getDeltaTime());
 
         //TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
 

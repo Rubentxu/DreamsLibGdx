@@ -22,12 +22,14 @@ public class GameScreen extends BaseScreen {
     private WorldController controller;
     private Table stats;
 
+
     public GameScreen(DreamsGame dreamsGame) {
         super(dreamsGame,new Stage(0, 0, true));
-        CURRENT_SCREEN= BaseScreen.SCREEN.MENU;
+        CURRENT_SCREEN= SCREEN.GAME;
         world=new World();
         controller=new WorldController(world);
         renderer=new WorldRenderer(this);
+
 
     }
 

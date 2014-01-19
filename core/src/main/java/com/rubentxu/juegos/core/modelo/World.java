@@ -1,6 +1,6 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -24,7 +24,8 @@ public class World implements Disposable{
     private HashSet<Water> waterSensors= new HashSet<Water>();
     private HashSet<Enemy> enemies=new HashSet<Enemy>();
     private HashSet<Item> items=new HashSet<Item>();
-    private Texture background;
+    private TextureAtlas.AtlasRegion background;
+    private TextureAtlas.AtlasRegion background2;
     private Array<Body> bodiesFlaggedDestroy=new Array<Body>();
 
     public World() {         
@@ -38,7 +39,9 @@ public class World implements Disposable{
         parser = new Box2DMapObjectParser(this);
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
-        background=(Texture) Assets.getInstance().get(Assets.getInstance().GAME_BACKGROUND);
+
+        background=((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS)).findRegion("fondo");
+        background2=((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS)).findRegion("nubes");
     }
 
     public void destroyFlaggedEntities(){
@@ -128,11 +131,15 @@ public class World implements Disposable{
         return items;
     }
 
-    public Texture getBackground() {
+    public TextureAtlas.AtlasRegion getBackground() {
         return background;
     }
 
-    public void setBackground(Texture background) {
+    public TextureAtlas.AtlasRegion getBackground2() {
+        return background2;
+    }
+
+    public void setBackground(TextureAtlas.AtlasRegion background) {
         this.background = background;
     }
 

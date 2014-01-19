@@ -21,13 +21,13 @@ public class Assets extends AssetManager implements Disposable{
     public static final String UISKIN_ATLAS="gui/uiskin.pack";
     public static final String SPRITE_ATLAS="imagenes/animaciones/sprites.pack";
     public static final String VARIOS_ATLAS="imagenes/varios/varios.pack";
+    public static final String FONDOS_ATLAS="imagenes/fondos/fondos.pack";
     public static final String SPLASH="imagenes/fondos/splash.jpg";
     public static final String DEFAULT_FONT="fonts/DreamOfMe-32.fnt";
     public static final String BIG_FONT="fonts/DreamOfMe-40.fnt";
     public static final String HEADER_FONT="fonts/Bedbug-18.fnt";
     public static final String DEBUG_BACKGROUND="imagenes/fondos/debug.jpg";
     public static final String MENU_BACKGROUND="imagenes/fondos/menu-backgroud.jpg";
-    public static final String GAME_BACKGROUND="imagenes/fondos/background.jpg";
     public static final String MAP_DEFAULT="maps/EscenarioDePruebas.tmx";
     public static final String PARTICLE_EFFECT="particles/dust.pfx";
 
@@ -65,7 +65,7 @@ public class Assets extends AssetManager implements Disposable{
         this.load(HEADER_FONT, BitmapFont.class);
         this.load(DEBUG_BACKGROUND, Texture.class);
         this.load(MENU_BACKGROUND, Texture.class);
-        this.load(GAME_BACKGROUND, Texture.class);
+        this.load(FONDOS_ATLAS, TextureAtlas.class);
         this.load(SPRITE_ATLAS, TextureAtlas.class);
         this.load(VARIOS_ATLAS, TextureAtlas.class);
         this.load(GUI_ATLAS, TextureAtlas.class);

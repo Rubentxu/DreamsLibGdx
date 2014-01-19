@@ -1,6 +1,7 @@
 package com.rubentxu.juegos.core.utils.builders;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -10,9 +11,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
+import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.servicios.Styles;
 
 
@@ -165,12 +167,11 @@ public class GuiBuilder {
 
         Table tableProfile = new Table();
         tableProfile.setBounds(0, 0, width , height /10);
-        NinePatchDrawable drawable= (NinePatchDrawable) styles.skin.get("debug", NinePatchDrawable.class);
-        drawable.getPatch().getColor().a=0.7f;
+        TextureRegionDrawable drawable= (TextureRegionDrawable) styles.skin.get("stats", TextureRegionDrawable.class);
         tableProfile.setBackground(drawable);
 
 
-        Image imageLives = new Image( styles.skin.get("buttonLeft", NinePatchDrawable.class));
+        Image imageLives = new Image(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("vidas"));
         imageLives.setName(Constants.IMAGE_LIVES);
 
         Label lives = new Label("0", styles.skin, "header", Color.ORANGE);
