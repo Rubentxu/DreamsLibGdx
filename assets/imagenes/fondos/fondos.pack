@@ -12,8 +12,8 @@ fondoStats
 nubes
   rotate: false
   xy: 2, 481
-  size: 866, 241
-  orig: 866, 241
+  size: 960, 241
+  orig: 960, 241
   offset: 0, 0
   index: -1
 fondo

@@ -68,6 +68,9 @@ public class ModelsAndViews {
                     || box2DPhysicsObject.getGrupo().equals(GRUPO.ENEMY))
                 updateModelPosition(box2DPhysicsObject, sprite);
 
+            if(((Box2DPhysicsObject) mav.getKey()).isFlaggedForDelete()) {
+
+            }
             sprite.draw(spriteBatch);
 
         }

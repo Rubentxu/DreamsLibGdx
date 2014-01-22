@@ -47,7 +47,6 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
         waterManager = new WaterManager(world);
         enemyManager = new EnemyManager(world);
         itemsManager= new ItemsManager(world);
-
     }
 
     public void leftPressed() {

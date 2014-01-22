@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
@@ -59,8 +58,8 @@ public class WorldRenderer {
     }
 
     public void resize(int w, int h) {
-        this.setWidth(w);
-        this.setHeight(h);
+        this.width=w;
+        this.height=h;
 
         cam.viewportWidth = Constants.VIEWPORT_WIDTH;
         cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
@@ -69,11 +68,9 @@ public class WorldRenderer {
 
     private void loadTextures() {
 
-
-        background=new ParallaxBackground(new ParallaxLayer[]{
-                new ParallaxLayer(world.getBackground(),new Vector2(),new Vector2(0, 0)),
-                new ParallaxLayer(world.getBackground2(),new Vector2(1.0f,1.0f),new Vector2(0, 500))
-        }, 800, 480,new Vector2(150,0));
+        background=new ParallaxBackground(Constants.VIEWPORT_WIDTH,Constants.VIEWPORT_HEIGHT);
+        background.addLayer(new ParallaxLayer(world.getBackground(),0.5f,0.2f,200,100));
+        background.addLayer(new ParallaxLayer(world.getBackground2(),0.8f,0.8f,200,40));
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
@@ -86,6 +83,7 @@ public class WorldRenderer {
                 modelsAndViews.addModelAndView(mvp,viewSprite);
             }
         }
+
         for(Water w :world.getWaterSensors()){
             String nombreRegion= (atlasVarios.findRegion(w.getNombre())!=null)? w.getNombre(): w.getGrupo().toString();
             Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
@@ -114,12 +112,10 @@ public class WorldRenderer {
 
     public void render() {
 
-        background.render(Gdx.graphics.getDeltaTime());
-
-        //TiledMapTileLayer mtl = (TiledMapTileLayer) world.getMap().getLayers().get(0);
+        background.render(cam.position,spriteBatch);
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
-        cam.position.set(world.getHero().getBody().getPosition().x, world.getHero().getBody().getPosition().y , 0);
+        cam.position.set(world.getHero().getBody().getPosition().x, world.getHero().getBody().getPosition().y +cam.viewportHeight/2-5, 0);
         cam.update();
 
         renderer.setView(cam);
@@ -128,7 +124,6 @@ public class WorldRenderer {
         spriteBatch.begin();
         modelsAndViews.update(world);
         modelsAndViews.render(spriteBatch);
-
 
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);

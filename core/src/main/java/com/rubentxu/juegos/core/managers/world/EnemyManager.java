@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.State;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
@@ -96,6 +97,19 @@ public class EnemyManager extends AbstractWorldManager {
         }
     }
 
+    public Hero getHero(Contact contact) {
+        Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
+        Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
+
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
+            return (Hero) box2dPhysicsA;
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
+            return (Hero) box2dPhysicsB;}
+        else {
+            return null;
+        }
+    }
+
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -112,6 +126,12 @@ public class EnemyManager extends AbstractWorldManager {
             enemy.setGround(true);
             System.out.println("Enemy Ground");
             contact.setEnabled(true);
+        }
+        Hero hero= getHero(contact);
+        if (hero!=null && enemy!=null && (contact.getFixtureA() == hero.getHeroSensorFixture() ||
+                contact.getFixtureB() == hero.getHeroSensorFixture())){
+            enemy.setFlaggedForDelete(true);
+            world.addBodiesFlaggedDestroy(enemy.getBody());
         }
 
     }

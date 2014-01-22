@@ -29,8 +29,9 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
     // Status
     private boolean onGround = false;
+    private boolean onWater = false;
     private State state = State.IDLE;
-    private Boolean hurt;
+
     boolean facingLeft = true;
 
     private Profile profile;
@@ -144,10 +145,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         this.grounContacts = grounContacts;
     }
 
-
-    public void hurt() {
-        hurt = true;
-    }
 
     public Profile getProfile() {
         return profile;

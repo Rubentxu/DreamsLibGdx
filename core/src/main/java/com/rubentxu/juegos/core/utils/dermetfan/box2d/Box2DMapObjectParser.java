@@ -451,6 +451,7 @@ public class Box2DMapObjectParser {
             fixDef.filter.categoryBits= GRUPO.ITEMS.getCategory();
             fixDef.filter.maskBits=Box2DPhysicsObject.MASK_ITEMS;
             Fixture fixBox=box.createFixture(fixDef);
+            fixBox.setSensor(true);
             shape.dispose();
             box.setBullet(true);
 

@@ -30,7 +30,6 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
     // Status
     private boolean onGround = false;
     private State state = State.WALKING;
-    private Boolean hurt;
     boolean facingLeft = true;
 
     public Enemy(World physics) {
@@ -113,11 +112,6 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
 
     public void setGrounContacts(HashSet<Fixture> grounContacts) {
         this.grounContacts = grounContacts;
-    }
-
-    public void hurt() {
-        hurt = true;
-
     }
 
     public Path getPath() {
