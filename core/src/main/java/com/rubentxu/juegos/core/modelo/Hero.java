@@ -80,7 +80,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
         super.getBody().setBullet(true);
 
-        setProfile(new Profile());
+        profile=new Profile();
 
     }
 
