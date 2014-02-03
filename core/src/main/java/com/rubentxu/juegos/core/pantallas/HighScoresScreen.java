@@ -1,6 +1,7 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -54,7 +55,7 @@ public class HighScoresScreen extends BaseScreen {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                game.setScreen(game.menuScreen);
+                game.setScreen(game.menuScreen,getTransition());
             }
         });
         backButton.pad(20);
@@ -63,6 +64,11 @@ public class HighScoresScreen extends BaseScreen {
 
         this.stage.addActor(mainTable);
 
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return stage;
     }
 
     private Label label(String text, Color color, boolean scale) {

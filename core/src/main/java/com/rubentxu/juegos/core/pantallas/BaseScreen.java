@@ -3,12 +3,18 @@ package com.rubentxu.juegos.core.pantallas;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlice;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.servicios.Styles;
+import com.badlogic.gdx.InputProcessor;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
@@ -22,9 +28,19 @@ public abstract class BaseScreen implements Screen {
     protected float width;
     protected float height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
+    //private ScreenTransition transition = ScreenTransitionFade.init(0.75f);
+    //private ScreenTransition transition = ScreenTransitionSlide.init(1.15f,
+    //        ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+    ScreenTransition transition = ScreenTransitionSlice.init(2,
+            ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
+
 
     public DreamsGame getGame() {
         return game;
+    }
+
+    public ScreenTransition getTransition() {
+        return transition;
     }
 
     public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, HIGHSCORES, CREDITS}
@@ -93,4 +109,8 @@ public abstract class BaseScreen implements Screen {
         assets=null;
         styles=null;
     }
+
+
+    public abstract InputProcessor getInputProcessor ();
+
 }

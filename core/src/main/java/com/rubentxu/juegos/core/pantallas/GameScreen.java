@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -59,12 +60,6 @@ public class GameScreen extends BaseScreen {
     public void resize(int width, int height) {
         stage.clear();
         stage.setViewport(width,height);
-
-        GameInputs gameInputs = new GameInputs(controller, renderer);
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(gameInputs);
-        Gdx.input.setInputProcessor(multiplexer);
         renderer.resize(width, height);
 
         stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), styles);
@@ -126,5 +121,15 @@ public class GameScreen extends BaseScreen {
 
     public void setController(WorldController controller) {
         this.controller = controller;
+    }
+
+    @Override
+    public InputProcessor getInputProcessor () {
+        GameInputs gameInputs = new GameInputs(controller, renderer);
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(gameInputs);
+        System.out.println("Agregado multiplexer...."+Gdx.input.getInputProcessor());
+        return multiplexer;
     }
 }

@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core.pantallas;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -112,7 +113,7 @@ public class OptionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.getPreferencesManager().save();
-                game.setScreen(game.menuScreen);
+                game.setScreen(game.menuScreen,getTransition());
             }
         });
 
@@ -120,6 +121,11 @@ public class OptionScreen extends BaseScreen {
 
         this.stage.addActor(mainTable);
 
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return stage;
     }
 
     private void updateVolumeLabel() {

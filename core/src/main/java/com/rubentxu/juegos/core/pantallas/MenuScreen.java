@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core.pantallas;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -47,7 +48,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
                 game.gameScreen= new GameScreen(game);
-                game.setScreen(game.gameScreen);
+                game.setScreen(game.gameScreen,getTransition());
             }
         });
 
@@ -55,7 +56,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click optionScreen...");
                 game.optionScreen= new OptionScreen(game);
-                game.setScreen(game.optionScreen);
+                game.setScreen(game.optionScreen,getTransition());
             }
         });
 
@@ -63,7 +64,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click highScoreScreen...");
                 game.highScoreScreen= new HighScoresScreen(game);
-                game.setScreen(game.highScoreScreen);
+                game.setScreen(game.highScoreScreen,getTransition());
             }
         });
 
@@ -85,6 +86,11 @@ public class MenuScreen extends BaseScreen {
 
         this.stage.addActor(mainTable);
 
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return stage;
     }
 
 }

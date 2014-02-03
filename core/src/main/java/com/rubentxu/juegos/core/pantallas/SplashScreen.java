@@ -1,5 +1,6 @@
 package com.rubentxu.juegos.core.pantallas;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -47,7 +48,7 @@ public class SplashScreen extends BaseScreen {
             }
         }), delay(3f, fadeOut(0.5f)), run(new Runnable() {
             public void run() {
-                game.setScreen(game.menuScreen);
+                game.setScreen(game.menuScreen,getTransition());
             }
         })));
 
@@ -57,6 +58,11 @@ public class SplashScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
+    }
+
+    @Override
+    public InputProcessor getInputProcessor() {
+        return null;
     }
 
 }
