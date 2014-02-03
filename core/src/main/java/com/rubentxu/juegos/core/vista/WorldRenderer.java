@@ -69,8 +69,9 @@ public class WorldRenderer {
     private void loadTextures() {
 
         background=new ParallaxBackground(Constants.VIEWPORT_WIDTH,Constants.VIEWPORT_HEIGHT);
-        background.addLayer(new ParallaxLayer(world.getBackground(),0.5f,0.2f,200,100));
-        background.addLayer(new ParallaxLayer(world.getBackground2(),0.8f,0.8f,200,40));
+        background.addLayer(new ParallaxLayer(world.getLevelBackground(),0.4f,0.2f,100,100));
+        background.addLayer(new ParallaxLayer(world.getCloudBackground(),0.6f,0.2f,100,100));
+        background.addLayer(new ParallaxLayer(world.getTreeBackground(),0.8f,0.2f,100,100));
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 

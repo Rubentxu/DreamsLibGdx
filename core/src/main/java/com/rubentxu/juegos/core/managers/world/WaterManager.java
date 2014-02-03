@@ -34,8 +34,9 @@ public class WaterManager extends AbstractWorldManager {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBody();
         w.addBody(b);
-        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO))
-            ((Hero)b.getUserData()).setState(Hero.State.SWIMMING);
+        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO)) {
+            ((Hero)b.getUserData()).setStatePos(Hero.StatePos.INWATER);
+        }
 
     }
 
@@ -43,7 +44,12 @@ public class WaterManager extends AbstractWorldManager {
     @Override
     public void handleEndContact(Contact contact) {
         Water w = getWater(contact);
+        Body b = getSubmergedBody(contact).getBody();
         w.removeBody(getSubmergedBody(contact).getBody());
+        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO)) {
+            ((Hero)b.getUserData()).setStatePos(Hero.StatePos.ONAIR);
+        }
+
     }
 
     @Override

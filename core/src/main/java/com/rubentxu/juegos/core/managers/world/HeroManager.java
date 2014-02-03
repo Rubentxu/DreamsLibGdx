@@ -7,9 +7,6 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.DreamsGame;
-import com.rubentxu.juegos.core.constantes.GameState;
-import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
@@ -19,7 +16,7 @@ import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
-import static com.rubentxu.juegos.core.controladores.WorldController.*;
+import static com.rubentxu.juegos.core.controladores.WorldController.keys;
 
 
 public class HeroManager extends AbstractWorldManager {
@@ -33,68 +30,130 @@ public class HeroManager extends AbstractWorldManager {
         this.hero = world.getHero();
     }
 
-    public void handleInput(Hero hero, WorldController controller) {
-        Vector2 vel = hero.getVelocity();
-        Vector2 pos = hero.getBody().getPosition();
-        switch (hero.getState()){
-            case IDLE:
-                if(keys.get(Keys.LEFT)){
+    public void handleInput(Hero hero) {
+
+        switch (hero.getStatePos()) {
+            case ONGROUND:
+                if (keys.get(Keys.LEFT)) {
                     hero.setState(State.WALKING);
                     hero.setFacingLeft(true);
                 }
-                if(keys.get(Keys.RIGHT)){
+                if (keys.get(Keys.RIGHT)) {
                     hero.setState(State.WALKING);
                     hero.setFacingLeft(false);
                 }
 
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
-                } else {
-                    setStillTime(0);
-                }
-
-                break;
-            case WALKING:
-                if(hero.isFacingLeft() && vel.x > -hero.MAX_VELOCITY){
-                    hero.getBody().applyLinearImpulse(-3f, 0f,  pos.x, pos.y, true);
-                }
-                if(!hero.isFacingLeft() && vel.x < hero.MAX_VELOCITY){
-                    hero.getBody().applyLinearImpulse(3f, 0, pos.x, pos.y, true);
-                }
-                if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     hero.setState(State.IDLE);
                 }
-                if (!hero.isGround()) hero.setState(State.FALL);
-                if (!hero.onWater)) hero.setState(State.SWIMMING);
-
-                    break;
-            case JUMPING:
-                // jump, but only when grounded
                 if (keys.get(Keys.JUMP)) {
-                    if (hero.isGround()) {
-                        hero.setState(Hero.State.JUMPING);
-                        hero.getBody().setLinearVelocity(vel.x, 0);
-                        hero.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-                        hero.getBody().applyLinearImpulse(0, hero.JUMP_FORCE, pos.x, pos.y, true);
-                    }  }
+                    hero.setState(Hero.State.JUMPING);
+                }
+                handleState();
                 break;
-            case DYING:
+            case INWATER:
+                if (keys.get(Keys.LEFT)) {
+                    hero.setState(State.SWIMMING);
+                    hero.setFacingLeft(true);
+                }
+                if (keys.get(Keys.RIGHT)) {
+                    hero.setState(State.SWIMMING);
+                    hero.setFacingLeft(false);
+                }
+                if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
+                    stillTime += Gdx.graphics.getDeltaTime();
+                    hero.setState(State.IDLE);
+                }
+                if (keys.get(Keys.JUMP)) {
+                    hero.setState(Hero.State.PROPULSION);
+                }
+
+                handleState();
                 break;
-            case FALL:
+            case ONAIR:
+                if (keys.get(Keys.LEFT)) {
+                    hero.setFacingLeft(true);
+                    applyPhysicMovingImpulse();
+                }
+                if (keys.get(Keys.RIGHT)) {
+                    hero.setFacingLeft(false);
+                    applyPhysicMovingImpulse();
+                }
+                if (hero.getVelocity().y <= 0 ){
+                    hero.setState(State.FALL);
+                }else{
+                    hero.setState(State.JUMPING);
+                }
+                hero.getHeroPhysicsFixture().setFriction(0f);
+                hero.getHeroSensorFixture().setFriction(0f);
+                break;
+        }
+        hero.velocityLimit();
+
+    }
+
+    public void handleState() {
+        Vector2 vel = hero.getVelocity();
+        Vector2 pos = hero.getBody().getPosition();
+
+        switch (hero.getState()) {
+            case IDLE:
+                stillTime += Gdx.graphics.getDeltaTime();
+                hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
+                hero.getHeroPhysicsFixture().setFriction(100f);
+                hero.getHeroSensorFixture().setFriction(100f);
+                break;
+            case WALKING:
+                applyPhysicMovingImpulse();
+                stillTime = 0;
+                hero.getHeroPhysicsFixture().setFriction(0.2f);
+                hero.getHeroSensorFixture().setFriction(0.2f);
+                break;
+            case JUMPING:
+                if(!hero.getStatePos().equals(Hero.StatePos.ONAIR))
+                    applyPhysicJumpingImpulse(vel, pos);
+                break;
+            case PROPULSION:
+                applyPhysicJumpingImpulse(vel, pos);
                 break;
             case SWIMMING:
-                break;
-            case HURT:
-                break;
+                applyPhysicMovingImpulse();
+
         }
 
     }
-    public void update(Hero hero) {
 
+
+    private void applyPhysicJumpingImpulse(Vector2 vel, Vector2 pos) {
+        hero.getBody().setLinearVelocity(vel.x, 0);
+        hero.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
+        hero.getBody().applyLinearImpulse(0, hero.JUMP_FORCE, pos.x, pos.y, true);
     }
 
-    public void update(float delta) {
+    private void applyPhysicMovingImpulse() {
+        Vector2 vel = hero.getVelocity();
+        Vector2 pos = hero.getBody().getPosition();
+
+        int impulse=0;
+        if (hero.isFacingLeft() && vel.x > -hero.MAX_VELOCITY) {
+            impulse=-3;
+        }
+        if (!hero.isFacingLeft() && vel.x < hero.MAX_VELOCITY) {
+            impulse=3;
+        }
+        if (!hero.isFacingLeft() && vel.x < 0) {
+            impulse=2;
+        }
+        if (hero.isFacingLeft() && vel.x > 0) {
+            impulse=-2;
+        }
+        hero.getBody().applyLinearImpulse(impulse, 0, pos.x, pos.y, true);
+    }
+
+
+
+ /*   public void update(float delta) {
 
 
         if(!hero.getState().equals(Hero.State.HURT) && hurtTime>1.2f){
@@ -111,70 +170,12 @@ public class HeroManager extends AbstractWorldManager {
 
         if(hurtTime>2)hurtTime=2;
         hurtTime += delta;
-    }
+    }*/
 
-    public void processVelocity(Vector2 vel,float delta) {
 
-       /* if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
-            stillTime += delta;
-            hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
-        } else {
-            setStillTime(0);
-        }*/
 
-        hero.velocityLimit();
-    }
 
-    public void applyImpulses(Vector2 vel, Vector2 pos) {
-        // apply left impulse, but only if max velocity is not reached yet
-     /*   if (keys.get(Keys.LEFT) && vel.x > -hero.MAX_VELOCITY) {
-            hero.getBody().applyLinearImpulse(-3f, 0f, pos.x, pos.y, true);
-        }
 
-        // apply right impulse, but only if max velocity is not reached yet
-        if (keys.get(Keys.RIGHT) && vel.x < hero.MAX_VELOCITY) {
-            hero.getBody().applyLinearImpulse(3f, 0, pos.x, pos.y, true);
-        }*/
-
-        // jump, but only when grounded
-        if (keys.get(Keys.JUMP)) {
-            if (hero.isGround()) {
-                hero.setState(Hero.State.JUMPING);
-                hero.getBody().setLinearVelocity(vel.x, 0);
-                hero.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-                hero.getBody().applyLinearImpulse(0, hero.JUMP_FORCE, pos.x, pos.y, true);
-            }else if(!hero.getState().equals(Hero.State.JUMPING)) {
-                hero.setState(Hero.State.FALL);
-            }
-        }
-    }
-
-    public void processContactGround() {
-
-        if (!hero.isGround()) {
-            hero.getHeroPhysicsFixture().setFriction(0f);
-            hero.getHeroSensorFixture().setFriction(0f);
-            if (hero.getVelocity().y <= 0 || !hero.getState().equals(Hero.State.JUMPING))
-                hero.setState(Hero.State.FALL);
-        } else {
-            if(!hero.getState().equals(Hero.State.SWIMMING)) hero.setState(Hero.State.IDLE);
-            if (keys.get(Keys.LEFT)  ) {
-                hero.setFacingLeft(true);
-                if(!hero.getState().equals(Hero.State.SWIMMING)) hero.setState(Hero.State.WALKING);
-            } else if (keys.get(Keys.RIGHT) ) {
-                hero.setFacingLeft(false);
-                if(!hero.getState().equals(Hero.State.SWIMMING)) hero.setState(Hero.State.WALKING);
-            }
-            if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT) && stillTime > 1
-                    && !hero.getState().equals(Hero.State.HURT)) {
-                hero.getHeroPhysicsFixture().setFriction(100f);
-                hero.getHeroSensorFixture().setFriction(100f);
-            } else {
-                hero.getHeroPhysicsFixture().setFriction(0.2f);
-                hero.getHeroSensorFixture().setFriction(0.2f);
-            }
-        }
-    }
 
     public Enemy getEnemy(Contact contact) {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
@@ -182,7 +183,7 @@ public class HeroManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.ENEMY)) {
             return (Enemy) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.ENEMY)){
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.ENEMY)) {
             return (Enemy) box2dPhysicsB;
         } else {
             return null;
@@ -195,17 +196,26 @@ public class HeroManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
-            return (Hero) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.HERO)) {
+            return (Hero) box2dPhysicsB;
+        } else {
             return null;
         }
     }
 
-    public Boolean existSensor (Contact contact) {
+    public boolean isGroundGrupo(Fixture fixture){
+
+        boolean check= ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.STATIC) ||
+         ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.PLATFORM) ||
+         ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.MOVING_PLATFORM);
+        System.out.println("IsGrounGrupo "+check);
+        return check;
+    }
+
+    public Boolean existSensor(Contact contact) {
 
         if (contact.getFixtureA() == hero.getHeroSensorFixture() ||
-                contact.getFixtureB() == hero.getHeroSensorFixture()){
+                contact.getFixtureB() == hero.getHeroSensorFixture()) {
             return true;
         }
 
@@ -213,43 +223,43 @@ public class HeroManager extends AbstractWorldManager {
     }
 
 
-
     @Override
     public void handleBeginContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "Begin contact");
-        Enemy enemy=getEnemy(contact);
+        Enemy enemy = getEnemy(contact);
 
 
-        if (enemy==null && contact.getFixtureA() == hero.getHeroSensorFixture()){
+        if (isGroundGrupo(contact.getFixtureB()) && contact.getFixtureA() == hero.getHeroSensorFixture()
+                && !hero.getStatePos().equals(Hero.StatePos.INWATER)) {
             hero.getGrounContacts().add(contact.getFixtureB());//A is foot so B is ground
         }
 
-        if (enemy==null &&  contact.getFixtureB() == hero.getHeroSensorFixture()) {
+        if (isGroundGrupo(contact.getFixtureA()) && contact.getFixtureB() == hero.getHeroSensorFixture()
+                && !hero.getStatePos().equals(Hero.StatePos.INWATER)) {
             hero.getGrounContacts().add(contact.getFixtureA());//A is foot so B is ground
         }
 
 
         if (hero.getGrounContacts().size() > 0) {
-            hero.setGround(true);
+            hero.setStatePos(Hero.StatePos.ONGROUND);
             contact.setEnabled(true);
-
-           // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
+            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
-        if(enemy!=null  &&  contact.getFixtureA() == hero.getHeroPhysicsFixture()
-                &&  contact.getFixtureB() == hero.getHeroPhysicsFixture() && !hero.getState().equals(State.HURT)) {
+        if (enemy != null && contact.getFixtureA() == hero.getHeroPhysicsFixture()
+                && contact.getFixtureB() == hero.getHeroPhysicsFixture() && !hero.getState().equals(State.HURT)) {
 
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
-            if (points[0].x < hero.getBody().getPosition().x ) {
-                force=new Vector2(4,7);
-            }else {
-                force=new Vector2(-4,7);
+            if (points[0].x < hero.getBody().getPosition().x) {
+                force = new Vector2(4, 7);
+            } else {
+                force = new Vector2(-4, 7);
             }
-            System.out.println("Fuerza colision Enemigo: "+force +" Sensor no exist");
-            hero.getBody().applyLinearImpulse(force,hero.getBody().getWorldCenter(),true);
+            System.out.println("Fuerza colision Enemigo: " + force + " Sensor no exist");
+            hero.getBody().applyLinearImpulse(force, hero.getBody().getWorldCenter(), true);
 
             hero.setState(Hero.State.HURT);
-            hurtTime=0;
+            hurtTime = 0;
         }
     }
 
@@ -265,7 +275,8 @@ public class HeroManager extends AbstractWorldManager {
 
 
         if (hero.getGrounContacts().size() == 0) {
-            hero.setGround(false);
+            if(!hero.getStatePos().equals(Hero.StatePos.INWATER))
+            hero.setStatePos(Hero.StatePos.ONAIR);
 
             //Gdx.app.log(DreamsGame.LOG, "OnGroun False");
         }
@@ -284,6 +295,12 @@ public class HeroManager extends AbstractWorldManager {
     @Override
     public boolean handleShouldCollide(Fixture fixtureA, Fixture fixtureB) {
         return true;
+    }
+
+    @Override
+    public void update(float delta) {
+        handleInput(hero);
+        hero.setStateTime(hero.getStateTime()+delta);
     }
 
     public void setStillTime(int stillTime) {

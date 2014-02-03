@@ -1,6 +1,6 @@
 package com.rubentxu.juegos.core.modelo;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -24,9 +24,10 @@ public class World implements Disposable{
     private HashSet<Water> waterSensors= new HashSet<Water>();
     private HashSet<Enemy> enemies=new HashSet<Enemy>();
     private HashSet<Item> items=new HashSet<Item>();
-    private TextureAtlas.AtlasRegion background;
-    private TextureAtlas.AtlasRegion background2;
     private Array<Body> bodiesFlaggedDestroy=new Array<Body>();
+    private Texture cloudBackground;
+    private Texture treeBackground;
+    private Texture levelBackground;
 
     public World() {         
         createDreamsWorld();
@@ -40,8 +41,9 @@ public class World implements Disposable{
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
 
-        background=((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS)).findRegion("fondo");
-        background2=((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS)).findRegion("nubes");
+        levelBackground =((Texture) Assets.getInstance().get(Assets.getInstance().LEVEL1_BACKGROUND));
+        cloudBackground =((Texture) Assets.getInstance().get(Assets.getInstance().CLOUD_BACKGROUND));
+        treeBackground =((Texture) Assets.getInstance().get(Assets.getInstance().TREE_BACKGROUND));
     }
 
     public void destroyFlaggedEntities(){
@@ -72,7 +74,7 @@ public class World implements Disposable{
     public void dispose() {
         map.dispose();
         physics.dispose();
-        background=null;
+        levelBackground =null;
         hero.dispose();
         bodiesFlaggedDestroy=null;
         for (MovingPlatform m:movingPlatforms){
@@ -131,16 +133,8 @@ public class World implements Disposable{
         return items;
     }
 
-    public TextureAtlas.AtlasRegion getBackground() {
-        return background;
-    }
-
-    public TextureAtlas.AtlasRegion getBackground2() {
-        return background2;
-    }
-
-    public void setBackground(TextureAtlas.AtlasRegion background) {
-        this.background = background;
+    public Texture getLevelBackground() {
+        return levelBackground;
     }
 
     public HashSet<Enemy> getEnemies() {
@@ -152,5 +146,13 @@ public class World implements Disposable{
     }
     public Array<Body> getBodiesFlaggedDestroy(){
         return bodiesFlaggedDestroy;
+    }
+
+    public Texture getCloudBackground() {
+        return cloudBackground;
+    }
+
+    public Texture getTreeBackground() {
+        return treeBackground;
     }
 }
