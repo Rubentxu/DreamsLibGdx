@@ -8,12 +8,14 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
+import com.rubentxu.juegos.core.modelo.Hero.StateHero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
@@ -21,8 +23,10 @@ import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedBox2DSprite;
 import com.rubentxu.juegos.core.utils.dermetfan.graphics.AnimatedSprite;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 public class ModelsAndViews {
@@ -38,7 +42,7 @@ public class ModelsAndViews {
     /**
      * Animations *
      */
-    private AnimatedBox2DSprite animationHero;
+    private HashMap<String, Animation> animationHero;
     private AnimatedSprite walkRightAnimation;
     private AnimatedSprite jumpRightAnimation;
     private AnimatedSprite fallRightAnimation;
@@ -54,6 +58,7 @@ public class ModelsAndViews {
      */
     private Table Score;
     private Map<Box2DPhysicsObject, Sprite> modelsAndViews = new HashMap<Box2DPhysicsObject, Sprite>();
+    private List<Box2DPhysicsObject> entities= new ArrayList<Box2DPhysicsObject>();
     private ParticleEffect dustParticles;
     private float timeIdle;
     private Hero hero;
@@ -74,12 +79,65 @@ public class ModelsAndViews {
             sprite.draw(spriteBatch);
 
         }
-        updateAnimationsRubentxu(hero);
-        animationHero.update();
-        animationHero.draw(spriteBatch);
-        dustParticles.update(Gdx.graphics.getDeltaTime());
-        dustParticles.draw(spriteBatch);
+        render2(spriteBatch);
+        //dustParticles.update(Gdx.graphics.getDeltaTime());
+        //dustParticles.draw(spriteBatch);
     }
+
+    public void render2(SpriteBatch batch){
+       TextureRegion frame;
+       for(Box2DPhysicsObject e: entities){
+           Map<String, Animation> anims = getAnimation(e);
+           if(anims!=null){
+               System.out.println("GET FRAME ANIMATION "+e.getState()+ " StateTime "+e.getStateTime());
+               frame = anims.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime(), true);
+
+               if(e.isFacingLeft() && !frame.isFlipX()){
+                   frame.flip(true,false);
+               } else if(!e.isFacingLeft() && frame.isFlipX()){
+                   frame.flip(true,false);
+               }
+               batch.draw(frame, e.getX()-e.getWidth()/2 , e.getY()-e.getHeight()/2,e.getWidth() , e.getHeight());
+           }
+       }
+    }
+
+    private Map<String,Animation> getAnimation(Box2DPhysicsObject e) {
+
+        if(e.getGrupo().equals(GRUPO.HERO)){
+           System.out.println("GET ANIMATION "+e.getGrupo());
+           return animationHero;
+        }
+        return null;
+    }
+
+    private void loadHeroAnimations(){
+        TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
+        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
+
+        Array<TextureAtlas.AtlasRegion> heroWalking = atlas.findRegions("Andando");
+        Array<TextureAtlas.AtlasRegion> heroJump = atlas.findRegions("Saltando");
+        Array<TextureAtlas.AtlasRegion> heroFall = atlas.findRegions("Cayendo");
+        Array<TextureAtlas.AtlasRegion> heroIdle = atlas.findRegions("Parado");
+        Array<TextureAtlas.AtlasRegion> heroSwimming = atlasVarios.findRegions("nadando");
+
+        Animation walking = new Animation(Constants.RUNNING_FRAME_DURATION, heroWalking);
+        walking.setPlayMode(Animation.LOOP);
+        Animation jump = new Animation(Constants.RUNNING_FRAME_DURATION * 7, heroJump);
+        Animation fall = new Animation(Constants.RUNNING_FRAME_DURATION * 5, heroFall);
+        Animation idle = new Animation(Constants.RUNNING_FRAME_DURATION * 4, heroIdle);
+        idle.setPlayMode(Animation.LOOP);
+        Animation swimming = new Animation(Constants.RUNNING_FRAME_DURATION * 4, heroSwimming);
+        swimming.setPlayMode(Animation.LOOP);
+
+        animationHero= new HashMap<String,Animation>();
+        animationHero.put(String.valueOf(StateHero.WALKING),walking);
+        animationHero.put(String.valueOf(StateHero.JUMPING),jump);
+        animationHero.put(String.valueOf(StateHero.FALL),fall);
+        animationHero.put(String.valueOf(StateHero.IDLE),idle);
+        animationHero.put(String.valueOf(StateHero.SWIMMING),swimming);
+    }
+
 
     private void updateModelPosition(Box2DPhysicsObject box2DPhysicsObject, Sprite sprite) {
         sprite.setPosition(box2DPhysicsObject.getBody().getPosition().x,
@@ -101,7 +159,7 @@ public class ModelsAndViews {
         this.modelsAndViews.put(box2DPhysicsObject, sprite);
     }
 
-    public void addModelAndBuildView(Hero hero) {
+   /* public void addModelAndBuildView(Hero hero) {
 
 
         TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
@@ -148,7 +206,7 @@ public class ModelsAndViews {
         animationHero.setPosition(hero.getBody().getPosition().x,
                 hero.getBody().getPosition().y);
 
-    }
+    }*/
 
     public AnimatedSprite convertToLeft(Array<TextureAtlas.AtlasRegion> atlasRegions, int mul) {
         Array<TextureAtlas.AtlasRegion> atlasRegionsTmp = new Array<TextureAtlas.AtlasRegion>();
@@ -161,7 +219,7 @@ public class ModelsAndViews {
 
     }
 
-    private void updateAnimationsRubentxu(Hero hero) {
+  /*  private void updateAnimationsRubentxu(Hero hero) {
         dustParticles.setPosition(hero.getBody().getPosition().x,
                 hero.getBody().getPosition().y - hero.getHeight() / 2.2f);
         if (hero.isFacingLeft()) {
@@ -233,7 +291,7 @@ public class ModelsAndViews {
         } else {
             animationHero.setColor(Color.WHITE);
         }
-    }
+    }*/
 
     public Map<Box2DPhysicsObject, Sprite> getModelsAndViews() {
         return modelsAndViews;
@@ -245,5 +303,10 @@ public class ModelsAndViews {
                 modelsAndViews.remove(b.getUserData());
             }
         }
+    }
+
+    public void addEntity(Box2DPhysicsObject e){
+        entities.add(e);
+        loadHeroAnimations();
     }
 }

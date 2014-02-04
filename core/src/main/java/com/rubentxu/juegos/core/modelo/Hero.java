@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.State;
 
 import java.util.HashSet;
 
@@ -16,7 +17,7 @@ import java.util.HashSet;
 public class Hero extends Box2DPhysicsObject implements Disposable {
 
 
-    public enum State {
+    public enum StateHero implements State {
         IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, PROPULSION, HURT ,ATTACK, DEAD, WIN
     }
 
@@ -29,7 +30,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     private Fixture heroSensorFixture;
 
     // Status
-    private State state = State.IDLE;
+
     private StatePos statePos = StatePos.ONGROUND;
 
     boolean facingLeft = true;
@@ -45,6 +46,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         super("Heroe", GRUPO.HERO, physics);
         setGrounContacts(new HashSet<Fixture>());
         createHero(x, y, width, height);
+        setState(StateHero.IDLE);
     }
 
     public void createHero(float x, float y, float width, float height) {
@@ -113,16 +115,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
          super.getBody().setLinearVelocity(velocity);
     }
 
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State newState) {
-        if(newState.equals(state)) return;
-        this.state = newState;
-        setStateTime(0);
-    }
-
     public Fixture getHeroPhysicsFixture() {
         return heroPhysicsFixture;
     }
@@ -161,7 +153,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     public String toString() {
         return
                 "StatePos=" + statePos +
-                "\nstate=" + state +
+                "\nstate=" + getState() +
                 "\nfacingLeft=" + facingLeft +
                 "\nisActive= " + getBody().isActive() +
                 "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +

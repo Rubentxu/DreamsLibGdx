@@ -69,7 +69,7 @@ public class Water extends Box2DPhysicsObject implements Disposable{
         mLinearDrag = linearDrag;
         mAngularDrag = angularDrag;
         m_bodyList = new Array<Body>();
-
+        setState(BaseState.DEFAULT);
     }
 
     public void addBody(Body body) {

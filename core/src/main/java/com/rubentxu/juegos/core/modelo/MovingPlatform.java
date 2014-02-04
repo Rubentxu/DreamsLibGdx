@@ -6,10 +6,16 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Path;
+import com.rubentxu.juegos.core.modelo.base.State;
 
 import java.util.HashSet;
 
 public class MovingPlatform extends Platform implements Disposable{
+
+
+    public enum StateMovingPlatform implements State {
+        ENABLED, DISABLED
+    }
 
     private  Vector2 pVelocity,start;
 
@@ -33,6 +39,7 @@ public class MovingPlatform extends Platform implements Disposable{
         path.addPoint(pos);
         path.addPoint(new Vector2(pos.x + dstX, pos.y + dstY));
         this.start=body.getPosition().cpy();
+        setState(BaseState.DEFAULT);
 
     }
 
@@ -85,6 +92,11 @@ public class MovingPlatform extends Platform implements Disposable{
 
     }
 
+
+    @Override
+    public State getState() {
+        return null;
+    }
 
     @Override
     public void dispose() {

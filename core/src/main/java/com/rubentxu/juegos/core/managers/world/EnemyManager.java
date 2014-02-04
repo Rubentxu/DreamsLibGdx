@@ -8,12 +8,11 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
-import com.rubentxu.juegos.core.modelo.Enemy.State;
+import com.rubentxu.juegos.core.modelo.Enemy.StateEnemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
-
 
 public class EnemyManager extends AbstractWorldManager {
 
@@ -36,7 +35,7 @@ public class EnemyManager extends AbstractWorldManager {
 
     public void processVelocity(Vector2 vel,Enemy enemy) {
 
-        if (enemy.getState().equals(State.IDLE)) {
+        if (enemy.getState().equals(StateEnemy.IDLE)) {
             enemy.getBody().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
         }
 
@@ -44,11 +43,11 @@ public class EnemyManager extends AbstractWorldManager {
 
     public void applyImpulses(Vector2 vel, Vector2 pos,Enemy enemy) {
         enemy.velocityLimit();
-        if (enemy.getState().equals(State.WALKING)) {
+        if (enemy.getState().equals(StateEnemy.WALKING)) {
             enemy.getBody().applyLinearImpulse(enemy.getPath().getForce(enemy.getBody().getMass()),enemy.getBody().getWorldCenter(),true);
         }
 
-        if ((enemy.getState().equals(State.JUMPING))) {
+        if ((enemy.getState().equals(StateEnemy.JUMPING))) {
             if (enemy.isGround()) {
                 enemy.getBody().setLinearVelocity(vel.x, 0);
                 enemy.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
@@ -61,11 +60,11 @@ public class EnemyManager extends AbstractWorldManager {
         if (!enemy.isGround()) {
             enemy.getEnemyPhysicsFixture().setFriction(0f);
             enemy.getEnemySensorFixture().setFriction(0f);
-            if (enemy.getVelocity().y < 0 || !enemy.getState().equals(Enemy.State.JUMPING))
-                enemy.setState(Enemy.State.FALL);
+            if (enemy.getVelocity().y < 0 || !enemy.getState().equals(Enemy.StateEnemy.JUMPING))
+                enemy.setState(Enemy.StateEnemy.FALL);
         } else {
-            enemy.setState(State.WALKING);
-            if (enemy.getState().equals(State.IDLE)) {
+            enemy.setState(StateEnemy.WALKING);
+            if (enemy.getState().equals(StateEnemy.IDLE)) {
                 enemy.getEnemyPhysicsFixture().setFriction(100f);
                 enemy.getEnemySensorFixture().setFriction(100f);
             } else {

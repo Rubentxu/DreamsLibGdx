@@ -75,7 +75,7 @@ public class WorldRenderer {
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
-        modelsAndViews.addModelAndBuildView(world.getHero());
+        modelsAndViews.addEntity(world.getHero());
 
         for(MovingPlatform mvp :world.getMovingPlatforms()){
             String nombreRegion= (atlasVarios.findRegion(mvp.getNombre())!=null)? mvp.getNombre(): mvp.getGrupo().toString();

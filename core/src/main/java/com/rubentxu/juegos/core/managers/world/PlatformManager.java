@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.WorldManifold;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
+import com.rubentxu.juegos.core.modelo.Hero.StateHero;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
@@ -111,10 +112,10 @@ public class PlatformManager extends AbstractWorldManager {
 
         if (contact.isEnabled()) {
             if (passenger.getGrupo().equals(GRUPO.HERO) &&
-                    !((Hero) passenger).getState().equals(Hero.State.WALKING)) {
+                    !((Hero) passenger).getState().equals(StateHero.WALKING)) {
                 contact.setFriction(100f);
             } else if (passenger.getGrupo().equals(GRUPO.HERO) &&
-                    !((Hero) passenger).getState().equals(Hero.State.WALKING)) {
+                    !((Hero) passenger).getState().equals(StateHero.WALKING)) {
                 contact.setFriction(0);
             }
         }

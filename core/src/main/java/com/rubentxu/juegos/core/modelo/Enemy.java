@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Path;
+import com.rubentxu.juegos.core.modelo.base.State;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -15,8 +16,8 @@ import java.util.List;
 
 public class Enemy extends Box2DPhysicsObject implements Disposable{
 
-    public enum State {
-        IDLE, WALKING, JUMPING, DYING, FALL
+    public enum StateEnemy implements State {
+        IDLE, WALKING, JUMPING, FALL
     }
 
     public final static float MAX_VELOCITY = 4f;
@@ -29,8 +30,6 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
 
     // Status
     private boolean onGround = false;
-    private State state = State.WALKING;
-    boolean facingLeft = true;
 
     public Enemy(World physics) {
         super("Enemigo", GRUPO.ENEMY, physics);
@@ -40,7 +39,7 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
         super(name, GRUPO.ENEMY, body);
         path = new Path(MAX_VELOCITY);
         path.setPoints((ArrayList<Vector2>) points);
-
+        setState(StateEnemy.WALKING);
     }
 
     public void velocityLimit() {
@@ -52,19 +51,13 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
         }
 
         if (vel.x < -0.5f) {
-            this.setFacingLeft(true);
+            setFacingLeft(true);
         } else if (vel.x > 0.5f) {
-            this.setFacingLeft(false);
+            setFacingLeft(false);
         }
     }
 
-    public boolean isFacingLeft() {
-        return facingLeft;
-    }
 
-    public void setFacingLeft(boolean facingLeft) {
-        this.facingLeft = facingLeft;
-    }
 
     public Vector2 getVelocity() {
         return super.getBody().getLinearVelocity();
@@ -72,14 +65,6 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
 
     public void setVelocity(Vector2 velocity) {
         super.getBody().setLinearVelocity(velocity);
-    }
-
-    public State getState() {
-        return state;
-    }
-
-    public void setState(State newState) {
-        this.state = newState;
     }
 
     public Fixture getEnemyPhysicsFixture() {
@@ -126,8 +111,8 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
     public String toString() {
         return
                 "onGround=" + onGround +
-                        "\nstate=" + state +
-                        "\nfacingLeft=" + facingLeft +
+                        "\nstate=" + getState() +
+                        "\nfacingLeft=" + isFacingLeft() +
                         "\nisActive= " + getBody().isActive() +
                         "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
                         "\nisAwake=" + getBody().isAwake() +

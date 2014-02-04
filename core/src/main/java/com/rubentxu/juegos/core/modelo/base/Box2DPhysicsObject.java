@@ -29,6 +29,10 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
         }
     }
 
+    public enum BaseState implements State{
+        INITIAL, DEFAULT, DELETE
+    }
+
     public static final short MASK_HERO = (short) ~GRUPO.HERO.category;
     public static final short MASK_ENEMY = (short) (GRUPO.HERO.category | GRUPO.STATIC.category);
     public static final short MASK_FLUID = (short) ~GRUPO.FLUID.category;
@@ -44,6 +48,18 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     protected String nombre;
     protected boolean isFlaggedForDelete = false;
     private float stateTime;
+    private State state= BaseState.DEFAULT;
+    private boolean facingLeft = false;
+
+    public State getState(){
+        return state;
+    }
+
+    public void setState(State state){
+        if(this.state.equals(state)) return;
+        this.state = state;
+        stateTime=0;
+    }
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, Body body) {
         this.nombre = nombre;
@@ -146,6 +162,14 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public void setStateTime(float stateTime) {
         this.stateTime = stateTime;
+    }
+
+    public boolean isFacingLeft() {
+        return facingLeft;
+    }
+
+    public void setFacingLeft(boolean facingLeft) {
+        this.facingLeft = facingLeft;
     }
 
 

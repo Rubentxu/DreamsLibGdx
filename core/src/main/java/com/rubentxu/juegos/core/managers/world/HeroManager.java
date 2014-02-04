@@ -11,12 +11,11 @@ import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
-import com.rubentxu.juegos.core.modelo.Hero.State;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
-
 import static com.rubentxu.juegos.core.controladores.WorldController.keys;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.*;
 
 
 public class HeroManager extends AbstractWorldManager {
@@ -35,38 +34,38 @@ public class HeroManager extends AbstractWorldManager {
         switch (hero.getStatePos()) {
             case ONGROUND:
                 if (keys.get(Keys.LEFT)) {
-                    hero.setState(State.WALKING);
+                    hero.setState(WALKING);
                     hero.setFacingLeft(true);
                 }
                 if (keys.get(Keys.RIGHT)) {
-                    hero.setState(State.WALKING);
+                    hero.setState(WALKING);
                     hero.setFacingLeft(false);
                 }
 
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    hero.setState(State.IDLE);
+                    hero.setState(IDLE);
                 }
                 if (keys.get(Keys.JUMP)) {
-                    hero.setState(Hero.State.JUMPING);
+                    hero.setState(JUMPING);
                 }
                 handleState();
                 break;
             case INWATER:
                 if (keys.get(Keys.LEFT)) {
-                    hero.setState(State.SWIMMING);
+                    hero.setState(SWIMMING);
                     hero.setFacingLeft(true);
                 }
                 if (keys.get(Keys.RIGHT)) {
-                    hero.setState(State.SWIMMING);
+                    hero.setState(SWIMMING);
                     hero.setFacingLeft(false);
                 }
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    hero.setState(State.IDLE);
+                    hero.setState(IDLE);
                 }
                 if (keys.get(Keys.JUMP)) {
-                    hero.setState(Hero.State.PROPULSION);
+                    hero.setState(PROPULSION);
                 }
 
                 handleState();
@@ -81,9 +80,9 @@ public class HeroManager extends AbstractWorldManager {
                     applyPhysicMovingImpulse();
                 }
                 if (hero.getVelocity().y <= 0 ){
-                    hero.setState(State.FALL);
+                    hero.setState(FALL);
                 }else{
-                    hero.setState(State.JUMPING);
+                    hero.setState(JUMPING);
                 }
                 hero.getHeroPhysicsFixture().setFriction(0f);
                 hero.getHeroSensorFixture().setFriction(0f);
@@ -97,29 +96,27 @@ public class HeroManager extends AbstractWorldManager {
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBody().getPosition();
 
-        switch (hero.getState()) {
-            case IDLE:
-                stillTime += Gdx.graphics.getDeltaTime();
-                hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
-                hero.getHeroPhysicsFixture().setFriction(100f);
-                hero.getHeroSensorFixture().setFriction(100f);
-                break;
-            case WALKING:
-                applyPhysicMovingImpulse();
-                stillTime = 0;
-                hero.getHeroPhysicsFixture().setFriction(0.2f);
-                hero.getHeroSensorFixture().setFriction(0.2f);
-                break;
-            case JUMPING:
-                if(!hero.getStatePos().equals(Hero.StatePos.ONAIR))
-                    applyPhysicJumpingImpulse(vel, pos);
-                break;
-            case PROPULSION:
-                applyPhysicJumpingImpulse(vel, pos);
-                break;
-            case SWIMMING:
-                applyPhysicMovingImpulse();
+        if (hero.getState().equals(Hero.StateHero.IDLE)) {
+            stillTime += Gdx.graphics.getDeltaTime();
+            hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
+            hero.getHeroPhysicsFixture().setFriction(100f);
+            hero.getHeroSensorFixture().setFriction(100f);
 
+        } else if (hero.getState().equals(Hero.StateHero.WALKING)) {
+            applyPhysicMovingImpulse();
+            stillTime = 0;
+            hero.getHeroPhysicsFixture().setFriction(0.2f);
+            hero.getHeroSensorFixture().setFriction(0.2f);
+
+        } else if (hero.getState().equals(Hero.StateHero.JUMPING)) {
+            if (!hero.getStatePos().equals(Hero.StatePos.ONAIR))
+                applyPhysicJumpingImpulse(vel, pos);
+
+        } else if (hero.getState().equals(Hero.StateHero.PROPULSION)) {
+            applyPhysicJumpingImpulse(vel, pos);
+
+        } else if (hero.getState().equals(Hero.StateHero.SWIMMING)) {
+            applyPhysicMovingImpulse();
         }
 
     }
@@ -156,16 +153,16 @@ public class HeroManager extends AbstractWorldManager {
  /*   public void update(float delta) {
 
 
-        if(!hero.getState().equals(Hero.State.HURT) && hurtTime>1.2f){
+        if(!hero.getState().equals(Hero.StateHero.HURT) && hurtTime>1.2f){
             processVelocity(vel, delta);
             processContactGround();
             applyImpulses(vel, pos);
-        } else if(hero.getState().equals(Hero.State.HURT) && hurtTime ==0)   {
+        } else if(hero.getState().equals(Hero.StateHero.HURT) && hurtTime ==0)   {
 
-            if(hero.getProfile().removeLive()) DreamsGame.gameState=GameState.GAME_OVER;
+            if(hero.getProfile().removeLive()) DreamsGame.gameState=GameStateHero.GAME_OVER;
             System.out.println("Pierde vida: "+hero.getProfile().getLives()+" STATE GAME: "+ DreamsGame.gameState);
         } else if (hurtTime>1.2f){
-            hero.setState(Hero.State.IDLE);
+            hero.setState(Hero.StateHero.IDLE);
         }
 
         if(hurtTime>2)hurtTime=2;
@@ -246,7 +243,7 @@ public class HeroManager extends AbstractWorldManager {
             // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
         if (enemy != null && contact.getFixtureA() == hero.getHeroPhysicsFixture()
-                && contact.getFixtureB() == hero.getHeroPhysicsFixture() && !hero.getState().equals(State.HURT)) {
+                && contact.getFixtureB() == hero.getHeroPhysicsFixture() && !hero.getState().equals(HURT)) {
 
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
@@ -258,7 +255,7 @@ public class HeroManager extends AbstractWorldManager {
             System.out.println("Fuerza colision Enemigo: " + force + " Sensor no exist");
             hero.getBody().applyLinearImpulse(force, hero.getBody().getWorldCenter(), true);
 
-            hero.setState(Hero.State.HURT);
+            hero.setState(HURT);
             hurtTime = 0;
         }
     }
