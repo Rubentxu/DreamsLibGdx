@@ -102,13 +102,14 @@ public class ModelsAndViews {
             float offsetY=0;
             float offsetWidth=0;
             if(e.getGrupo().equals(GRUPO.HERO)){
-                offsetX= e.getWidth()/2;
+
                 offsetY= e.getHeight()/2;
-                offsetWidth= e.getWidth()*0.5f;
+                offsetWidth= e.getWidth()*0.8f;
+                offsetX= e.getWidth()/2+offsetWidth/2;
             }
             if (anims != null) {
                 System.out.println("GET FRAME ANIMATION " +e.getGrupo()+" State: " + e.getState() + " StateTime " + e.getStateTime());
-                frame = anims.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime(), true);
+                frame = anims.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime());
 
                 if (e.isFacingLeft() && !frame.isFlipX()) {
                     frame.flip(true, false);
