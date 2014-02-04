@@ -78,33 +78,20 @@ public class WorldRenderer {
         modelsAndViews.addEntity(world.getHero());
 
         for(MovingPlatform mvp :world.getMovingPlatforms()){
-            String nombreRegion= (atlasVarios.findRegion(mvp.getNombre())!=null)? mvp.getNombre(): mvp.getGrupo().toString();
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
-            if(viewSprite!=null){
-                modelsAndViews.addModelAndView(mvp,viewSprite);
-            }
+            modelsAndViews.addEntity(mvp);
         }
 
         for(Water w :world.getWaterSensors()){
-            String nombreRegion= (atlasVarios.findRegion(w.getNombre())!=null)? w.getNombre(): w.getGrupo().toString();
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
-            if(viewSprite!=null){
-                System.out.println("Creado Sprite "+w.getNombre());
-                modelsAndViews.addModelAndView(w,viewSprite);
-            }
+            modelsAndViews.addEntity(w);
         }
 
         for(Enemy e :world.getEnemies()){
-            String nombreRegion= (atlasVarios.findRegion(e.getNombre())!=null)? e.getNombre(): e.getGrupo().toString();
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion(nombreRegion));
-            if(viewSprite!=null){
-                modelsAndViews.addModelAndView(e,viewSprite);
-            }
+            modelsAndViews.addEntity(e);
         }
 
         for(Item i :world.getItems()){
             String nombreRegion= (atlasVarios.findRegion(i.getNombre())!=null)? i.getNombre(): i.getGrupo().toString();
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion("agua2"));
+            Sprite viewSprite = new Sprite(atlasVarios.findRegion("agua"));
             if(viewSprite!=null){
                 modelsAndViews.addModelAndView(i,viewSprite);
             }

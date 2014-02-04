@@ -30,6 +30,7 @@ public class MovingPlatform extends Platform implements Disposable{
         super("Platform", GRUPO.MOVING_PLATFORM,body);
         this.pVelocity = pVelocity;
         //this.maxDist=0;
+
     }
 
     public MovingPlatform(String nombre, GRUPO grupo, Body body, float dstX, float dstY,float speed) {
@@ -39,7 +40,7 @@ public class MovingPlatform extends Platform implements Disposable{
         path.addPoint(pos);
         path.addPoint(new Vector2(pos.x + dstX, pos.y + dstY));
         this.start=body.getPosition().cpy();
-        setState(BaseState.DEFAULT);
+
 
     }
 
@@ -90,12 +91,6 @@ public class MovingPlatform extends Platform implements Disposable{
                 "\nVelocidad= " + path.getVelocity()+
                 "\nPasajeros= " + passengers.size() ;
 
-    }
-
-
-    @Override
-    public State getState() {
-        return null;
     }
 
     @Override

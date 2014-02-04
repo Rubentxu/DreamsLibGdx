@@ -48,7 +48,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     protected String nombre;
     protected boolean isFlaggedForDelete = false;
     private float stateTime;
-    private State state= BaseState.DEFAULT;
+    private State state= BaseState.INITIAL;
     private boolean facingLeft = false;
 
     public State getState(){
