@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>com.rubentxu.juegos</groupId>
 		<artifactId>dreams</artifactId>
-		<version>1.0.1</version>
+		<version>1.0.2</version>
 	</parent>
 
 	<artifactId>dreams-android</artifactId>
@@ -140,10 +140,10 @@
 									<includes>
 										<include>target/*.apk</include>
 									</includes>
-									<keystore>${keystore.path}</keystore>
-									<storepass>${keystore.password}</storepass>
-									<keypass>${key.password}</keypass>
-									<alias>${keystore.alias}</alias>
+									<keystore>/home/rubentxu/Dropbox/juegos/keystore/keyStore.store</keystore>
+									<storepass>rudacaga74</storepass>
+									<keypass>1974rubendario</keypass>
+									<alias>rubentxu</alias>
 									<arguments>
 										<argument>-sigalg</argument><argument>MD5withRSA</argument>
 										<argument>-digestalg</argument><argument>SHA1</argument>

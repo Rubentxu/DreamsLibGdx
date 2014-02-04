@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.servicios.Assets;
@@ -167,7 +167,7 @@ public class GuiBuilder {
 
         Table tableProfile = new Table();
         tableProfile.setBounds(0, 0, width , height /10);
-        TextureRegionDrawable drawable= (TextureRegionDrawable) styles.skin.get("stats", TextureRegionDrawable.class);
+        SpriteDrawable drawable=  styles.skin.get("stats", SpriteDrawable.class);
         tableProfile.setBackground(drawable);
 
 

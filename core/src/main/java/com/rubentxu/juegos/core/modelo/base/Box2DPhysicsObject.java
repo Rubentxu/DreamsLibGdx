@@ -10,6 +10,8 @@ import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
+
+
     public static enum GRUPO {
         HERO((short) 0x0001), ENEMY((short) 0x0002), PLATFORM((short) 0x0004), MOVING_PLATFORM((short) 0x0008),
         ITEMS((short) 0x0010), SENSOR((short) 0x0020), STATIC((short) 0x0040), FLUID((short) 0x0080);
@@ -37,14 +39,11 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     protected com.badlogic.gdx.physics.box2d.World box2D;
     protected Body body;
-    protected float x;
-    protected float y;
-    protected float width = 1;
-    protected float height = 1;
-    protected float radius = 0;
+
     protected GRUPO grupo;
     protected String nombre;
     protected boolean isFlaggedForDelete = false;
+    private float stateTime;
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, Body body) {
         this.nombre = nombre;
@@ -58,17 +57,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
         this.box2D = physics;
     }
 
-    public Box2DPhysicsObject(String nombre, GRUPO grupo, com.badlogic.gdx.physics.box2d.World box2D,
-                              float x, float y, float width, float height, float radius) {
-        this.nombre = nombre;
-        this.grupo = grupo;
-        this.box2D = box2D;
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.radius = radius;
-    }
+
 
     @Override
     public float getX() {
@@ -150,6 +139,15 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     public void setFlaggedForDelete(boolean isFlaggedForDelete) {
         this.isFlaggedForDelete = isFlaggedForDelete;
     }
+
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
+    }
+
 
     @Override
     public void dispose() {

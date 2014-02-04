@@ -15,22 +15,22 @@ import java.util.HashSet;
 
 public class Hero extends Box2DPhysicsObject implements Disposable {
 
+
     public enum State {
-        IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, HURT
+        IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, PROPULSION, HURT ,ATTACK, DEAD, WIN
     }
+
+    public enum StatePos { ONGROUND, INWATER, ONAIR }
 
     public final static float MAX_VELOCITY = 4f;
     public final static float JUMP_FORCE = 14.5f;
-
-
     private HashSet<Fixture> grounContacts;
     private Fixture heroPhysicsFixture;
     private Fixture heroSensorFixture;
 
     // Status
-    private boolean onGround = false;
-    private boolean onWater = false;
     private State state = State.IDLE;
+    private StatePos statePos = StatePos.ONGROUND;
 
     boolean facingLeft = true;
 
@@ -42,7 +42,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     }
 
     public Hero(World physics, float x, float y, float width, float height) {
-        super("Heroe", GRUPO.HERO, physics, x, y, width, height, 0);
+        super("Heroe", GRUPO.HERO, physics);
         setGrounContacts(new HashSet<Fixture>());
         createHero(x, y, width, height);
     }
@@ -80,7 +80,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
         super.getBody().setBullet(true);
 
-        setProfile(new Profile());
+        profile=new Profile();
 
     }
 
@@ -118,7 +118,9 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     }
 
     public void setState(State newState) {
+        if(newState.equals(state)) return;
         this.state = newState;
+        setStateTime(0);
     }
 
     public Fixture getHeroPhysicsFixture() {
@@ -129,13 +131,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         return heroSensorFixture;
     }
 
-    public boolean isGround() {
-        return onGround;
-    }
-
-    public void setGround(boolean onGround) {
-        this.onGround = onGround;
-    }
 
     public HashSet<Fixture> getGrounContacts() {
         return grounContacts;
@@ -154,10 +149,18 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         this.profile = profile;
     }
 
+    public StatePos getStatePos() {
+        return statePos;
+    }
+
+    public void setStatePos(StatePos statePos) {
+        this.statePos = statePos;
+    }
+
     @Override
     public String toString() {
         return
-                "onGround=" + onGround +
+                "StatePos=" + statePos +
                 "\nstate=" + state +
                 "\nfacingLeft=" + facingLeft +
                 "\nisActive= " + getBody().isActive() +
@@ -175,10 +178,10 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
                 "\nLinearDamping=" + getBody().getLinearDamping()+
                 "\nLinearVelocity=" + getBody().getLinearVelocity().toString()+
                 "\nPosition=" + getBody().getPosition().toString()+
-                "\nLocalCenter=" + getBody().getLocalCenter().toString()+
+                "\nSizeGroundContact=" + grounContacts.size()+
                 "\nWidth=" +getWidth()+
                 "\nHeight=" + getHeight()+
-                "\nWorldCenter=" + getBody().getWorldCenter().toString();
+                "\nTimeState=" + getStateTime();
     }
 
     @Override
@@ -189,6 +192,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         heroSensorFixture=null;
         profile=null;
     }
+
 }
 
 

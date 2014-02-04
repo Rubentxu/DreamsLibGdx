@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 					package="com.rubentxu.juegos.android"
 					android:screenOrientation="landscape"
-					android:versionCode="3"
-					android:versionName="1.0.2">
+					android:versionCode="5"
+					android:versionName="1.0.4">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>

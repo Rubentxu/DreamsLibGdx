@@ -69,8 +69,9 @@ public class WorldRenderer {
     private void loadTextures() {
 
         background=new ParallaxBackground(Constants.VIEWPORT_WIDTH,Constants.VIEWPORT_HEIGHT);
-        background.addLayer(new ParallaxLayer(world.getBackground(),0.5f,0.2f,200,100));
-        background.addLayer(new ParallaxLayer(world.getBackground2(),0.8f,0.8f,200,40));
+        background.addLayer(new ParallaxLayer(world.getLevelBackground(),0.4f,0,100,100));
+        background.addLayer(new ParallaxLayer(world.getCloudBackground(),0.6f,0,100,100));
+        background.addLayer(new ParallaxLayer(world.getTreeBackground(),0.8f,0.02f,100,100));
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
@@ -115,7 +116,7 @@ public class WorldRenderer {
         background.render(cam.position,spriteBatch);
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
-        cam.position.set(world.getHero().getBody().getPosition().x, world.getHero().getBody().getPosition().y +cam.viewportHeight/2-5, 0);
+        cam.position.set(world.getHero().getBody().getPosition().x, cam.viewportHeight/2 -cam.viewportHeight/12, 0);
         cam.update();
 
         renderer.setView(cam);
@@ -126,7 +127,7 @@ public class WorldRenderer {
         modelsAndViews.render(spriteBatch);
 
         if (DreamsGame.DEBUG) {
-            DebugWindow.getInstance().setPosition(cam.position.x - 11.5f, cam.position.y - 2);
+            DebugWindow.getInstance().setPosition(cam.position.x - 13f, cam.position.y - 5);
             DebugWindow.myLabel.setText("Modo Debug:\n\n"+world.getHero().toString());
             DebugWindow.getInstance().pack();
             DebugWindow.getInstance().draw(spriteBatch, 1f);

@@ -2,7 +2,9 @@ package com.rubentxu.juegos.core.servicios;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox.CheckBoxStyle;
@@ -13,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -61,7 +64,7 @@ public class Styles implements Disposable{
         CheckBoxStyle checkBoxStyle=new CheckBox.CheckBoxStyle(checkox_false,checkox_true,font,Color.WHITE) ;
 
 
-        TextureRegionDrawable stats = new TextureRegionDrawable(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS)).findRegion("fondoStats"));
+        SpriteDrawable stats = new SpriteDrawable(new Sprite((Texture) Assets.getInstance().get(Assets.getInstance().STATS_BACKGROUND)));
 
 
         SliderStyle sliderStyle= new SliderStyle(slider,slider_knob);
@@ -96,7 +99,7 @@ public class Styles implements Disposable{
         touchpadStyle.background=touchpad_background;
         touchpadStyle.knob=touchpad_thumb;
 
-        skin.addRegions((TextureAtlas) Assets.getInstance().get(Assets.getInstance().FONDOS_ATLAS));
+
         skin.add("default", tbs);
         skin.add("buttonLeft", ImageButtonLeft);
         skin.add("buttonRight", ImageButtonRight);
