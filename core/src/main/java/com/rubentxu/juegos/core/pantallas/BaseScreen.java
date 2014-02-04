@@ -29,10 +29,9 @@ public abstract class BaseScreen implements Screen {
     protected float height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
     //private ScreenTransition transition = ScreenTransitionFade.init(0.75f);
-    //private ScreenTransition transition = ScreenTransitionSlide.init(1.15f,
-    //        ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
-    ScreenTransition transition = ScreenTransitionSlice.init(2,
-            ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
+    private ScreenTransition transition = ScreenTransitionSlide.init(1.15f,
+            ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+    // ScreenTransition transition = ScreenTransitionSlice.init(2,ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
 
 
     public DreamsGame getGame() {
