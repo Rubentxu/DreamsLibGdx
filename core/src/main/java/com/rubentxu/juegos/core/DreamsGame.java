@@ -1,10 +1,12 @@
 package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.PreferencesManager;
 import com.rubentxu.juegos.core.managers.game.ProfileManager;
+import com.rubentxu.juegos.core.pantallas.BaseScreen.SCREEN;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
@@ -19,17 +21,13 @@ public class DreamsGame extends DirectedGame {
     FPSLogger log;
     private PreferencesManager preferencesManager;
 
-    public GameScreen gameScreen;
-    public MenuScreen menuScreen;
-    public OptionScreen optionScreen;
-    public HighScoresScreen highScoreScreen;
     public static GameState gameState= GameState.GAME_RUNNING;
     private ProfileManager profileManager;
 
 
-
     @Override
     public void create() {
+        Gdx.input.setCatchBackKey(true);
         preferencesManager = PreferencesManager.instance;
         profileManager= new ProfileManager();
         log = new FPSLogger();
@@ -43,6 +41,25 @@ public class DreamsGame extends DirectedGame {
     public void dispose() {
         super.dispose();
 
+    }
+
+    @Override
+    public void createScreen(SCREEN screen) {
+        switch (screen) {
+
+            case SPLASH:
+                break;
+            case MENU:
+                break;
+            case GAME:
+                break;
+            case OPTIONS:
+                break;
+            case HIGHSCORES:
+                break;
+            case CREDITS:
+                break;
+        }
     }
 
     @Override

@@ -9,5 +9,7 @@ public enum GameState {
     GAME_WIN,
     GAME_LEVELWIN,
     GAME_IDLE,
-    GAME_SLOWMOTION
+    GAME_SLOWMOTION,
+    GAME_BACK,
+    SCREEN_TRANSITION
 }

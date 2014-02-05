@@ -2,6 +2,7 @@ package com.rubentxu.juegos.core.pantallas;
 
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -18,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.inputs.MobileInput;
 
 public class OptionScreen extends BaseScreen {
 
@@ -125,7 +127,10 @@ public class OptionScreen extends BaseScreen {
 
     @Override
     public InputProcessor getInputProcessor() {
-        return stage;
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new MobileInput());
+        return multiplexer;
     }
 
     private void updateVolumeLabel() {

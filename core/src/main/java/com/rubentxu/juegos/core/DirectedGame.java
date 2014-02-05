@@ -1,15 +1,26 @@
 package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.ApplicationListener;
-import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
-import com.rubentxu.juegos.core.pantallas.BaseScreen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.constantes.GameState;
+import com.rubentxu.juegos.core.pantallas.BaseScreen;
+import com.rubentxu.juegos.core.pantallas.BaseScreen.SCREEN;
+import com.rubentxu.juegos.core.pantallas.GameScreen;
+import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
+import com.rubentxu.juegos.core.pantallas.MenuScreen;
+import com.rubentxu.juegos.core.pantallas.OptionScreen;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
 
 public abstract class DirectedGame implements ApplicationListener {
-    private boolean init;
+    private boolean init=false;
     private BaseScreen currScreen;
     private BaseScreen nextScreen;
     private FrameBuffer currFbo;
@@ -17,6 +28,11 @@ public abstract class DirectedGame implements ApplicationListener {
     private SpriteBatch batch;
     private float t;
     private ScreenTransition screenTransition;
+
+    public GameScreen gameScreen;
+    public MenuScreen menuScreen;
+    public OptionScreen optionScreen;
+    public HighScoresScreen highScoreScreen;
 
 
     public void setScreen(BaseScreen screen,
@@ -34,56 +50,100 @@ public abstract class DirectedGame implements ApplicationListener {
         nextScreen.show(); // activate next screen
         nextScreen.resize(w, h);
         nextScreen.render(0); // let screen update() once
-        if (currScreen != null) currScreen.pause();
         nextScreen.pause();
         Gdx.input.setInputProcessor(null); // disable input
         this.screenTransition = screenTransition;
         t = 0;
+        if (currScreen != null) {
+            currScreen.pause();
+            DreamsGame.gameState = GameState.SCREEN_TRANSITION;
+        }else {
+            Gdx.input.setInputProcessor(nextScreen.getInputProcessor());
+            currScreen = nextScreen;
+            nextScreen = null;
+            screenTransition = null;
+        }
+
+
     }
 
     @Override
     public void render() {
+        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1.0f / 60.0f);
 
-        float deltaTime = Math.min(Gdx.graphics.getDeltaTime(),
-                1.0f / 60.0f);
-        if (nextScreen == null) {
-
-            if (currScreen != null) currScreen.render(deltaTime);
-        } else {
-
-            float duration = 0;
-            if (screenTransition != null)
-                duration = screenTransition.getDuration();
-
-            t = Math.min(t + deltaTime, duration);
-            if (screenTransition == null || t >= duration) {
-
-                if (currScreen != null) currScreen.hide();
-                nextScreen.resume();
-
-                Gdx.input.setInputProcessor(
-                        nextScreen.getInputProcessor());
-                System.out.println("Multiplexer...."+Gdx.input.getInputProcessor());
-
-                currScreen = nextScreen;
-                nextScreen = null;
-                screenTransition = null;
-            } else {
-
-                currFbo.begin();
+        switch (DreamsGame.gameState) {
+            case GAME_RUNNING:
+                Gdx.app.log(Constants.LOG, "GAME STATE: GAME_RUNNING");
                 if (currScreen != null) currScreen.render(deltaTime);
-                currFbo.end();
-                nextFbo.begin();
-                nextScreen.render(deltaTime);
-                nextFbo.end();
+            case GAME_PAUSED:
+                break;
+            case GAME_UPDATE:
+                break;
+            case GAME_OVER:
+                break;
+            case GAME_WIN:
+                break;
+            case GAME_LEVELWIN:
+                break;
+            case GAME_IDLE:
+                break;
+            case GAME_SLOWMOTION:
+                break;
+            case GAME_BACK:
+                Gdx.app.log(Constants.LOG, "GAME STATE: GAME_BACK");
+                if(currScreen instanceof MenuScreen ){
+                   Gdx.app.exit();
+                }else {
+                    //Presentar una ventana para salir
+                    //DreamsGame.gameState=GameState.GAME_PAUSED;
+                    if(menuScreen!=null){
+                        setScreen(menuScreen,menuScreen.getTransition());
+                    }else {
+                        Gdx.app.exit();
+                    }
 
-                float alpha = t / duration;/**/
-                screenTransition.render(batch,
-                        currFbo.getColorBufferTexture(),
-                        nextFbo.getColorBufferTexture(),
-                        alpha);
-            }
+
+
+
+                }
+                break;
+            case SCREEN_TRANSITION:
+                Gdx.app.log(Constants.LOG, "GAME STATE: SCREEN_TRANSITION");
+                float duration = 0;
+                if (screenTransition != null)
+                    duration = screenTransition.getDuration();
+
+                t = Math.min(t + deltaTime, duration);
+                if (screenTransition == null || t >= duration) {
+
+                    if (currScreen != null) currScreen.hide();
+                    nextScreen.resume();
+
+                    Gdx.input.setInputProcessor(nextScreen.getInputProcessor());
+                    currScreen = nextScreen;
+                    nextScreen = null;
+                    screenTransition = null;
+                    DreamsGame.gameState = GameState.GAME_RUNNING;
+                } else {
+
+                    currFbo.begin();
+                    if (currScreen != null) currScreen.render(deltaTime);
+                    currFbo.end();
+                    nextFbo.begin();
+                    nextScreen.render(deltaTime);
+                    nextFbo.end();
+
+                    float alpha = t / duration;
+                    screenTransition.render(batch,
+                            currFbo.getColorBufferTexture(),
+                            nextFbo.getColorBufferTexture(),
+                            alpha);
+
+
+                }
+                break;
         }
+
     }
 
     @Override
@@ -108,6 +168,7 @@ public abstract class DirectedGame implements ApplicationListener {
         if (nextScreen != null) nextScreen.hide();
         if (init) {
             currFbo.dispose();
+            currScreen.dispose();
             currScreen = null;
             nextFbo.dispose();
             nextScreen = null;
@@ -115,6 +176,8 @@ public abstract class DirectedGame implements ApplicationListener {
             init = false;
         }
     }
+
+    public abstract void createScreen(SCREEN screen );
 
 }
 

@@ -1,6 +1,7 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.modelo.Profile;
 
 public class HighScoresScreen extends BaseScreen {
@@ -68,7 +70,10 @@ public class HighScoresScreen extends BaseScreen {
 
     @Override
     public InputProcessor getInputProcessor() {
-        return stage;
+        InputMultiplexer multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new MobileInput());
+        return multiplexer;
     }
 
     private Label label(String text, Color color, boolean scale) {

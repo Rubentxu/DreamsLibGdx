@@ -11,6 +11,7 @@ import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.inputs.GameInputs;
+import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
@@ -128,8 +129,8 @@ public class GameScreen extends BaseScreen {
         GameInputs gameInputs = new GameInputs(controller, renderer);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
+        multiplexer.addProcessor(new MobileInput());
         multiplexer.addProcessor(gameInputs);
-        System.out.println("Agregado multiplexer...."+Gdx.input.getInputProcessor());
         return multiplexer;
     }
 }
