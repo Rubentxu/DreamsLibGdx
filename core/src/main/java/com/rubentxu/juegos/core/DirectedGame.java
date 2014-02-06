@@ -64,6 +64,7 @@ public abstract class DirectedGame implements ApplicationListener {
             screenTransition = null;
         }
 
+        Gdx.app.log(Constants.LOG, "SCREENS: Menu: "+menuScreen+" Option: "+optionScreen+" Game: "+gameScreen+" Score: "+highScoreScreen);
 
     }
 
@@ -73,7 +74,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
         switch (DreamsGame.gameState) {
             case GAME_RUNNING:
-                Gdx.app.log(Constants.LOG, "GAME STATE: GAME_RUNNING");
+                //Gdx.app.log(Constants.LOG, "GAME STATE: GAME_RUNNING");
                 if (currScreen != null) currScreen.render(deltaTime);
             case GAME_PAUSED:
                 break;
@@ -105,7 +106,7 @@ public abstract class DirectedGame implements ApplicationListener {
                 }
                 break;
             case SCREEN_TRANSITION:
-                Gdx.app.log(Constants.LOG, "GAME STATE: SCREEN_TRANSITION");
+                //Gdx.app.log(Constants.LOG, "GAME STATE: SCREEN_TRANSITION");
                 float duration = 0;
                 if (screenTransition != null)
                     duration = screenTransition.getDuration();

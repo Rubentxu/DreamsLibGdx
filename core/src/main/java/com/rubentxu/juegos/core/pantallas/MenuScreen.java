@@ -48,7 +48,7 @@ public class MenuScreen extends BaseScreen {
         btnStart.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
-                game.gameScreen= new GameScreen(game);
+                if(game.gameScreen==null) game.gameScreen= new GameScreen(game);
                 game.setScreen(game.gameScreen,getTransition());
             }
         });
