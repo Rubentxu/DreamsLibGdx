@@ -21,8 +21,8 @@ public class ParallaxBackground {
         for (ParallaxLayer layer : layers) {
             float layerOffsetX = (position.x * layer.getxRatio() % width);
             float layerOffsetY = (position.y * layer.getyRatio() % height);
-            layer.render(position.x - width / 2f - layerOffsetX, position.y -height/2 +height/6- layerOffsetY, width, height, batch);
-            layer.render(position.x + width / 2f - layerOffsetX , position.y - height/2 +height/6- layerOffsetY, width, height, batch);
+            layer.render(position.x - width / 2f - layerOffsetX, position.y -height/2 +height/12- layerOffsetY, width, height, batch);
+            layer.render(position.x + width / 2f - layerOffsetX , position.y - height/2 +height/12- layerOffsetY, width, height, batch);
         }
     }
 

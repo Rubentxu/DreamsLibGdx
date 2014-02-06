@@ -128,7 +128,9 @@ public class Box2DMapObjectParser {
     public Box2DMapObjectParser(com.rubentxu.juegos.core.modelo.World worldEntity) {
         this(new Aliases(),worldEntity);
 
+
     }
+
 
     /**
      * creates a new {@link Box2DMapObjectParser} using the given {@link Aliases}
@@ -137,6 +139,7 @@ public class Box2DMapObjectParser {
     public Box2DMapObjectParser(Aliases aliases,com.rubentxu.juegos.core.modelo.World worldEntity) {
         this.aliases = aliases;
         this.worldEntity=worldEntity;
+
     }
 
     /**
@@ -206,6 +209,7 @@ public class Box2DMapObjectParser {
      * @return the given {@link World} with the parsed {@link MapObjects} of the given {@link MapLayer} created in it
      */
     public World load(World world, MapLayer layer) {
+        System.out.println("UNIT SCALE...........:"+unitScale);
         for(MapObject object : layer.getObjects()) {
             if(!ignoreMapUnitScale)
                 unitScale = getProperty(layer.getProperties(), aliases.unitScale, unitScale);
@@ -264,7 +268,7 @@ public class Box2DMapObjectParser {
     }
 
     private void createHero(World world, MapObject object) {
-        Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+        Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
         rectangle.x *= unitScale;
         rectangle.y *= unitScale;
         rectangle.width *= unitScale;
@@ -282,12 +286,13 @@ public class Box2DMapObjectParser {
 
         if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
+            System.out.println("Rectangle Water "+rectangle);
             rectangle.x *= unitScale;
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;
             rectangle.height *= unitScale;
-            System.out.println("Rectangle "+rectangle);
+            System.out.println("Rectangle Water2 "+rectangle);
             shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
@@ -333,7 +338,7 @@ public class Box2DMapObjectParser {
 
         if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
             rectangle.x *= unitScale;
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;
@@ -380,7 +385,7 @@ public class Box2DMapObjectParser {
 
         if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
             rectangle.x *= unitScale;
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;
@@ -438,7 +443,7 @@ public class Box2DMapObjectParser {
 
         if(object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = ((RectangleMapObject) object).getRectangle();
+            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
             rectangle.x *= unitScale;
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;
@@ -549,7 +554,7 @@ public class Box2DMapObjectParser {
 
         if(mapObject instanceof RectangleMapObject) {
             shape = new PolygonShape();
-            Rectangle rectangle = ((RectangleMapObject) mapObject).getRectangle();
+            Rectangle rectangle = new Rectangle(((RectangleMapObject) mapObject).getRectangle());
             rectangle.x *= unitScale;
             rectangle.y *= unitScale;
             rectangle.width *= unitScale;

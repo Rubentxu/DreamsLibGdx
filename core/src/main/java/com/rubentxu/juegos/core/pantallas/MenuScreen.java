@@ -1,7 +1,6 @@
 package com.rubentxu.juegos.core.pantallas;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -48,7 +47,8 @@ public class MenuScreen extends BaseScreen {
         btnStart.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
-                if(game.gameScreen==null) game.gameScreen= new GameScreen(game);
+                game.gameScreen=null;
+                game.gameScreen= new GameScreen(game);
                 game.setScreen(game.gameScreen,getTransition());
             }
         });

@@ -55,6 +55,7 @@ public class WorldRenderer implements Disposable {
         spriteBatch = (SpriteBatch) renderer.getSpriteBatch();
         cam = new OrthographicCamera();
 
+        loadTextures();
     }
 
     public void resize(int w, int h) {
@@ -63,16 +64,17 @@ public class WorldRenderer implements Disposable {
 
         cam.viewportWidth = Constants.VIEWPORT_WIDTH;
         cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
-        loadTextures();
 
-    }
-
-    private void loadTextures() {
+        Gdx.app.log(Constants.LOG, "SIZE CAM: "+cam.viewportWidth+" Height: "+cam.viewportHeight);
 
         background=new ParallaxBackground(cam.viewportWidth, cam.viewportHeight);
         background.addLayer(new ParallaxLayer(world.getLevelBackground(),0.4f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getCloudBackground(),0.6f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getTreeBackground(),0.8f,0.02f,100,100));
+
+    }
+
+    private void loadTextures() {
 
         TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
 
