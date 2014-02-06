@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Enemy;
@@ -21,7 +22,7 @@ import com.rubentxu.juegos.core.utils.parallax.ParallaxBackground;
 import com.rubentxu.juegos.core.utils.parallax.ParallaxLayer;
 
 
-public class WorldRenderer {
+public class WorldRenderer implements Disposable {
 
     /**
      * for debug rendering *
@@ -38,7 +39,6 @@ public class WorldRenderer {
     private float height;
 
     private ModelsAndViews modelsAndViews;
-
     private ParallaxBackground background;
 
 
@@ -54,7 +54,7 @@ public class WorldRenderer {
         world.removeParser();
         spriteBatch = (SpriteBatch) renderer.getSpriteBatch();
         cam = new OrthographicCamera();
-        loadTextures();
+
     }
 
     public void resize(int w, int h) {
@@ -63,12 +63,13 @@ public class WorldRenderer {
 
         cam.viewportWidth = Constants.VIEWPORT_WIDTH;
         cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
+        loadTextures();
 
     }
 
     private void loadTextures() {
 
-        background=new ParallaxBackground(Constants.VIEWPORT_WIDTH,Constants.VIEWPORT_HEIGHT);
+        background=new ParallaxBackground(cam.viewportWidth, cam.viewportHeight);
         background.addLayer(new ParallaxLayer(world.getLevelBackground(),0.4f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getCloudBackground(),0.6f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getTreeBackground(),0.8f,0.02f,100,100));
@@ -129,9 +130,16 @@ public class WorldRenderer {
         }
     }
 
-
+    @Override
     public void dispose() {
         renderer.dispose();
+        renderer=null;
+        modelsAndViews=null;
+        debugRenderer.dispose();
+        debugRenderer=null;
+        cam=null;
+        spriteBatch=null;
+        background=null;
     }
 
     public OrthographicCamera getCam() {

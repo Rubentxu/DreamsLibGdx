@@ -28,10 +28,6 @@ public class GameScreen extends BaseScreen {
     public GameScreen(DreamsGame dreamsGame) {
         super(dreamsGame,new Stage(0, 0, true));
         CURRENT_SCREEN= SCREEN.GAME;
-        world=new World();
-        controller=new WorldController(world);
-        renderer=new WorldRenderer(this);
-
 
     }
 
@@ -60,6 +56,9 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
+        world=new World();
+        controller=new WorldController(world);
+        renderer=new WorldRenderer(this);
         renderer.resize(width, height);
 
         stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), styles);
@@ -76,6 +75,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void hide() {
         super.hide();
+        dispose();
     }
 
     @Override
@@ -90,11 +90,12 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void dispose() {
-        super.dispose();
-        Gdx.input.setInputProcessor(null);
-        getWorld().dispose();
+        world.dispose();
+        world=null;
         renderer.dispose();
+        renderer=null;
         controller.dispose();
+        controller=null;
     }
 
 

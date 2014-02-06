@@ -112,7 +112,6 @@ public abstract class DirectedGame implements ApplicationListener {
 
                 t = Math.min(t + deltaTime, duration);
                 if (screenTransition == null || t >= duration) {
-                    Gdx.app.log(Constants.LOG, "SCREEN_TRANSITION NULL");
                     if (currScreen != null) currScreen.hide();
                     nextScreen.resume();
 
@@ -122,7 +121,6 @@ public abstract class DirectedGame implements ApplicationListener {
                     screenTransition = null;
                     DreamsGame.gameState = GameState.GAME_RUNNING;
                 } else {
-                    Gdx.app.log(Constants.LOG, "SCREEN_TRANSITION NOTNULL");
                     currFbo.begin();
                     if (currScreen != null) currScreen.render(deltaTime);
                     currFbo.end();
@@ -140,7 +138,6 @@ public abstract class DirectedGame implements ApplicationListener {
                 }
                 break;
         }
-
     }
 
     @Override

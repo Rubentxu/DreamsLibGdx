@@ -73,8 +73,10 @@ public class World implements Disposable{
     public void dispose() {
         map.dispose();
         physics.dispose();
+        physics=null;
         levelBackground =null;
         hero.dispose();
+        hero=null;
         bodiesFlaggedDestroy=null;
         for (MovingPlatform m:movingPlatforms){
             m.dispose();
