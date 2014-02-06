@@ -34,7 +34,6 @@ public class World implements Disposable{
     }
 
     private void createDreamsWorld() {
-        Assets.getInstance().loadAssetsScreen(BaseScreen.SCREEN.GAME);
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
         map =  Assets.getInstance().get(Assets.getInstance().MAP_DEFAULT);
         parser = new Box2DMapObjectParser(this);

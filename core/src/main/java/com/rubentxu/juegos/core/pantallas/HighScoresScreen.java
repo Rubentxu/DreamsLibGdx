@@ -23,10 +23,8 @@ public class HighScoresScreen extends BaseScreen {
 
     @Override
     public void resize(int width, int height) {
-
         super.resize(width, height);
         Profile profile = getGame().getProfileManager().retrieveProfile();
-        Gdx.input.setInputProcessor(stage);
 
         mainTable.setFillParent(true);
 

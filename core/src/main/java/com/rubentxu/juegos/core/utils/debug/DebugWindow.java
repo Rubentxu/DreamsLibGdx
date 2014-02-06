@@ -22,7 +22,7 @@ public class DebugWindow extends Window{
 
     public static Window createWindowDebug(){
 
-        BitmapFont font = (BitmapFont) Assets.getInstance().get(Assets.getInstance().DEFAULT_FONT);
+        BitmapFont font = (BitmapFont) Assets.getInstance().get(Assets.getInstance().BIG_FONT);
         font.setScale(1 / 64F);
         font.setUseIntegerPositions(false);
         Window.WindowStyle style = new Window.WindowStyle();

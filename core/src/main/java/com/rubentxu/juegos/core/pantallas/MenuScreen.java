@@ -33,7 +33,6 @@ public class MenuScreen extends BaseScreen {
 
     @Override
     public void resize(int width, int height) {
-        Gdx.input.setInputProcessor(stage);
         super.resize(width, height);
 
         final TextButton btnStart = new TextButton("Comenzar", styles.skin);

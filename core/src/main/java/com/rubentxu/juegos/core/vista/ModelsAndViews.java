@@ -108,7 +108,7 @@ public class ModelsAndViews {
                 offsetX= e.getWidth()/2+offsetWidth/2;
             }
             if (anims != null) {
-                System.out.println("GET FRAME ANIMATION " +e.getGrupo()+" State: " + e.getState() + " StateTime " + e.getStateTime());
+                //System.out.println("GET FRAME ANIMATION " +e.getGrupo()+" State: " + e.getState() + " StateTime " + e.getStateTime());
                 frame = anims.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime());
 
                 if (e.isFacingLeft() && !frame.isFlipX()) {
@@ -124,7 +124,7 @@ public class ModelsAndViews {
     private Map<String, Animation> getAnimation(Box2DPhysicsObject e) {
 
         if (e.getGrupo().equals(GRUPO.HERO)) {
-            System.out.println("GET ANIMATION " + e.getGrupo());
+            //System.out.println("GET ANIMATION " + e.getGrupo());
             return animationHero;
         } else if(e.getGrupo().equals(GRUPO.ENEMY)) {
             return animationEnemy;

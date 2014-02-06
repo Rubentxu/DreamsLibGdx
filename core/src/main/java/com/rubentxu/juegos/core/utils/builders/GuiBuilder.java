@@ -174,13 +174,13 @@ public class GuiBuilder {
         Image imageLives = new Image(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("vidas"));
         imageLives.setName(Constants.IMAGE_LIVES);
 
-        Label lives = new Label("0", styles.skin, "header", Color.ORANGE);
+        Label lives = new Label("0", styles.skin, "default", Color.ORANGE);
         lives.setName(Constants.LIVES);
 
-        Label labelScore = new Label("Puntuacion: ", styles.skin, "header", Color.ORANGE);
+        Label labelScore = new Label("Puntuacion: ", styles.skin, "default", Color.ORANGE);
         labelScore.setName(Constants.LABEL_SCORE);
 
-        Label score = new Label("0000", styles.skin, "header", Color.ORANGE);
+        Label score = new Label("0000", styles.skin, "default", Color.ORANGE);
         score.setName(Constants.SCORE);
 
         tableProfile.add(imageLives).padRight(2);

@@ -59,8 +59,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void resize(int width, int height) {
-        stage.clear();
-        stage.setViewport(width,height);
+        super.resize(width, height);
         renderer.resize(width, height);
 
         stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), styles);
@@ -76,18 +75,17 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void hide() {
-        Gdx.input.setInputProcessor(null);
-        dispose();
+        super.hide();
     }
 
     @Override
     public void pause() {
-
+       super.pause();
     }
 
     @Override
     public void resume() {
-
+        super.resume();
     }
 
     @Override

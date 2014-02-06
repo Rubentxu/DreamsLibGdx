@@ -23,7 +23,7 @@ public abstract class BaseScreen implements Screen {
     protected final DreamsGame game;
     protected Stage stage;
     protected Assets assets;
-    public Styles styles;
+    public static Styles styles;
     protected Table mainTable;
     protected float width;
     protected float height;
@@ -59,8 +59,7 @@ public abstract class BaseScreen implements Screen {
         mainTable= new Table();
         Gdx.app.log(Constants.LOG, "Showing screen: " + getName() + " Current_Screen " + CURRENT_SCREEN);
         assets = Assets.getInstance();
-        assets.loadAssetsScreen(CURRENT_SCREEN);
-        if(!CURRENT_SCREEN.equals(SCREEN.SPLASH)) this.styles = new Styles(assets);
+        if(styles==null) styles=new Styles(assets);
     }
 
     @Override

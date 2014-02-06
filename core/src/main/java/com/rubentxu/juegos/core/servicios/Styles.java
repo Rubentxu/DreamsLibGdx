@@ -19,94 +19,98 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 
-public class Styles implements Disposable{
-        public BitmapFont font;
-        public BitmapFont font2;
-        public Skin skin;
+public class Styles implements Disposable {
+    public BitmapFont font;
+    public BitmapFont font2;
+    public Skin skin;
+    public boolean initialize = false;
 
     public Styles(Assets assets) {
         createStyles(assets);
     }
 
-    private void createStyles(Assets assets) {
-        font = assets.get(assets.DEFAULT_FONT);
-        font2 = assets.get(assets.HEADER_FONT);
-        skin = new Skin();
-        skin.add("default", font);
-        skin.add("header", font2);
+    public void createStyles(Assets assets) {
+        if (!initialize) {
+            initialize=true;
+            font = assets.get(assets.DEFAULT_FONT);
+            font2 = assets.get(assets.HEADER_FONT);
+            skin = new Skin();
+            skin.add("default", font);
+            skin.add("header", font2);
 
-        skin.add("lt-blue", new Color(.62f, .76f, .99f, 1f));
-        skin.add("lt-green", new Color(.39f, .9f, .6f, 1f));
-        skin.add("dark-blue", new Color(.79f, .95f, 91f, 1f));
+            skin.add("lt-blue", new Color(.62f, .76f, .99f, 1f));
+            skin.add("lt-green", new Color(.39f, .9f, .6f, 1f));
+            skin.add("dark-blue", new Color(.79f, .95f, 91f, 1f));
 
-        NinePatchDrawable btnMenu = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btnMenu"));
-        NinePatchDrawable btnMenuPress = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("btnMenuPress"));
-        NinePatchDrawable buttonLeft = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("buttonLeft"));
-        NinePatchDrawable buttonLeftPress = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("buttonLeftPress"));
-        NinePatchDrawable buttonRight = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("buttonRight"));
-        NinePatchDrawable buttonRightPress = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("buttonRightPress"));
-        NinePatchDrawable buttonUp = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("buttonUp"));
-        NinePatchDrawable buttonUpPress = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("buttonUpPress"));
-        NinePatchDrawable debug = new NinePatchDrawable(((TextureAtlas)assets.get(assets.GUI_ATLAS)).createPatch("debug"));
-
-
-        TextureRegionDrawable touchpad_background = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_background"));
-        TextureRegionDrawable touchpad_thumb = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_thumb"));
+            NinePatchDrawable btnMenu = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("btnMenu"));
+            NinePatchDrawable btnMenuPress = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("btnMenuPress"));
+            NinePatchDrawable buttonLeft = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("buttonLeft"));
+            NinePatchDrawable buttonLeftPress = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("buttonLeftPress"));
+            NinePatchDrawable buttonRight = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("buttonRight"));
+            NinePatchDrawable buttonRightPress = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("buttonRightPress"));
+            NinePatchDrawable buttonUp = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("buttonUp"));
+            NinePatchDrawable buttonUpPress = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("buttonUpPress"));
+            NinePatchDrawable debug = new NinePatchDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).createPatch("debug"));
 
 
-        TextureRegionDrawable checkox_true = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-on"));
-
-        TextureRegionDrawable checkox_false = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-off"));
-
-        TextureRegionDrawable slider_knob = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("default-slider-knob"));
-        TextureRegionDrawable slider = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("default-slider"));
-
-        CheckBoxStyle checkBoxStyle=new CheckBox.CheckBoxStyle(checkox_false,checkox_true,font,Color.WHITE) ;
+            TextureRegionDrawable touchpad_background = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_background"));
+            TextureRegionDrawable touchpad_thumb = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.GUI_ATLAS)).findRegion("touchpad_thumb"));
 
 
-        SpriteDrawable stats = new SpriteDrawable(new Sprite((Texture) Assets.getInstance().get(Assets.getInstance().STATS_BACKGROUND)));
+            TextureRegionDrawable checkox_true = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-on"));
+
+            TextureRegionDrawable checkox_false = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("check-off"));
+
+            TextureRegionDrawable slider_knob = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("default-slider-knob"));
+            TextureRegionDrawable slider = new TextureRegionDrawable(((TextureAtlas) assets.get(assets.UISKIN_ATLAS)).findRegion("default-slider"));
+
+            CheckBoxStyle checkBoxStyle = new CheckBox.CheckBoxStyle(checkox_false, checkox_true, font, Color.WHITE);
 
 
-        SliderStyle sliderStyle= new SliderStyle(slider,slider_knob);
-        skin.add("stats", stats);
-        skin.add("btnMenu", btnMenu);
-        skin.add("btnMenuPress", btnMenuPress);
-        skin.add("buttonLeft", buttonLeft);
-        skin.add("buttonLeftPress", buttonLeftPress);
-        skin.add("buttonRight", buttonRight);
-        skin.add("buttonRightPress", buttonRightPress);
-        skin.add("buttonUp", buttonUp);
-        skin.add("buttonUpPress", buttonUpPress);
-        skin.add("debug", debug);
+            SpriteDrawable stats = new SpriteDrawable(new Sprite((Texture) Assets.getInstance().get(Assets.getInstance().STATS_BACKGROUND)));
 
 
-        LabelStyle lbs = new LabelStyle();
-        lbs.font = font;
-        lbs.fontColor = Color.WHITE;
-        skin.add("default", lbs);
-
-        TextButtonStyle tbs = new TextButtonStyle(btnMenu, btnMenuPress, btnMenu, font);
-        tbs.fontColor = skin.getColor("dark-blue");
-        tbs.pressedOffsetX = Math.round(1f * Gdx.graphics.getDensity());
-        tbs.pressedOffsetY = tbs.pressedOffsetX * -1f;
-
-        ImageButton.ImageButtonStyle ImageButtonLeft = new ImageButton.ImageButtonStyle(buttonLeft, buttonLeftPress, buttonLeft,null,null,null);
-        ImageButton.ImageButtonStyle ImageButtonRight = new ImageButton.ImageButtonStyle(buttonRight, buttonRightPress, buttonRight,null,null,null);
-        ImageButton.ImageButtonStyle ImageButtonUp = new ImageButton.ImageButtonStyle(buttonUp, buttonUpPress, buttonUp,null,null,null);
+            SliderStyle sliderStyle = new SliderStyle(slider, slider_knob);
+            skin.add("stats", stats);
+            skin.add("btnMenu", btnMenu);
+            skin.add("btnMenuPress", btnMenuPress);
+            skin.add("buttonLeft", buttonLeft);
+            skin.add("buttonLeftPress", buttonLeftPress);
+            skin.add("buttonRight", buttonRight);
+            skin.add("buttonRightPress", buttonRightPress);
+            skin.add("buttonUp", buttonUp);
+            skin.add("buttonUpPress", buttonUpPress);
+            skin.add("debug", debug);
 
 
-        Touchpad.TouchpadStyle touchpadStyle= new Touchpad.TouchpadStyle();
-        touchpadStyle.background=touchpad_background;
-        touchpadStyle.knob=touchpad_thumb;
+            LabelStyle lbs = new LabelStyle();
+            lbs.font = font;
+            lbs.fontColor = Color.WHITE;
+            skin.add("default", lbs);
+
+            TextButtonStyle tbs = new TextButtonStyle(btnMenu, btnMenuPress, btnMenu, font);
+            tbs.fontColor = skin.getColor("dark-blue");
+            tbs.pressedOffsetX = Math.round(1f * Gdx.graphics.getDensity());
+            tbs.pressedOffsetY = tbs.pressedOffsetX * -1f;
+
+            ImageButton.ImageButtonStyle ImageButtonLeft = new ImageButton.ImageButtonStyle(buttonLeft, buttonLeftPress, buttonLeft, null, null, null);
+            ImageButton.ImageButtonStyle ImageButtonRight = new ImageButton.ImageButtonStyle(buttonRight, buttonRightPress, buttonRight, null, null, null);
+            ImageButton.ImageButtonStyle ImageButtonUp = new ImageButton.ImageButtonStyle(buttonUp, buttonUpPress, buttonUp, null, null, null);
 
 
-        skin.add("default", tbs);
-        skin.add("buttonLeft", ImageButtonLeft);
-        skin.add("buttonRight", ImageButtonRight);
-        skin.add("buttonUp", ImageButtonUp);
-        skin.add("default", touchpadStyle);
-        skin.add("default",checkBoxStyle);
-        skin.add("default-horizontal",sliderStyle);
+            Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();
+            touchpadStyle.background = touchpad_background;
+            touchpadStyle.knob = touchpad_thumb;
+
+
+            skin.add("default", tbs);
+            skin.add("buttonLeft", ImageButtonLeft);
+            skin.add("buttonRight", ImageButtonRight);
+            skin.add("buttonUp", ImageButtonUp);
+            skin.add("default", touchpadStyle);
+            skin.add("default", checkBoxStyle);
+            skin.add("default-horizontal", sliderStyle);
+        }
     }
 
     @Override
@@ -114,8 +118,8 @@ public class Styles implements Disposable{
         skin.dispose();
         font.dispose();
         font2.dispose();
-        skin=null;
-        font=null;
-        font2=null;
+        skin = null;
+        font = null;
+        font2 = null;
     }
 }

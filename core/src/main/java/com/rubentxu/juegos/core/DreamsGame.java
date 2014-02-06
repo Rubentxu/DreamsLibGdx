@@ -14,6 +14,8 @@ import com.rubentxu.juegos.core.pantallas.OptionScreen;
 import com.rubentxu.juegos.core.pantallas.SplashScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
+import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.servicios.Styles;
 
 public class DreamsGame extends DirectedGame {
 
@@ -31,8 +33,8 @@ public class DreamsGame extends DirectedGame {
         preferencesManager = PreferencesManager.instance;
         profileManager= new ProfileManager();
         log = new FPSLogger();
-        ScreenTransition transition = ScreenTransitionFade.init(0.75f);
 
+        ScreenTransition transition = ScreenTransitionFade.init(0.75f);
         setScreen(new SplashScreen(this),transition);
         //setScreen(gameScreen);
     }
