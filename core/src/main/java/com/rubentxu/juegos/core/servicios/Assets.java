@@ -51,10 +51,10 @@ public class Assets extends AssetManager implements Disposable {
         this.load(HEADER_FONT, BitmapFont.class);
         this.load(DEBUG_BACKGROUND, Texture.class);
         this.load(MENU_BACKGROUND, Texture.class);
-        this.load(CLOUD_BACKGROUND, Texture.class);
-        this.load(TREE_BACKGROUND, Texture.class);
+        //this.load(CLOUD_BACKGROUND, Texture.class);
+        //this.load(TREE_BACKGROUND, Texture.class);
         this.load(STATS_BACKGROUND, Texture.class);
-        this.load(LEVEL1_BACKGROUND, Texture.class);
+        //this.load(LEVEL1_BACKGROUND, Texture.class);
 
         this.load(SPRITE_ATLAS, TextureAtlas.class);
         this.load(VARIOS_ATLAS, TextureAtlas.class);
@@ -62,7 +62,7 @@ public class Assets extends AssetManager implements Disposable {
         this.load(UISKIN_ATLAS, TextureAtlas.class);
         this.load(PARTICLE_EFFECT, ParticleEffect.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        this.load(MAP_DEFAULT, TiledMap.class);
+        //this.load(MAP_DEFAULT, TiledMap.class);
 
         this.finishLoading();
     }

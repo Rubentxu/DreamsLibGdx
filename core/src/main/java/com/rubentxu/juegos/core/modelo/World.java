@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.pantallas.BaseScreen;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
@@ -25,9 +24,9 @@ public class World implements Disposable{
     private HashSet<Enemy> enemies=new HashSet<Enemy>();
     private HashSet<Item> items=new HashSet<Item>();
     private Array<Body> bodiesFlaggedDestroy=new Array<Body>();
-    private Texture cloudBackground;
-    private Texture treeBackground;
-    private Texture levelBackground;
+    private Texture background_03;
+    private Texture background_02;
+    private Texture background_01;
 
     public World() {         
         createDreamsWorld();
@@ -35,14 +34,14 @@ public class World implements Disposable{
 
     private void createDreamsWorld() {
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        map =  Assets.getInstance().get(Assets.getInstance().MAP_DEFAULT);
+        map =  //Assets.getInstance().get(Assets.getInstance().MAP_DEFAULT);
         parser = new Box2DMapObjectParser(this);
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
 
-        levelBackground =((Texture) Assets.getInstance().get(Assets.getInstance().LEVEL1_BACKGROUND));
-        cloudBackground =((Texture) Assets.getInstance().get(Assets.getInstance().CLOUD_BACKGROUND));
-        treeBackground =((Texture) Assets.getInstance().get(Assets.getInstance().TREE_BACKGROUND));
+        background_01 =((Texture) Assets.getInstance().get(Assets.getInstance().LEVEL1_BACKGROUND));
+        background_03 =((Texture) Assets.getInstance().get(Assets.getInstance().CLOUD_BACKGROUND));
+        background_02 =((Texture) Assets.getInstance().get(Assets.getInstance().TREE_BACKGROUND));
     }
 
     public void destroyFlaggedEntities(){
@@ -74,7 +73,7 @@ public class World implements Disposable{
         map.dispose();
         physics.dispose();
         physics=null;
-        levelBackground =null;
+        background_01 =null;
         hero.dispose();
         hero=null;
         bodiesFlaggedDestroy=null;
@@ -134,8 +133,8 @@ public class World implements Disposable{
         return items;
     }
 
-    public Texture getLevelBackground() {
-        return levelBackground;
+    public Texture getBackground_01() {
+        return background_01;
     }
 
     public HashSet<Enemy> getEnemies() {
@@ -149,11 +148,11 @@ public class World implements Disposable{
         return bodiesFlaggedDestroy;
     }
 
-    public Texture getCloudBackground() {
-        return cloudBackground;
+    public Texture getBackground_03() {
+        return background_03;
     }
 
-    public Texture getTreeBackground() {
-        return treeBackground;
+    public Texture getBackground_02() {
+        return background_02;
     }
 }

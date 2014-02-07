@@ -65,12 +65,10 @@ public class WorldRenderer implements Disposable {
         cam.viewportWidth = Constants.VIEWPORT_WIDTH;
         cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
 
-        Gdx.app.log(Constants.LOG, "SIZE CAM: "+cam.viewportWidth+" Height: "+cam.viewportHeight);
-
         background=new ParallaxBackground(cam.viewportWidth, cam.viewportHeight);
-        background.addLayer(new ParallaxLayer(world.getLevelBackground(),0.4f,0,100,100));
-        background.addLayer(new ParallaxLayer(world.getCloudBackground(),0.6f,0,100,100));
-        background.addLayer(new ParallaxLayer(world.getTreeBackground(),0.8f,0.02f,100,100));
+        background.addLayer(new ParallaxLayer(world.getBackground_01(),0.4f,0,100,100));
+        background.addLayer(new ParallaxLayer(world.getBackground_03(),0.6f,0,100,100));
+        background.addLayer(new ParallaxLayer(world.getBackground_02(), 0.8f, 0.02f, 100, 100));
 
     }
 
