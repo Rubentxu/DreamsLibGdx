@@ -2,22 +2,23 @@ package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
+import com.rubentxu.juegos.core.managers.game.LevelManager;
+import com.rubentxu.juegos.core.managers.game.MusicManager;
+import com.rubentxu.juegos.core.managers.game.PreferencesManager;
+import com.rubentxu.juegos.core.managers.game.ProfileManager;
 import com.rubentxu.juegos.core.pantallas.BaseScreen;
-import com.rubentxu.juegos.core.pantallas.BaseScreen.SCREEN;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import com.rubentxu.juegos.core.servicios.Assets;
 
 public abstract class DirectedGame implements ApplicationListener {
     private boolean init=false;
@@ -33,6 +34,12 @@ public abstract class DirectedGame implements ApplicationListener {
     public MenuScreen menuScreen;
     public OptionScreen optionScreen;
     public HighScoresScreen highScoreScreen;
+
+    protected MusicManager musicManager;
+    protected LevelManager levelManager;
+    protected PreferencesManager preferencesManager;
+    public static GameState gameState= GameState.GAME_RUNNING;
+    protected ProfileManager profileManager;
 
 
     public void setScreen(BaseScreen screen,
@@ -65,7 +72,17 @@ public abstract class DirectedGame implements ApplicationListener {
         }
 
         Gdx.app.log(Constants.LOG, "SCREENS: Menu: "+menuScreen+" Option: "+optionScreen+" Game: "+gameScreen+" Score: "+highScoreScreen);
-
+        if(screen instanceof GameScreen ){
+            Gdx.app.log(Constants.LOG,"music Game");
+            musicManager.stop();
+            musicManager.setCurrentMusicPlaying(levelManager.getCurrentLevel().getMusic());
+            musicManager.play();
+        }else if(screen instanceof MenuScreen) {
+            Gdx.app.log(Constants.LOG,"music Menu");
+            musicManager.stop();
+            musicManager.setCurrentMusicPlaying(Assets.getInstance().<Music>get(Assets.getInstance().MUSIC_MENU));
+            musicManager.play();
+        }
     }
 
     @Override
@@ -115,11 +132,11 @@ public abstract class DirectedGame implements ApplicationListener {
                 if (screenTransition == null || t >= duration) {
                     if (currScreen != null) currScreen.hide();
                     nextScreen.resume();
-
-                    Gdx.input.setInputProcessor(nextScreen.getInputProcessor());
                     currScreen = nextScreen;
                     nextScreen = null;
                     screenTransition = null;
+
+                    Gdx.input.setInputProcessor(currScreen.getInputProcessor());
                     DreamsGame.gameState = GameState.GAME_RUNNING;
                 } else {
                     currFbo.begin();
@@ -130,12 +147,7 @@ public abstract class DirectedGame implements ApplicationListener {
                     nextFbo.end();
 
                     float alpha = t / duration;
-                    screenTransition.render(batch,
-                            currFbo.getColorBufferTexture(),
-                            nextFbo.getColorBufferTexture(),
-                            alpha);
-
-
+                    screenTransition.render(batch,currFbo.getColorBufferTexture(),nextFbo.getColorBufferTexture(),alpha);
                 }
                 break;
         }
@@ -143,6 +155,7 @@ public abstract class DirectedGame implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
+        musicManager.stop();
         if (currScreen != null) currScreen.resize(width, height);
         if (nextScreen != null) nextScreen.resize(width, height);
     }
@@ -172,7 +185,25 @@ public abstract class DirectedGame implements ApplicationListener {
         }
     }
 
-    public abstract void createScreen(SCREEN screen );
+    public MusicManager getMusicManager() {
+        return musicManager;
+    }
+
+    public LevelManager getLevelManager() {
+        return levelManager;
+    }
+
+
+    public PreferencesManager getPreferencesManager() {
+        return preferencesManager;
+    }
+
+
+    public ProfileManager getProfileManager() {
+        return profileManager;
+    }
+
+
 
 }
 

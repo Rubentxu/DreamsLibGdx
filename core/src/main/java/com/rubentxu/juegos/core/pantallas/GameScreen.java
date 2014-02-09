@@ -56,7 +56,7 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        world=new World();
+        world=new World(game.getLevelManager().getCurrentLevel());
         controller=new WorldController(world);
         renderer=new WorldRenderer(this);
         renderer.resize(width, height);
@@ -77,6 +77,7 @@ public class GameScreen extends BaseScreen {
         super.hide();
         dispose();
     }
+
 
     @Override
     public void pause() {

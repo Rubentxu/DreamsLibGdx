@@ -17,7 +17,7 @@ public class LevelManager {
     public static final String TREE_BACKGROUND = "imagenes/fondos/arboles.png";
     public static final String LEVEL1_BACKGROUND = "imagenes/fondos/fondo.jpg";
     public static final String CLOUD_BACKGROUND = "imagenes/fondos/nubes.png";
-    public static final String MUSIC = "music/";
+    public static final String MUSIC = "sounds/music/BusyDayAtTheMarket.mp3";
 
     public LevelManager(){
         levels=new ArrayList<Level>();
@@ -30,9 +30,17 @@ public class LevelManager {
 
 
         levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...",(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", Assets.getInstance().<Music>get(MUSIC),(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
                 (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND)));
+        currentLevel=levels.get(0);
     }
 
 
+    public Level getCurrentLevel() {
+        return currentLevel;
+    }
+
+    public void setCurrentLevel(Level currentLevel) {
+        this.currentLevel = currentLevel;
+    }
 }

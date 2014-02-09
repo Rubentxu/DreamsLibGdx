@@ -1,9 +1,9 @@
 package com.rubentxu.juegos.core.pantallas;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,10 +20,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
+import com.rubentxu.juegos.core.servicios.Assets;
 
 public class OptionScreen extends BaseScreen {
 
-    private Label volumeValue;
+    private Label volumeValueSound;
+    private Label volumeValueMusic;
 
     public OptionScreen(DreamsGame game) {
         super(game, new Stage(0, 0, true));
@@ -56,9 +58,67 @@ public class OptionScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
                 game.getPreferencesManager().music=enabled;
+                game.getMusicManager().setCurrentMusicPlaying(Assets.getInstance().<Music>get(Assets.getInstance().MUSIC_MENU));
+                game.getMusicManager().play();
             }
         });
         mainTable.add(musicCheckbox);
+        mainTable.row();
+
+        Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, styles.skin);
+        volumeSliderMusic.setValue(game.getPreferencesManager().volMusic);
+        volumeSliderMusic.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Slider slider = (Slider) actor;
+                float value = slider.getValue();
+                game.getPreferencesManager().volMusic = value;
+                updateVolumeLabelMusic();
+            }
+
+        });
+        mainTable.add(volumeSliderMusic);
+        mainTable.row();
+
+        volumeValueMusic = new Label(" Volume ", styles.skin);
+        updateVolumeLabelMusic();
+        mainTable.add(volumeValueMusic);
+        mainTable.row();
+
+
+        final CheckBox soundCheckbox = new CheckBox(" Sound", styles.skin);
+        soundCheckbox.align(Align.left);
+        soundCheckbox.setChecked(game.getPreferencesManager().sound);
+        soundCheckbox.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                boolean enabled = soundCheckbox.isChecked();
+                game.getPreferencesManager().sound=enabled;
+
+            }
+        });
+        mainTable.add(soundCheckbox);
+        mainTable.row();
+
+
+        Slider volumeSliderSound = new Slider(0f, 1f, 0.1f, false, styles.skin);
+        volumeSliderSound.setValue(game.getPreferencesManager().volSound);
+        volumeSliderSound.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Slider slider = (Slider) actor;
+                float value = slider.getValue();
+                game.getPreferencesManager().volSound = value;
+                updateVolumeLabelSound();
+            }
+
+        });
+        mainTable.add(volumeSliderSound);
+        mainTable.row();
+
+        volumeValueSound = new Label(" Volume ", styles.skin);
+        updateVolumeLabelSound();
+        mainTable.add(volumeValueSound);
         mainTable.row();
 
         final CheckBox touchPadCheckbox = new CheckBox(" TouchPad Control", styles.skin);
@@ -74,39 +134,9 @@ public class OptionScreen extends BaseScreen {
         mainTable.add(touchPadCheckbox);
         mainTable.row();
 
-        Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, styles.skin);
-        volumeSliderMusic.setValue(game.getPreferencesManager().volMusic);
-        volumeSliderMusic.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Slider slider = (Slider) actor;
-                float value = slider.getValue();
-                game.getPreferencesManager().volMusic = value;
-                updateVolumeLabel();
-            }
 
-        });
-        mainTable.add(volumeSliderMusic);
-        mainTable.row();
-        Slider volumeSliderSound = new Slider(0f, 1f, 0.1f, false, styles.skin);
-        volumeSliderSound.setValue(game.getPreferencesManager().volSound);
-        volumeSliderSound.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Slider slider = (Slider) actor;
-                float value = slider.getValue();
-                game.getPreferencesManager().volSound = value;
-                updateVolumeLabel();
-            }
 
-        });
-        mainTable.add(volumeSliderSound);
-        mainTable.row();
 
-        volumeValue = new Label(" Volume ", styles.skin);
-        updateVolumeLabel();
-        mainTable.add(volumeValue);
-        mainTable.row();
 
         TextButton backButton = new TextButton("Volver Menu", styles.skin);
         backButton.pad(20);
@@ -132,9 +162,14 @@ public class OptionScreen extends BaseScreen {
         return multiplexer;
     }
 
-    private void updateVolumeLabel() {
-        float volume = (game.getPreferencesManager().volMusic * 100);
-        volumeValue.setText(Float.toString(volume));
+    private void updateVolumeLabelMusic() {
+        int volume = (int) (game.getPreferencesManager().volMusic * 100);
+        volumeValueMusic.setText("Volume "+Integer.toString(volume));
+    }
+
+    private void updateVolumeLabelSound() {
+        int volume = (int) (game.getPreferencesManager().volSound * 100);
+        volumeValueSound.setText("Volume "+Integer.toString(volume));
     }
 
 }

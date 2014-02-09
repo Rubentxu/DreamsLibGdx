@@ -1,6 +1,7 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
@@ -9,12 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
-import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
-import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlice;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
 import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.servicios.Styles;
-import com.badlogic.gdx.InputProcessor;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
@@ -42,7 +40,7 @@ public abstract class BaseScreen implements Screen {
         return transition;
     }
 
-    public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, HIGHSCORES, CREDITS}
+    public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, HIGHSCORES, CREDITS, LEVELSCREEN}
 
 
     public BaseScreen(DreamsGame game, Stage stage) {

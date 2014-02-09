@@ -17,6 +17,7 @@ public class PreferencesManager {
 
     private PreferencesManager() {
         preferences= Gdx.app.getPreferences(Constants.PREFS_NAME);
+        load();
     }
 
     public void load () {

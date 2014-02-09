@@ -166,9 +166,9 @@ public class GuiBuilder {
     public static final Table buildStats(float width,float height, Styles styles) {
 
         Table tableProfile = new Table();
-        tableProfile.setBounds(0, 0, width , height /10);
+        tableProfile.setBounds(0, 0, width , height /15);
         SpriteDrawable drawable=  styles.skin.get("stats", SpriteDrawable.class);
-        tableProfile.setBackground(drawable);
+        //tableProfile.setBackground(drawable);
 
 
         Image imageLives = new Image(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("vidas"));
@@ -183,12 +183,14 @@ public class GuiBuilder {
         Label score = new Label("0000", styles.skin, "default", Color.ORANGE);
         score.setName(Constants.SCORE);
 
-        tableProfile.add(imageLives).padRight(2);
-        tableProfile.add(lives).width(width / 5).expandY().fill();
+        tableProfile.add(imageLives).top().left().padRight(2);
+        tableProfile.add(lives).top().left().width(width / 5).expandY().fill();
 
-        tableProfile.add(labelScore).right().expandY().fill();
-        tableProfile.add(score).right().expandY().fill();
+        tableProfile.add(labelScore).top().right().expandY().fill();
+        tableProfile.add(score).top().right().expandY().fill();
 
         return tableProfile;
     }
+
+
 }

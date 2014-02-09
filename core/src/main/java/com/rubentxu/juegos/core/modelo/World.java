@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
-import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
@@ -28,20 +27,20 @@ public class World implements Disposable{
     private Texture background_02;
     private Texture background_01;
 
-    public World() {         
-        createDreamsWorld();
+    public World(Level level) {
+        createDreamsWorld(level);
     }
 
-    private void createDreamsWorld() {
+    private void createDreamsWorld(Level level) {
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        map =  //Assets.getInstance().get(Assets.getInstance().MAP_DEFAULT);
+        map =  level.getMap();
         parser = new Box2DMapObjectParser(this);
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
 
-        background_01 =((Texture) Assets.getInstance().get(Assets.getInstance().LEVEL1_BACKGROUND));
-        background_03 =((Texture) Assets.getInstance().get(Assets.getInstance().CLOUD_BACKGROUND));
-        background_02 =((Texture) Assets.getInstance().get(Assets.getInstance().TREE_BACKGROUND));
+        background_01 =level.getBackground_01();
+        background_02 =level.getBackground_02();
+        background_03 =level.getBackground_03();
     }
 
     public void destroyFlaggedEntities(){

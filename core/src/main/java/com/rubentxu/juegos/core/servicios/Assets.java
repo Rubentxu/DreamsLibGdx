@@ -3,6 +3,7 @@ package com.rubentxu.juegos.core.servicios;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -11,7 +12,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.constantes.Constants;
-import com.rubentxu.juegos.core.pantallas.BaseScreen;
 
 public class Assets extends AssetManager implements Disposable {
 
@@ -33,6 +33,8 @@ public class Assets extends AssetManager implements Disposable {
     public static final String MENU_BACKGROUND = "imagenes/fondos/menu-backgroud.jpg";
     public static final String MAP_DEFAULT = "maps/EscenarioDePruebas.tmx";
     public static final String PARTICLE_EFFECT = "particles/dust.pfx";
+    public static final String MUSIC_MENU = "sounds/music/MonkeysSpinningMonkeys.mp3";
+
 
     private Assets() {
         super();
@@ -55,6 +57,7 @@ public class Assets extends AssetManager implements Disposable {
         //this.load(TREE_BACKGROUND, Texture.class);
         this.load(STATS_BACKGROUND, Texture.class);
         //this.load(LEVEL1_BACKGROUND, Texture.class);
+        this.load(MUSIC_MENU,Music.class);
 
         this.load(SPRITE_ATLAS, TextureAtlas.class);
         this.load(VARIOS_ATLAS, TextureAtlas.class);

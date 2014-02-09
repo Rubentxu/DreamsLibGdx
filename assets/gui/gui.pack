@@ -1,112 +1,119 @@
 
 gui.png
 format: RGBA8888
-filter: Linear,Linear
+filter: Nearest,Nearest
 repeat: none
 touchpad_background
   rotate: false
-  xy: 0, 65
+  xy: 1, 67
   size: 180, 180
   orig: 180, 180
   offset: 0, 0
   index: -1
-vidas
+tijeras
   rotate: false
-  xy: 181, 114
-  size: 144, 131
-  orig: 144, 131
+  xy: 183, 86
+  size: 111, 161
+  orig: 111, 161
   offset: 0, 0
   index: -1
 joystick
   rotate: false
-  xy: 326, 117
+  xy: 296, 119
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
 touchBack2
   rotate: false
-  xy: 455, 117
+  xy: 426, 119
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
+vidas
+  rotate: false
+  xy: 556, 160
+  size: 100, 87
+  orig: 100, 87
+  offset: 0, 0
+  index: -1
 touchpad_thumb
   rotate: false
-  xy: 584, 161
+  xy: 658, 163
   size: 84, 84
   orig: 84, 84
   offset: 0, 0
   index: -1
 btnMenu
   rotate: false
-  xy: 0, 0
+  xy: 1, 1
   size: 64, 64
   split: 31, 32, 15, 48
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-buttonUp
-  rotate: false
-  xy: 669, 181
-  size: 64, 64
-  split: 0, 64, 17, 17
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-buttonLeft
-  rotate: false
-  xy: 65, 0
-  size: 64, 64
-  split: 16, 18, 0, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-buttonRightPress
-  rotate: false
-  xy: 734, 181
-  size: 64, 64
-  split: 19, 17, 0, 64
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-debug
-  rotate: false
-  xy: 799, 181
-  size: 64, 64
-  split: 31, 32, 33, 30
-  orig: 64, 64
-  offset: 0, 0
-  index: -1
-buttonRight
-  rotate: false
-  xy: 864, 181
-  size: 64, 64
-  split: 19, 16, 0, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 btnMenuPress
   rotate: false
-  xy: 929, 181
+  xy: 744, 183
   size: 64, 64
   split: 31, 32, 15, 48
   orig: 64, 64
   offset: 0, 0
   index: -1
-buttonUpPress
+buttonLeft
   rotate: false
-  xy: 130, 0
+  xy: 67, 1
   size: 64, 64
-  split: 0, 64, 18, 18
+  split: 16, 18, 0, 64
   orig: 64, 64
   offset: 0, 0
   index: -1
 buttonLeftPress
   rotate: false
-  xy: 584, 96
+  xy: 810, 183
   size: 64, 64
   split: 17, 19, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonRight
+  rotate: false
+  xy: 876, 183
+  size: 64, 64
+  split: 19, 16, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonRightPress
+  rotate: false
+  xy: 942, 183
+  size: 64, 64
+  split: 19, 17, 0, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonUp
+  rotate: false
+  xy: 133, 1
+  size: 64, 64
+  split: 0, 64, 17, 17
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+buttonUpPress
+  rotate: false
+  xy: 199, 20
+  size: 64, 64
+  split: 0, 64, 18, 18
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+debug
+  rotate: false
+  xy: 556, 94
+  size: 64, 64
+  split: 31, 32, 33, 30
   orig: 64, 64
   offset: 0, 0
   index: -1

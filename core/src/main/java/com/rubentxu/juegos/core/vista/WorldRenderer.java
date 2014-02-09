@@ -91,8 +91,8 @@ public class WorldRenderer implements Disposable {
         }
 
         for(Item i :world.getItems()){
-            String nombreRegion= (atlasVarios.findRegion(i.getNombre())!=null)? i.getNombre(): i.getGrupo().toString();
-            Sprite viewSprite = new Sprite(atlasVarios.findRegion("agua"));
+
+            Sprite viewSprite = new Sprite(((TextureAtlas)Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"));
             if(viewSprite!=null){
                 modelsAndViews.addModelAndView(i,viewSprite);
             }
@@ -104,7 +104,7 @@ public class WorldRenderer implements Disposable {
         background.render(cam.position,spriteBatch);
 
         world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
-        cam.position.set(world.getHero().getBody().getPosition().x, cam.viewportHeight/2 -cam.viewportHeight/12, 0);
+        cam.position.set(world.getHero().getBody().getPosition().x, cam.viewportHeight / 2 - cam.viewportHeight / 12, 0);
         cam.update();
 
         renderer.setView(cam);

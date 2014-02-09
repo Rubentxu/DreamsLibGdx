@@ -140,10 +140,10 @@
 									<includes>
 										<include>target/*.apk</include>
 									</includes>
-									<keystore>/home/rubentxu/Dropbox/juegos/keystore/keyStore.store</keystore>
-									<storepass>rudacaga74</storepass>
-									<keypass>1974rubendario</keypass>
-									<alias>rubentxu</alias>
+									<keystore>${keystore.path}</keystore>
+									<storepass>${keystore.password}</storepass>
+									<keypass>${key.password}</keypass>
+									<alias>${keystore.alias}</alias>
 									<arguments>
 										<argument>-sigalg</argument><argument>MD5withRSA</argument>
 										<argument>-digestalg</argument><argument>SHA1</argument>
