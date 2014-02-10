@@ -58,8 +58,7 @@ public class OptionScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
                 game.getPreferencesManager().music=enabled;
-                game.getMusicManager().setCurrentMusicPlaying(Assets.getInstance().<Music>get(Assets.getInstance().MUSIC_MENU));
-                game.getMusicManager().play();
+                game.getMusicManager().play(Assets.getInstance().MUSIC_MENU);
             }
         });
         mainTable.add(musicCheckbox);

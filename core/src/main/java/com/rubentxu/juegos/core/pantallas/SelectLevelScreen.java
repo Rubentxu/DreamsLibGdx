@@ -6,15 +6,25 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
+import com.rubentxu.juegos.core.modelo.Level;
+import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.utils.gui.mtx.ButtonLevel;
+
+import java.util.List;
+import java.util.Random;
 
 public class SelectLevelScreen extends BaseScreen {
 
@@ -33,57 +43,39 @@ public class SelectLevelScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-
-        final TextButton btnStart = new TextButton("Comenzar", styles.skin);
-        btnStart.pad(30);
-        final TextButton btnOptions = new TextButton("Opciones", styles.skin);
-        btnOptions.pad(30);
-        final TextButton btnScores = new TextButton("Puntuaciones", styles.skin);
-        btnScores.pad(30);
-        final TextButton button3 = new TextButton("Creditos", styles.skin);
-        button3.pad(30);
-        button3.setChecked(false);
-
-        btnStart.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Click Comenzar...");
-                game.gameScreen=null;
-                game.gameScreen= new GameScreen(game);
-                game.setScreen(game.gameScreen,getTransition());
+        final List<Level> levels = game.getLevelManager().getLevels();
+        for (int i = 0; i < levels.size(); i++){
+            //1. Create level button
+            final ButtonLevel levelButton =new ButtonLevel(styles.skin.get("btnMenu",NinePatchDrawable.class),styles.skin.get("btnMenuPress",NinePatchDrawable.class));
+            if(!levels.get(i).isActive()) {
+                levelButton.setTextureLocked(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"),true);
             }
-        });
 
-        btnOptions.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Click optionScreen...");
-                game.optionScreen= new OptionScreen(game);
-                game.setScreen(game.optionScreen,getTransition());
+            levelButton.setLevelNumber(i + 1, styles.font2);
+
+            levelButton.setLevelStars(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("vidas")
+                    , ((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"), 4, levels.get(i).getAchievements());
+
+            levelButton.addListener(new ActorGestureListener() {
+                @Override
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchUp(event, x, y, pointer, button);
+                   game.getLevelManager().setCurrentLevel(levels.get(levelButton.getLevelNumber()));
+                   game.gameScreen= new GameScreen(game);
+                   game.setScreen(game.gameScreen,getTransition());
+                }
+            });
+
+            if(i % 5 == 0){
+                mainTable.row();
             }
-        });
 
-        btnScores.addListener(new ClickListener() {
-            public void clicked(InputEvent event, float x, float y) {
-                System.out.println("Click highScoreScreen...");
-                game.highScoreScreen= new HighScoresScreen(game);
-                game.setScreen(game.highScoreScreen,getTransition());
-            }
-        });
-
+            mainTable.add(levelButton).size(100, 100).pad(5, 5, 5, 5).expand();
+        }
 
         mainTable.setFillParent(true);
-        mainTable.defaults().pad(16f);
-        mainTable.add(label("Selecciona Nivel", Color.CYAN, true));
         mainTable.row();
-        mainTable.add(btnStart);
-        mainTable.row();
-        mainTable.add(btnOptions);
-        mainTable.row();
-        mainTable.add(btnScores);
-        mainTable.row();
-        mainTable.add(button3);
-        mainTable.row();
-        mainTable.add(label("Pulsa en comenzar, para iniciar la partida.", Color.LIGHT_GRAY, false));
-        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get(assets.MENU_BACKGROUND))));
+        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get(assets.DEBUG_BACKGROUND))));
 
         this.stage.addActor(mainTable);
 

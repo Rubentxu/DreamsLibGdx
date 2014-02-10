@@ -75,6 +75,12 @@ public class Assets extends AssetManager implements Disposable {
         this.finishLoading();
     }
 
+    public Music getMusic(String name){
+        this.load(name,Music.class);
+        this.finishLoading();
+        return this.get(name);
+    }
+
     @Override
     public void dispose() {
         super.dispose();

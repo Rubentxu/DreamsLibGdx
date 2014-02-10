@@ -17,10 +17,11 @@ import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
+import com.rubentxu.juegos.core.pantallas.SelectLevelScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.servicios.Assets;
 
-public abstract class DirectedGame implements ApplicationListener {
+public class BaseGame implements ApplicationListener {
     private boolean init=false;
     private BaseScreen currScreen;
     private BaseScreen nextScreen;
@@ -34,6 +35,7 @@ public abstract class DirectedGame implements ApplicationListener {
     public MenuScreen menuScreen;
     public OptionScreen optionScreen;
     public HighScoresScreen highScoreScreen;
+    public SelectLevelScreen levelScreen;
 
     protected MusicManager musicManager;
     protected LevelManager levelManager;
@@ -75,13 +77,12 @@ public abstract class DirectedGame implements ApplicationListener {
         if(screen instanceof GameScreen ){
             Gdx.app.log(Constants.LOG,"music Game");
             musicManager.stop();
-            musicManager.setCurrentMusicPlaying(levelManager.getCurrentLevel().getMusic());
-            musicManager.play();
+            musicManager.play(levelManager.getCurrentLevel().getMusic());
         }else if(screen instanceof MenuScreen) {
             Gdx.app.log(Constants.LOG,"music Menu");
             musicManager.stop();
-            musicManager.setCurrentMusicPlaying(Assets.getInstance().<Music>get(Assets.getInstance().MUSIC_MENU));
-            musicManager.play();
+            musicManager.play(Assets.getInstance().MUSIC_MENU);
+
         }
     }
 
@@ -151,6 +152,11 @@ public abstract class DirectedGame implements ApplicationListener {
                 }
                 break;
         }
+    }
+
+    @Override
+    public void create() {
+
     }
 
     @Override

@@ -30,8 +30,29 @@ public class LevelManager {
 
 
         levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", Assets.getInstance().<Music>get(MUSIC),(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
-                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND)));
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),true,1));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),true,2));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),true,3));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),true,4));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),true,2));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),false,0));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),false,0));
+        levels.add( new Level((TiledMap)Assets.getInstance().get("maps/EscenarioDePruebas.tmx"),"Madrid no es Olimpica",
+                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC,(Texture) Assets.getInstance().get(LEVEL1_BACKGROUND),
+                (Texture) Assets.getInstance().get(CLOUD_BACKGROUND),(Texture) Assets.getInstance().get(TREE_BACKGROUND),false,0));
         currentLevel=levels.get(0);
     }
 
@@ -42,5 +63,9 @@ public class LevelManager {
 
     public void setCurrentLevel(Level currentLevel) {
         this.currentLevel = currentLevel;
+    }
+
+    public List<Level> getLevels() {
+        return levels;
     }
 }

@@ -10,13 +10,10 @@ import com.rubentxu.juegos.core.pantallas.SplashScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
 
-public class DreamsGame extends DirectedGame {
+public class DreamsGame extends BaseGame {
 
     public static boolean DEBUG = false;
     FPSLogger log;
-
-
-
 
     @Override
     public void create() {
@@ -35,9 +32,7 @@ public class DreamsGame extends DirectedGame {
     @Override
     public void dispose() {
         super.dispose();
-
     }
-
 
     @Override
     public void render() {
