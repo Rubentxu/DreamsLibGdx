@@ -12,15 +12,15 @@ import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
 
 public class DreamsGame extends BaseGame {
 
-    public static boolean DEBUG = false;
+    public static boolean DEBUG = true;
     FPSLogger log;
 
     @Override
     public void create() {
         Gdx.input.setCatchBackKey(true);
         preferencesManager = PreferencesManager.instance;
-        profileManager= new ProfileManager();
-        levelManager=new LevelManager();
+        profileManager= new ProfileManager(this);
+        levelManager=new LevelManager(this);
         musicManager=new MusicManager(this);
         log = new FPSLogger();
 

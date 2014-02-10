@@ -57,6 +57,7 @@ public class GameScreen extends BaseScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         world=new World(game.getLevelManager().getCurrentLevel());
+        world.getHero().setProfile(game.getProfileManager().retrieveProfile());
         controller=new WorldController(world);
         renderer=new WorldRenderer(this);
         renderer.resize(width, height);

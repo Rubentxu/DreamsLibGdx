@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
@@ -33,14 +34,15 @@ public class World implements Disposable{
 
     private void createDreamsWorld(Level level) {
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        map =  level.getMap();
+        map = Assets.getInstance().get(level.getMap());
         parser = new Box2DMapObjectParser(this);
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
 
-        background_01 =level.getBackground_01();
-        background_02 =level.getBackground_02();
-        background_03 =level.getBackground_03();
+        background_01 =Assets.getInstance().get(level.getBackground_01());
+        background_02 =Assets.getInstance().get(level.getBackground_02());
+        background_03 =Assets.getInstance().get(level.getBackground_03());
+
     }
 
     public void destroyFlaggedEntities(){

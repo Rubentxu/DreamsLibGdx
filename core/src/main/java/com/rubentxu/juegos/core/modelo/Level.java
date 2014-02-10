@@ -6,19 +6,22 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.rubentxu.juegos.core.servicios.Assets;
 
+import java.util.Map;
+
 public class Level {
 
-    private TiledMap map;
+    private String map;
     private String levelName;
     private String description;
     private String music;
-    private Texture background_01;
-    private Texture background_02;
-    private Texture background_03;
-    private boolean active;
-    private int achievements;
+    private String background_01;
+    private String background_02;
+    private String background_03;
+    private boolean active=false;
+    private int achievements=0;
+    private int highScore=0;
 
-    public Level(TiledMap map, String levelName, String description, String music, Texture background_01, Texture background_02, Texture background_03,
+    public Level(String map, String levelName, String description, String music, String background_01, String background_02, String background_03,
                  boolean active,int achievements) {
         this.map = map;
         this.levelName = levelName;
@@ -31,7 +34,7 @@ public class Level {
         this.achievements= achievements;
     }
 
-    public TiledMap getMap() {
+    public String getMap() {
         return map;
     }
 
@@ -47,15 +50,15 @@ public class Level {
         return music;
     }
 
-    public Texture getBackground_01() {
+    public String getBackground_01() {
         return background_01;
     }
 
-    public Texture getBackground_02() {
+    public String getBackground_02() {
         return background_02;
     }
 
-    public Texture getBackground_03() {
+    public String getBackground_03() {
         return background_03;
     }
 
@@ -73,5 +76,13 @@ public class Level {
 
     public void setAchievements(int achievements) {
         this.achievements = achievements;
+    }
+
+    public int getHighScore() {
+        return highScore;
+    }
+
+    public void setHighScore(int highScore) {
+        this.highScore = highScore;
     }
 }

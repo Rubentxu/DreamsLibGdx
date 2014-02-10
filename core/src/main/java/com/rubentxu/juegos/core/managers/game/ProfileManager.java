@@ -11,7 +11,12 @@ import com.rubentxu.juegos.core.modelo.Profile;
 public class ProfileManager {
 
 
+    private final DreamsGame game;
     private Profile profile;
+
+    public ProfileManager(DreamsGame dreamsGame){
+        this.game=dreamsGame;
+    }
 
     public Profile retrieveProfile() {
 
@@ -34,11 +39,11 @@ public class ProfileManager {
 
             } catch (Exception e) {
                 Gdx.app.error(Constants.LOG, "Unable to parse existing profile data file", e);
-                profile = new Profile();
+                profile = new Profile(game.getLevelManager().getLevels());
                 persist(profile);
             }
         } else {
-            profile = new Profile();
+            profile = new Profile(game.getLevelManager().getLevels());
             persist(profile);
         }
 

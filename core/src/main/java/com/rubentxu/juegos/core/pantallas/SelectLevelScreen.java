@@ -45,7 +45,7 @@ public class SelectLevelScreen extends BaseScreen {
         super.resize(width, height);
         final List<Level> levels = game.getLevelManager().getLevels();
         for (int i = 0; i < levels.size(); i++){
-            //1. Create level button
+
             final ButtonLevel levelButton =new ButtonLevel(styles.skin.get("btnMenu",NinePatchDrawable.class),styles.skin.get("btnMenuPress",NinePatchDrawable.class));
             if(!levels.get(i).isActive()) {
                 levelButton.setTextureLocked(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"),true);
