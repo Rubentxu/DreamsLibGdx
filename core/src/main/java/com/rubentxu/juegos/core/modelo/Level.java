@@ -1,14 +1,10 @@
 package com.rubentxu.juegos.core.modelo;
 
 
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.rubentxu.juegos.core.servicios.Assets;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 
-import java.util.Map;
-
-public class Level {
+public class Level implements Json.Serializable {
 
     private String map;
     private String levelName;
@@ -20,6 +16,8 @@ public class Level {
     private boolean active=false;
     private int achievements=0;
     private int highScore=0;
+
+    public Level(){}
 
     public Level(String map, String levelName, String description, String music, String background_01, String background_02, String background_03,
                  boolean active,int achievements) {
@@ -84,5 +82,35 @@ public class Level {
 
     public void setHighScore(int highScore) {
         this.highScore = highScore;
+    }
+
+    @Override
+    public void read(Json json, JsonValue jsonData) {
+
+        map=json.readValue("map", String.class, jsonData);;
+        levelName=json.readValue("levelName", String.class, jsonData);;
+        description=json.readValue("description", String.class, jsonData);;
+        music=json.readValue("music", String.class, jsonData);;
+        background_01=json.readValue("background_01", String.class, jsonData);;
+        background_02=json.readValue("background_02", String.class, jsonData);;
+        background_03=json.readValue("background_03", String.class, jsonData);;
+        active=json.readValue("active", Boolean.class, jsonData);;
+        achievements=json.readValue("achievements", Integer.class, jsonData);;
+        highScore=json.readValue("highScore", Integer.class, jsonData);;
+
+    }
+
+    @Override
+    public void write(Json json) {
+        json.writeValue("map", map);
+        json.writeValue("levelName", levelName);
+        json.writeValue("description", description);
+        json.writeValue("music", music);
+        json.writeValue("background_01", background_01);
+        json.writeValue("background_02", background_02);
+        json.writeValue("background_03", background_03);
+        json.writeValue("active", active);
+        json.writeValue("achievements", achievements);
+        json.writeValue("highScore", highScore);
     }
 }

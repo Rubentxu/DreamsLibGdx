@@ -17,30 +17,37 @@ tijeras
   orig: 111, 161
   offset: 0, 0
   index: -1
-joystick
+botonCandado
   rotate: false
   xy: 296, 119
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
-touchBack2
+estrella
   rotate: false
   xy: 426, 119
   size: 128, 128
   orig: 128, 128
   offset: 0, 0
   index: -1
+estrellaZocalo
+  rotate: false
+  xy: 556, 119
+  size: 128, 128
+  orig: 128, 128
+  offset: 0, 0
+  index: -1
 vidas
   rotate: false
-  xy: 556, 160
+  xy: 686, 160
   size: 100, 87
   orig: 100, 87
   offset: 0, 0
   index: -1
 touchpad_thumb
   rotate: false
-  xy: 658, 163
+  xy: 788, 163
   size: 84, 84
   orig: 84, 84
   offset: 0, 0
@@ -55,7 +62,7 @@ btnMenu
   index: -1
 btnMenuPress
   rotate: false
-  xy: 744, 183
+  xy: 874, 183
   size: 64, 64
   split: 31, 32, 15, 48
   orig: 64, 64
@@ -71,7 +78,7 @@ buttonLeft
   index: -1
 buttonLeftPress
   rotate: false
-  xy: 810, 183
+  xy: 940, 183
   size: 64, 64
   split: 17, 19, 0, 64
   orig: 64, 64
@@ -79,7 +86,7 @@ buttonLeftPress
   index: -1
 buttonRight
   rotate: false
-  xy: 876, 183
+  xy: 133, 1
   size: 64, 64
   split: 19, 16, 0, 64
   orig: 64, 64
@@ -87,7 +94,7 @@ buttonRight
   index: -1
 buttonRightPress
   rotate: false
-  xy: 942, 183
+  xy: 199, 20
   size: 64, 64
   split: 19, 17, 0, 64
   orig: 64, 64
@@ -95,7 +102,7 @@ buttonRightPress
   index: -1
 buttonUp
   rotate: false
-  xy: 133, 1
+  xy: 686, 94
   size: 64, 64
   split: 0, 64, 17, 17
   orig: 64, 64
@@ -103,7 +110,7 @@ buttonUp
   index: -1
 buttonUpPress
   rotate: false
-  xy: 199, 20
+  xy: 752, 94
   size: 64, 64
   split: 0, 64, 18, 18
   orig: 64, 64
@@ -111,7 +118,7 @@ buttonUpPress
   index: -1
 debug
   rotate: false
-  xy: 556, 94
+  xy: 818, 97
   size: 64, 64
   split: 31, 32, 33, 30
   orig: 64, 64

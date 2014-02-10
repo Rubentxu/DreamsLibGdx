@@ -19,7 +19,7 @@ public class DreamsGame extends BaseGame {
     public void create() {
         Gdx.input.setCatchBackKey(true);
         preferencesManager = PreferencesManager.instance;
-        profileManager= new ProfileManager(this);
+        profileManager= new ProfileManager();
         levelManager=new LevelManager(this);
         musicManager=new MusicManager(this);
         log = new FPSLogger();

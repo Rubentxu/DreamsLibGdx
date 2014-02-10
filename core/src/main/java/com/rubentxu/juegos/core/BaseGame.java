@@ -2,7 +2,6 @@ package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
@@ -56,9 +55,9 @@ public class BaseGame implements ApplicationListener {
         }
 
         nextScreen = screen;
-        nextScreen.show(); // activate next screen
+        nextScreen.show();
         nextScreen.resize(w, h);
-        nextScreen.render(0); // let screen update() once
+        nextScreen.render(0);
         nextScreen.pause();
         Gdx.input.setInputProcessor(null); // disable input
         this.screenTransition = screenTransition;
@@ -116,7 +115,8 @@ public class BaseGame implements ApplicationListener {
                     //Presentar una ventana para salir
                     //DreamsGame.gameState=GameState.GAME_PAUSED;
                     if(menuScreen!=null){
-                        setScreen(menuScreen,menuScreen.getTransition());
+                        profileManager.retrieveProfile();
+                        setScreen(menuScreen, menuScreen.getTransition()); 
                     }else {
                         Gdx.app.exit();
                     }

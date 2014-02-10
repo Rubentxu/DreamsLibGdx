@@ -30,34 +30,7 @@ public class LevelManager {
         Assets.getInstance().load(LEVEL1_BACKGROUND, Texture.class);
         Assets.getInstance().load(MUSIC, Music.class);
         Assets.getInstance().finishLoading();
-
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, true, 1));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, true, 2));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, true, 3));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, true, 2));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, true, 0));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, false, 0));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, false, 0));
-        levels.add(new Level("maps/EscenarioDePruebas.tmx", "Madrid no es Olimpica",
-                "El malvado Borcena esta intentando destruir la imagen de Madrid...", MUSIC, LEVEL1_BACKGROUND,
-                CLOUD_BACKGROUND, TREE_BACKGROUND, false, 0));
-
-        currentLevel = levels.get(0);
-        game.getProfileManager().persist();
+        loadLevels();
     }
 
 

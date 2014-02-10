@@ -10,11 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
@@ -24,7 +21,6 @@ import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.gui.mtx.ButtonLevel;
 
 import java.util.List;
-import java.util.Random;
 
 public class SelectLevelScreen extends BaseScreen {
 
@@ -48,13 +44,13 @@ public class SelectLevelScreen extends BaseScreen {
 
             final ButtonLevel levelButton =new ButtonLevel(styles.skin.get("btnMenu",NinePatchDrawable.class),styles.skin.get("btnMenuPress",NinePatchDrawable.class));
             if(!levels.get(i).isActive()) {
-                levelButton.setTextureLocked(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"),true);
+                levelButton.setTextureLocked(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("botonCandado"),true);
             }
 
             levelButton.setLevelNumber(i + 1, styles.font2);
 
-            levelButton.setLevelStars(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("vidas")
-                    , ((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"), 4, levels.get(i).getAchievements());
+            levelButton.setLevelStars(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("estrellaZocalo")
+                    , ((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("estrella"), 4, levels.get(i).getAchievements());
 
             levelButton.addListener(new ActorGestureListener() {
                 @Override
@@ -70,7 +66,7 @@ public class SelectLevelScreen extends BaseScreen {
                 mainTable.row();
             }
 
-            mainTable.add(levelButton).size(100, 100).pad(5, 5, 5, 5).expand();
+            mainTable.add(levelButton).size(150, 150).pad(5, 5, 5, 5).expand();
         }
 
         mainTable.setFillParent(true);

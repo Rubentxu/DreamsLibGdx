@@ -25,7 +25,7 @@ public class ButtonLevel extends AbstractButton {
 	private BitmapFont bitMapFont;
 
 	public ButtonLevel(Drawable up, Drawable down) {
-		super(Assets.getInstance().<BitmapFont>get(Assets.DEFAULT_FONT), up, down);
+		super(Assets.getInstance().<BitmapFont>get(Assets.HEADER_FONT), up, down);
 	}
 
 	@Override

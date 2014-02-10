@@ -20,7 +20,8 @@ public class Constants {
     public static final String PREF_SOUND_ENABLED = "sound.enabled";
     public static final String PREF_TOUCHPAD_ENABLED = "touchpad.enabled";
     // Profile
-    public static final String PROFILE_DATA_FILE = "data/profile.json";
+    public static final String PROFILE_DATA_FILE = "data/profile.game";
+    public static final String INIT_PROFILE_DATA_FILE = "data/initProfile.game";
 
     //Name elements GUI STATS
     public static final String LABEL_SCORE= "Puntuacion";

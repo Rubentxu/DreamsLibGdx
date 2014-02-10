@@ -11,19 +11,13 @@ import com.rubentxu.juegos.core.modelo.Profile;
 public class ProfileManager {
 
 
-    private final DreamsGame game;
     private Profile profile;
 
-    public ProfileManager(DreamsGame dreamsGame){
-        this.game=dreamsGame;
-    }
-
     public Profile retrieveProfile() {
-
+        profile=null;
         FileHandle profileDataFile = Gdx.files.local(Constants.PROFILE_DATA_FILE);
         Gdx.app.log(Constants.LOG, "Retrieving profile from: " + profileDataFile.path());
 
-        if (profile != null) return profile;
         Json json = new Json();
 
         if (profileDataFile.exists()) {
@@ -38,12 +32,15 @@ public class ProfileManager {
                 profile = json.fromJson(Profile.class, profileAsText);
 
             } catch (Exception e) {
-                Gdx.app.error(Constants.LOG, "Unable to parse existing profile data file", e);
-                profile = new Profile(game.getLevelManager().getLevels());
+                FileHandle initProfileDataFile = Gdx.files.local(Constants.INIT_PROFILE_DATA_FILE);
+                Gdx.app.log(Constants.LOG, "Retrieving profile from: " + initProfileDataFile.path());
+                profile = json.fromJson(Profile.class, initProfileDataFile.readString().trim());
                 persist(profile);
             }
         } else {
-            profile = new Profile(game.getLevelManager().getLevels());
+            FileHandle initProfileDataFile = Gdx.files.local(Constants.INIT_PROFILE_DATA_FILE);
+            Gdx.app.log(Constants.LOG, "Retrieving profile from: " + initProfileDataFile.path());
+            profile = json.fromJson(Profile.class, initProfileDataFile.readString().trim());
             persist(profile);
         }
 
@@ -67,5 +64,10 @@ public class ProfileManager {
         if (profile != null) {
             persist(profile);
         }
+    }
+
+    public void resetToDefaultProfile(){
+        FileHandle profileDataFile = Gdx.files.local(Constants.PROFILE_DATA_FILE);
+        if (profileDataFile.exists()) profileDataFile.delete();
     }
 }
