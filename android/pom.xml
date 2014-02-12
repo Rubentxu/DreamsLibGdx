@@ -98,7 +98,7 @@
 						</jvmArguments>
 					</dex>
                     <emulator>
-                        <avd>a43</avd>
+                        <avd>androidEmulator</avd>
                         <!-- Wait for emulator starting (3 minutes) -->
                         <wait>180000</wait>
                         <options>-no-skin</options>

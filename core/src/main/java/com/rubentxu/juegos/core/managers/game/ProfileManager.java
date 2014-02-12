@@ -32,13 +32,13 @@ public class ProfileManager {
                 profile = json.fromJson(Profile.class, profileAsText);
 
             } catch (Exception e) {
-                FileHandle initProfileDataFile = Gdx.files.local(Constants.INIT_PROFILE_DATA_FILE);
+                FileHandle initProfileDataFile = Gdx.files.internal(Constants.INIT_PROFILE_DATA_FILE);
                 Gdx.app.log(Constants.LOG, "Retrieving profile from: " + initProfileDataFile.path());
                 profile = json.fromJson(Profile.class, initProfileDataFile.readString().trim());
                 persist(profile);
             }
         } else {
-            FileHandle initProfileDataFile = Gdx.files.local(Constants.INIT_PROFILE_DATA_FILE);
+            FileHandle initProfileDataFile = Gdx.files.internal(Constants.INIT_PROFILE_DATA_FILE);
             Gdx.app.log(Constants.LOG, "Retrieving profile from: " + initProfileDataFile.path());
             profile = json.fromJson(Profile.class, initProfileDataFile.readString().trim());
             persist(profile);
