@@ -9,11 +9,11 @@ public class PreferencesManager {
 
     private Preferences preferences;
     public static final PreferencesManager instance = new PreferencesManager();
-    public boolean sound;
-    public boolean music;
-    public float volSound;
-    public float volMusic;
-    public boolean touchPadEnabled;
+    public boolean sound=false;
+    public boolean music=false;
+    public float volSound=0.5f;
+    public float volMusic=0.5f;
+    public boolean touchPadEnabled=true;
 
     private PreferencesManager() {
         preferences= Gdx.app.getPreferences(Constants.PREFS_NAME);
@@ -36,5 +36,6 @@ public class PreferencesManager {
         preferences.putFloat(Constants.PREF_VOLUME_MUSIC, volMusic);
         preferences.putBoolean(Constants.PREF_TOUCHPAD_ENABLED, touchPadEnabled);
         preferences.flush();
+        load();
     }
 }

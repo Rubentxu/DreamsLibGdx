@@ -76,6 +76,7 @@ public class Assets extends AssetManager implements Disposable {
     }
 
     public Music getMusic(String name){
+        this.unload(name);
         this.load(name,Music.class);
         this.finishLoading();
         return this.get(name);

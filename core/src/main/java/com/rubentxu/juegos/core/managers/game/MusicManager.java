@@ -30,11 +30,15 @@ public class MusicManager {
             stop();
             return;
         }
+        stop();
         currentMusicPlaying = Assets.getInstance().getMusic(music);
         if (currentMusicPlaying != null) {
-            currentMusicPlaying.setVolume(game.getPreferencesManager().volMusic);
-            currentMusicPlaying.setLooping(true);
+            Gdx.app.log(Constants.LOG, "Volume Music: "+game.getPreferencesManager().volMusic);
+            Gdx.app.log(Constants.LOG, "Current Music vol: "+currentMusicPlaying.getVolume());
             currentMusicPlaying.play();
+            currentMusicPlaying.setLooping(true);
+            currentMusicPlaying.setVolume(game.getPreferencesManager().volMusic);
         }
     }
 }
+
