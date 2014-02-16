@@ -56,20 +56,20 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        world=new World(game.getLevelManager().getCurrentLevel());
+        world=new World(game);
         world.getHero().setProfile(game.getProfileManager().retrieveProfile());
-        controller=new WorldController(world);
-        renderer=new WorldRenderer(this);
+        controller=new WorldController(game,world);
+        renderer=new WorldRenderer(game,world);
         renderer.resize(width, height);
 
-        stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), styles);
+        stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(),game.getResourcesManager());
         stats.setBounds(0,height-height/7,width,height/7);
         stage.addActor(stats);
 
         if(game.getPreferencesManager().touchPadEnabled){
-            stage.addActor(GuiBuilder.buildTouchPad(stage.getWidth(), stage.getHeight(), styles, controller));
+            stage.addActor(GuiBuilder.buildTouchPad(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
         } else {
-            stage.addActor(GuiBuilder.buildPadButtons(stage.getWidth(), stage.getHeight(), styles, controller));
+            stage.addActor(GuiBuilder.buildPadButtons(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
         }
     }
 

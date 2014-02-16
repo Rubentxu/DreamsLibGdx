@@ -2,8 +2,9 @@ package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
+import com.rubentxu.juegos.core.managers.game.AudioManager;
 import com.rubentxu.juegos.core.managers.game.LevelManager;
-import com.rubentxu.juegos.core.managers.game.MusicManager;
 import com.rubentxu.juegos.core.managers.game.PreferencesManager;
 import com.rubentxu.juegos.core.managers.game.ProfileManager;
 import com.rubentxu.juegos.core.pantallas.SplashScreen;
@@ -18,15 +19,15 @@ public class DreamsGame extends BaseGame {
     @Override
     public void create() {
         Gdx.input.setCatchBackKey(true);
+        resourcesManager =new ResourcesManager();
         preferencesManager = PreferencesManager.instance;
         profileManager= new ProfileManager();
         levelManager=new LevelManager(this);
-        musicManager=new MusicManager(this);
+        audioManager =new AudioManager(this);
         log = new FPSLogger();
 
         ScreenTransition transition = ScreenTransitionFade.init(0.75f);
         setScreen(new SplashScreen(this),transition);
-        //setScreen(gameScreen);
     }
 
     @Override

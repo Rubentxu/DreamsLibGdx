@@ -7,10 +7,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
+import com.rubentxu.juegos.core.managers.game.AudioManager;
 import com.rubentxu.juegos.core.managers.game.LevelManager;
-import com.rubentxu.juegos.core.managers.game.MusicManager;
 import com.rubentxu.juegos.core.managers.game.PreferencesManager;
 import com.rubentxu.juegos.core.managers.game.ProfileManager;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.pantallas.BaseScreen;
 import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
@@ -18,7 +19,6 @@ import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
 import com.rubentxu.juegos.core.pantallas.SelectLevelScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
-import com.rubentxu.juegos.core.servicios.Assets;
 
 public class BaseGame implements ApplicationListener {
     private boolean init=false;
@@ -36,7 +36,8 @@ public class BaseGame implements ApplicationListener {
     public HighScoresScreen highScoreScreen;
     public SelectLevelScreen levelScreen;
 
-    protected MusicManager musicManager;
+    protected ResourcesManager resourcesManager;
+    protected AudioManager audioManager;
     protected LevelManager levelManager;
     protected PreferencesManager preferencesManager;
     public static GameState gameState= GameState.GAME_RUNNING;
@@ -75,12 +76,12 @@ public class BaseGame implements ApplicationListener {
         Gdx.app.log(Constants.LOG, "SCREENS: Menu: "+menuScreen+" Option: "+optionScreen+" Game: "+gameScreen+" Score: "+highScoreScreen);
         if(screen instanceof GameScreen ){
             Gdx.app.log(Constants.LOG,"music Game");
-            musicManager.stop();
-            musicManager.play(levelManager.getCurrentLevel().getMusic());
+            audioManager.stopMusic();
+            audioManager.playMusic(levelManager.getCurrentLevel().getMusic());
         }else if(screen instanceof MenuScreen) {
             Gdx.app.log(Constants.LOG,"music Menu");
-            musicManager.stop();
-            musicManager.play(Assets.getInstance().MUSIC_MENU);
+            audioManager.stopMusic();
+            audioManager.playMusic(resourcesManager.MUSIC_MENU);
 
         }
     }
@@ -124,7 +125,6 @@ public class BaseGame implements ApplicationListener {
                 }
                 break;
             case SCREEN_TRANSITION:
-                //Gdx.app.log(Constants.LOG, "GAME STATE: SCREEN_TRANSITION");
                 float duration = 0;
                 if (screenTransition != null)
                     duration = screenTransition.getDuration();
@@ -161,7 +161,7 @@ public class BaseGame implements ApplicationListener {
 
     @Override
     public void resize(int width, int height) {
-        musicManager.stop();
+        audioManager.stopMusic();
         if (currScreen != null) currScreen.resize(width, height);
         if (nextScreen != null) nextScreen.resize(width, height);
     }
@@ -178,6 +178,7 @@ public class BaseGame implements ApplicationListener {
 
     @Override
     public void dispose() {
+        resourcesManager.dispose();
         if (currScreen != null) currScreen.hide();
         if (nextScreen != null) nextScreen.hide();
         if (init) {
@@ -191,8 +192,8 @@ public class BaseGame implements ApplicationListener {
         }
     }
 
-    public MusicManager getMusicManager() {
-        return musicManager;
+    public AudioManager getAudioManager() {
+        return audioManager;
     }
 
     public LevelManager getLevelManager() {
@@ -210,6 +211,8 @@ public class BaseGame implements ApplicationListener {
     }
 
 
-
+    public ResourcesManager getResourcesManager() {
+        return resourcesManager;
+    }
 }
 

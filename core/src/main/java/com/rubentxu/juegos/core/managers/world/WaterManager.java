@@ -1,5 +1,6 @@
 package com.rubentxu.juegos.core.managers.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.ChainShape;
@@ -12,7 +13,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.utils.Array;
-import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
+import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
@@ -34,18 +36,25 @@ public class WaterManager extends AbstractWorldManager {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBody();
         w.addBody(b);
-        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO)) {
+        if(isHero(b)) {
             ((Hero)b.getUserData()).setStatePos(Hero.StatePos.INWATER);
         }
 
     }
 
+    public Boolean isHero(Body b){
+        return ((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO);
+    }
+
+    public Boolean isHero(Fixture b){
+        return ((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO);
+    }
 
     @Override
     public void handleEndContact(Contact contact) {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBody();
-        w.removeBody(getSubmergedBody(contact).getBody());
+        w.removeBody(b);
         if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO)) {
             ((Hero)b.getUserData()).setStatePos(Hero.StatePos.ONAIR);
         }
@@ -97,6 +106,8 @@ public class WaterManager extends AbstractWorldManager {
                 for (int j = 0; j < fixtureList.size; j++) {
                     Fixture fixture = fixtureList.get(j);
                     if(!fixture.isSensor()){
+                        if(isHero(fixture) && ((Hero)fixture.getUserData()).getStatePos().equals(Hero.StatePos.ONAIR))
+                            ((Hero)fixture.getUserData()).setStatePos(Hero.StatePos.INWATER);
                         ApplyToFixture(fixture, w);
                     }
                 }
@@ -106,9 +117,10 @@ public class WaterManager extends AbstractWorldManager {
 
     private boolean ApplyToFixture(Fixture f, Water w) {
         float shapeDensity = w.mUseDensity ? f.getDensity() : w.mFluidDensity;
-
+        Gdx.app.log(Constants.LOG, "Get shape density: "+shapeDensity);
         // don't bother with buoyancy on sensors or fixtures with no density
         if (f.isSensor() || (shapeDensity == 0)) {
+            Gdx.app.log(Constants.LOG, "Fixture is sensor o shapedensity 0: ");
             return false;
         }
         Body body = f.getBody();
@@ -118,28 +130,33 @@ public class WaterManager extends AbstractWorldManager {
 
         // Get shape for displacement area calculations
         Shape shape = f.getShape();
-
+        Gdx.app.log(Constants.LOG, "Get shape for displacement area calculations: "+shape.getType());
         w.mSC.set(Vector2.Zero);
         float sarea;
         switch (shape.getType()) {
             case Circle:
+                Gdx.app.log(Constants.LOG, "Apply water impulse....Circle");
                 sarea = BuoyancyUtils.ComputeSubmergedArea((CircleShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
                 break;
 
             case Chain:
+                Gdx.app.log(Constants.LOG, "Apply water impulse....Chain");
                 sarea = BuoyancyUtils.ComputeSubmergedArea((ChainShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
                 break;
 
             case Edge:
+                Gdx.app.log(Constants.LOG, "Apply water impulse....Edge");
                 sarea = BuoyancyUtils.ComputeSubmergedArea((EdgeShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
                 break;
 
             case Polygon:
+
                 sarea = BuoyancyUtils.ComputeSubmergedArea((PolygonShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
+                Gdx.app.log(Constants.LOG, "Apply water impulse....Polygon: Area "+sarea);
                 break;
 
             default:
-                sarea = 0;
+                sarea = 2;
                 break;
         }
 
@@ -160,17 +177,19 @@ public class WaterManager extends AbstractWorldManager {
 
         if (w.DEBUG_BUOYANCY) {
             // Run debug w/HCR to see the effects of different fluid densities / linear drag
-            w.mFluidDensity = 2f;
-            w.mLinearDrag = 5;
-            w.mAngularDrag = 2;
+            w.mFluidDensity = 0.6f;
+            w.mLinearDrag = .5f;
+            w.mAngularDrag = 1;
         }
 
         // buoyancy force.
         w.mTmp.set(w.mGravity).scl(-w.mFluidDensity * area);
+        Gdx.app.log(Constants.LOG, "Apply Force Water "+w.mTmp);
         body.applyForce(w.mTmp, w.mMassc, true); // multiply by -density to invert gravity
 
         // linear drag.
         w.mTmp.set(body.getLinearVelocityFromWorldPoint(w.mAreac).sub(w.mFluidVelocity).scl(-w.mLinearDrag * area));
+        Gdx.app.log(Constants.LOG, "Apply Force2 Water "+w.mTmp);
         body.applyForce(w.mTmp, w.mAreac, true);
 
         // angular drag.

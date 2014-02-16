@@ -1,6 +1,5 @@
 package com.rubentxu.juegos.core.pantallas;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -33,24 +32,24 @@ public class HighScoresScreen extends BaseScreen {
 
         // episode 1 high-score
         String level1Highscore = String.valueOf(profile.getHighScore(0));
-        Label episode1HighScore = new Label(level1Highscore, styles.skin);
+        Label episode1HighScore = new Label(level1Highscore,game.getResourcesManager().getStyles().skin);
         mainTable.row();
         mainTable.add(label("Episode 1", Color.CYAN, false));
         mainTable.add(episode1HighScore);
 
         String level2Highscore = String.valueOf(profile.getHighScore(1));
-        Label episode2HighScore = new Label(level2Highscore, styles.skin);
+        Label episode2HighScore = new Label(level2Highscore,game.getResourcesManager().getStyles().skin);
         mainTable.row();
         mainTable.add(label("Episode 2", Color.CYAN, false)).center();
         mainTable.add(episode2HighScore);
 
         String level3Highscore = String.valueOf(profile.getHighScore(2));
-        Label episode3HighScore = new Label(level3Highscore, styles.skin);
+        Label episode3HighScore = new Label(level3Highscore,game.getResourcesManager().getStyles().skin);
         mainTable.row();
         mainTable.add(label("Episode 3", Color.CYAN, false));
         mainTable.add(episode3HighScore);
 
-        TextButton backButton = new TextButton("Volver Menu", styles.skin);
+        TextButton backButton = new TextButton("Volver Menu",game.getResourcesManager().getStyles().skin);
         backButton.addListener(new ClickListener() {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
@@ -75,7 +74,7 @@ public class HighScoresScreen extends BaseScreen {
     }
 
     private Label label(String text, Color color, boolean scale) {
-        Label label = new Label(text, styles.skin, "header", color);
+        Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
         if (scale == true) label.setFontScale(1.5f);
         label.setAlignment(Align.center, Align.center);
         return label;

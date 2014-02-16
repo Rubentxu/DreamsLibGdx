@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 public class MenuScreen extends BaseScreen {
 
@@ -24,7 +25,7 @@ public class MenuScreen extends BaseScreen {
     }
 
     private Label label(String text, Color color, boolean scale) {
-        Label label = new Label(text, styles.skin, "header", color);
+        Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
         if (scale == true) label.setFontScale(2);
         label.setAlignment(Align.center, Align.center);
         return label;
@@ -34,13 +35,13 @@ public class MenuScreen extends BaseScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
 
-        final TextButton btnStart = new TextButton("Comenzar", styles.skin);
+        final TextButton btnStart = new TextButton("Comenzar", game.getResourcesManager().getStyles().skin);
         btnStart.pad(30);
-        final TextButton btnOptions = new TextButton("Opciones", styles.skin);
+        final TextButton btnOptions = new TextButton("Opciones", game.getResourcesManager().getStyles().skin);
         btnOptions.pad(30);
-        final TextButton btnScores = new TextButton("Puntuaciones", styles.skin);
+        final TextButton btnScores = new TextButton("Puntuaciones", game.getResourcesManager().getStyles().skin);
         btnScores.pad(30);
-        final TextButton button3 = new TextButton("Creditos", styles.skin);
+        final TextButton button3 = new TextButton("Creditos", game.getResourcesManager().getStyles().skin);
         button3.pad(30);
         button3.setChecked(false);
 
@@ -84,7 +85,7 @@ public class MenuScreen extends BaseScreen {
         mainTable.add(button3);
         mainTable.row();
         mainTable.add(label("Pulsa en comenzar, para iniciar la partida.", Color.LIGHT_GRAY, false));
-        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get(assets.MENU_BACKGROUND))));
+        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
         this.stage.addActor(mainTable);
 

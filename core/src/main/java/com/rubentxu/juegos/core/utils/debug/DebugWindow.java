@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
-import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 public class DebugWindow extends Window{
 
@@ -20,16 +20,16 @@ public class DebugWindow extends Window{
     }
 
 
-    public static Window createWindowDebug(){
+    public static Window createWindowDebug(ResourcesManager resourcesManager){
 
-        BitmapFont font = (BitmapFont) Assets.getInstance().get(Assets.getInstance().BIG_FONT);
+        BitmapFont font = (BitmapFont) resourcesManager.get(resourcesManager.BIG_FONT);
         font.setScale(1 / 64F);
         font.setUseIntegerPositions(false);
         Window.WindowStyle style = new Window.WindowStyle();
         //style.background = background;
         style.titleFont = font;
         style.titleFontColor=new Color(1, 1, 1, 0.4f);
-        Sprite background = new Sprite((Texture) Assets.getInstance().get(Assets.getInstance().DEBUG_BACKGROUND));
+        Sprite background = new Sprite((Texture) resourcesManager.get(resourcesManager.DEBUG_BACKGROUND));
         background.setSize(10,8);
         background.setOrigin(background.getWidth() / 2, background.getHeight() / 2);
         background.setColor(1,1,1,0.4f);
@@ -47,9 +47,9 @@ public class DebugWindow extends Window{
         return window;
     }
 
-    public static final Window getInstance(){
+    public static final Window getInstance(ResourcesManager resourcesManager){
         if(windowDebug==null){
-            windowDebug= createWindowDebug();
+            windowDebug= createWindowDebug(resourcesManager);
         }
         return windowDebug;
     }

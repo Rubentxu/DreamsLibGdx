@@ -17,10 +17,16 @@ import java.util.List;
 public class Enemy extends Box2DPhysicsObject implements Disposable{
 
     public enum StateEnemy implements State {
-        IDLE, WALKING, JUMPING, FALL
+        IDLE, WALKING, JUMPING, FALL,HURT,HIT ,DEAD
     }
 
-    public final static float MAX_VELOCITY = 4f;
+    public enum StatePos { ONGROUND, INWATER, ONAIR }
+
+    // States
+    private StatePos statePos = StatePos.ONGROUND;
+    boolean facingLeft = true;
+
+    public final static float MAX_VELOCITY = 3f;
     public final static float JUMP_FORCE = 14.5f;
 
     private HashSet<Fixture> grounContacts = new HashSet<Fixture>();
@@ -28,8 +34,6 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
     private Fixture enemySensorFixture;
     private Path path;
 
-    // Status
-    private boolean onGround = false;
 
     public Enemy(World physics) {
         super("Enemigo", GRUPO.ENEMY, physics);
@@ -51,9 +55,9 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
         }
 
         if (vel.x < -0.5f) {
-            setFacingLeft(true);
+            facingLeft=true;
         } else if (vel.x > 0.5f) {
-            setFacingLeft(false);
+            facingLeft=false;
         }
     }
 
@@ -83,13 +87,6 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
         this.enemySensorFixture = enemySensorFixture;
     }
 
-    public boolean isGround() {
-        return onGround;
-    }
-
-    public void setGround(boolean onGround) {
-        this.onGround = onGround;
-    }
 
     public HashSet<Fixture> getGrounContacts() {
         return grounContacts;
@@ -107,10 +104,27 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
         this.path = path;
     }
 
+    public StatePos getStatePos() {
+        return statePos;
+    }
+
+    public void setStatePos(StatePos statePos) {
+        this.statePos = statePos;
+    }
+
+    public boolean isFacingLeft() {
+        return facingLeft;
+    }
+
+    public void setFacingLeft(boolean facingLeft) {
+        this.facingLeft = facingLeft;
+    }
+
+
     @Override
     public String toString() {
         return
-                "onGround=" + onGround +
+                "statePos=" + statePos +
                         "\nstate=" + getState() +
                         "\nfacingLeft=" + isFacingLeft() +
                         "\nisActive= " + getBody().isActive() +

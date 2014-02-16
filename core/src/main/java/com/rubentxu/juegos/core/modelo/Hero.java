@@ -18,22 +18,21 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
 
     public enum StateHero implements State {
-        IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, PROPULSION, HURT ,ATTACK, DEAD, WIN
+        IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, PROPULSION, HURT ,HIT, DEAD, WIN
     }
 
     public enum StatePos { ONGROUND, INWATER, ONAIR }
+
+
+    // States
+    private StatePos statePos = StatePos.ONGROUND;
+    boolean facingLeft = true;
 
     public final static float MAX_VELOCITY = 4f;
     public final static float JUMP_FORCE = 14.5f;
     private HashSet<Fixture> grounContacts;
     private Fixture heroPhysicsFixture;
     private Fixture heroSensorFixture;
-
-    // Status
-
-    private StatePos statePos = StatePos.ONGROUND;
-
-    boolean facingLeft = true;
 
     private Profile profile;
 
@@ -155,17 +154,10 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
                 "StatePos=" + statePos +
                 "\nstate=" + getState() +
                 "\nfacingLeft=" + facingLeft +
-                "\nisActive= " + getBody().isActive() +
-                "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
-                "\nisAwake=" + getBody().isAwake()+
-                "\nAngle=" + getBody().getAngle()+
-                "\nAngularDamping=" + getBody().getAngularDamping()+
-                "\nAngularVelocity=" + getBody().getAngularVelocity()+
                 "\nGravityScale=" + getBody().getGravityScale()+
                 "\nInertia=" + getBody().getInertia()+
                 "\nMasa=" + getBody().getMass()+
                 "\nPeso=" + getBody().getMass()*9.8f+
-                "\nisBullet=" + getBody().isBullet()+
                 "\nisFixedRotation=" + getBody().isFixedRotation()+
                 "\nLinearDamping=" + getBody().getLinearDamping()+
                 "\nLinearVelocity=" + getBody().getLinearVelocity().toString()+

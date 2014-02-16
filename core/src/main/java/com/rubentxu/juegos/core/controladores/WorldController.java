@@ -7,7 +7,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Disposable;
-import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
+import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.managers.world.EnemyManager;
 import com.rubentxu.juegos.core.managers.world.HeroManager;
 import com.rubentxu.juegos.core.managers.world.ItemsManager;
@@ -40,13 +41,17 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
     }
 
 
-    public WorldController(World world) {
+    public WorldController(DreamsGame game, World world) {
         world.getPhysics().setContactListener(this);
         heroManager = new HeroManager(world);
         platformManager = new PlatformManager(world);
         waterManager = new WaterManager(world);
         enemyManager = new EnemyManager(world);
         itemsManager= new ItemsManager(world);
+
+        itemsManager.addObserver(game.getProfileManager());
+        itemsManager.addObserver(game.getAudioManager());
+        heroManager.addObserver(game.getAudioManager());
     }
 
     public void leftPressed() {

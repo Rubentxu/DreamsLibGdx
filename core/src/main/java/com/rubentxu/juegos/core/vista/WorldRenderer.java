@@ -10,13 +10,12 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
-import com.rubentxu.juegos.core.pantallas.GameScreen;
-import com.rubentxu.juegos.core.servicios.Assets;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.parallax.ParallaxBackground;
 import com.rubentxu.juegos.core.utils.parallax.ParallaxLayer;
@@ -28,7 +27,7 @@ public class WorldRenderer implements Disposable {
      * for debug rendering *
      */
     Box2DDebugRenderer debugRenderer;
-    private final GameScreen gameScreen;
+    private final DreamsGame game;
 
     private World world;
     private OrthographicCamera cam;
@@ -43,11 +42,11 @@ public class WorldRenderer implements Disposable {
 
 
 
-    public WorldRenderer(GameScreen gameScreen) {
-        this.gameScreen= gameScreen;
-        this.world = gameScreen.getWorld();
+    public WorldRenderer(DreamsGame game,World world) {
+        this.game= game;
+        this.world = world;
 
-        modelsAndViews=new ModelsAndViews();
+        modelsAndViews=new ModelsAndViews(game.getResourcesManager());
 
         debugRenderer = new Box2DDebugRenderer();
         renderer = new OrthogonalTiledMapRenderer(world.getMap(), world.getParser().getUnitScale());
@@ -74,9 +73,9 @@ public class WorldRenderer implements Disposable {
 
     private void loadTextures() {
 
-        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
+        TextureAtlas atlasVarios = game.getResourcesManager().get(ResourcesManager.VARIOS_ATLAS);
 
-        modelsAndViews.addEntity(world.getHero());
+
 
         for(MovingPlatform mvp :world.getMovingPlatforms()){
             modelsAndViews.addEntity(mvp);
@@ -92,11 +91,12 @@ public class WorldRenderer implements Disposable {
 
         for(Item i :world.getItems()){
 
-            Sprite viewSprite = new Sprite(((TextureAtlas)Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("tijeras"));
+            Sprite viewSprite = new Sprite(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("tijeras"));
             if(viewSprite!=null){
                 modelsAndViews.addModelAndView(i,viewSprite);
             }
         }
+        modelsAndViews.addEntity(world.getHero());
     }
 
     public void render() {
@@ -115,10 +115,10 @@ public class WorldRenderer implements Disposable {
         modelsAndViews.render(spriteBatch);
 
         if (DreamsGame.DEBUG) {
-            DebugWindow.getInstance().setPosition(cam.position.x - 13f, cam.position.y - 5);
+            DebugWindow.getInstance(game.getResourcesManager()).setPosition(cam.position.x - 13f, cam.position.y - 5);
             DebugWindow.myLabel.setText("Modo Debug:\n\n"+world.getHero().toString());
-            DebugWindow.getInstance().pack();
-            DebugWindow.getInstance().draw(spriteBatch, 1f);
+            DebugWindow.getInstance(game.getResourcesManager()).pack();
+            DebugWindow.getInstance(game.getResourcesManager()).draw(spriteBatch, 1f);
 
         }
 

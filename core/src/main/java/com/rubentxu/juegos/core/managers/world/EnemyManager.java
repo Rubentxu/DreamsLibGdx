@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
+import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.StateEnemy;
 import com.rubentxu.juegos.core.modelo.Hero;
@@ -22,56 +22,64 @@ public class EnemyManager extends AbstractWorldManager {
     }
 
     public void update(float delta) {
-        for(Enemy enemy:world.getEnemies()){
-            enemy.getPath().update(enemy.getBody().getPosition(),delta);
+        for (Enemy enemy : world.getEnemies()) {
+            enemy.getPath().update(enemy.getBody().getPosition(), delta);
             Vector2 vel = enemy.getVelocity();
             Vector2 pos = enemy.getBody().getPosition();
-            //processVelocity(vel,enemy);
-            processContactGround(enemy);
-            applyImpulses(vel, pos,enemy);
-
+            enemy.setStateTime(enemy.getStateTime() + delta);
+            handleState(enemy);
         }
     }
 
-    public void processVelocity(Vector2 vel,Enemy enemy) {
-
-        if (enemy.getState().equals(StateEnemy.IDLE)) {
-            enemy.getBody().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
-        }
-
+    private void applyPhysicJumpingImpulse(Vector2 vel, Vector2 pos, Enemy enemy) {
+        enemy.getBody().setLinearVelocity(vel.x, 0);
+        enemy.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
+        enemy.getBody().applyLinearImpulse(0, enemy.JUMP_FORCE, pos.x, pos.y, true);
     }
 
-    public void applyImpulses(Vector2 vel, Vector2 pos,Enemy enemy) {
+    public void handleState(Enemy enemy) {
+        Vector2 vel = enemy.getVelocity();
+        Vector2 pos = enemy.getBody().getPosition();
+
+        switch (enemy.getStatePos()) {
+            case ONGROUND:
+                if (enemy.getState().equals(StateEnemy.IDLE)) {
+                    enemy.getBody().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
+                    enemy.getEnemyPhysicsFixture().setFriction(100f);
+                    enemy.getEnemySensorFixture().setFriction(100f);
+
+                } else if (enemy.getState().equals(StateEnemy.WALKING)) {
+                    enemy.getBody().applyLinearImpulse(enemy.getPath().getForce(enemy.getBody().getMass()), enemy.getBody().getWorldCenter(), true);
+                    enemy.getEnemyPhysicsFixture().setFriction(0.2f);
+                    enemy.getEnemySensorFixture().setFriction(0.2f);
+
+                } else if (enemy.getState().equals(StateEnemy.JUMPING)) {
+                    if (!enemy.getStatePos().equals(Hero.StatePos.ONAIR))
+                        applyPhysicJumpingImpulse(vel, pos, enemy);
+
+                }
+
+                break;
+            case INWATER:
+
+
+
+                break;
+            case ONAIR:
+
+                break;
+        }
         enemy.velocityLimit();
-        if (enemy.getState().equals(StateEnemy.WALKING)) {
-            enemy.getBody().applyLinearImpulse(enemy.getPath().getForce(enemy.getBody().getMass()),enemy.getBody().getWorldCenter(),true);
-        }
-
-        if ((enemy.getState().equals(StateEnemy.JUMPING))) {
-            if (enemy.isGround()) {
-                enemy.getBody().setLinearVelocity(vel.x, 0);
-                enemy.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-                enemy.getBody().applyLinearImpulse(0, enemy.JUMP_FORCE, pos.x, pos.y, true);
-            }
-        }
     }
 
-    public void processContactGround(Enemy enemy) {
-        if (!enemy.isGround()) {
-            enemy.getEnemyPhysicsFixture().setFriction(0f);
-            enemy.getEnemySensorFixture().setFriction(0f);
-            if (enemy.getVelocity().y < 0 || !enemy.getState().equals(Enemy.StateEnemy.JUMPING))
-                enemy.setState(Enemy.StateEnemy.FALL);
-        } else {
-            enemy.setState(StateEnemy.WALKING);
-            if (enemy.getState().equals(StateEnemy.IDLE)) {
-                enemy.getEnemyPhysicsFixture().setFriction(100f);
-                enemy.getEnemySensorFixture().setFriction(100f);
-            } else {
-                enemy.getEnemyPhysicsFixture().setFriction(0.2f);
-                enemy.getEnemySensorFixture().setFriction(0.2f);
-            }
-        }
+
+    public boolean isGroundGrupo(Fixture fixture) {
+
+        boolean check = ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.STATIC) ||
+                ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.PLATFORM) ||
+                ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.MOVING_PLATFORM);
+        System.out.println("IsGrounGrupo " + check);
+        return check;
     }
 
     public Enemy getEnemy(Contact contact) {
@@ -79,7 +87,7 @@ public class EnemyManager extends AbstractWorldManager {
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.ENEMY)) {
-            return  (Enemy) box2dPhysicsA;
+            return (Enemy) box2dPhysicsA;
         } else {
             return (Enemy) box2dPhysicsB;
         }
@@ -102,9 +110,9 @@ public class EnemyManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
-            return (Hero) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.HERO)) {
+            return (Hero) box2dPhysicsB;
+        } else {
             return null;
         }
     }
@@ -113,24 +121,49 @@ public class EnemyManager extends AbstractWorldManager {
     @Override
     public void handleBeginContact(Contact contact) {
         Enemy enemy = getEnemy(contact);
-        Box2DPhysicsObject other = getOther(contact);
+        Hero hero = getHero(contact);
 
-        if (contact.getFixtureA() == enemy.getEnemySensorFixture())
+
+        if (isGroundGrupo(contact.getFixtureB()) && contact.getFixtureA() == enemy.getEnemySensorFixture()
+                && !enemy.getStatePos().equals(Enemy.StatePos.INWATER)) {
             enemy.getGrounContacts().add(contact.getFixtureB());
+        }
 
-        if (contact.getFixtureB() == enemy.getEnemySensorFixture())
+        if (isGroundGrupo(contact.getFixtureA()) && contact.getFixtureB() == enemy.getEnemySensorFixture()
+                && !enemy.getStatePos().equals(Enemy.StatePos.INWATER)) {
             enemy.getGrounContacts().add(contact.getFixtureA());
+        }
 
         if (enemy.getGrounContacts().size() > 0) {
-            enemy.setGround(true);
-            System.out.println("Enemy Ground");
+            enemy.setStatePos(Enemy.StatePos.ONGROUND);
+            enemy.setState(StateEnemy.WALKING);
             contact.setEnabled(true);
         }
-        Hero hero= getHero(contact);
-        if (hero!=null && enemy!=null && (contact.getFixtureA() == hero.getHeroSensorFixture() ||
-                contact.getFixtureB() == hero.getHeroSensorFixture())){
-            enemy.setFlaggedForDelete(true);
-            world.addBodiesFlaggedDestroy(enemy.getBody());
+
+
+        if (hero != null && enemy != null && (contact.getFixtureA() == hero.getHeroSensorFixture() ||
+                contact.getFixtureB() == hero.getHeroSensorFixture())) {
+            Vector2[] points = contact.getWorldManifold().getPoints();
+            if (points[0].y > enemy.getBody().getPosition().y + enemy.getHeight() / 2) {
+                enemy.setFlaggedForDelete(true);
+                world.addBodiesFlaggedDestroy(enemy.getBody());
+            }
+        }
+
+        if (hero != null && (contact.getFixtureA() == hero.getHeroPhysicsFixture()
+                || contact.getFixtureB() == hero.getHeroPhysicsFixture()) && !enemy.getState().equals(StateEnemy.HIT)) {
+
+            Vector2[] points = contact.getWorldManifold().getPoints();
+            Vector2 force;
+            if (points[0].x < enemy.getBody().getPosition().x) {
+                force = new Vector2(6, 10);
+            } else {
+                force = new Vector2(-6, 10);
+            }
+
+            enemy.getBody().applyLinearImpulse(force, enemy.getBody().getWorldCenter(), true);
+
+            enemy.setState(StateEnemy.HIT);
         }
 
     }
@@ -148,7 +181,7 @@ public class EnemyManager extends AbstractWorldManager {
 
         if (enemy.getGrounContacts().size() == 0) {
             System.out.println("Enemy UnGround");
-            enemy.setGround(false);
+            enemy.setStatePos(Enemy.StatePos.ONAIR);
         }
     }
 

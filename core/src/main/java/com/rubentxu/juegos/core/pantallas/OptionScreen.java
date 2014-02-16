@@ -3,7 +3,6 @@ package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -20,7 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
-import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 public class OptionScreen extends BaseScreen {
 
@@ -33,7 +32,7 @@ public class OptionScreen extends BaseScreen {
     }
 
     private Label label(String text, Color color, boolean scale) {
-        Label label = new Label(text, styles.skin, "header", color);
+        Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
         if (scale == true) label.setFontScale(1.5f);
         label.setAlignment(Align.center, Align.center);
         return label;
@@ -48,9 +47,9 @@ public class OptionScreen extends BaseScreen {
         mainTable.defaults().pad(16f);
         mainTable.add(label("Opciones del Juego", Color.CYAN, true));
         mainTable.row();
-        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) assets.get(assets.MENU_BACKGROUND))));
+        mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
-        final CheckBox musicCheckbox = new CheckBox(" Music", styles.skin);
+        final CheckBox musicCheckbox = new CheckBox(" Music",  game.getResourcesManager().getStyles().skin);
         musicCheckbox.align(Align.left);
         musicCheckbox.setChecked(game.getPreferencesManager().music);
         musicCheckbox.addListener(new ClickListener() {
@@ -58,13 +57,13 @@ public class OptionScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
                 game.getPreferencesManager().music=enabled;
-                game.getMusicManager().play(Assets.getInstance().MUSIC_MENU);
+                game.getAudioManager().playMusic(ResourcesManager.MUSIC_MENU);
             }
         });
         mainTable.add(musicCheckbox);
         mainTable.row();
 
-        Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, styles.skin);
+        Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, game.getResourcesManager().getStyles().skin);
         volumeSliderMusic.setValue(game.getPreferencesManager().volMusic);
         volumeSliderMusic.addListener(new ChangeListener() {
             @Override
@@ -79,13 +78,13 @@ public class OptionScreen extends BaseScreen {
         mainTable.add(volumeSliderMusic);
         mainTable.row();
 
-        volumeValueMusic = new Label(" Volume ", styles.skin);
+        volumeValueMusic = new Label(" Volume ", game.getResourcesManager().getStyles().skin);
         updateVolumeLabelMusic();
         mainTable.add(volumeValueMusic);
         mainTable.row();
 
 
-        final CheckBox soundCheckbox = new CheckBox(" Sound", styles.skin);
+        final CheckBox soundCheckbox = new CheckBox(" Sound",game.getResourcesManager().getStyles().skin);
         soundCheckbox.align(Align.left);
         soundCheckbox.setChecked(game.getPreferencesManager().sound);
         soundCheckbox.addListener(new ClickListener() {
@@ -100,7 +99,7 @@ public class OptionScreen extends BaseScreen {
         mainTable.row();
 
 
-        Slider volumeSliderSound = new Slider(0f, 1f, 0.1f, false, styles.skin);
+        Slider volumeSliderSound = new Slider(0f, 1f, 0.1f, false, game.getResourcesManager().getStyles().skin);
         volumeSliderSound.setValue(game.getPreferencesManager().volSound);
         volumeSliderSound.addListener(new ChangeListener() {
             @Override
@@ -115,12 +114,12 @@ public class OptionScreen extends BaseScreen {
         mainTable.add(volumeSliderSound);
         mainTable.row();
 
-        volumeValueSound = new Label(" Volume ", styles.skin);
+        volumeValueSound = new Label(" Volume ", game.getResourcesManager().getStyles().skin);
         updateVolumeLabelSound();
         mainTable.add(volumeValueSound);
         mainTable.row();
 
-        final CheckBox touchPadCheckbox = new CheckBox(" TouchPad Control", styles.skin);
+        final CheckBox touchPadCheckbox = new CheckBox(" TouchPad Control", game.getResourcesManager().getStyles().skin);
         touchPadCheckbox.align(Align.left);
         touchPadCheckbox.setChecked(game.getPreferencesManager().touchPadEnabled);
         touchPadCheckbox.addListener(new ClickListener() {
@@ -137,7 +136,7 @@ public class OptionScreen extends BaseScreen {
 
 
 
-        TextButton backButton = new TextButton("Volver Menu", styles.skin);
+        TextButton backButton = new TextButton("Volver Menu", game.getResourcesManager().getStyles().skin);
         backButton.pad(20);
         backButton.addListener(new ClickListener() {
             @Override

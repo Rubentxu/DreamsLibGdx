@@ -8,22 +8,27 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
-import com.rubentxu.juegos.core.managers.interfaces.AbstractWorldManager;
+import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
+
 import static com.rubentxu.juegos.core.controladores.WorldController.keys;
-import static com.rubentxu.juegos.core.modelo.Hero.StateHero.*;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.FALL;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.HURT;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.IDLE;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.JUMPING;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.PROPULSION;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.SWIMMING;
+import static com.rubentxu.juegos.core.modelo.Hero.StateHero.WALKING;
 
 
 public class HeroManager extends AbstractWorldManager {
 
     private Hero hero;
     private float stillTime = 0;
-    private float hurtTime = 0;
-
     public HeroManager(World world) {
         super(world);
         this.hero = world.getHero();
@@ -47,7 +52,7 @@ public class HeroManager extends AbstractWorldManager {
                     hero.setState(IDLE);
                 }
                 if (keys.get(Keys.JUMP)) {
-                    hero.setState(JUMPING);
+                    if(hero.getStateTime()>0.2) hero.setState(JUMPING);
                 }
                 handleState();
                 break;
@@ -93,6 +98,8 @@ public class HeroManager extends AbstractWorldManager {
     }
 
     public void handleState() {
+        setChanged();
+        notifyObservers(hero.getState());
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBody().getPosition();
 
@@ -109,7 +116,7 @@ public class HeroManager extends AbstractWorldManager {
             hero.getHeroSensorFixture().setFriction(0.2f);
 
         } else if (hero.getState().equals(Hero.StateHero.JUMPING)) {
-            if (!hero.getStatePos().equals(Hero.StatePos.ONAIR))
+            if (!hero.getStatePos().equals(Hero.StatePos.ONAIR) )
                 applyPhysicJumpingImpulse(vel, pos);
 
         } else if (hero.getState().equals(Hero.StateHero.PROPULSION)) {
@@ -205,7 +212,6 @@ public class HeroManager extends AbstractWorldManager {
         boolean check= ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.STATIC) ||
          ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.PLATFORM) ||
          ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.MOVING_PLATFORM);
-        System.out.println("IsGrounGrupo "+check);
         return check;
     }
 
@@ -222,7 +228,7 @@ public class HeroManager extends AbstractWorldManager {
 
     @Override
     public void handleBeginContact(Contact contact) {
-        //Gdx.app.log(DreamsGame.LOG, "Begin contact");
+
         Enemy enemy = getEnemy(contact);
 
 
@@ -240,23 +246,24 @@ public class HeroManager extends AbstractWorldManager {
         if (hero.getGrounContacts().size() > 0) {
             hero.setStatePos(Hero.StatePos.ONGROUND);
             contact.setEnabled(true);
-            // Gdx.app.log(DreamsGame.LOG, "OnGroun True");
         }
-        if (enemy != null && contact.getFixtureA() == hero.getHeroPhysicsFixture()
-                && contact.getFixtureB() == hero.getHeroPhysicsFixture() && !hero.getState().equals(HURT)) {
+
+        if (enemy != null && (contact.getFixtureA() == hero.getHeroPhysicsFixture()
+                || contact.getFixtureB() == hero.getHeroPhysicsFixture()) && !hero.getState().equals(Hero.StateHero.HURT) ) {
 
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
             if (points[0].x < hero.getBody().getPosition().x) {
-                force = new Vector2(4, 7);
+                force = new Vector2(6, 10);
             } else {
-                force = new Vector2(-4, 7);
+                force = new Vector2(-6, 10);
             }
             System.out.println("Fuerza colision Enemigo: " + force + " Sensor no exist");
             hero.getBody().applyLinearImpulse(force, hero.getBody().getWorldCenter(), true);
 
             hero.setState(HURT);
-            hurtTime = 0;
+            setChanged();
+            notifyObservers(hero.getState());
         }
     }
 
@@ -275,7 +282,7 @@ public class HeroManager extends AbstractWorldManager {
             if(!hero.getStatePos().equals(Hero.StatePos.INWATER))
             hero.setStatePos(Hero.StatePos.ONAIR);
 
-            //Gdx.app.log(DreamsGame.LOG, "OnGroun False");
+
         }
 
     }

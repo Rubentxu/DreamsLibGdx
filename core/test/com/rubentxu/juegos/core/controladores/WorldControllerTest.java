@@ -16,7 +16,7 @@ public class WorldControllerTest {
     @Before
     public void testSetup() {
 
-        worldController = new WorldController(new World());
+        worldController = new WorldController(game, new World());
     }
 
     @Test

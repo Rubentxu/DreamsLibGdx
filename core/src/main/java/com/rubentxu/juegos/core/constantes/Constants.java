@@ -29,6 +29,6 @@ public class Constants {
     public static final String IMAGE_LIVES= "ImageLives";
     public static final String LIVES= "Lives";
 
-
-
+    // Name World Events
+    public static final int COLLET_COIN = 1;
 }

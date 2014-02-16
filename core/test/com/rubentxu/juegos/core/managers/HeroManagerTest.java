@@ -40,7 +40,7 @@ public class HeroManagerTest {
         r.getRubenPhysicsFixture().setFriction(0);
         r.getRubenSensorFixture().setFriction(0);
         heroManager = new HeroManager(r);
-        controller=new WorldController(new com.rubentxu.juegos.core.modelo.World());
+        controller=new WorldController(game, new com.rubentxu.juegos.core.modelo.World());
     }
 
     @Before

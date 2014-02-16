@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.modelo.Level;
-import com.rubentxu.juegos.core.servicios.Assets;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +20,15 @@ public class LevelManager {
     public static final String CLOUD_BACKGROUND = "imagenes/fondos/nubes.png";
     public static final String MUSIC = "sounds/music/BusyDayAtTheMarket.mp3";
 
-    public LevelManager(DreamsGame dreamsGame) {
-        this.game = dreamsGame;
+    public LevelManager(DreamsGame game) {
+        this.game = game;
         levels = new ArrayList<Level>();
-        Assets.getInstance().load("maps/EscenarioDePruebas.tmx", TiledMap.class);
-        Assets.getInstance().load(CLOUD_BACKGROUND, Texture.class);
-        Assets.getInstance().load(TREE_BACKGROUND, Texture.class);
-        Assets.getInstance().load(LEVEL1_BACKGROUND, Texture.class);
-        Assets.getInstance().load(MUSIC, Music.class);
-        Assets.getInstance().finishLoading();
+        game.getResourcesManager().load("maps/EscenarioDePruebas.tmx", TiledMap.class);
+        game.getResourcesManager().load(CLOUD_BACKGROUND, Texture.class);
+        game.getResourcesManager().load(TREE_BACKGROUND, Texture.class);
+        game.getResourcesManager().load(LEVEL1_BACKGROUND, Texture.class);
+        game.getResourcesManager().load(MUSIC, Music.class);
+        game.getResourcesManager().finishLoading();
         loadLevels();
     }
 

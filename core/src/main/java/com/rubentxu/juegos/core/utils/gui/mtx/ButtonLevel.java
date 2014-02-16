@@ -3,8 +3,8 @@ package com.rubentxu.juegos.core.utils.gui.mtx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
-import com.rubentxu.juegos.core.servicios.Assets;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 public class ButtonLevel extends AbstractButton {
     // Level stars (Not mandatory)
@@ -24,8 +24,10 @@ public class ButtonLevel extends AbstractButton {
 	// Font (For writings and level number)
 	private BitmapFont bitMapFont;
 
-	public ButtonLevel(Drawable up, Drawable down) {
-		super(Assets.getInstance().<BitmapFont>get(Assets.HEADER_FONT), up, down);
+	public ButtonLevel(ResourcesManager resourcesManager) {
+
+		super(resourcesManager.<BitmapFont>get(ResourcesManager.HEADER_FONT), resourcesManager.getStyles().skin.get("btnMenu",NinePatchDrawable.class)
+                , resourcesManager.getStyles().skin.get("btnMenuPress",NinePatchDrawable.class));
 	}
 
 	@Override
@@ -148,7 +150,7 @@ public class ButtonLevel extends AbstractButton {
 	}
 
 	/**
-	 * Set level stars X position. This is being calculated automaticly and centered. Do not suggest to play 
+	 * Set level stars X position. This is being calculated automaticly and centered. Do not suggest to playMusic
 	 * width.
 	 * */
 	public void setLevelStarPosXStart(float starPosXStart) {

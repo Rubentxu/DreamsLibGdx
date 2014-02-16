@@ -1,9 +1,10 @@
-package com.rubentxu.juegos.core.servicios;
+package com.rubentxu.juegos.core.managers.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -12,10 +13,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.servicios.Styles;
 
-public class Assets extends AssetManager implements Disposable {
+public class ResourcesManager extends AssetManager implements Disposable {
 
-    private static Assets instance = new Assets();
+    private Styles styles;
 
     public static final String GUI_ATLAS = "gui/gui.pack";
     public static final String UISKIN_ATLAS = "gui/uiskin.pack";
@@ -35,49 +37,59 @@ public class Assets extends AssetManager implements Disposable {
     public static final String PARTICLE_EFFECT = "particles/dust.pfx";
     public static final String MUSIC_MENU = "sounds/music/MonkeysSpinningMonkeys.mp3";
 
+    // Sonidos
+    public static final String HIT_SOUND = "sounds/sound/Hit_Hurt.ogg";
+    public static final String JUMP_SOUND = "sounds/sound/Jump.ogg";
+    public static final String PICKUP_COIN_SOUND = "sounds/sound/Pickup_Coin.ogg";
+    public static final String POWERUP_SOUND = "sounds/sound/Powerup.ogg";
 
-    private Assets() {
+
+    public ResourcesManager() {
         super();
         loadSplash();
         loadAssetsGame();
+        loadSounds();
+        this.finishLoading();
+        styles=new Styles(this);
     }
 
-    public static Assets getInstance() {
-        return instance;
+    @Override
+    public void finishLoading () {
+        Gdx.app.log(Constants.LOG, "Finish Loading Assets: ");
+        super.finishLoading();
+    }
+
+    @Override
+    public synchronized <T> void load (String fileName, Class<T> type) {
+        Gdx.app.log(Constants.LOG, "Load Asset: " + fileName+" Type: "+ type.getName());
+        load(fileName, type, null);
     }
 
     private void loadAssetsGame() {
-        Gdx.app.log(Constants.LOG, "Load Assets Game");
+        Gdx.app.log(Constants.LOG, "Load ResourcesManager Game");
         this.load(DEFAULT_FONT, BitmapFont.class);
         this.load(BIG_FONT, BitmapFont.class);
         this.load(HEADER_FONT, BitmapFont.class);
         this.load(DEBUG_BACKGROUND, Texture.class);
         this.load(MENU_BACKGROUND, Texture.class);
-        //this.load(CLOUD_BACKGROUND, Texture.class);
-        //this.load(TREE_BACKGROUND, Texture.class);
         this.load(STATS_BACKGROUND, Texture.class);
-        //this.load(LEVEL1_BACKGROUND, Texture.class);
-        this.load(MUSIC_MENU,Music.class);
-
         this.load(SPRITE_ATLAS, TextureAtlas.class);
         this.load(VARIOS_ATLAS, TextureAtlas.class);
         this.load(GUI_ATLAS, TextureAtlas.class);
         this.load(UISKIN_ATLAS, TextureAtlas.class);
         this.load(PARTICLE_EFFECT, ParticleEffect.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
-        //this.load(MAP_DEFAULT, TiledMap.class);
+        this.load(MUSIC_MENU,Music.class);
 
-        this.finishLoading();
     }
 
     public void loadSplash() {
         this.load(SPLASH, Texture.class);
-        this.finishLoading();
     }
 
-    public Music getMusic(String name){
+    public Music getMusic(String name) {
         this.unload(name);
-        this.load(name,Music.class);
+        this.load(name, Music.class);
         this.finishLoading();
         return this.get(name);
     }
@@ -85,7 +97,21 @@ public class Assets extends AssetManager implements Disposable {
     @Override
     public void dispose() {
         super.dispose();
-        instance = null;
+        styles.dispose();
     }
 
+    public void loadSounds() {
+        this.load(HIT_SOUND, Sound.class);
+        this.load(JUMP_SOUND, Sound.class);
+        this.load(PICKUP_COIN_SOUND, Sound.class);
+        this.load(POWERUP_SOUND, Sound.class);
+    }
+
+    public Sound getSound(String sound) {
+        return this.get(sound, Sound.class);
+    }
+
+    public Styles getStyles() {
+        return styles;
+    }
 }

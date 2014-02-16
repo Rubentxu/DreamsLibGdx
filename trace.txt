@@ -798,7 +798,7 @@
 [INFO]          com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle
 [INFO]       Compilation unit 'file:/home/rubentxu/Proyectos/DreamsLibGdx/html/src/main/java/com/rubentxu/juegos/html/DreamsGameHtml.java' is removed due to invalid reference(s):
 [INFO]          com.badlogic.gdx.backends.gwt.GwtApplication
-[INFO]       Compilation unit 'jar:file:/home/rubentxu/.m2/repository/com/badlogicgames/gdx/gdx/0.9.9-SNAPSHOT/gdx-0.9.9-SNAPSHOT-sources.jar!/com/badlogic/gdx/assets/loaders/SkinLoader.java' is removed due to invalid reference(s):
+[INFO]       Compilation unit 'jar:file:/home/rubentxu/.m2/repository/com/badlogicgames/gdx/gdx/0.9.9-SNAPSHOT/gdx-0.9.9-SNAPSHOT-sources.jar!/com/badlogic/gdx/resourcesManager/loaders/SkinLoader.java' is removed due to invalid reference(s):
 [INFO]          com.badlogic.gdx.scenes.scene2d.ui.Skin
 [INFO]       Compilation unit 'jar:file:/home/rubentxu/.m2/repository/com/badlogicgames/gdx/gdx-backend-gwt/0.9.9-SNAPSHOT/gdx-backend-gwt-0.9.9-SNAPSHOT-sources.jar!/com/badlogic/gdx/backends/gwt/GwtFileHandle.java' is removed due to invalid reference(s):
 [INFO]          com.badlogic.gdx.backends.gwt.preloader.Preloader

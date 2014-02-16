@@ -6,15 +6,19 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.Profile;
 
-public class ProfileManager {
+import java.util.Observable;
+import java.util.Observer;
+
+public class ProfileManager  implements Observer {
 
 
     private Profile profile;
 
     public Profile retrieveProfile() {
-        profile=null;
+        profile = null;
         FileHandle profileDataFile = Gdx.files.local(Constants.PROFILE_DATA_FILE);
         Gdx.app.log(Constants.LOG, "Retrieving profile from: " + profileDataFile.path());
 
@@ -66,8 +70,24 @@ public class ProfileManager {
         }
     }
 
-    public void resetToDefaultProfile(){
+    public void resetToDefaultProfile() {
         FileHandle profileDataFile = Gdx.files.local(Constants.PROFILE_DATA_FILE);
         if (profileDataFile.exists()) profileDataFile.delete();
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
+        if(arg instanceof Item){
+            switch (((Item) arg).getType()){
+                case COIN:
+                    profile.addCredits(((Item) arg).getValue());
+                    break;
+                case POWERUP:
+                    break;
+                case KEY:
+                    break;
+            }
+        }
     }
 }

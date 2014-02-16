@@ -28,7 +28,7 @@ public class Water extends Box2DPhysicsObject implements Disposable{
 
     // If false, bodies are assumed to be uniformly dense, otherwise use the
     // shapes' densities
-    public boolean mUseDensity = true;
+    public boolean mUseDensity = false;
 
     //
     // Shared values
@@ -41,27 +41,27 @@ public class Water extends Box2DPhysicsObject implements Disposable{
     //
     // Default values
     //
-    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 0.35f); // point up
-    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,2.5f); // zero velocity / no current
+    public static final Vector2 DEFAULT_SURFACE_NORMAL = new Vector2(0, 1.85f); // point up
+    public static final Vector2 DEFAULT_FLUID_VELOCITY = new Vector2(0,2.2f); // zero velocity / no current
     public static final Vector2 DEFAULT_FLUID_GRAVITY = new Vector2(0, -9.8f); // standard gravity
     public static final float DEFAULT_LINEAR_DRAG = 5f;
     public static final float DEFAULT_ANGULAR_DRAG = 2f;
 
-    public static final boolean DEBUG_BUOYANCY = false;
+    public static final boolean DEBUG_BUOYANCY = true;
 
 
     public Water(String nombre, Body body) {
         this(nombre, body, DEFAULT_SURFACE_NORMAL, DEFAULT_FLUID_VELOCITY, DEFAULT_FLUID_GRAVITY,
-                Box2DUtils.height(body), body.getFixtureList().get(0).getDensity(), DEFAULT_LINEAR_DRAG, DEFAULT_ANGULAR_DRAG);
+                Box2DUtils.height(body),0.2f, DEFAULT_LINEAR_DRAG, DEFAULT_ANGULAR_DRAG);
 
     }
 
     public Water(String nombre, Body body, Vector2 surfaceNormal, Vector2 fluidVelocity, Vector2 gravity,
                  float surfaceHeight, float fluidDensity, float linearDrag, float angularDrag) {
         super(nombre, GRUPO.FLUID, body);
-        System.out.println("FLUID CREADA tilesHeight :"+(1.4f-0.055f*( body.getPosition().y+Box2DUtils.height(body))));
+        System.out.println("FLUID CREADA tilesHeight :"+(( body.getPosition().y+Box2DUtils.height(body))));
 
-        mSurfaceNormal.set(new Vector2(0 ,1.345f-0.055f*(body.getPosition().y+Box2DUtils.height(body))));
+        mSurfaceNormal.set(new Vector2(0 ,(body.getPosition().y+Box2DUtils.height(body))*1.2f));
         mFluidVelocity.set(fluidVelocity);
         mGravity.set(gravity);
         mSurfaceHeight = surfaceHeight;

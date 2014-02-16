@@ -7,6 +7,6 @@
 	<public path="resources" />
 
 	<entry-point class='com.rubentxu.juegos.html.DreamsGameHtml'/>
-	<set-configuration-property name="gdx.assetpath" value="assets" />
+	<set-configuration-property name="gdx.assetpath" value="resourcesManager" />
 	<set-configuration-property name="gdx.assetoutputpath" value="html/target/webapp" />
 </module>

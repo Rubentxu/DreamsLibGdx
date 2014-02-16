@@ -14,7 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
-import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.servicios.Styles;
 
 
@@ -163,7 +163,7 @@ public class GuiBuilder {
         return touchpad;
     }
 
-    public static final Table buildStats(float width,float height, Styles styles) {
+    public static final Table buildStats(float width,float height, Styles styles,ResourcesManager resourcesManager) {
 
         Table tableProfile = new Table();
         tableProfile.setBounds(0, 0, width , height /15);
@@ -171,7 +171,7 @@ public class GuiBuilder {
         //tableProfile.setBackground(drawable);
 
 
-        Image imageLives = new Image(((TextureAtlas) Assets.getInstance().get(Assets.getInstance().GUI_ATLAS)).findRegion("vidas"));
+        Image imageLives = new Image(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).findRegion("vidas"));
         imageLives.setName(Constants.IMAGE_LIVES);
 
         Label lives = new Label("0", styles.skin, "default", Color.ORANGE);

@@ -18,7 +18,8 @@ import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
-import com.rubentxu.juegos.core.servicios.Assets;
+import com.rubentxu.juegos.core.managers.game.ResourcesManager;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,7 +29,10 @@ import java.util.Map;
 public class ModelsAndViews {
 
 
-    public ModelsAndViews(){
+    private final ResourcesManager resourcesManager;
+
+    public ModelsAndViews(ResourcesManager resourcesManager){
+        this.resourcesManager = resourcesManager;
         loadHeroAnimations();
         loadEnemyAnimations();
         loadWaterAnimations();
@@ -126,8 +130,8 @@ public class ModelsAndViews {
     }
 
     private void loadHeroAnimations() {
-        TextureAtlas atlas = Assets.getInstance().get(Assets.getInstance().SPRITE_ATLAS);
-        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
+        TextureAtlas atlas = resourcesManager.get(resourcesManager.SPRITE_ATLAS);
+        TextureAtlas atlasVarios = resourcesManager.get(resourcesManager.VARIOS_ATLAS);
 
         Array<TextureAtlas.AtlasRegion> heroWalking = atlas.findRegions("Andando");
         Array<TextureAtlas.AtlasRegion> heroJump = atlas.findRegions("Saltando");
@@ -146,25 +150,29 @@ public class ModelsAndViews {
         animationHero.put(String.valueOf(StateHero.WALKING), walking);
         animationHero.put(String.valueOf(StateHero.JUMPING), jump);
         animationHero.put(String.valueOf(StateHero.FALL), fall);
+        animationHero.put(String.valueOf(StateHero.HURT), fall);
         animationHero.put(String.valueOf(StateHero.IDLE), idle);
         animationHero.put(String.valueOf(StateHero.SWIMMING), swimming);
+        animationHero.put(String.valueOf(StateHero.PROPULSION), swimming);
     }
 
     private void loadEnemyAnimations() {
 
-        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
+        TextureAtlas atlasVarios = resourcesManager.get(resourcesManager.VARIOS_ATLAS);
         Array<TextureAtlas.AtlasRegion> enemy = atlasVarios.findRegions("ENEMY");
         Animation walking = new Animation(Constants.RUNNING_FRAME_DURATION, enemy,Animation.LOOP);
         animationEnemy= new HashMap<String,Animation>();
-        animationEnemy.put(String.valueOf(StateHero.WALKING), walking);
-        animationEnemy.put(String.valueOf(StateHero.JUMPING), walking);
-        animationEnemy.put(String.valueOf(StateHero.FALL), walking);
-        animationEnemy.put(String.valueOf(StateHero.IDLE), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.WALKING), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.JUMPING), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.FALL), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.IDLE), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.HIT), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.HURT), walking);
     }
 
     private void loadWaterAnimations() {
 
-        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
+        TextureAtlas atlasVarios = resourcesManager.get(resourcesManager.VARIOS_ATLAS);
         Array<TextureAtlas.AtlasRegion> water = atlasVarios.findRegions("agua");
         Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, water,Animation.LOOP);
         animationWater= new HashMap<String,Animation>();
@@ -174,7 +182,7 @@ public class ModelsAndViews {
 
     private void loadMovingPlatformAnimations() {
 
-        TextureAtlas atlasVarios = Assets.getInstance().get(Assets.getInstance().VARIOS_ATLAS);
+        TextureAtlas atlasVarios = resourcesManager.get(resourcesManager.VARIOS_ATLAS);
         Array<TextureAtlas.AtlasRegion> moving_platform = atlasVarios.findRegions("MOVING_PLATFORM");
         Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, moving_platform,Animation.LOOP);
         animationMovingPlatform= new HashMap<String,Animation>();

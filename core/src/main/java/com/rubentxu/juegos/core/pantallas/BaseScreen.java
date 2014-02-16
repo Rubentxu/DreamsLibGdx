@@ -11,8 +11,6 @@ import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
-import com.rubentxu.juegos.core.servicios.Assets;
-import com.rubentxu.juegos.core.servicios.Styles;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
@@ -20,8 +18,8 @@ public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
     protected Stage stage;
-    protected Assets assets;
-    public static Styles styles;
+
+
     protected Table mainTable;
     protected float width;
     protected float height;
@@ -56,8 +54,8 @@ public abstract class BaseScreen implements Screen {
     public void show() {
         mainTable= new Table();
         Gdx.app.log(Constants.LOG, "Showing screen: " + getName() + " Current_Screen " + CURRENT_SCREEN);
-        assets = Assets.getInstance();
-        if(styles==null) styles=new Styles(assets);
+
+
     }
 
     @Override
@@ -98,12 +96,8 @@ public abstract class BaseScreen implements Screen {
     public void dispose() {
         Gdx.app.log(Constants.LOG, "Disposing screen: " + getName());
         stage.dispose();
-        assets.dispose();
-        styles.dispose();
         mainTable=null;
         stage=null;
-        assets=null;
-        styles=null;
     }
 
 
