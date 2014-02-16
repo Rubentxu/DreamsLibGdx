@@ -137,6 +137,9 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
                 break;
             case STATIC:
                 break;
+
+            default:
+                break;
         }
         return null;
     }
