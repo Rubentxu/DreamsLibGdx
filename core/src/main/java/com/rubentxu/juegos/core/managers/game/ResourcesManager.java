@@ -36,7 +36,6 @@ public class ResourcesManager extends AssetManager implements Disposable {
     public static final String MAP_DEFAULT = "maps/EscenarioDePruebas.tmx";
     public static final String PARTICLE_EFFECT = "particles/dust.pfx";
     public static final String MUSIC_MENU = "sounds/music/MonkeysSpinningMonkeys.mp3";
-
     // Sonidos
     public static final String HIT_SOUND = "sounds/sound/Hit_Hurt.ogg";
     public static final String JUMP_SOUND = "sounds/sound/Jump.ogg";

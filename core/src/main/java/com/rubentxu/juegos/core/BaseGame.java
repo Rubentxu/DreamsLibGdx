@@ -5,6 +5,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.AudioManager;
@@ -19,6 +22,7 @@ import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
 import com.rubentxu.juegos.core.pantallas.SelectLevelScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+import com.rubentxu.juegos.core.utils.gui.CustomDialog;
 
 public class BaseGame implements ApplicationListener {
     private boolean init=false;
@@ -94,7 +98,10 @@ public class BaseGame implements ApplicationListener {
             case GAME_RUNNING:
                 //Gdx.app.log(Constants.LOG, "GAME STATE: GAME_RUNNING");
                 if (currScreen != null) currScreen.render(deltaTime);
+                break;
             case GAME_PAUSED:
+                currScreen.showDialog();
+                currScreen.render(deltaTime);
                 break;
             case GAME_UPDATE:
                 break;
@@ -110,19 +117,7 @@ public class BaseGame implements ApplicationListener {
                 break;
             case GAME_BACK:
                 Gdx.app.log(Constants.LOG, "GAME STATE: GAME_BACK");
-                if(currScreen instanceof MenuScreen ){
-                   Gdx.app.exit();
-                }else {
-                    //Presentar una ventana para salir
-                    //DreamsGame.gameState=GameState.GAME_PAUSED;
-                    if(menuScreen!=null){
-                        profileManager.retrieveProfile();
-                        setScreen(menuScreen, menuScreen.getTransition()); 
-                    }else {
-                        Gdx.app.exit();
-                    }
-
-                }
+                DreamsGame.gameState=GameState.GAME_PAUSED;
                 break;
             case SCREEN_TRANSITION:
                 float duration = 0;
@@ -151,6 +146,8 @@ public class BaseGame implements ApplicationListener {
                     screenTransition.render(batch,currFbo.getColorBufferTexture(),nextFbo.getColorBufferTexture(),alpha);
                 }
                 break;
+            case GAME_EXIT:
+                Gdx.app.exit();
         }
     }
 

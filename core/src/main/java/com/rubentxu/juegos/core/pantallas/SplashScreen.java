@@ -70,4 +70,9 @@ public class SplashScreen extends BaseScreen {
         return multiplexer;
     }
 
+    @Override
+    public void showDialog(){
+
+    }
+
 }

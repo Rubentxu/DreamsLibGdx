@@ -11,5 +11,6 @@ public enum GameState {
     GAME_IDLE,
     GAME_SLOWMOTION,
     GAME_BACK,
-    SCREEN_TRANSITION
+    SCREEN_TRANSITION,
+    GAME_EXIT ;
 }

@@ -73,6 +73,7 @@ public class HighScoresScreen extends BaseScreen {
         return multiplexer;
     }
 
+
     private Label label(String text, Color color, boolean scale) {
         Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
         if (scale == true) label.setFontScale(1.5f);

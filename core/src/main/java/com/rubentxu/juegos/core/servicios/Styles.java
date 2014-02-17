@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
+import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
 import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
@@ -72,6 +73,8 @@ public class Styles implements Disposable {
 
 
             SliderStyle sliderStyle = new SliderStyle(slider, slider_knob);
+            skin.add("default",new WindowStyle(font2,Color.LIGHT_GRAY,debug));
+
             skin.add("stats", stats);
             skin.add("btnMenu", btnMenu);
             skin.add("btnMenuPress", btnMenuPress);
@@ -88,6 +91,11 @@ public class Styles implements Disposable {
             lbs.font = font;
             lbs.fontColor = Color.WHITE;
             skin.add("default", lbs);
+
+            LabelStyle lbsHeader = new LabelStyle();
+            lbsHeader.font = font2;
+            lbsHeader.fontColor = Color.WHITE;
+            skin.add("header", lbsHeader);
 
             TextButtonStyle tbs = new TextButtonStyle(btnMenu, btnMenuPress, btnMenu, font);
             tbs.fontColor = skin.getColor("dark-blue");

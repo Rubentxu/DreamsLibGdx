@@ -5,21 +5,26 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
+import com.rubentxu.juegos.core.utils.gui.CustomDialog;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
     protected Stage stage;
-
-
     protected Table mainTable;
     protected float width;
     protected float height;
@@ -27,16 +32,10 @@ public abstract class BaseScreen implements Screen {
     //private ScreenTransition transition = ScreenTransitionFade.init(0.75f);
     private ScreenTransition transition = ScreenTransitionSlide.init(1.15f,
             ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+
+
     // ScreenTransition transition = ScreenTransitionSlice.init(2,ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
 
-
-    public DreamsGame getGame() {
-        return game;
-    }
-
-    public ScreenTransition getTransition() {
-        return transition;
-    }
 
     public static enum SCREEN {SPLASH, MENU, GAME, OPTIONS, HIGHSCORES, CREDITS, LEVELSCREEN}
 
@@ -52,7 +51,7 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void show() {
-        mainTable= new Table();
+        mainTable = new Table();
         Gdx.app.log(Constants.LOG, "Showing screen: " + getName() + " Current_Screen " + CURRENT_SCREEN);
 
 
@@ -96,11 +95,25 @@ public abstract class BaseScreen implements Screen {
     public void dispose() {
         Gdx.app.log(Constants.LOG, "Disposing screen: " + getName());
         stage.dispose();
-        mainTable=null;
-        stage=null;
+        mainTable = null;
+        stage = null;
     }
 
 
-    public abstract InputProcessor getInputProcessor ();
+    public DreamsGame getGame() {
+        return game;
+    }
+
+    public ScreenTransition getTransition() {
+        return transition;
+    }
+
+    public abstract InputProcessor getInputProcessor();
+
+    public void showDialog() {
+        new CustomDialog("Pulso Button Back", game.getResourcesManager())
+        .text("¿Desea cerrar el juego.?")
+                .button("Ok",true).button("No", false).show(stage);
+    }
 
 }

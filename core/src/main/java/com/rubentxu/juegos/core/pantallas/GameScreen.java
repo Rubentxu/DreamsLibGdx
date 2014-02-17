@@ -4,16 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
+import com.rubentxu.juegos.core.utils.gui.CustomDialog;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
@@ -28,7 +32,6 @@ public class GameScreen extends BaseScreen {
     public GameScreen(DreamsGame dreamsGame) {
         super(dreamsGame,new Stage(0, 0, true));
         CURRENT_SCREEN= SCREEN.GAME;
-
     }
 
     @Override
@@ -37,8 +40,10 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //updates
-        controller.update(delta);
-        updateStats();
+        if(!DreamsGame.gameState.equals(GameState.GAME_PAUSED)){
+            controller.update(delta);
+            updateStats();
+        }
         stage.act(delta);
 
         //render
@@ -51,6 +56,24 @@ public class GameScreen extends BaseScreen {
     private void updateStats(){
         ((Label)stats.findActor(Constants.SCORE)).setText(world.getHero().getProfile().getCreditsAsText());
         ((Label)stats.findActor(Constants.LIVES)).setText(world.getHero().getProfile().getLivesAsText());
+    }
+
+    @Override
+    public void showDialog() {
+        new CustomDialog("Game Pause",game.getResourcesManager())
+        .text("¿Que desea hacer.?")
+        .button("Continuar con el Juego" )
+       .button("Salir al Menu",new ClickListener() {
+            @Override
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("Event "+event.getType());
+                super.touchUp(event,x,y,pointer,button);
+                if(game.menuScreen!=null){
+                    game.getProfileManager().retrieveProfile();
+                    game.setScreen(game.menuScreen, game.menuScreen.getTransition());
+                }
+            }
+        }).show(stage);
     }
 
     @Override
