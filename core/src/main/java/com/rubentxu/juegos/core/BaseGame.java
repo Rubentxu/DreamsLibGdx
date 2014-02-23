@@ -40,8 +40,17 @@ public class BaseGame implements ApplicationListener {
     protected AudioManager audioManager;
     protected LevelManager levelManager;
     protected PreferencesManager preferencesManager;
-    public static GameState gameState= GameState.GAME_RUNNING;
+    private static GameState gameState= GameState.GAME_RUNNING;
     protected ProfileManager profileManager;
+
+    public static GameState getGameState() {
+        return gameState;
+    }
+
+    public static void setGameState(GameState gameState) {
+        Gdx.app.log(Constants.LOG,"Change GameState: "+gameState);
+        BaseGame.gameState = gameState;
+    }
 
     public void setScreen(BaseScreen screen,
                           ScreenTransition screenTransition) {
@@ -64,7 +73,7 @@ public class BaseGame implements ApplicationListener {
         t = 0;
         if (currScreen != null) {
             currScreen.pause();
-            DreamsGame.gameState = GameState.SCREEN_TRANSITION;
+            DreamsGame.setGameState(GameState.SCREEN_TRANSITION);
         }else {
             Gdx.input.setInputProcessor(nextScreen.getInputProcessor());
             currScreen = nextScreen;
@@ -89,9 +98,8 @@ public class BaseGame implements ApplicationListener {
     public void render() {
         float deltaTime = Math.min(Gdx.graphics.getDeltaTime(), 1.0f / 60.0f);
 
-        switch (DreamsGame.gameState) {
+        switch (DreamsGame.getGameState()) {
             case GAME_RUNNING:
-                //Gdx.app.log(Constants.LOG, "GAME STATE: GAME_RUNNING");
                 if (currScreen != null) currScreen.render(deltaTime);
                 break;
             case GAME_PAUSED:
@@ -111,8 +119,11 @@ public class BaseGame implements ApplicationListener {
             case GAME_SLOWMOTION:
                 break;
             case GAME_BACK:
-                Gdx.app.log(Constants.LOG, "GAME STATE: GAME_BACK");
-                DreamsGame.gameState=GameState.GAME_PAUSED;
+                DreamsGame.setGameState(GameState.GAME_PAUSED);
+                break;
+            case GAME_SHOW_MENU:
+                if(menuScreen==null) menuScreen = new MenuScreen((DreamsGame) this);
+                setScreen(menuScreen, menuScreen.getTransition());
                 break;
             case SCREEN_TRANSITION:
                 float duration = 0;
@@ -126,9 +137,8 @@ public class BaseGame implements ApplicationListener {
                     currScreen = nextScreen;
                     nextScreen = null;
                     screenTransition = null;
-
                     Gdx.input.setInputProcessor(currScreen.getInputProcessor());
-                    DreamsGame.gameState = GameState.GAME_RUNNING;
+                    DreamsGame.setGameState(GameState.GAME_RUNNING);
                 } else {
                     currFbo.begin();
                     if (currScreen != null) currScreen.render(deltaTime);

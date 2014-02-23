@@ -6,26 +6,25 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
-import com.rubentxu.juegos.core.utils.gui.CustomDialog;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.moveTo;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
 
 public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
     protected Stage stage;
     protected Table mainTable;
+    protected Window dialog;
     protected float width;
     protected float height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
@@ -111,9 +110,35 @@ public abstract class BaseScreen implements Screen {
     public abstract InputProcessor getInputProcessor();
 
     public void showDialog() {
-        new CustomDialog("Pulso Button Back", game.getResourcesManager())
-        .text("¿Desea cerrar el juego.?")
-                .button("Ok",true).button("No", false).show(stage);
+        if(dialog==null ){
+            dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
+
+            TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
+            TextButton btnContinuar = new TextButton("Continuar", game.getResourcesManager().getStyles().skin);
+            btnSalir.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println("Click Salir...");
+                    DreamsGame.setGameState(GameState.GAME_EXIT);
+                }
+            });
+            btnContinuar.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println("Click Continuar...");
+                    DreamsGame.setGameState(GameState.GAME_RUNNING);
+                    dialog.remove();
+                    dialog=null;
+                }
+            });
+
+            dialog.defaults().spaceBottom(10);
+            dialog.row().fill().expandX();
+            dialog.add(btnContinuar);
+            dialog.add(btnSalir);
+            dialog.pack();
+            dialog.setPosition(width/2-dialog.getWidth()/2, height/2-dialog.getHeight()/2);
+            stage.addActor(dialog);
+        }
+
     }
 
 }

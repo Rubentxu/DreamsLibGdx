@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
@@ -92,7 +93,9 @@ public class WorldRenderer implements Disposable {
 
         background.render(cam.position,spriteBatch);
 
-        world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
+        if(!DreamsGame.getGameState().equals(GameState.GAME_PAUSED))
+            world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
+
         cam.position.set(world.getHero().getBody().getPosition().x, cam.viewportHeight / 2 - cam.viewportHeight / 12, 0);
         cam.update();
 

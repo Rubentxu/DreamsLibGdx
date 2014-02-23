@@ -8,6 +8,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
@@ -17,7 +19,6 @@ import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
-import com.rubentxu.juegos.core.utils.gui.CustomDialog;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
@@ -40,7 +41,7 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //updates
-        if(!DreamsGame.gameState.equals(GameState.GAME_PAUSED)){
+        if(!DreamsGame.getGameState().equals(GameState.GAME_PAUSED)){
             controller.update(delta);
             updateStats();
         }
@@ -60,20 +61,34 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void showDialog() {
-        new CustomDialog("Game Pause",game.getResourcesManager())
-        .text("¿Que desea hacer.?")
-        .button("Continuar con el Juego" )
-       .button("Salir al Menu",new ClickListener() {
-            @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("Event "+event.getType());
-                super.touchUp(event,x,y,pointer,button);
-                if(game.menuScreen!=null){
-                    game.getProfileManager().retrieveProfile();
-                    game.setScreen(game.menuScreen, game.menuScreen.getTransition());
+        if(dialog==null ){
+            dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
+
+            TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
+            TextButton btnContinuar = new TextButton("Continuar", game.getResourcesManager().getStyles().skin);
+            btnSalir.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println("Click Salir...");
+                    DreamsGame.setGameState(GameState.GAME_SHOW_MENU);
                 }
-            }
-        }).show(stage);
+            });
+            btnContinuar.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    System.out.println("Click Continuar...");
+                    DreamsGame.setGameState(GameState.GAME_RUNNING);
+                    dialog.remove();
+                    dialog=null;
+                }
+            });
+
+            dialog.defaults().spaceBottom(10);
+            dialog.row().fill().expandX();
+            dialog.add(btnContinuar);
+            dialog.add(btnSalir);
+            dialog.pack();
+            dialog.setPosition(width/2-dialog.getWidth()/2, height/2-dialog.getHeight()/2);
+            stage.addActor(dialog);
+        }
     }
 
     @Override

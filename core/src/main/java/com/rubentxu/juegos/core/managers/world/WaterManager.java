@@ -117,10 +117,9 @@ public class WaterManager extends AbstractWorldManager {
 
     private boolean ApplyToFixture(Fixture f, Water w) {
         float shapeDensity = w.mUseDensity ? f.getDensity() : w.mFluidDensity;
-        Gdx.app.log(Constants.LOG, "Get shape density: "+shapeDensity);
+
         // don't bother with buoyancy on sensors or fixtures with no density
         if (f.isSensor() || (shapeDensity == 0)) {
-            Gdx.app.log(Constants.LOG, "Fixture is sensor o shapedensity 0: ");
             return false;
         }
         Body body = f.getBody();
@@ -130,7 +129,7 @@ public class WaterManager extends AbstractWorldManager {
 
         // Get shape for displacement area calculations
         Shape shape = f.getShape();
-        Gdx.app.log(Constants.LOG, "Get shape for displacement area calculations: "+shape.getType());
+
         w.mSC.set(Vector2.Zero);
         float sarea;
         switch (shape.getType()) {
@@ -152,7 +151,7 @@ public class WaterManager extends AbstractWorldManager {
             case Polygon:
 
                 sarea = BuoyancyUtils.ComputeSubmergedArea((PolygonShape) shape, w.mSurfaceNormal, w.mSurfaceHeight, body.getTransform(), w.mSC);
-                Gdx.app.log(Constants.LOG, "Apply water impulse....Polygon: Area "+sarea);
+
                 break;
 
             default:
@@ -184,12 +183,12 @@ public class WaterManager extends AbstractWorldManager {
 
         // buoyancy force.
         w.mTmp.set(w.mGravity).scl(-w.mFluidDensity * area);
-        Gdx.app.log(Constants.LOG, "Apply Force Water "+w.mTmp);
+
         body.applyForce(w.mTmp, w.mMassc, true); // multiply by -density to invert gravity
 
         // linear drag.
         w.mTmp.set(body.getLinearVelocityFromWorldPoint(w.mAreac).sub(w.mFluidVelocity).scl(-w.mLinearDrag * area));
-        Gdx.app.log(Constants.LOG, "Apply Force2 Water "+w.mTmp);
+
         body.applyForce(w.mTmp, w.mAreac, true);
 
         // angular drag.

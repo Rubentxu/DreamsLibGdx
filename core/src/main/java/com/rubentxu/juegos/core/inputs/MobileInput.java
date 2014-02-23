@@ -15,7 +15,7 @@ public class MobileInput extends InputAdapter {
         Gdx.app.log(Constants.LOG, "PRESS BUTTON: KEY MOBILE INPUT");
         if ((keycode == Keys.ESCAPE) || (keycode == Keys.BACK) ) {
             Gdx.app.log(Constants.LOG, "PRESS BUTTON: GAME_BACK");
-            DreamsGame.gameState= GameState.GAME_BACK;
+            DreamsGame.setGameState(GameState.GAME_BACK);
         }
 
 
