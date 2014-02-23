@@ -5,9 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Pixmap.Format;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.AudioManager;
@@ -22,7 +19,6 @@ import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
 import com.rubentxu.juegos.core.pantallas.SelectLevelScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
-import com.rubentxu.juegos.core.utils.gui.CustomDialog;
 
 public class BaseGame implements ApplicationListener {
     private boolean init=false;
@@ -46,7 +42,6 @@ public class BaseGame implements ApplicationListener {
     protected PreferencesManager preferencesManager;
     public static GameState gameState= GameState.GAME_RUNNING;
     protected ProfileManager profileManager;
-
 
     public void setScreen(BaseScreen screen,
                           ScreenTransition screenTransition) {

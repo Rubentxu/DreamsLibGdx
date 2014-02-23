@@ -7,6 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.factorias.Box2dObjectFactory;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
@@ -28,6 +29,7 @@ public class World implements Disposable{
     private Texture background_03;
     private Texture background_02;
     private Texture background_01;
+    protected Box2dObjectFactory box2dObjectFactory;
 
     public World(DreamsGame game) {
         createDreamsWorld(game.getLevelManager().getCurrentLevel(),game.getResourcesManager());
@@ -37,8 +39,9 @@ public class World implements Disposable{
 
     private void createDreamsWorld(Level level,ResourcesManager resourcesManager) {
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
+        box2dObjectFactory= new Box2dObjectFactory(physics,resourcesManager);
         map = resourcesManager.get(level.getMap());
-        parser = new Box2DMapObjectParser(this);
+        parser = new Box2DMapObjectParser(this,box2dObjectFactory);
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
 

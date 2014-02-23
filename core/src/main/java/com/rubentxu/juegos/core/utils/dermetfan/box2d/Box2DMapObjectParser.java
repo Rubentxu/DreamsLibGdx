@@ -59,19 +59,17 @@ import com.badlogic.gdx.physics.box2d.joints.WeldJointDef;
 import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
+import com.rubentxu.juegos.core.factorias.Box2dObjectFactory;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
-import com.rubentxu.juegos.core.modelo.Item.TYPE;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.utils.dermetfan.math.BayazitDecomposer;
 
-import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.areVerticesClockwise;
 import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.isConvex;
@@ -97,6 +95,7 @@ import static com.rubentxu.juegos.core.utils.dermetfan.math.GeometryUtils.toVect
  */
 public class Box2DMapObjectParser {
 
+    private Box2dObjectFactory box2dObjectFactory;
     private com.rubentxu.juegos.core.modelo.World worldEntity;
     /**
      * @see Aliases
@@ -142,9 +141,8 @@ public class Box2DMapObjectParser {
     /**
      * creates a new {@link Box2DMapObjectParser} with the default {@link Aliases}
      */
-    public Box2DMapObjectParser(com.rubentxu.juegos.core.modelo.World worldEntity) {
-        this(new Aliases(), worldEntity);
-
+    public Box2DMapObjectParser(com.rubentxu.juegos.core.modelo.World worldEntity, Box2dObjectFactory box2dObjectFactory) {
+        this(new Aliases(), worldEntity, box2dObjectFactory);
 
     }
 
@@ -154,9 +152,10 @@ public class Box2DMapObjectParser {
      *
      * @param aliases the {@link Aliases} to use
      */
-    public Box2DMapObjectParser(Aliases aliases, com.rubentxu.juegos.core.modelo.World worldEntity) {
+    public Box2DMapObjectParser(Aliases aliases, com.rubentxu.juegos.core.modelo.World worldEntity, Box2dObjectFactory box2dObjectFactory) {
         this.aliases = aliases;
         this.worldEntity = worldEntity;
+        this.box2dObjectFactory = box2dObjectFactory;
 
     }
 
@@ -216,6 +215,7 @@ public class Box2DMapObjectParser {
     public World load(World world, Map map) {
         if (!ignoreMapUnitScale)
             unitScale = getProperty(map.getProperties(), aliases.unitScale, unitScale);
+            box2dObjectFactory.setUnitScale(unitScale);
         tileWidth = getProperty(map.getProperties(), "tilewidth", (int) tileWidth);
         tileHeight = getProperty(map.getProperties(), "tileheight", (int) tileHeight);
 
@@ -278,343 +278,20 @@ public class Box2DMapObjectParser {
 
     private void createModelObject(World world, MapObject object) {
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.hero))
-            createHero(world, object);
+            worldEntity.setHero(box2dObjectFactory.<Hero>getEntity(GRUPO.HERO, object));
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.movingPlatform))
-            createMovingPlatform(world, object);
+            worldEntity.getMovingPlatforms().add(box2dObjectFactory.<MovingPlatform>getEntity(GRUPO.MOVING_PLATFORM, object));
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.water))
-            createWater(world, object);
+            worldEntity.getWaterSensors().add(box2dObjectFactory.<Water>getEntity(GRUPO.FLUID, object));
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.enemy))
-            createEnemy(world, object);
+            worldEntity.getEnemies().add(box2dObjectFactory.<Enemy>getEntity(GRUPO.ENEMY, object));
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.item))
-            createItem(world, object);
+            worldEntity.getItems().add(box2dObjectFactory.<Item>getEntity(GRUPO.ITEMS, object));
 
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.revoluteObject)) {
-            Gdx.app.log(getClass().getName(),"Empezar a crear Model Object Revolute Object...");
-            createRevoluteObject(world, object);
+            Gdx.app.log(getClass().getName(), "Empezar a crear Model Object Revolute Object...");
+
         }
-
-
-
-    }
-
-    private void createHero(World world, MapObject object) {
-        Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-        rectangle.x *= unitScale;
-        rectangle.y *= unitScale;
-        rectangle.width *= unitScale;
-        rectangle.height *= unitScale;
-        worldEntity.setHero(new Hero(world, rectangle.x, rectangle.y, 0.45f, 1));
-    }
-
-    private void createWater(World world, MapObject object) {
-        MapProperties properties = object.getProperties();
-        BodyDef def = new BodyDef();
-        def.type = BodyType.StaticBody;
-        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
-
-
-        if (object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
-            PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            System.out.println("Rectangle Water " + rectangle);
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-            System.out.println("Rectangle Water2 " + rectangle);
-            shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
-                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
-
-            FixtureDef fixDef = new FixtureDef();
-            fixDef.shape = shape;
-            fixDef.friction = 1f;
-            fixDef.isSensor = true;
-            fixDef.density = getProperty(properties, aliases.density, 2);
-            fixDef.filter.categoryBits = GRUPO.FLUID.getCategory();
-            fixDef.filter.maskBits = Box2DPhysicsObject.MASK_FLUID;
-            Fixture fixBox = box.createFixture(fixDef);
-            shape.dispose();
-
-            String name = object.getName();
-            if (bodies.containsKey(name)) {
-                int duplicate = 1;
-                while (bodies.containsKey(name + duplicate))
-                    duplicate++;
-                name += duplicate;
-            }
-
-            Water w1 = new Water(name, box);
-            worldEntity.getWaterSensors().add(w1);
-            box.setUserData(w1);
-            fixBox.setUserData(w1);
-            bodies.put(name, box);
-
-        } else {
-            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \"" + aliases.typeModelObject + "\"");
-        }
-
-
-    }
-
-    private void createMovingPlatform(World world, MapObject object) {
-        MapProperties properties = object.getProperties();
-        BodyDef def = new BodyDef();
-        def.type = BodyType.KinematicBody;
-        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
-
-
-        if (object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
-            PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-            shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
-                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
-
-            FixtureDef fixDef = new FixtureDef();
-            fixDef.shape = shape;
-            fixDef.filter.categoryBits = GRUPO.MOVING_PLATFORM.getCategory();
-            fixDef.filter.maskBits = Box2DPhysicsObject.MASK_MOVING_PLATFORM;
-            Fixture fixBox = box.createFixture(fixDef);
-            shape.dispose();
-            box.setBullet(true);
-
-            String name = object.getName();
-            if (bodies.containsKey(name)) {
-                int duplicate = 1;
-                while (bodies.containsKey(name + duplicate))
-                    duplicate++;
-                name += duplicate;
-            }
-
-            MovingPlatform m1 = new MovingPlatform(name, GRUPO.MOVING_PLATFORM, box, Float.parseFloat(properties.get(aliases.movingPlatformDistX, String.class))
-                    , Float.parseFloat(properties.get(aliases.movingPlatformDistY, String.class)), Float.parseFloat(properties.get(aliases.movingPlatformSpeed, String.class)));
-            worldEntity.getMovingPlatforms().add(m1);
-            box.setUserData(m1);
-            fixBox.setUserData(m1);
-            bodies.put(name, box);
-
-        } else {
-            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \"" + aliases.typeModelObject + "\"");
-        }
-
-    }
-
-    private void createEnemy(World world, MapObject object) {
-        MapProperties properties = object.getProperties();
-        BodyDef def = new BodyDef();
-        def.type = BodyDef.BodyType.DynamicBody;
-        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
-        box.setFixedRotation(true);
-
-        if (object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
-            PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-            shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
-                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
-
-            FixtureDef fixDef = new FixtureDef();
-            fixDef.shape = shape;
-            fixDef.filter.categoryBits = GRUPO.ENEMY.getCategory();
-            fixDef.filter.maskBits = Box2DPhysicsObject.MASK_ENEMY;
-            Fixture enemyPhysicsFixture = box.createFixture(fixDef);
-            shape.dispose();
-            CircleShape circle = new CircleShape();
-            circle.setRadius(rectangle.width / 2);
-            circle.setPosition(new Vector2(rectangle.width / 2, rectangle.height / 5));
-            Fixture enemySensorFixture = box.createFixture(circle, 0);
-            enemySensorFixture.setSensor(true);
-            circle.dispose();
-
-            String name = object.getName();
-            if (bodies.containsKey(name)) {
-                int duplicate = 1;
-                while (bodies.containsKey(name + duplicate))
-                    duplicate++;
-                name += duplicate;
-            }
-            List<Vector2> points = new ArrayList<Vector2>();
-            points.add(box.getPosition().cpy());
-            points.add(new Vector2(Float.parseFloat(properties.get(aliases.pointX, String.class)),
-                    Float.parseFloat(properties.get(aliases.pointY, String.class))));
-
-
-            Enemy enemy = new Enemy(name, box, points);
-            enemy.setEnemyPhysicsFixture(enemyPhysicsFixture);
-            enemy.setEnemySensorFixture(enemySensorFixture);
-            worldEntity.getEnemies().add(enemy);
-            box.setUserData(enemy);
-            enemyPhysicsFixture.setUserData(enemy);
-            enemySensorFixture.setUserData(enemy);
-            bodies.put(name, box);
-
-        } else {
-            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \"" + aliases.typeModelObject + "\"");
-        }
-
-    }
-
-    private void createItem(World world, MapObject object) {
-        MapProperties properties = object.getProperties();
-        BodyDef def = new BodyDef();
-        def.type = BodyType.StaticBody;
-        def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
-
-        if (object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
-            PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-            shape.setAsBox(rectangle.width / 2, rectangle.height, new Vector2(rectangle.x - box.getPosition().x
-                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
-
-            FixtureDef fixDef = new FixtureDef();
-            fixDef.shape = shape;
-            fixDef.filter.categoryBits = GRUPO.ITEMS.getCategory();
-            fixDef.filter.maskBits = Box2DPhysicsObject.MASK_ITEMS;
-            Fixture fixBox = box.createFixture(fixDef);
-            fixBox.setSensor(true);
-            shape.dispose();
-
-            String name = object.getName();
-            if (bodies.containsKey(name)) {
-                int duplicate = 1;
-                while (bodies.containsKey(name + duplicate))
-                    duplicate++;
-                name += duplicate;
-            }
-            Item item = null;
-            if (object.getProperties().get(aliases.typeItem).equals(aliases.coin)) {
-                item = new Item(name, GRUPO.ITEMS, TYPE.COIN, box, 1);
-
-            } else if (object.getProperties().get(aliases.typeItem).equals(aliases.powerup)) {
-                item = new Item(name, GRUPO.ITEMS, TYPE.POWERUP, box, 1);
-            } else if (object.getProperties().get(aliases.typeItem).equals(aliases.key)) {
-                item = new Item(name, GRUPO.ITEMS, TYPE.KEY, box, 1);
-            }
-
-            worldEntity.getItems().add(item);
-            box.setUserData(item);
-            fixBox.setUserData(item);
-            bodies.put(name, box);
-
-
-        } else {
-            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \"" + aliases.typeModelObject + "\"");
-        }
-
-    }
-
-
-    private void createRevoluteObject(World world, MapObject object) {
-        MapProperties properties = object.getProperties();
-        Gdx.app.log(getClass().getName(),"Empezando Revolute Object...");
-
-        if (object instanceof RectangleMapObject && !properties.get(aliases.type).equals(aliases.typeModelObject)) {
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-            Gdx.app.log(getClass().getName(),"Empezando Revolute Object2...");
-            String name = object.getName();
-            if (bodies.containsKey(name)) {
-                int duplicate = 1;
-                while (bodies.containsKey(name + duplicate))
-                    duplicate++;
-                name += duplicate;
-            }
-            Gdx.app.log(getClass().getName(),"Empezando Revolute Object3...");
-            if (object.getProperties().get(aliases.typeRevolute).equals(aliases.revoluteObject1)) {
-                Body body1 = createBall(world, rectangle.x, rectangle.y, 2);
-                Body body2 =createBox(world,rectangle.x,rectangle.y,rectangle.width,rectangle.height);
-
-                Box2DPhysicsObject box2DPhysicsObject = new Box2DPhysicsObject(name, GRUPO.STATIC, body1);
-                body1.setUserData(box2DPhysicsObject);
-                bodies.put(name, body1);
-
-                Box2DPhysicsObject box2DPhysicsObject2 = new Box2DPhysicsObject(name, GRUPO.STATIC, body2);
-                body2.setUserData(box2DPhysicsObject2);
-                bodies.put(name, body2);
-
-                RevoluteJointDef joint_def = new RevoluteJointDef();
-                joint_def.bodyA = body1;
-                joint_def.bodyB = body2;
-                Gdx.app.log(getClass().getName(),"Creando Revolute Object...");
-                joint_def.localAnchorA.set(new Vector2(-2, 0));
-                joint_def.localAnchorB.set(new Vector2(0, 0));
-
-
-                world.createJoint(joint_def);
-                Gdx.app.log(getClass().getName(),"Agregado Revolute Object...");
-            }
-        } else {
-            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(aliases.type) + "\" instead of \"" + aliases.typeModelObject + "\"");
-        }
-
-    }
-
-    public Body createBall(World world, float x, float y, float radius) {
-
-        BodyDef def = new BodyDef();
-        def.type = BodyType.StaticBody;
-        def.position.set(x, y);
-        def.linearDamping = 0.5f;
-        def.angularDamping = 0.5f;
-
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.friction = 0.5f;
-        fixDef.density = 1;
-        fixDef.restitution = 0.5f;
-
-        CircleShape shape = new CircleShape();
-        shape.setPosition(new Vector2(x, y));
-        shape.setRadius(radius);
-        fixDef.shape = shape;
-        Body body = world.createBody(def);
-        Fixture fixBox = body.createFixture(fixDef);
-        shape.dispose();
-
-        Gdx.app.log(getClass().getName(),"Creando Ball para revolute");
-        return body;
-
-    }
-
-    public Body createBox(World world, float x, float y, float width, float height) {
-
-        BodyDef def = new BodyDef();
-        def.type = BodyType.DynamicBody;
-        def.position.set(x, y);
-        def.linearDamping = 0.5f;
-        def.angularDamping = 0.5f;
-
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.friction = 0.5f;
-        fixDef.density = 1;
-        fixDef.restitution = 0.5f;
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width / 2, height, new Vector2(x + width / 2, y + height / 2),0);
-        fixDef.shape = shape;
-        Body body = world.createBody(def);
-        Fixture fixBox = body.createFixture(fixDef);
-
-        shape.dispose();
-
-        Gdx.app.log(getClass().getName(), "Creando Box para revolute");
-        return body;
 
     }
 
@@ -1131,7 +808,7 @@ public class Box2DMapObjectParser {
         /**
          * the aliases
          */
-        public String
+        public static String
                 type = "type",
                 bodyType = "bodyType",
                 dynamicBody = "DynamicBody",

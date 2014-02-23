@@ -1,5 +1,6 @@
 package com.rubentxu.juegos.core.modelo;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -33,6 +34,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     private HashSet<Fixture> grounContacts;
     private Fixture heroPhysicsFixture;
     private Fixture heroSensorFixture;
+    private ParticleEffect particleEffect;
 
     private Profile profile;
 
@@ -45,8 +47,8 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         super("Heroe", GRUPO.HERO, physics);
         setGrounContacts(new HashSet<Fixture>());
         createHero(x, y, width, height);
-        setState(StateHero.IDLE);
-    }
+        setState(StateHero.IDLE);       }
+
 
     public void createHero(float x, float y, float width, float height) {
         BodyDef def = new BodyDef();
@@ -80,8 +82,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         circle.dispose();
 
         super.getBody().setBullet(true);
-
-        //profile=new Profile();
 
     }
 
@@ -147,6 +147,17 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     public void setStatePos(StatePos statePos) {
         this.statePos = statePos;
     }
+
+    @Override
+    public ParticleEffect getEffect() {
+        return particleEffect;
+    }
+
+    @Override
+    public void setEffect(ParticleEffect effect) {
+        this.particleEffect = effect;
+    }
+
 
     @Override
     public String toString() {

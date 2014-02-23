@@ -91,6 +91,7 @@ public class HeroManager extends AbstractWorldManager {
                 }
                 hero.getHeroPhysicsFixture().setFriction(0f);
                 hero.getHeroSensorFixture().setFriction(0f);
+                handleState();
                 break;
         }
         hero.velocityLimit();
@@ -98,7 +99,7 @@ public class HeroManager extends AbstractWorldManager {
     }
 
     public void handleState() {
-        setChanged();
+        if (hero.isChangedStatus()) setChanged();
         notifyObservers(hero.getState());
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBody().getPosition();
@@ -108,22 +109,29 @@ public class HeroManager extends AbstractWorldManager {
             hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
             hero.getHeroPhysicsFixture().setFriction(100f);
             hero.getHeroSensorFixture().setFriction(100f);
+            hero.getEffect().allowCompletion();
 
         } else if (hero.getState().equals(Hero.StateHero.WALKING)) {
             applyPhysicMovingImpulse();
             stillTime = 0;
             hero.getHeroPhysicsFixture().setFriction(0.2f);
             hero.getHeroSensorFixture().setFriction(0.2f);
+            if (hero.getEffect().isComplete()) hero.getEffect().reset();
 
         } else if (hero.getState().equals(Hero.StateHero.JUMPING)) {
             if (!hero.getStatePos().equals(Hero.StatePos.ONAIR) )
                 applyPhysicJumpingImpulse(vel, pos);
+            hero.getEffect().allowCompletion();
 
         } else if (hero.getState().equals(Hero.StateHero.PROPULSION)) {
             applyPhysicJumpingImpulse(vel, pos);
+            hero.getEffect().allowCompletion();
 
         } else if (hero.getState().equals(Hero.StateHero.SWIMMING)) {
             applyPhysicMovingImpulse();
+            hero.getEffect().allowCompletion();
+        } else if (hero.getState().equals(Hero.StateHero.FALL)) {
+            hero.getEffect().allowCompletion();
         }
 
     }
@@ -304,7 +312,9 @@ public class HeroManager extends AbstractWorldManager {
     @Override
     public void update(float delta) {
         handleInput(hero);
-        hero.setStateTime(hero.getStateTime()+delta);
+        hero.setStateTime(hero.getStateTime() + delta);
+        hero.getEffect().setPosition(hero.getX(), hero.getY() - hero.getHeight()/2.2f);
+        hero.getEffect().update(delta);
     }
 
     public void setStillTime(int stillTime) {

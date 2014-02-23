@@ -1,6 +1,7 @@
 package com.rubentxu.juegos.core.modelo.base;
 
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -9,8 +10,6 @@ import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
-
-
 
     public static enum GRUPO {
         HERO((short) 0x0001), ENEMY((short) 0x0002), PLATFORM((short) 0x0004), MOVING_PLATFORM((short) 0x0008),
@@ -49,6 +48,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     protected boolean isFlaggedForDelete = false;
     private float stateTime;
     private State state= BaseState.INITIAL;
+    private boolean changedStatus=false;
     private boolean facingLeft = false;
 
     public State getState(){
@@ -56,9 +56,13 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public void setState(State state){
-        if(this.state.equals(state)) return;
+        if(this.state.equals(state)){
+            changedStatus=false;
+            return;
+        }
         this.state = state;
         stateTime=0;
+        changedStatus=true;
     }
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, Body body) {
@@ -119,6 +123,16 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
         return body;
     }
 
+    @Override
+    public ParticleEffect getEffect() {
+        return null;
+    }
+
+    @Override
+    public void setEffect(ParticleEffect effect) {
+
+    }
+
     public void setBody(Body body) {
         this.body = body;
     }
@@ -170,6 +184,10 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public void setFacingLeft(boolean facingLeft) {
         this.facingLeft = facingLeft;
+    }
+
+    public boolean isChangedStatus() {
+        return changedStatus;
     }
 
 

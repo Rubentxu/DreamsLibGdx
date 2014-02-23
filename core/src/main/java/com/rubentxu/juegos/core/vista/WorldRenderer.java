@@ -2,15 +2,12 @@ package com.rubentxu.juegos.core.vista;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
-import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
@@ -73,10 +70,6 @@ public class WorldRenderer implements Disposable {
 
     private void loadTextures() {
 
-        TextureAtlas atlasVarios = game.getResourcesManager().get(ResourcesManager.VARIOS_ATLAS);
-
-
-
         for(MovingPlatform mvp :world.getMovingPlatforms()){
             modelsAndViews.addEntity(mvp);
         }
@@ -90,11 +83,7 @@ public class WorldRenderer implements Disposable {
         }
 
         for(Item i :world.getItems()){
-
-            Sprite viewSprite = new Sprite(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("tijeras"));
-            if(viewSprite!=null){
-                modelsAndViews.addModelAndView(i,viewSprite);
-            }
+            modelsAndViews.addEntity(i);
         }
         modelsAndViews.addEntity(world.getHero());
     }
@@ -111,7 +100,6 @@ public class WorldRenderer implements Disposable {
         renderer.render();
 
         spriteBatch.begin();
-        modelsAndViews.update(world);
         modelsAndViews.render(spriteBatch);
 
         if (DreamsGame.DEBUG) {
