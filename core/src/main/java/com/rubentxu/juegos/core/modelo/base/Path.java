@@ -30,9 +30,9 @@ public class Path {
         boolean checkChange = false;
         if (maxDist == 0) maxDist = points.get(waypoint).dst2(bodyPosition);
         distance += getVelocity().len() * delta;
-        if (isWaypointReached(bodyPosition, delta) ) {
+        if (isWaypointReached(bodyPosition, delta)) {
             distance = 0;
-            int tempPoint=waypoint;
+            int tempPoint = waypoint;
             waypoint = getNextPoint();
             maxDist = points.get(tempPoint).dst2(points.get(waypoint));
             checkChange = true;
@@ -44,7 +44,7 @@ public class Path {
     }
 
     public boolean isWaypointReached(Vector2 bodyPosition, float delta) {
-        return Math.abs(points.get(waypoint).x - bodyPosition.x) <= speed * delta ;
+        return Math.abs(points.get(waypoint).x - bodyPosition.x) <= speed * delta;
     }
 
     int getNextPoint() {
@@ -70,8 +70,8 @@ public class Path {
     }
 
     public Vector2 getForce(float mass) {
-        Vector2 v=velocity.cpy().nor().scl(mass);
-        v.y=0;
+        Vector2 v = velocity.cpy().nor().scl(mass);
+        v.y = 0;
         return v;
     }
 

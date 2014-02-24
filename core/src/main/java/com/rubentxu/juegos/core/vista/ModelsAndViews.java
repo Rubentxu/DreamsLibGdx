@@ -16,6 +16,7 @@ import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
+import com.rubentxu.juegos.core.modelo.base.Box2dPhysicsCompoundObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,9 +58,9 @@ public class ModelsAndViews {
             float offsetWidth=0;
             if(e.getGrupo().equals(GRUPO.HERO)){
 
-                offsetY= e.getHeight()/2;
-                offsetWidth= e.getWidth()*0.8f;
-                offsetX= e.getWidth()/2+offsetWidth/2;
+                offsetY= e.getHeightBodyA()/2;
+                offsetWidth= e.getWidthBodyA()*0.8f;
+                offsetX= e.getWidthBodyA()/2+offsetWidth/2;
             }
             if (anims != null) {
                 try{
@@ -70,7 +71,9 @@ public class ModelsAndViews {
                     } else if (!e.isFacingLeft() && frame.isFlipX()) {
                         frame.flip(true, false);
                     }
-                    batch.draw(frame, e.getX()-offsetX , e.getY()-offsetY, e.getWidth()+offsetWidth, e.getHeight());
+                    batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getWidthBodyA()+offsetWidth, e.getHeightBodyA());
+                    if(e instanceof Box2dPhysicsCompoundObject)
+                        batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getWidthBodyA()+offsetWidth, e.getHeightBodyA());
 
                 }catch (Exception ex){
                    Gdx.app.log(Constants.LOG,"Error en render: "+ ex.getMessage()+ "Grupo "+e.getGrupo()+" State"+e.getState());

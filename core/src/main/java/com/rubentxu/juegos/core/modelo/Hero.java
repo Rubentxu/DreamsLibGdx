@@ -19,10 +19,10 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
 
     public enum StateHero implements State {
-        IDLE, WALKING, JUMPING, DYING, FALL,SWIMMING, PROPULSION, HURT ,HIT, DEAD, WIN
+        IDLE, WALKING, JUMPING, DYING, FALL, SWIMMING, PROPULSION, HURT, HIT, DEAD, WIN
     }
 
-    public enum StatePos { ONGROUND, INWATER, ONAIR }
+    public enum StatePos {ONGROUND, INWATER, ONAIR}
 
 
     // States
@@ -47,7 +47,8 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         super("Heroe", GRUPO.HERO, physics);
         setGrounContacts(new HashSet<Fixture>());
         createHero(x, y, width, height);
-        setState(StateHero.IDLE);       }
+        setState(StateHero.IDLE);
+    }
 
 
     public void createHero(float x, float y, float width, float height) {
@@ -55,45 +56,45 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.x = x;
         def.position.y = y;
-        setBody(box2D.createBody(def));
-        getBody().setFixedRotation(true);
-        getBody().setUserData(this);
+        setBodyA(box2D.createBody(def));
+        getBodyA().setFixedRotation(true);
+        getBodyA().setUserData(this);
 
 
         PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width,height);
+        poly.setAsBox(width, height);
 
 
         FixtureDef fixDef = new FixtureDef();
-        fixDef.shape=poly;
-        fixDef.filter.categoryBits= GRUPO.HERO.getCategory();
-        fixDef.filter.maskBits=Box2DPhysicsObject.MASK_HERO;
-        heroPhysicsFixture = super.getBody().createFixture(fixDef);
+        fixDef.shape = poly;
+        fixDef.filter.categoryBits = GRUPO.HERO.getCategory();
+        fixDef.filter.maskBits = Box2DPhysicsObject.MASK_HERO;
+        heroPhysicsFixture = super.getBodyA().createFixture(fixDef);
         heroPhysicsFixture.setUserData(this);
         poly.dispose();
 
         CircleShape circle = new CircleShape();
         circle.setRadius(width);
-        circle.setPosition(new Vector2(0, -height*0.9f));
-        fixDef.shape=circle;
-        heroSensorFixture = super.getBody().createFixture(fixDef);
+        circle.setPosition(new Vector2(0, -height * 0.9f));
+        fixDef.shape = circle;
+        heroSensorFixture = super.getBodyA().createFixture(fixDef);
         heroSensorFixture.setSensor(true);
         heroSensorFixture.setUserData(this);
         circle.dispose();
 
-        super.getBody().setBullet(true);
+        super.getBodyA().setBullet(true);
 
     }
 
 
     public void velocityLimit() {
-        Vector2 vel = this.getBody().getLinearVelocity();
+        Vector2 vel = this.getBodyA().getLinearVelocity();
 
-        if (Math.abs(vel.x) > this.MAX_VELOCITY){
+        if (Math.abs(vel.x) > this.MAX_VELOCITY) {
             vel.x = Math.signum(vel.x) * this.MAX_VELOCITY;
             this.setVelocity(new Vector2(vel.x, vel.y));
-        }else if(Math.abs(vel.y) > this.MAX_VELOCITY*2) {
-            vel.y=  Math.signum(vel.y) * this.MAX_VELOCITY*2;
+        } else if (Math.abs(vel.y) > this.MAX_VELOCITY * 2) {
+            vel.y = Math.signum(vel.y) * this.MAX_VELOCITY * 2;
             this.setVelocity(new Vector2(vel.x, vel.y));
         }
     }
@@ -107,11 +108,11 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     }
 
     public Vector2 getVelocity() {
-        return super.getBody().getLinearVelocity();
+        return super.getBodyA().getLinearVelocity();
     }
 
     public void setVelocity(Vector2 velocity) {
-         super.getBody().setLinearVelocity(velocity);
+        super.getBodyA().setLinearVelocity(velocity);
     }
 
     public Fixture getHeroPhysicsFixture() {
@@ -163,29 +164,29 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     public String toString() {
         return
                 "StatePos=" + statePos +
-                "\nstate=" + getState() +
-                "\nfacingLeft=" + facingLeft +
-                "\nGravityScale=" + getBody().getGravityScale()+
-                "\nInertia=" + getBody().getInertia()+
-                "\nMasa=" + getBody().getMass()+
-                "\nPeso=" + getBody().getMass()*9.8f+
-                "\nisFixedRotation=" + getBody().isFixedRotation()+
-                "\nLinearDamping=" + getBody().getLinearDamping()+
-                "\nLinearVelocity=" + getBody().getLinearVelocity().toString()+
-                "\nPosition=" + getBody().getPosition().toString()+
-                "\nSizeGroundContact=" + grounContacts.size()+
-                "\nWidth=" +getWidth()+
-                "\nHeight=" + getHeight()+
-                "\nTimeState=" + getStateTime();
+                        "\nstate=" + getState() +
+                        "\nfacingLeft=" + facingLeft +
+                        "\nGravityScale=" + getBodyA().getGravityScale() +
+                        "\nInertia=" + getBodyA().getInertia() +
+                        "\nMasa=" + getBodyA().getMass() +
+                        "\nPeso=" + getBodyA().getMass() * 9.8f +
+                        "\nisFixedRotation=" + getBodyA().isFixedRotation() +
+                        "\nLinearDamping=" + getBodyA().getLinearDamping() +
+                        "\nLinearVelocity=" + getBodyA().getLinearVelocity().toString() +
+                        "\nPosition=" + getBodyA().getPosition().toString() +
+                        "\nSizeGroundContact=" + grounContacts.size() +
+                        "\nWidth=" + getWidthBodyA() +
+                        "\nHeight=" + getHeightBodyA() +
+                        "\nTimeState=" + getStateTime();
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        grounContacts=null;
-        heroPhysicsFixture=null;
-        heroSensorFixture=null;
-        profile=null;
+        grounContacts = null;
+        heroPhysicsFixture = null;
+        heroSensorFixture = null;
+        profile = null;
     }
 
 }

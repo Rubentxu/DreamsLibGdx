@@ -12,24 +12,24 @@ public class Item extends Sensor {
 
     private int value;
     private String name;
-    private TYPE TYPE_ITEM=null ;
+    private TYPE TYPE_ITEM = null;
 
-    public Item(String nombre, GRUPO grupo,TYPE tipo, Body body,int value) {
+    public Item(String nombre, GRUPO grupo, TYPE tipo, Body body, int value) {
         super(nombre, grupo, body);
-        this.TYPE_ITEM=tipo;
-        this.name=nombre;
-        this.value=value;
+        this.TYPE_ITEM = tipo;
+        this.name = nombre;
+        this.value = value;
     }
 
-    public String getName(){
+    public String getName() {
         return name;
     }
 
-    public void setName(String name){
-        this.name=name;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getValue(){
+    public int getValue() {
         return value;
     }
 
@@ -38,7 +38,7 @@ public class Item extends Sensor {
     }
 
     public TYPE getType() {
-        return TYPE_ITEM ;
+        return TYPE_ITEM;
     }
 
     public void setType(TYPE type) {

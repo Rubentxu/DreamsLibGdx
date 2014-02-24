@@ -119,13 +119,13 @@
     <property name="typeModelObject" value="Hero"/>
    </properties>
   </object>
-  <object name="molino" type="modelObject" x="824" y="449" width="56" height="60">
+  <object name="molino" type="modelObject" x="824" y="849" width="56" height="60">
    <properties>
     <property name="typeModelObject" value="RevoluteObject"/>
     <property name="typeRevolute" value="revoluteObject1"/>
    </properties>
   </object>
-  <object name="molino2" type="modelObject" x="1479" y="452" width="56" height="60">
+  <object name="molino2" type="modelObject" x="1479" y="0" width="56" height="60">
    <properties>
     <property name="typeModelObject" value="RevoluteObject"/>
     <property name="typeRevolute" value="revoluteObject1"/>

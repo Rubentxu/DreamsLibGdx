@@ -67,7 +67,7 @@ public abstract class Box2DUtils {
 	/** @see #tmpVec */
 	public static Vector2[] tmpVecArr;
 
-	/** @return the vertices of all fixtures of the given body
+	/** @return the vertices of all fixtures of the given bodyA
 	 *  @see #vertices(Shape) */
 	public static Vector2[] vertices(Body body, Vector2[] output) {
 		Vector2[][] fixtureVertices = new Vector2[body.getFixtureList().size][]; // caching fixture vertices for performance
@@ -318,7 +318,7 @@ public abstract class Box2DUtils {
 	}
 
 	/** @return the relative position of the given Shape to its Body
-	 *  @param rotation the rotation of the body in radians */
+	 *  @param rotation the rotation of the bodyA in radians */
 	public static Vector2 positionRelative(Shape shape, float rotation, Vector2 output) {
 		// get the position without rotation
 		if(shapeCache.containsKey(shape)) {

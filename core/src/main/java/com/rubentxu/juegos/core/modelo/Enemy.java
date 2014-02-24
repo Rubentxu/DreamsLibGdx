@@ -14,13 +14,13 @@ import java.util.HashSet;
 import java.util.List;
 
 
-public class Enemy extends Box2DPhysicsObject implements Disposable{
+public class Enemy extends Box2DPhysicsObject implements Disposable {
 
     public enum StateEnemy implements State {
-        IDLE, WALKING, JUMPING, FALL,HURT,HIT ,DEAD
+        IDLE, WALKING, JUMPING, FALL, HURT, HIT, DEAD
     }
 
-    public enum StatePos { ONGROUND, INWATER, ONAIR }
+    public enum StatePos {ONGROUND, INWATER, ONAIR}
 
     // States
     private StatePos statePos = StatePos.ONGROUND;
@@ -47,7 +47,7 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
     }
 
     public void velocityLimit() {
-        Vector2 vel = this.getBody().getLinearVelocity();
+        Vector2 vel = this.getBodyA().getLinearVelocity();
 
         if (Math.abs(vel.x) > this.MAX_VELOCITY) {
             vel.x = Math.signum(vel.x) * this.MAX_VELOCITY;
@@ -55,20 +55,19 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
         }
 
         if (vel.x < -0.5f) {
-            facingLeft=true;
+            facingLeft = true;
         } else if (vel.x > 0.5f) {
-            facingLeft=false;
+            facingLeft = false;
         }
     }
 
 
-
     public Vector2 getVelocity() {
-        return super.getBody().getLinearVelocity();
+        return super.getBodyA().getLinearVelocity();
     }
 
     public void setVelocity(Vector2 velocity) {
-        super.getBody().setLinearVelocity(velocity);
+        super.getBodyA().setLinearVelocity(velocity);
     }
 
     public Fixture getEnemyPhysicsFixture() {
@@ -127,32 +126,32 @@ public class Enemy extends Box2DPhysicsObject implements Disposable{
                 "statePos=" + statePos +
                         "\nstate=" + getState() +
                         "\nfacingLeft=" + isFacingLeft() +
-                        "\nisActive= " + getBody().isActive() +
-                        "\nisSleepingAllowed= " + getBody().isSleepingAllowed() +
-                        "\nisAwake=" + getBody().isAwake() +
+                        "\nisActive= " + getBodyA().isActive() +
+                        "\nisSleepingAllowed= " + getBodyA().isSleepingAllowed() +
+                        "\nisAwake=" + getBodyA().isAwake() +
                         "\nWayPoint0=" + this.getPath().getPoints().toArray()[0] +
                         "\nWayPoint1=" + this.getPath().getPoints().toArray()[1] +
                         "\nWayPointSize=" + this.getPath().getPoints().size() +
                         "\nWayPointIndex=" + this.getPath().waypoint +
-                        "\nMass=" + getBody().getMass() +
-                        "\nisBullet=" + getBody().isBullet() +
-                        "\nisFixedRotation=" + getBody().isFixedRotation() +
-                        "\nLinearDamping=" + getBody().getLinearDamping() +
-                        "\nLinearVelocity=" + getBody().getLinearVelocity().toString() +
-                        "\nPosition=" + getBody().getPosition().toString() +
-                        "\nLocalCenter=" + getBody().getLocalCenter().toString() +
-                        "\nWidth=" + getWidth() +
-                        "\nHeight=" + getHeight() +
-                        "\nWorldCenter=" + getBody().getWorldCenter().toString();
+                        "\nMass=" + getBodyA().getMass() +
+                        "\nisBullet=" + getBodyA().isBullet() +
+                        "\nisFixedRotation=" + getBodyA().isFixedRotation() +
+                        "\nLinearDamping=" + getBodyA().getLinearDamping() +
+                        "\nLinearVelocity=" + getBodyA().getLinearVelocity().toString() +
+                        "\nPosition=" + getBodyA().getPosition().toString() +
+                        "\nLocalCenter=" + getBodyA().getLocalCenter().toString() +
+                        "\nWidth=" + getWidthBodyA() +
+                        "\nHeight=" + getHeightBodyA() +
+                        "\nWorldCenter=" + getBodyA().getWorldCenter().toString();
     }
 
     @Override
     public void dispose() {
-       super.dispose();
-       grounContacts=null;
-       enemyPhysicsFixture=null;
-       enemySensorFixture=null;
-       path=null;
+        super.dispose();
+        grounContacts = null;
+        enemyPhysicsFixture = null;
+        enemySensorFixture = null;
+        path = null;
     }
 
 

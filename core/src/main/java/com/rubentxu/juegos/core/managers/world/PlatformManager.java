@@ -38,20 +38,20 @@ public class PlatformManager extends AbstractWorldManager {
 
 
         if ((platform.waitForPassenger && platform.getPassengers().size() == 0) || !platform.enabled) {
-            platform.getBody().setLinearVelocity(new Vector2(0f, 0f));
+            platform.getBodyA().setLinearVelocity(new Vector2(0f, 0f));
         } else {
 
-            boolean check = platform.getPath().update(platform.getBody().getPosition(), delta);
+            boolean check = platform.getPath().update(platform.getBodyA().getPosition(), delta);
             Vector2 velPlatform = platform.getPath().getVelocity().cpy();
 
             if (check && velPlatform.y < 0) {
                 for (Box2DPhysicsObject passenger : platform.getPassengers()) {
-                    float force = passenger.getBody().getMass() * velPlatform.y*2 ;
-                    passenger.getBody().applyLinearImpulse(0, force, passenger.getBody().getPosition().x,
-                            passenger.getBody().getPosition().y, true);
+                    float force = passenger.getBodyA().getMass() * velPlatform.y*2 ;
+                    passenger.getBodyA().applyLinearImpulse(0, force, passenger.getBodyA().getPosition().x,
+                            passenger.getBodyA().getPosition().y, true);
                 }
             }
-            platform.getBody().setLinearVelocity(velPlatform);
+            platform.getBodyA().setLinearVelocity(velPlatform);
         }
     }
 
@@ -78,9 +78,9 @@ public class PlatformManager extends AbstractWorldManager {
     }
 
     public Vector2 getRelativeVelocity(MovingPlatform movingPlatform, Box2DPhysicsObject passenger, Vector2 point) {
-        Vector2 velMovingPlatform = movingPlatform.getBody().getLinearVelocityFromWorldPoint(point);
-        Vector2 velPassenger = passenger.getBody().getLinearVelocityFromWorldPoint(point);
-        return movingPlatform.getBody().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
+        Vector2 velMovingPlatform = movingPlatform.getBodyA().getLinearVelocityFromWorldPoint(point);
+        Vector2 velPassenger = passenger.getBodyA().getLinearVelocityFromWorldPoint(point);
+        return movingPlatform.getBodyA().getLocalVector(velPassenger.cpy().sub(velMovingPlatform));
     }
 
 
@@ -121,8 +121,8 @@ public class PlatformManager extends AbstractWorldManager {
         }
         WorldManifold manifold = contact.getWorldManifold();
         for (Vector2 point : manifold.getPoints()) {
-            float posPlatform = movingPlatform.getBody().getPosition().y + movingPlatform.getHeight() / 2;
-            float posPassenger = passenger.getBody().getPosition().y;
+            float posPlatform = movingPlatform.getBodyA().getPosition().y + movingPlatform.getHeightBodyA() / 2;
+            float posPassenger = passenger.getBodyA().getPosition().y;
             Vector2 relativeVel = getRelativeVelocity(movingPlatform, passenger, point);
 
             if (relativeVel.y < -1 && posPlatform < posPassenger) {
@@ -131,7 +131,7 @@ public class PlatformManager extends AbstractWorldManager {
                 return;
             } else if (relativeVel.y < 1 && posPlatform < posPassenger) {
 
-                Vector2 relativePoint = movingPlatform.getBody().getLocalPoint(point);
+                Vector2 relativePoint = movingPlatform.getBodyA().getLocalPoint(point);
                 float platformFaceY = 0.5f;
                 if (relativePoint.y > platformFaceY - 0.05) {
                     movingPlatform.getPassengers().add(passenger);

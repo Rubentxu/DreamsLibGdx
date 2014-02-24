@@ -27,8 +27,8 @@ public class PlatformManagerTest {
          *
          * @param addr the address of the fixture
          *//*
-        protected Fix(Body body, long addr) {
-            super(body, addr);
+        protected Fix(Body bodyA, long addr) {
+            super(bodyA, addr);
         }
     };
 
@@ -152,7 +152,7 @@ public class PlatformManagerTest {
         platformManager.updateMovingPlatform(m1,0.4f);
         Vector2 velRelative = platformManager.getRelativeVelocity(m1, r, manifold.getPoints()[0]);
         System.out.println("Velocity Relative: "+ velRelative);
-        assertTrue(velRelative.y < r.getBody().getLinearVelocity().y);
+        assertTrue(velRelative.y < r.getBodyA().getLinearVelocity().y);
     }
 
     @Test

@@ -1,5 +1,6 @@
 package com.rubentxu.juegos.core.factorias;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
@@ -8,16 +9,24 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
+import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
+import com.rubentxu.juegos.core.modelo.CheckPoint;
 import com.rubentxu.juegos.core.modelo.Coin;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.Mill;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
@@ -59,13 +68,14 @@ public class Box2dObjectFactory {
                 break;
             case FLUID:
                 return (T) createWater(object);
+            case MILL:
+                return (T) createMill(object);
         }
         return null;
     }
 
     private Rectangle getRectangle(RectangleMapObject object) {
         Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-        System.out.println("Rectangle Water " + rectangle);
         rectangle.x *= unitScale;
         rectangle.y *= unitScale;
         rectangle.width *= unitScale;
@@ -108,7 +118,6 @@ public class Box2dObjectFactory {
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
             Rectangle rectangle = getRectangle((RectangleMapObject) object);
-            System.out.println("Rectangle Water2 " + rectangle);
             shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
@@ -144,11 +153,7 @@ public class Box2dObjectFactory {
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
+            Rectangle rectangle = getRectangle((RectangleMapObject) object);
             shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
@@ -186,11 +191,7 @@ public class Box2dObjectFactory {
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
+            Rectangle rectangle = getRectangle((RectangleMapObject) object);
             shape.setAsBox(rectangle.width / 2, rectangle.height / 2, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
@@ -238,11 +239,7 @@ public class Box2dObjectFactory {
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
+            Rectangle rectangle = getRectangle((RectangleMapObject) object);
             shape.setAsBox(rectangle.width / 2, rectangle.height, new Vector2(rectangle.x - box.getPosition().x
                     + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
 
@@ -269,12 +266,145 @@ public class Box2dObjectFactory {
             fixBox.setUserData(item);
 
 
-
         } else {
             throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(Box2DMapObjectParser.Aliases.type) + "\" instead of \"" + Box2DMapObjectParser.Aliases.typeModelObject + "\"");
         }
         return item;
 
+    }
+
+    private Mill createMill(MapObject object) {
+        Gdx.app.log(Constants.LOG,"Creando Mill");
+        RevoluteJointDef revoluteJoint;
+        MapProperties properties = object.getProperties();
+        Mill mill=null;
+        if (object instanceof RectangleMapObject) {
+            Rectangle rectangle = getRectangle((RectangleMapObject) object);
+
+            Vector2[] vertices = new Vector2[6];
+            vertices[0] = new Vector2(0.3256686329841614f, 0f);
+            vertices[1] = new Vector2(0.1628349423408508f, 3.026409149169922f);
+            vertices[2] = new Vector2(-0.1628349423408508f, 3.026409149169922f);
+            vertices[3] = new Vector2(-0.3256686329841614f,
+                    -3.055059494272427e-07f);
+            vertices[4] = new Vector2(-0.1628349423408508f, -3.026409149169922f);
+            vertices[5] = new Vector2(0.1628349423408508f, -3.026409149169922f);
+
+
+
+            BodyDef def = new BodyDef();
+            def.type = BodyType.StaticBody;
+            def.position.set(rectangle.x, rectangle.y);
+            Gdx.app.log(Constants.LOG,"Creando Mill");
+            CircleShape circle = new CircleShape();
+            circle.setRadius(0.5f);
+            Body bodyA = world.createBody(def);
+
+            Fixture fixtA = bodyA.createFixture(circle, 1);
+            Gdx.app.log(Constants.LOG,"Creando2 Mill");
+
+            PolygonShape shape = new PolygonShape();
+            shape.set(vertices);
+            FixtureDef fd = new FixtureDef();
+            fd.shape = shape;
+            fd.friction = 0.2f;
+            fd.density = 1;
+            fd.filter.categoryBits = GRUPO.MILL.getCategory();
+            fd.filter.maskBits = Box2DPhysicsObject.MASK_INTERACTIVE;
+            BodyDef bd = new BodyDef();
+            bd.type = BodyType.DynamicBody;
+            bd.position.set(rectangle.x, rectangle.y);
+            Body bodyB = world.createBody(bd);
+            Fixture fixtB=bodyB.createFixture(fd);
+            Gdx.app.log(Constants.LOG,"Creando3 Mill");
+
+            revoluteJoint = new RevoluteJointDef();
+            revoluteJoint.bodyA = bodyA;
+            revoluteJoint.bodyB = bodyB;
+            revoluteJoint.localAnchorA.set(new Vector2(0, 0));
+            revoluteJoint.localAnchorB.set(new Vector2(0, 0));
+            revoluteJoint.collideConnected = false;
+            revoluteJoint.enableMotor = true;
+            revoluteJoint.maxMotorTorque = 10000.0f;
+            revoluteJoint.motorSpeed = 1f;
+            RevoluteJoint rj= (RevoluteJoint) world.createJoint(revoluteJoint);
+
+            mill = new Mill(object.getName(), bodyA,bodyB,rj);
+            bodyA.setUserData(mill);
+            bodyB.setUserData(mill);
+            fixtA.setUserData(mill);
+            fixtB.setUserData(mill);
+
+            shape.dispose();
+            circle.dispose();
+
+        }  else {
+            throw new IllegalArgumentException("type of " + object + " is  \"" + properties.get(Box2DMapObjectParser.Aliases.type) + "\" instead of \"" + Box2DMapObjectParser.Aliases.typeModelObject + "\"");
+        }
+        Gdx.app.log(Constants.LOG,"Terminada la Creacion de Mill");
+        return mill;
+    }
+
+    private CheckPoint createCheckPoint(MapObject object) {
+            CheckPoint checkPoint=null;
+        if (object instanceof RectangleMapObject) {
+            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
+            rectangle.x *= unitScale;
+            rectangle.y *= unitScale;
+            rectangle.width *= unitScale;
+            rectangle.height *= unitScale;
+
+            PrismaticJoint m_joint;
+            BodyDef def = new BodyDef();
+            def.type = BodyType.StaticBody;
+            Body bodyA = world.createBody(def);
+            bodyA.setTransform(rectangle.x, rectangle.y+6f, 0);
+            PolygonShape poly = new PolygonShape();
+            poly.setAsBox(0.25f, 5);
+            FixtureDef fixBox = new FixtureDef();
+            fixBox.isSensor = true;
+            fixBox.shape = poly;
+            fixBox.filter.categoryBits = GRUPO.CHECKPOINT.getCategory();
+            fixBox.filter.maskBits = Box2DPhysicsObject.MASK_INTERACTIVE;
+            Fixture fixtA = bodyA.createFixture(fixBox);
+            poly.dispose();
+
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(1.0f, 0.25f);
+
+            BodyDef bd = new BodyDef();
+            bd.type = BodyType.DynamicBody;
+            bd.position.set(rectangle.x, rectangle.y+ 1.5f);
+            Body bodyB = world.createBody(bd);
+            FixtureDef fixBd = new FixtureDef();
+            fixBd.isSensor = true;
+            fixBd.shape = shape;
+
+
+            PrismaticJointDef pjd = new PrismaticJointDef();
+            pjd.localAxisA.set(0, 1);
+            pjd.bodyA = bodyA;
+            pjd.bodyB = bodyB;
+            pjd.collideConnected = false;
+            pjd.localAnchorA.set(0, -4f);
+            pjd.localAnchorB.set(-1, 0.25f);
+            pjd.motorSpeed = 3.0f;
+            pjd.maxMotorForce = 10000.0f;
+            pjd.enableMotor = false;
+            pjd.lowerTranslation = 0.0f;
+            pjd.upperTranslation = 9.0f;
+            Fixture fixtB = bodyB.createFixture(fixBd);
+            pjd.enableLimit = true;
+
+            m_joint = (PrismaticJoint) world.createJoint(pjd);
+
+            checkPoint = new CheckPoint(object.getName(), bodyA,bodyB,m_joint);
+            bodyA.setUserData(checkPoint);
+            bodyB.setUserData(checkPoint);
+            fixtA.setUserData(checkPoint);
+            fixtB.setUserData(checkPoint);
+        }
+        return checkPoint;
     }
 
 

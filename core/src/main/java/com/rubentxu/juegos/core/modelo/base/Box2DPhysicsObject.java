@@ -13,8 +13,9 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public static enum GRUPO {
         HERO((short) 0x0001), ENEMY((short) 0x0002), PLATFORM((short) 0x0004), MOVING_PLATFORM((short) 0x0008),
-        ITEMS((short) 0x0010), SENSOR((short) 0x0020), STATIC((short) 0x0040), FLUID((short) 0x0080);
-        // 256= 0x0100 , 512=0x0200, 1024=0x0400
+        ITEMS((short) 0x0010), SENSOR((short) 0x0020), STATIC((short) 0x0040), FLUID((short) 0x0080), MILL((short) 0x0100)
+        , CHECKPOINT((short) 0x0200);
+        //  1024=0x0400
 
         private final short category;
 
@@ -28,7 +29,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
         }
     }
 
-    public enum BaseState implements State{
+    public enum BaseState implements State {
         INITIAL, DEFAULT, DELETE
     }
 
@@ -37,38 +38,39 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     public static final short MASK_FLUID = (short) ~GRUPO.FLUID.category;
     public static final short MASK_MOVING_PLATFORM = (short) ~GRUPO.MOVING_PLATFORM.category;
     public static final short MASK_ITEMS = (short) (GRUPO.HERO.category | GRUPO.STATIC.category);
+    public static final short MASK_INTERACTIVE = (short) (GRUPO.HERO.category);
     public static final short MASK_STATIC = -1;
 
 
     protected com.badlogic.gdx.physics.box2d.World box2D;
-    protected Body body;
+    protected Body bodyA;
 
     protected GRUPO grupo;
     protected String nombre;
     protected boolean isFlaggedForDelete = false;
     private float stateTime;
-    private State state= BaseState.INITIAL;
-    private boolean changedStatus=false;
+    private State state = BaseState.INITIAL;
+    private boolean changedStatus = false;
     private boolean facingLeft = false;
 
-    public State getState(){
+    public State getState() {
         return state;
     }
 
-    public void setState(State state){
-        if(this.state.equals(state)){
-            changedStatus=false;
+    public void setState(State state) {
+        if (this.state.equals(state)) {
+            changedStatus = false;
             return;
         }
         this.state = state;
-        stateTime=0;
-        changedStatus=true;
+        stateTime = 0;
+        changedStatus = true;
     }
 
-    public Box2DPhysicsObject(String nombre, GRUPO grupo, Body body) {
+    public Box2DPhysicsObject(String nombre, GRUPO grupo, Body bodyA) {
         this.nombre = nombre;
         this.grupo = grupo;
-        this.body = body;
+        this.bodyA = bodyA;
     }
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, World physics) {
@@ -78,49 +80,48 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
 
-
     @Override
-    public float getX() {
-        return getBody().getPosition().x;
+    public float getXBodyA() {
+        return getBodyA().getPosition().x;
     }
 
     @Override
-    public void setX(float value) {
-        getBody().getPosition().x = value;
+    public void setXBodyA(float value) {
+        getBodyA().getPosition().x = value;
     }
 
     @Override
-    public float getY() {
-        return getBody().getPosition().y;
-
-    }
-
-    @Override
-    public void setY(float value) {
-        getBody().getPosition().y = value;
-    }
-
-
-    @Override
-    public float getRotation() {
-        return (float) (getBody().getAngle() * 180 / Math.PI);
+    public float getYBodyA() {
+        return getBodyA().getPosition().y;
 
     }
 
     @Override
-    public float getWidth() {
-        return Box2DUtils.width(getBody());
+    public void setYBodyA(float value) {
+        getBodyA().getPosition().y = value;
     }
 
 
     @Override
-    public float getHeight() {
-        return Box2DUtils.height(getBody());
+    public float getRotationBodyA() {
+        return (float) (bodyA.getAngle() * 180 / Math.PI);
+
     }
 
     @Override
-    public Body getBody() {
-        return body;
+    public float getWidthBodyA() {
+        return Box2DUtils.width(bodyA);
+    }
+
+
+    @Override
+    public float getHeightBodyA() {
+        return Box2DUtils.height(bodyA);
+    }
+
+    @Override
+    public Body getBodyA() {
+        return bodyA;
     }
 
     @Override
@@ -133,8 +134,8 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     }
 
-    public void setBody(Body body) {
-        this.body = body;
+    public void setBodyA(Body bodyA) {
+        this.bodyA = bodyA;
     }
 
     public GRUPO getGrupo() {
@@ -154,12 +155,12 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public Vector2 getVelocity() {
-        return body.getLinearVelocity();
+        return bodyA.getLinearVelocity();
 
     }
 
     public void setVelocity(Vector2 velocity) {
-        body.setLinearVelocity(velocity);
+        bodyA.setLinearVelocity(velocity);
     }
 
     public boolean isFlaggedForDelete() {
@@ -193,7 +194,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     @Override
     public void dispose() {
-        body = null;
+        bodyA = null;
         grupo = null;
     }
 

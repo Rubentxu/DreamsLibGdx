@@ -67,7 +67,7 @@ public class HeroManagerTest {
     @Test
     public void testApplyImpulses() {
         Vector2 vel = r.getVelocity();
-        Vector2 pos = r.getBody().getPosition();
+        Vector2 pos = r.getBodyA().getPosition();
 
         heroManager.applyImpulses(vel,pos);
         assertEquals(vel.x, r.getVelocity().x,0);
@@ -76,21 +76,21 @@ public class HeroManagerTest {
     @Test
     public void testApplyImpulsesLeft() {
         controller.leftPressed();
-        heroManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
+        heroManager.applyImpulses(r.getVelocity(), r.getBodyA().getPosition());
         assertTrue(r.getVelocity().toString(), velocity.x > r.getVelocity().x);
     }
 
     @Test
     public void testApplyImpulsesRight() {
         controller.rightPressed();
-        heroManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
+        heroManager.applyImpulses(r.getVelocity(), r.getBodyA().getPosition());
         assertTrue(r.getVelocity().toString(), velocity.x < r.getVelocity().x);
     }
 
     @Test
     public void testApplyImpulsesJump() {
         controller.jumpPressed();
-        heroManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
+        heroManager.applyImpulses(r.getVelocity(), r.getBodyA().getPosition());
         assertTrue(r.getVelocity().toString(), velocity.y < r.getVelocity().y);
         assertEquals(Hero.State.JUMPING,r.getState());
 
@@ -102,7 +102,7 @@ public class HeroManagerTest {
         r.setGround(false);
         r.setState(Hero.State.IDLE);
 
-        heroManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
+        heroManager.applyImpulses(r.getVelocity(), r.getBodyA().getPosition());
         assertEquals( velocity.y , r.getVelocity().y,0);
         assertEquals(Hero.State.FALL,r.getState());
 
@@ -112,7 +112,7 @@ public class HeroManagerTest {
     public void testApplyImpulsesRightPressedAndLeftPressed() {
         controller.leftPressed();
         controller.rightPressed();
-        heroManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
+        heroManager.applyImpulses(r.getVelocity(), r.getBodyA().getPosition());
         assertEquals( velocity.x , r.getVelocity().x,0);
     }
 
@@ -122,7 +122,7 @@ public class HeroManagerTest {
         controller.jumpPressed();
         controller.rightPressed();
 
-        heroManager.applyImpulses(r.getVelocity(), r.getBody().getPosition());
+        heroManager.applyImpulses(r.getVelocity(), r.getBodyA().getPosition());
         assertTrue( velocity.y < r.getVelocity().y);
 
     }

@@ -13,23 +13,24 @@ public class Level implements Json.Serializable {
     private String background_01;
     private String background_02;
     private String background_03;
-    private boolean active=false;
-    private int achievements=0;
-    private int highScore=0;
+    private boolean active = false;
+    private int achievements = 0;
+    private int highScore = 0;
 
-    public Level(){}
+    public Level() {
+    }
 
     public Level(String map, String levelName, String description, String music, String background_01, String background_02, String background_03,
-                 boolean active,int achievements) {
+                 boolean active, int achievements) {
         this.map = map;
         this.levelName = levelName;
         this.description = description;
-        this.music=music;
+        this.music = music;
         this.background_01 = background_01;
         this.background_02 = background_02;
         this.background_03 = background_03;
-        this.active=active;
-        this.achievements= achievements;
+        this.active = active;
+        this.achievements = achievements;
     }
 
     public String getMap() {
@@ -87,16 +88,26 @@ public class Level implements Json.Serializable {
     @Override
     public void read(Json json, JsonValue jsonData) {
 
-        map=json.readValue("map", String.class, jsonData);;
-        levelName=json.readValue("levelName", String.class, jsonData);;
-        description=json.readValue("description", String.class, jsonData);;
-        music=json.readValue("music", String.class, jsonData);;
-        background_01=json.readValue("background_01", String.class, jsonData);;
-        background_02=json.readValue("background_02", String.class, jsonData);;
-        background_03=json.readValue("background_03", String.class, jsonData);;
-        active=json.readValue("active", Boolean.class, jsonData);;
-        achievements=json.readValue("achievements", Integer.class, jsonData);;
-        highScore=json.readValue("highScore", Integer.class, jsonData);;
+        map = json.readValue("map", String.class, jsonData);
+        ;
+        levelName = json.readValue("levelName", String.class, jsonData);
+        ;
+        description = json.readValue("description", String.class, jsonData);
+        ;
+        music = json.readValue("music", String.class, jsonData);
+        ;
+        background_01 = json.readValue("background_01", String.class, jsonData);
+        ;
+        background_02 = json.readValue("background_02", String.class, jsonData);
+        ;
+        background_03 = json.readValue("background_03", String.class, jsonData);
+        ;
+        active = json.readValue("active", Boolean.class, jsonData);
+        ;
+        achievements = json.readValue("achievements", Integer.class, jsonData);
+        ;
+        highScore = json.readValue("highScore", Integer.class, jsonData);
+        ;
 
     }
 

@@ -64,6 +64,7 @@ import com.rubentxu.juegos.core.factorias.Box2dObjectFactory;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.Mill;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
@@ -288,124 +289,8 @@ public class Box2DMapObjectParser {
             worldEntity.getEnemies().add(box2dObjectFactory.<Enemy>getEntity(GRUPO.ENEMY, object));
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.item))
             worldEntity.getItems().add(box2dObjectFactory.<Item>getEntity(GRUPO.ITEMS, object));
-
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.revoluteObject)) {
-            Gdx.app.log(getClass().getName(), "Empezar a crear Model Object Revolute Object...");
-            createMolino(world, object);
-        }
-
-    }
-
-    private void createMolino(World world, MapObject object) {
-        RevoluteJointDef revoluteJoint;
-
-        if (object instanceof RectangleMapObject) {
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-
-
-            Vector2[] vertices = new Vector2[6];
-
-            vertices[0] = new Vector2(0.3256686329841614f, 0f);
-            vertices[1] = new Vector2(0.1628349423408508f, 3.026409149169922f);
-            vertices[2] = new Vector2(-0.1628349423408508f, 3.026409149169922f);
-            vertices[3] = new Vector2(-0.3256686329841614f,
-                    -3.055059494272427e-07f);
-            vertices[4] = new Vector2(-0.1628349423408508f, -3.026409149169922f);
-            vertices[5] = new Vector2(0.1628349423408508f, -3.026409149169922f);
-
-            PolygonShape shape = new PolygonShape();
-            shape.set(vertices);
-
-            FixtureDef fd = new FixtureDef();
-            fd.shape = shape;
-            fd.friction = 0.2f;
-            fd.density = 1;
-            BodyDef bd = new BodyDef();
-            bd.type = BodyType.DynamicBody;
-            bd.position.set(rectangle.x, rectangle.y);
-            Body bodyB = world.createBody(bd);
-            bodyB.createFixture(fd);
-
-            BodyDef def = new BodyDef();
-            def.type = BodyType.StaticBody;
-            def.position.set(rectangle.x, rectangle.y);
-
-            CircleShape circle = new CircleShape();
-            circle.setRadius(0.5f);
-            Body bodyA = world.createBody(def);
-
-            bodyA.createFixture(circle, 1);
-            shape.dispose();
-            circle.dispose();
-
-            revoluteJoint = new RevoluteJointDef();
-            revoluteJoint.bodyA = bodyA;
-            revoluteJoint.bodyB = bodyB;
-            revoluteJoint.localAnchorA.set(new Vector2(0, 0));
-            revoluteJoint.localAnchorB.set(new Vector2(0, 0));
-            revoluteJoint.collideConnected = false;
-            revoluteJoint.enableMotor = true;
-            revoluteJoint.maxMotorTorque = 10000.0f;
-            revoluteJoint.motorSpeed = 1f;
-            world.createJoint(revoluteJoint);
-
-
-        }
-    }
-
-    private void createCheckPoint(World world, MapObject object) {
-
-        if (object instanceof RectangleMapObject) {
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
-
-            PrismaticJoint m_joint;
-            BodyDef def = new BodyDef();
-            def.type = BodyType.StaticBody;
-            Body box = world.createBody(def);
-            box.setTransform(rectangle.x, rectangle.y+6f, 0);
-            PolygonShape poly = new PolygonShape();
-            poly.setAsBox(0.25f, 5);
-            FixtureDef fixBox = new FixtureDef();
-            fixBox.isSensor = true;
-            fixBox.shape = poly;
-            box.createFixture(fixBox);
-            poly.dispose();
-
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(1.0f, 0.25f);
-
-            BodyDef bd = new BodyDef();
-            bd.type = BodyType.DynamicBody;
-            bd.position.set(rectangle.x, rectangle.y+ 1.5f);
-            Body body = world.createBody(bd);
-            FixtureDef fixBd = new FixtureDef();
-            fixBd.isSensor = true;
-            fixBd.shape = shape;
-            body.createFixture(fixBd).setUserData("Flag");
-
-            PrismaticJointDef pjd = new PrismaticJointDef();
-            pjd.localAxisA.set(0, 1);
-            pjd.bodyA = box;
-            pjd.bodyB = body;
-            pjd.collideConnected = false;
-            pjd.localAnchorA.set(0, -4f);
-            pjd.localAnchorB.set(-1, 0.25f);
-            pjd.motorSpeed = 3.0f;
-            pjd.maxMotorForce = 1000.0f;
-            pjd.enableMotor = false;
-            pjd.lowerTranslation = 0.0f;
-            pjd.upperTranslation = 9.0f;
-            pjd.enableLimit = true;
-
-            m_joint = (PrismaticJoint) world.createJoint(pjd);
+            worldEntity.getMills().add(box2dObjectFactory.<Mill>getEntity(GRUPO.MILL, object));
         }
     }
 
@@ -947,7 +832,7 @@ public class Box2DMapObjectParser {
                 friciton = "friction",
                 isSensor = "isSensor",
                 restitution = "restitution",
-                body = "body",
+                body = "bodyA",
                 fixture = "fixture",
                 joint = "joint",
                 jointType = "jointType",

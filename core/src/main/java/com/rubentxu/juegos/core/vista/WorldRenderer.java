@@ -96,7 +96,7 @@ public class WorldRenderer implements Disposable {
         if(!DreamsGame.getGameState().equals(GameState.GAME_PAUSED))
             world.getPhysics().step(Gdx.graphics.getDeltaTime(), Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
 
-        cam.position.set(world.getHero().getBody().getPosition().x, cam.viewportHeight / 2 - cam.viewportHeight / 12, 0);
+        cam.position.set(world.getHero().getBodyA().getPosition().x, cam.viewportHeight / 2 - cam.viewportHeight / 12, 0);
         cam.update();
 
         renderer.setView(cam);

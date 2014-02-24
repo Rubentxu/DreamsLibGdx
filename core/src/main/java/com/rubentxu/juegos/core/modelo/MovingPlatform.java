@@ -10,36 +10,36 @@ import com.rubentxu.juegos.core.modelo.base.State;
 
 import java.util.HashSet;
 
-public class MovingPlatform extends Platform implements Disposable{
+public class MovingPlatform extends Platform implements Disposable {
 
 
     public enum StateMovingPlatform implements State {
         ENABLED, DISABLED
     }
 
-    private  Vector2 pVelocity,start;
+    private Vector2 pVelocity, start;
 
-    private float distance=0;
-    public Boolean enabled=true;
-    public Boolean waitForPassenger=false;
-    private Boolean forward= false;
-    private HashSet<Box2DPhysicsObject> passengers= new HashSet<Box2DPhysicsObject>();
+    private float distance = 0;
+    public Boolean enabled = true;
+    public Boolean waitForPassenger = false;
+    private Boolean forward = false;
+    private HashSet<Box2DPhysicsObject> passengers = new HashSet<Box2DPhysicsObject>();
     private Path path;
 
-    public MovingPlatform(Body body, Vector2 pVelocity){
-        super("Platform", GRUPO.MOVING_PLATFORM,body);
+    public MovingPlatform(Body body, Vector2 pVelocity) {
+        super("Platform", GRUPO.MOVING_PLATFORM, body);
         this.pVelocity = pVelocity;
         //this.maxDist=0;
 
     }
 
-    public MovingPlatform(String nombre, GRUPO grupo, Body body, float dstX, float dstY,float speed) {
+    public MovingPlatform(String nombre, GRUPO grupo, Body body, float dstX, float dstY, float speed) {
         super(nombre, grupo, body);
-        path=new Path(speed);
-        Vector2 pos= body.getPosition().cpy();
+        path = new Path(speed);
+        Vector2 pos = body.getPosition().cpy();
         path.addPoint(pos);
         path.addPoint(new Vector2(pos.x + dstX, pos.y + dstY));
-        this.start=body.getPosition().cpy();
+        this.start = body.getPosition().cpy();
 
 
     }
@@ -85,20 +85,20 @@ public class MovingPlatform extends Platform implements Disposable{
     @Override
     public String toString() {
         return
-                "\nSin Pasajeros?= " + passengers.isEmpty()+
-                "\nPosicion Comienzo= " + start+
-                "\nPosicion Actual= " + this.getBody().getPosition()+
-                "\nVelocidad= " + path.getVelocity()+
-                "\nPasajeros= " + passengers.size() ;
+                "\nSin Pasajeros?= " + passengers.isEmpty() +
+                        "\nPosicion Comienzo= " + start +
+                        "\nPosicion Actual= " + this.getBodyA().getPosition() +
+                        "\nVelocidad= " + path.getVelocity() +
+                        "\nPasajeros= " + passengers.size();
 
     }
 
     @Override
     public void dispose() {
         super.dispose();
-        pVelocity=null;
-        start=null;
-        passengers=null;
-        path=null;
+        pVelocity = null;
+        start = null;
+        passengers = null;
+        path = null;
     }
 }

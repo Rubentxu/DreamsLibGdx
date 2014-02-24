@@ -3,9 +3,8 @@ package com.rubentxu.juegos.core.modelo;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 
 public class Profile implements Serializable {
     private int credits;
@@ -14,20 +13,20 @@ public class Profile implements Serializable {
 
     public Profile() {
         credits = 0;
-        lives=3;
+        lives = 3;
     }
 
-    public Profile( List<Level> levels) {
+    public Profile(List<Level> levels) {
         credits = 0;
-        lives=3;
-        this.levels=levels;
+        lives = 3;
+        this.levels = levels;
     }
 
     public int getHighScore(int levelId) {
         return levels.get(levelId).getHighScore();
     }
 
-    public boolean notifyScore(int levelId,int score) {
+    public boolean notifyScore(int levelId, int score) {
         if (score > getHighScore(levelId)) {
             levels.get(levelId).setHighScore(score);
             return true;
@@ -39,8 +38,8 @@ public class Profile implements Serializable {
         return credits;
     }
 
-    public void addCredits(int credits){
-        this.credits+=credits;
+    public void addCredits(int credits) {
+        this.credits += credits;
     }
 
     public String getCreditsAsText() {
@@ -51,8 +50,8 @@ public class Profile implements Serializable {
         return lives;
     }
 
-    public boolean removeLive(){
-        return --lives<=0;
+    public boolean removeLive() {
+        return --lives <= 0;
     }
 
     @Override

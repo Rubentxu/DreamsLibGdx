@@ -102,11 +102,11 @@ public class HeroManager extends AbstractWorldManager {
         if (hero.isChangedStatus()) setChanged();
         notifyObservers(hero.getState());
         Vector2 vel = hero.getVelocity();
-        Vector2 pos = hero.getBody().getPosition();
+        Vector2 pos = hero.getBodyA().getPosition();
 
         if (hero.getState().equals(Hero.StateHero.IDLE)) {
             stillTime += Gdx.graphics.getDeltaTime();
-            hero.getBody().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
+            hero.getBodyA().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
             hero.getHeroPhysicsFixture().setFriction(100f);
             hero.getHeroSensorFixture().setFriction(100f);
             hero.getEffect().allowCompletion();
@@ -138,14 +138,14 @@ public class HeroManager extends AbstractWorldManager {
 
 
     private void applyPhysicJumpingImpulse(Vector2 vel, Vector2 pos) {
-        hero.getBody().setLinearVelocity(vel.x, 0);
-        hero.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-        hero.getBody().applyLinearImpulse(0, hero.JUMP_FORCE, pos.x, pos.y, true);
+        hero.getBodyA().setLinearVelocity(vel.x, 0);
+        hero.getBodyA().setTransform(pos.x, pos.y + 0.01f, 0);
+        hero.getBodyA().applyLinearImpulse(0, hero.JUMP_FORCE, pos.x, pos.y, true);
     }
 
     private void applyPhysicMovingImpulse() {
         Vector2 vel = hero.getVelocity();
-        Vector2 pos = hero.getBody().getPosition();
+        Vector2 pos = hero.getBodyA().getPosition();
 
         int impulse=0;
         if (hero.isFacingLeft() && vel.x > -hero.MAX_VELOCITY) {
@@ -160,7 +160,7 @@ public class HeroManager extends AbstractWorldManager {
         if (hero.isFacingLeft() && vel.x > 0) {
             impulse=-2;
         }
-        hero.getBody().applyLinearImpulse(impulse, 0, pos.x, pos.y, true);
+        hero.getBodyA().applyLinearImpulse(impulse, 0, pos.x, pos.y, true);
     }
 
 
@@ -261,13 +261,13 @@ public class HeroManager extends AbstractWorldManager {
 
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
-            if (points[0].x < hero.getBody().getPosition().x) {
+            if (points[0].x < hero.getBodyA().getPosition().x) {
                 force = new Vector2(6, 10);
             } else {
                 force = new Vector2(-6, 10);
             }
             System.out.println("Fuerza colision Enemigo: " + force + " Sensor no exist");
-            hero.getBody().applyLinearImpulse(force, hero.getBody().getWorldCenter(), true);
+            hero.getBodyA().applyLinearImpulse(force, hero.getBodyA().getWorldCenter(), true);
 
             hero.setState(HURT);
             setChanged();
@@ -313,7 +313,7 @@ public class HeroManager extends AbstractWorldManager {
     public void update(float delta) {
         handleInput(hero);
         hero.setStateTime(hero.getStateTime() + delta);
-        hero.getEffect().setPosition(hero.getX(), hero.getY() - hero.getHeight()/2.2f);
+        hero.getEffect().setPosition(hero.getXBodyA(), hero.getYBodyA() - hero.getHeightBodyA()/2.2f);
         hero.getEffect().update(delta);
     }
 

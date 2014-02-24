@@ -23,33 +23,33 @@ public class EnemyManager extends AbstractWorldManager {
 
     public void update(float delta) {
         for (Enemy enemy : world.getEnemies()) {
-            enemy.getPath().update(enemy.getBody().getPosition(), delta);
+            enemy.getPath().update(enemy.getBodyA().getPosition(), delta);
             Vector2 vel = enemy.getVelocity();
-            Vector2 pos = enemy.getBody().getPosition();
+            Vector2 pos = enemy.getBodyA().getPosition();
             enemy.setStateTime(enemy.getStateTime() + delta);
             handleState(enemy);
         }
     }
 
     private void applyPhysicJumpingImpulse(Vector2 vel, Vector2 pos, Enemy enemy) {
-        enemy.getBody().setLinearVelocity(vel.x, 0);
-        enemy.getBody().setTransform(pos.x, pos.y + 0.01f, 0);
-        enemy.getBody().applyLinearImpulse(0, enemy.JUMP_FORCE, pos.x, pos.y, true);
+        enemy.getBodyA().setLinearVelocity(vel.x, 0);
+        enemy.getBodyA().setTransform(pos.x, pos.y + 0.01f, 0);
+        enemy.getBodyA().applyLinearImpulse(0, enemy.JUMP_FORCE, pos.x, pos.y, true);
     }
 
     public void handleState(Enemy enemy) {
         Vector2 vel = enemy.getVelocity();
-        Vector2 pos = enemy.getBody().getPosition();
+        Vector2 pos = enemy.getBodyA().getPosition();
 
         switch (enemy.getStatePos()) {
             case ONGROUND:
                 if (enemy.getState().equals(StateEnemy.IDLE)) {
-                    enemy.getBody().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
+                    enemy.getBodyA().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
                     enemy.getEnemyPhysicsFixture().setFriction(100f);
                     enemy.getEnemySensorFixture().setFriction(100f);
 
                 } else if (enemy.getState().equals(StateEnemy.WALKING)) {
-                    enemy.getBody().applyLinearImpulse(enemy.getPath().getForce(enemy.getBody().getMass()), enemy.getBody().getWorldCenter(), true);
+                    enemy.getBodyA().applyLinearImpulse(enemy.getPath().getForce(enemy.getBodyA().getMass()), enemy.getBodyA().getWorldCenter(), true);
                     enemy.getEnemyPhysicsFixture().setFriction(0.2f);
                     enemy.getEnemySensorFixture().setFriction(0.2f);
 
@@ -144,9 +144,9 @@ public class EnemyManager extends AbstractWorldManager {
         if (hero != null && enemy != null && (contact.getFixtureA() == hero.getHeroSensorFixture() ||
                 contact.getFixtureB() == hero.getHeroSensorFixture())) {
             Vector2[] points = contact.getWorldManifold().getPoints();
-            if (points[0].y > enemy.getBody().getPosition().y + enemy.getHeight() / 2) {
+            if (points[0].y > enemy.getBodyA().getPosition().y + enemy.getHeightBodyA() / 2) {
                 enemy.setFlaggedForDelete(true);
-                world.addBodiesFlaggedDestroy(enemy.getBody());
+                world.addBodiesFlaggedDestroy(enemy.getBodyA());
             }
         }
 
@@ -155,13 +155,13 @@ public class EnemyManager extends AbstractWorldManager {
 
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;
-            if (points[0].x < enemy.getBody().getPosition().x) {
+            if (points[0].x < enemy.getBodyA().getPosition().x) {
                 force = new Vector2(6, 10);
             } else {
                 force = new Vector2(-6, 10);
             }
 
-            enemy.getBody().applyLinearImpulse(force, enemy.getBody().getWorldCenter(), true);
+            enemy.getBodyA().applyLinearImpulse(force, enemy.getBodyA().getWorldCenter(), true);
 
             enemy.setState(StateEnemy.HIT);
         }

@@ -68,7 +68,7 @@ public class GameInputs implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;  //To change body of implemented methods use File | Settings | File Templates.
+        return false;  //To change bodyA of implemented methods use File | Settings | File Templates.
     }
 
     @Override

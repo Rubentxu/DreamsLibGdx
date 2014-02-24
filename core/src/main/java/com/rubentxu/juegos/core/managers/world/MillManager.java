@@ -4,29 +4,27 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.Mill;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
-public class ItemsManager extends AbstractWorldManager {
+public class MillManager extends AbstractWorldManager {
 
 
-    public ItemsManager(World world) {
+    public MillManager(World world) {
         super(world);
     }
 
     @Override
     public void handleBeginContact(Contact contact) {
         if(getHero(contact)!=null) {
-            Item item= getItem(contact);
-            setChanged();
-            notifyObservers(item);
-            item.setFlaggedForDelete(true);
-            world.addBodiesFlaggedDestroy(item.getBodyA());
+
         }
     }
 
@@ -73,16 +71,24 @@ public class ItemsManager extends AbstractWorldManager {
         }
     }
 
-    public Item getItem(Contact contact) {
+    public Item getMill(Contact contact) {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
-        if (box2dPhysicsA.getGrupo().equals(GRUPO.ITEMS)) {
+        if (box2dPhysicsA.getGrupo().equals(GRUPO.MILL)) {
             return (Item) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.ITEMS)){
+        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.MILL)){
             return (Item) box2dPhysicsB;}
         else {
             return null;
         }
+    }
+
+    private void enableMotor(Mill mill){
+        ((RevoluteJoint)mill.getJoint()).enableMotor(true);
+    }
+
+    private void disableMotor(Mill mill){
+        ((RevoluteJoint)mill.getJoint()).enableMotor(false);
     }
 }

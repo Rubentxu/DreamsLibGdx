@@ -6,21 +6,21 @@ import com.badlogic.gdx.physics.box2d.Body;
 
 public interface IBox2DPhysicsObject {
 
-    public float getX();
+    public float getXBodyA();
 
-    public void setX(float value);
+    public void setXBodyA(float value);
 
-    public float getY();
+    public float getYBodyA();
 
-    public void setY(float value);
+    public void setYBodyA(float value);
 
-    public float getRotation();
+    public float getRotationBodyA();
 
-    public float getWidth();
+    public float getWidthBodyA();
 
-    public float getHeight();
+    public float getHeightBodyA();
 
-    public Body getBody();
+    public Body getBodyA();
 
     public ParticleEffect getEffect();
 

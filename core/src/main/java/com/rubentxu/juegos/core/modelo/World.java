@@ -14,34 +14,34 @@ import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
 import java.util.HashSet;
 
-public class World implements Disposable{
-   
+public class World implements Disposable {
+
     private TiledMap map;
-    private com.badlogic.gdx.physics.box2d.World physics;    
+    private com.badlogic.gdx.physics.box2d.World physics;
     private Hero hero;
     private Box2DMapObjectParser parser;
-    private HashSet<Platform> platforms=new HashSet<Platform>();
-    private HashSet<MovingPlatform> movingPlatforms=new HashSet<MovingPlatform>();
-    private HashSet<Water> waterSensors= new HashSet<Water>();
-    private HashSet<Enemy> enemies=new HashSet<Enemy>();
-    private HashSet<Item> items=new HashSet<Item>();
-    private Array<Body> bodiesFlaggedDestroy=new Array<Body>();
+    private HashSet<Platform> platforms = new HashSet<Platform>();
+    private HashSet<MovingPlatform> movingPlatforms = new HashSet<MovingPlatform>();
+    private HashSet<Water> waterSensors = new HashSet<Water>();
+    private HashSet<Enemy> enemies = new HashSet<Enemy>();
+    private HashSet<Item> items = new HashSet<Item>();
+    private HashSet<Mill> mills = new HashSet<Mill>();
+    private Array<Body> bodiesFlaggedDestroy = new Array<Body>();
     private Texture background_03;
     private Texture background_02;
     private Texture background_01;
     protected Box2dObjectFactory box2dObjectFactory;
 
     public World(DreamsGame game) {
-        createDreamsWorld(game.getLevelManager().getCurrentLevel(),game.getResourcesManager());
+        createDreamsWorld(game.getLevelManager().getCurrentLevel(), game.getResourcesManager());
     }
 
 
-
-    private void createDreamsWorld(Level level,ResourcesManager resourcesManager) {
+    private void createDreamsWorld(Level level, ResourcesManager resourcesManager) {
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        box2dObjectFactory= new Box2dObjectFactory(physics,resourcesManager);
+        box2dObjectFactory = new Box2dObjectFactory(physics, resourcesManager);
         map = resourcesManager.get(level.getMap());
-        parser = new Box2DMapObjectParser(this,box2dObjectFactory);
+        parser = new Box2DMapObjectParser(this, box2dObjectFactory);
         // System.out.println(getParser().getHierarchy(map));
         parser.load(getPhysics(), map);
 
@@ -51,10 +51,10 @@ public class World implements Disposable{
 
     }
 
-    public void destroyFlaggedEntities(){
-        for(Body b: bodiesFlaggedDestroy) {
+    public void destroyFlaggedEntities() {
+        for (Body b : bodiesFlaggedDestroy) {
             Box2DPhysicsObject data = (Box2DPhysicsObject) b.getUserData();
-            if(data!=null && data.isFlaggedForDelete()){
+            if (data != null && data.isFlaggedForDelete()) {
                 b.setUserData(null);
                 physics.destroyBody(b);
                 switch (data.getGrupo()) {
@@ -69,8 +69,8 @@ public class World implements Disposable{
                         break;
 
                 }
-                data=null;
-                b=null;
+                data = null;
+                b = null;
             }
         }
     }
@@ -79,26 +79,26 @@ public class World implements Disposable{
     public void dispose() {
         map.dispose();
         physics.dispose();
-        physics=null;
-        background_01 =null;
+        physics = null;
+        background_01 = null;
         hero.dispose();
-        hero=null;
-        bodiesFlaggedDestroy=null;
-        for (MovingPlatform m:movingPlatforms){
+        hero = null;
+        bodiesFlaggedDestroy = null;
+        for (MovingPlatform m : movingPlatforms) {
             m.dispose();
-            m=null;
+            m = null;
         }
-        for (Water w:waterSensors){
+        for (Water w : waterSensors) {
             w.dispose();
-            w=null;
+            w = null;
         }
-        for (Enemy e:enemies){
+        for (Enemy e : enemies) {
             e.dispose();
-            e=null;
+            e = null;
         }
-        for (Item e:items){
+        for (Item e : items) {
             e.dispose();
-            e=null;
+            e = null;
         }
     }
 
@@ -114,15 +114,17 @@ public class World implements Disposable{
         return hero;
     }
 
-    public void setHero(Hero hero){
-        this.hero=hero;
+    public void setHero(Hero hero) {
+        this.hero = hero;
     }
 
     public Box2DMapObjectParser getParser() {
         return parser;
     }
 
-    public void removeParser(){parser=null;}
+    public void removeParser() {
+        parser = null;
+    }
 
     public HashSet<Platform> getPlatforms() {
         return platforms;
@@ -151,7 +153,8 @@ public class World implements Disposable{
     public void addBodiesFlaggedDestroy(Body body) {
         bodiesFlaggedDestroy.add(body);
     }
-    public Array<Body> getBodiesFlaggedDestroy(){
+
+    public Array<Body> getBodiesFlaggedDestroy() {
         return bodiesFlaggedDestroy;
     }
 
@@ -161,5 +164,9 @@ public class World implements Disposable{
 
     public Texture getBackground_02() {
         return background_02;
+    }
+
+    public HashSet<Mill> getMills() {
+        return mills;
     }
 }
