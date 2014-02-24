@@ -9,6 +9,7 @@ public class CheckPoint extends Box2dPhysicsCompoundObject {
 
     public CheckPoint(String nombre, Body bodyA, Body bodyB,Joint joint) {
         super(nombre, GRUPO.CHECKPOINT, bodyA,bodyB,joint);
+        setState(BaseState.DEFAULT);
     }
 
 }

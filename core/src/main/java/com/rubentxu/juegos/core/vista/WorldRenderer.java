@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
-import com.rubentxu.juegos.core.modelo.CheckPoint;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.Mill;
@@ -73,10 +72,11 @@ public class WorldRenderer implements Disposable {
 
     private void loadTextures() {
 
-       /* for(Mill m :world.getMills()){
+        for(Mill m :world.getMills()){
+            Gdx.app.log(Constants.LOG,"Añado la entidad a la vista para el molino");
             modelsAndViews.addEntity(m);
         }
-
+         /*
         for(CheckPoint c :world.getCheckPoints()){
             modelsAndViews.addEntity(c);
         }*/

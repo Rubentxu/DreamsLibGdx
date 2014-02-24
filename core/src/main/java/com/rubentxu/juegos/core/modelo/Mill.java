@@ -9,6 +9,7 @@ public class Mill extends Box2dPhysicsCompoundObject {
 
     public Mill(String nombre, Body bodyA, Body bodyB,Joint joint) {
         super(nombre, GRUPO.MILL, bodyA,bodyB,joint);
+        setState(BaseState.DEFAULT);
     }
 
 }

@@ -3,7 +3,6 @@ package com.rubentxu.juegos.core.vista;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,9 +35,13 @@ public class ModelsAndViews {
     private HashMap<String, Animation> animationWater;
     private HashMap<String, Animation> animationMovingPlatform;
     private Map<String,Animation> animationItemCoin;
+    private HashMap<String, Animation> animationMotorMill;
+    private HashMap<String, Animation> animationAspasMolino;
 
     private List<Box2DPhysicsObject> entities = new ArrayList<Box2DPhysicsObject>();
-    private ParticleEffect dustParticles;
+
+
+
 
     public ModelsAndViews(ResourcesManager resourcesManager){
         this.resourcesManager = resourcesManager;
@@ -47,12 +50,17 @@ public class ModelsAndViews {
         loadWaterAnimations();
         loadMovingPlatformAnimations();
         loadItemsCoinAnimations();
+        loadMotorMolinoAnimations();
+        loadAspasMolinoAnimations();
     }
 
     public void render(SpriteBatch batch) {
-        TextureRegion frame;
+        TextureRegion frame=null;
+        TextureRegion frame2=null;
         for (Box2DPhysicsObject e : entities) {
             Map<String, Animation> anims = getAnimation(e);
+            Map<String, Animation> anims2=null;
+            if(e instanceof Box2dPhysicsCompoundObject) anims2 = getAnimation2(e);
             float offsetX=0;
             float offsetY=0;
             float offsetWidth=0;
@@ -65,6 +73,7 @@ public class ModelsAndViews {
             if (anims != null) {
                 try{
                     frame = anims.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime());
+                    if (anims2 != null) frame2 = anims2.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime());
 
                     if (e.isFacingLeft() && !frame.isFlipX()) {
                         frame.flip(true, false);
@@ -72,9 +81,10 @@ public class ModelsAndViews {
                         frame.flip(true, false);
                     }
                     batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getWidthBodyA()+offsetWidth, e.getHeightBodyA());
-                    if(e instanceof Box2dPhysicsCompoundObject) {
+                    if(frame2 !=null) {
                         Box2dPhysicsCompoundObject e2= (Box2dPhysicsCompoundObject) e;
-                        batch.draw(frame, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY, e2.getWidthBodyB()+offsetWidth, e2.getHeightBodyB());
+                        batch.draw(frame2, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY,0 ,0,e2.getWidthBodyB()+offsetWidth, e2.getHeightBodyB(),1,1,e2.getRotationB());
+
                     }
 
                 }catch (Exception ex){
@@ -99,6 +109,17 @@ public class ModelsAndViews {
             return animationMovingPlatform;
         }else if(e.getGrupo().equals(GRUPO.ITEMS)) {
             if(((Item)e).getType().equals(Item.TYPE.COIN)) return animationItemCoin;
+        }  else if(e.getGrupo().equals(GRUPO.MILL)) {
+            Gdx.app.log(Constants.LOG,"Cojo la 1ra animacion");
+            return animationMotorMill;
+        }
+        return null;
+    }
+
+    private Map<String, Animation> getAnimation2(Box2DPhysicsObject e) {
+        if(e.getGrupo().equals(GRUPO.MILL)) {
+            Gdx.app.log(Constants.LOG,"Cojo la 2da animacion");
+            return animationAspasMolino;
         }
         return null;
     }
@@ -153,6 +174,23 @@ public class ModelsAndViews {
         animationWater.put(String.valueOf(BaseState.DEFAULT), defaultState);
 
     }
+
+    private void loadMotorMolinoAnimations() {
+        TextureAtlas objectsAtlas = resourcesManager.get(ResourcesManager.OBJECTS_ATLAS);
+        Array<TextureAtlas.AtlasRegion> motorMolino = objectsAtlas.findRegions("motorMolino");
+        Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, motorMolino,Animation.LOOP);
+        animationMotorMill= new HashMap<String,Animation>();
+        animationMotorMill.put(String.valueOf(BaseState.DEFAULT), defaultState);
+    }
+
+    private void loadAspasMolinoAnimations() {
+        TextureAtlas objectsAtlas = resourcesManager.get(ResourcesManager.OBJECTS_ATLAS);
+        Array<TextureAtlas.AtlasRegion> aspasMolino = objectsAtlas.findRegions("aspasMolino");
+        Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, aspasMolino,Animation.LOOP);
+        animationAspasMolino= new HashMap<String,Animation>();
+        animationAspasMolino.put(String.valueOf(BaseState.DEFAULT), defaultState);
+    }
+
 
     private void loadMovingPlatformAnimations() {
 
