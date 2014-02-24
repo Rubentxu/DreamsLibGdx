@@ -9,8 +9,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
+import com.rubentxu.juegos.core.modelo.CheckPoint;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.Mill;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
@@ -70,6 +72,14 @@ public class WorldRenderer implements Disposable {
     }
 
     private void loadTextures() {
+
+       /* for(Mill m :world.getMills()){
+            modelsAndViews.addEntity(m);
+        }
+
+        for(CheckPoint c :world.getCheckPoints()){
+            modelsAndViews.addEntity(c);
+        }*/
 
         for(MovingPlatform mvp :world.getMovingPlatforms()){
             modelsAndViews.addEntity(mvp);

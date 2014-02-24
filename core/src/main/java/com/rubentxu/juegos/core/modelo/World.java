@@ -26,6 +26,7 @@ public class World implements Disposable {
     private HashSet<Enemy> enemies = new HashSet<Enemy>();
     private HashSet<Item> items = new HashSet<Item>();
     private HashSet<Mill> mills = new HashSet<Mill>();
+    private HashSet<CheckPoint> checkPoints = new HashSet<CheckPoint>();
     private Array<Body> bodiesFlaggedDestroy = new Array<Body>();
     private Texture background_03;
     private Texture background_02;
@@ -138,16 +139,24 @@ public class World implements Disposable {
         return waterSensors;
     }
 
+    public HashSet<Enemy> getEnemies() {
+        return enemies;
+    }
+
     public HashSet<Item> getItems() {
         return items;
     }
 
-    public Texture getBackground_01() {
-        return background_01;
+    public HashSet<Mill> getMills() {
+        return mills;
     }
 
-    public HashSet<Enemy> getEnemies() {
-        return enemies;
+    public HashSet<CheckPoint> getCheckPoints() {
+        return checkPoints;
+    }
+
+    public Texture getBackground_01() {
+        return background_01;
     }
 
     public void addBodiesFlaggedDestroy(Body body) {
@@ -166,7 +175,4 @@ public class World implements Disposable {
         return background_02;
     }
 
-    public HashSet<Mill> getMills() {
-        return mills;
-    }
 }

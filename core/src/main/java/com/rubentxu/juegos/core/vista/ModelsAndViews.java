@@ -72,8 +72,10 @@ public class ModelsAndViews {
                         frame.flip(true, false);
                     }
                     batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getWidthBodyA()+offsetWidth, e.getHeightBodyA());
-                    if(e instanceof Box2dPhysicsCompoundObject)
-                        batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getWidthBodyA()+offsetWidth, e.getHeightBodyA());
+                    if(e instanceof Box2dPhysicsCompoundObject) {
+                        Box2dPhysicsCompoundObject e2= (Box2dPhysicsCompoundObject) e;
+                        batch.draw(frame, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY, e2.getWidthBodyB()+offsetWidth, e2.getHeightBodyB());
+                    }
 
                 }catch (Exception ex){
                    Gdx.app.log(Constants.LOG,"Error en render: "+ ex.getMessage()+ "Grupo "+e.getGrupo()+" State"+e.getState());
