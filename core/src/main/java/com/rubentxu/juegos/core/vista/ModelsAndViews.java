@@ -83,7 +83,9 @@ public class ModelsAndViews {
                     batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getWidthBodyA()+offsetWidth, e.getHeightBodyA());
                     if(frame2 !=null) {
                         Box2dPhysicsCompoundObject e2= (Box2dPhysicsCompoundObject) e;
-                        batch.draw(frame2, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY,0 ,0,e2.getWidthBodyB()+offsetWidth, e2.getHeightBodyB(),1,1,e2.getRotationB());
+                        offsetY= e2.getHeightBodyB()/2;
+                        offsetX= e2.getWidthBodyB()/2;
+                        batch.draw(frame2, e2.getXBodyB()-offsetX , e2.getYBodyB(), 0 ,0,e2.getWidthBodyB(), e2.getHeightBodyB(),1,1,e2.getRotationB());
 
                     }
 
