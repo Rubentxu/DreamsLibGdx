@@ -279,6 +279,7 @@ public class Box2dObjectFactory {
         MapProperties properties = object.getProperties();
         Mill mill=null;
         if (object instanceof RectangleMapObject) {
+
             Rectangle rectangle = getRectangle((RectangleMapObject) object);
 
             Vector2[] vertices = new Vector2[6];
@@ -294,17 +295,21 @@ public class Box2dObjectFactory {
 
             BodyDef def = new BodyDef();
             def.type = BodyType.StaticBody;
-            def.position.set(rectangle.x, rectangle.y);
+            Vector2 position = new Vector2(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
+
             Gdx.app.log(Constants.LOG,"Creando Mill");
             CircleShape circle = new CircleShape();
             circle.setRadius(0.5f);
+           // def.position.set(rectangle.x-0.5f, rectangle.y-0.5f);
             Body bodyA = world.createBody(def);
+            bodyA.setTransform(position,0);
 
             Fixture fixtA = bodyA.createFixture(circle, 1);
             Gdx.app.log(Constants.LOG,"Creando2 Mill");
 
             PolygonShape shape = new PolygonShape();
             shape.set(vertices);
+
             FixtureDef fd = new FixtureDef();
             fd.shape = shape;
             fd.friction = 0.2f;
@@ -313,7 +318,7 @@ public class Box2dObjectFactory {
             fd.filter.maskBits = Box2DPhysicsObject.MASK_INTERACTIVE;
             BodyDef bd = new BodyDef();
             bd.type = BodyType.DynamicBody;
-            bd.position.set(rectangle.x, rectangle.y);
+            bd.position.set(position);
             Body bodyB = world.createBody(bd);
             Fixture fixtB=bodyB.createFixture(fd);
             Gdx.app.log(Constants.LOG,"Creando3 Mill");

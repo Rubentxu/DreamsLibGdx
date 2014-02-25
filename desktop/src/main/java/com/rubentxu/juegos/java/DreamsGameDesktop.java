@@ -12,8 +12,8 @@ public class DreamsGameDesktop {
         config.title = "Dreams Game " + Constants.VERSION;
         DreamsGame.DEBUG= true;
         config.useGL20 = true;
-        config.width = 500;
-        config.height = 380;
+        config.width = 1200;
+        config.height = 900;
 		new LwjglApplication(new DreamsGame(), config);
 	}
 }
