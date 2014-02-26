@@ -2,12 +2,8 @@ package com.rubentxu.juegos.core.modelo;
 
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.State;
@@ -35,57 +31,13 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     private Fixture heroPhysicsFixture;
     private Fixture heroSensorFixture;
     private ParticleEffect particleEffect;
-
     private Profile profile;
 
-    public Hero(World physics) {
-        super("Heroe", GRUPO.HERO, physics);
+    public Hero(String name, Body body) {
+        super(name, GRUPO.HERO,body);
         setGrounContacts(new HashSet<Fixture>());
-    }
-
-    public Hero(World physics, float x, float y, float width, float height) {
-        super("Heroe", GRUPO.HERO, physics);
-        setGrounContacts(new HashSet<Fixture>());
-        createHero(x, y, width, height);
         setState(StateHero.IDLE);
     }
-
-
-    public void createHero(float x, float y, float width, float height) {
-        BodyDef def = new BodyDef();
-        def.type = BodyDef.BodyType.DynamicBody;
-        def.position.x = x;
-        def.position.y = y;
-        setBodyA(box2D.createBody(def));
-        getBodyA().setFixedRotation(true);
-        getBodyA().setUserData(this);
-
-
-        PolygonShape poly = new PolygonShape();
-        poly.setAsBox(width, height);
-
-
-        FixtureDef fixDef = new FixtureDef();
-        fixDef.shape = poly;
-        fixDef.filter.categoryBits = GRUPO.HERO.getCategory();
-        fixDef.filter.maskBits = Box2DPhysicsObject.MASK_HERO;
-        heroPhysicsFixture = super.getBodyA().createFixture(fixDef);
-        heroPhysicsFixture.setUserData(this);
-        poly.dispose();
-
-        CircleShape circle = new CircleShape();
-        circle.setRadius(width);
-        circle.setPosition(new Vector2(0, -height * 0.9f));
-        fixDef.shape = circle;
-        heroSensorFixture = super.getBodyA().createFixture(fixDef);
-        heroSensorFixture.setSensor(true);
-        heroSensorFixture.setUserData(this);
-        circle.dispose();
-
-        super.getBodyA().setBullet(true);
-
-    }
-
 
     public void velocityLimit() {
         Vector2 vel = this.getBodyA().getLinearVelocity();
@@ -121,6 +73,14 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
     public Fixture getHeroSensorFixture() {
         return heroSensorFixture;
+    }
+
+    public void setHeroPhysicsFixture(Fixture heroPhysicsFixture) {
+        this.heroPhysicsFixture = heroPhysicsFixture;
+    }
+
+    public void setHeroSensorFixture(Fixture heroSensorFixture) {
+        this.heroSensorFixture = heroSensorFixture;
     }
 
 
