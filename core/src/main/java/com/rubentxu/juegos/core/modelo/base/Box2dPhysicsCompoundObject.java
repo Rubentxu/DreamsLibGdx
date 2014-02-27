@@ -1,8 +1,8 @@
 package com.rubentxu.juegos.core.modelo.base;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Joint;
-import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsCompoundObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
@@ -10,6 +10,7 @@ public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IB
 
     private Joint joint;
     private Body bodyB;
+    private final Vector2 originBodyB = new Vector2(0,0);
 
     public Box2dPhysicsCompoundObject(String nombre, GRUPO grupo, Body bodyA,Body bodyB, Joint joint) {
         super(nombre, grupo, bodyA);
@@ -61,4 +62,7 @@ public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IB
     }
 
 
+    public Vector2 getOriginBodyB() {
+        return originBodyB;
+    }
 }

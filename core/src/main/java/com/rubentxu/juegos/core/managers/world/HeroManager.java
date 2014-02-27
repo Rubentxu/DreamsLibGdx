@@ -313,7 +313,7 @@ public class HeroManager extends AbstractWorldManager {
     public void update(float delta) {
         handleInput(hero);
         hero.setStateTime(hero.getStateTime() + delta);
-        hero.getEffect().setPosition(hero.getXBodyA(), hero.getYBodyA() - hero.getHeightBodyA()/2.2f);
+        hero.getEffect().setPosition(hero.getXBodyA(), hero.getYBodyA());
         hero.getEffect().update(delta);
     }
 

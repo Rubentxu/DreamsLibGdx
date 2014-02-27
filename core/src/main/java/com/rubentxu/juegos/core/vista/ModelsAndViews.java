@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
@@ -56,7 +56,7 @@ public class ModelsAndViews {
     }
 
     public void render(SpriteBatch batch) {
-
+        Vector2 originDefault=new Vector2(0,0);
         for (Box2DPhysicsObject e : entities) {
             TextureRegion frame=null;
             TextureRegion frame2=null;
@@ -66,7 +66,7 @@ public class ModelsAndViews {
             float offsetX=0;
             float offsetY=0;
 
-            if(e.getBodyA().getFixtureList().size >0 && !(e.getBodyA().getFixtureList().get(0).getShape() instanceof PolygonShape)){
+            if(!e.getOriginBodyA().equals(originDefault)){
                 offsetX= e.getWidthBodyA()/2;
                 offsetY= e.getHeightBodyA()/2;
             }
@@ -80,17 +80,16 @@ public class ModelsAndViews {
                     } else if (!e.isFacingLeft() && frame.isFlipX()) {
                         frame.flip(true, false);
                     }
-                    batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY,offsetX,offsetY,e.getWidthBodyA(), e.getHeightBodyA(),1,1,e.getRotationBodyA());
+                    batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getOriginBodyA().x ,e.getOriginBodyA().y,e.getWidthBodyA(), e.getHeightBodyA(),1,1,e.getRotationBodyA());
                     if(frame2 !=null) {
                         Box2dPhysicsCompoundObject e2= (Box2dPhysicsCompoundObject) e;
                         offsetX=0;
                         offsetY=0;
-
-                        if(e2.getBodyB().getFixtureList().size >0 && !(e2.getBodyB().getFixtureList().get(0).getShape() instanceof PolygonShape)){
+                        if(!e2.getOriginBodyB().equals(originDefault)){
                             offsetY= e2.getHeightBodyB()/2;
                             offsetX= e2.getWidthBodyB()/2;
                         }
-                        batch.draw(frame2, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY, offsetX ,offsetY, e2.getWidthBodyB(), e2.getHeightBodyB(),1,1,e2.getRotationB());
+                        batch.draw(frame2, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY, e2.getOriginBodyB().x ,e2.getOriginBodyB().y, e2.getWidthBodyB(), e2.getHeightBodyB(),1,1,e2.getRotationB());
                     }
 
                 }catch (Exception ex){

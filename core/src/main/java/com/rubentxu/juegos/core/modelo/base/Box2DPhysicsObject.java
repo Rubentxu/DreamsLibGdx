@@ -44,7 +44,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     protected com.badlogic.gdx.physics.box2d.World box2D;
     protected Body bodyA;
-
+    private final Vector2 originBodyA = new Vector2(0,0);
     protected GRUPO grupo;
     protected String nombre;
     protected boolean isFlaggedForDelete = false;
@@ -162,6 +162,12 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     public void setVelocity(Vector2 velocity) {
         bodyA.setLinearVelocity(velocity);
     }
+
+
+    public Vector2 getOriginBodyA() {
+        return originBodyA;
+    }
+
 
     public boolean isFlaggedForDelete() {
         return isFlaggedForDelete;

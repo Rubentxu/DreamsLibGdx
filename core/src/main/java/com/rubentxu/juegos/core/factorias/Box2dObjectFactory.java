@@ -31,6 +31,7 @@ import com.rubentxu.juegos.core.modelo.MovingPlatform;
 import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
+import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -338,7 +339,6 @@ public class Box2dObjectFactory {
             Gdx.app.log(Constants.LOG, "Creando Mill");
             CircleShape circle = new CircleShape();
             circle.setRadius(0.5f);
-            // def.position.set(rectangle.x-0.5f, rectangle.y-0.5f);
             Body bodyA = world.createBody(def);
             bodyA.setTransform(position, 0);
 
@@ -358,6 +358,7 @@ public class Box2dObjectFactory {
             bd.type = BodyType.DynamicBody;
             bd.position.set(position);
             Body bodyB = world.createBody(bd);
+
             Fixture fixtB = bodyB.createFixture(fd);
             Gdx.app.log(Constants.LOG, "Creando3 Mill");
 
@@ -372,7 +373,10 @@ public class Box2dObjectFactory {
             revoluteJoint.motorSpeed = 1f;
             RevoluteJoint rj = (RevoluteJoint) world.createJoint(revoluteJoint);
 
+            bodyB.resetMassData();
             mill = new Mill(object.getName(), bodyA, bodyB, rj);
+            mill.getOriginBodyA().set(0.5f,0.5f);
+            mill.getOriginBodyB().set(Box2DUtils.width(bodyB)/2,Box2DUtils.height(bodyB)/2);
             bodyA.setUserData(mill);
             bodyB.setUserData(mill);
             fixtA.setUserData(mill);
