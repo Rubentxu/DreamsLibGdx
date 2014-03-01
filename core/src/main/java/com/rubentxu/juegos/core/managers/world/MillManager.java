@@ -9,17 +9,12 @@ import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.Mill;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
 public class MillManager extends AbstractWorldManager {
 
-
-    public MillManager(World world) {
-        super(world);
-    }
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -49,7 +44,7 @@ public class MillManager extends AbstractWorldManager {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float delta, Box2DPhysicsObject entity) {
 
     }
 

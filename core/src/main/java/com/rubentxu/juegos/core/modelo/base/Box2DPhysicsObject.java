@@ -6,15 +6,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
+import com.rubentxu.juegos.core.modelo.Enemy;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
-import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public static enum GRUPO {
         HERO((short) 0x0001), ENEMY((short) 0x0002), PLATFORM((short) 0x0004), MOVING_PLATFORM((short) 0x0008),
-        ITEMS((short) 0x0010), SENSOR((short) 0x0020), STATIC((short) 0x0040), FLUID((short) 0x0080), MILL((short) 0x0100)
-        , CHECKPOINT((short) 0x0200);
+        ITEMS((short) 0x0010), SENSOR((short) 0x0020), STATIC((short) 0x0040), FLUID((short) 0x0080), MILL((short) 0x0100), CHECKPOINT((short) 0x0200);
         //  1024=0x0400
 
         private final short category;
@@ -30,7 +30,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public enum BaseState implements State {
-        INITIAL, DEFAULT, DELETE
+        INITIAL, DEFAULT, DESTROY
     }
 
     public static final short MASK_HERO = (short) ~GRUPO.HERO.category;
@@ -44,10 +44,12 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     protected com.badlogic.gdx.physics.box2d.World box2D;
     protected Body bodyA;
-    private final Vector2 originBodyA = new Vector2(0,0);
+    private final Vector2 originBodyA = new Vector2(0, 0);
+    private final Vector2 scaleBodyA = new Vector2(1, 1);
+    private float widthBodyA;
+    private float heightBodyA;
     protected GRUPO grupo;
     protected String nombre;
-    protected boolean isFlaggedForDelete = false;
     private float stateTime;
     private State state = BaseState.INITIAL;
     private boolean changedStatus = false;
@@ -58,7 +60,13 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public void setState(State state) {
-        if (this.state.equals(state)) {
+        if (this.state.equals(state) || (this.state.equals(Enemy.StateEnemy.DEAD) && !state.equals(BaseState.DESTROY))) {
+            changedStatus = false;
+            return;
+        }
+        if((this.state.equals(Enemy.StateEnemy.HURT) || this.state.equals(Enemy.StateEnemy.HIT) ||
+                this.state.equals(Hero.StateHero.HURT)  || this.state.equals(Hero.StateHero.HIT) ||
+                this.state.equals(Hero.StateHero.DEAD) ) && this.getStateTime() <1.1f){
             changedStatus = false;
             return;
         }
@@ -110,14 +118,25 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     @Override
     public float getWidthBodyA() {
-        return Box2DUtils.width(bodyA);
+        return widthBodyA;
     }
 
 
     @Override
     public float getHeightBodyA() {
-        return Box2DUtils.height(bodyA);
+        return heightBodyA;
     }
+
+    @Override
+    public void setWidthBodyA(float widthBodyA) {
+        this.widthBodyA = widthBodyA;
+    }
+
+    @Override
+    public void setHeightBodyA(float heightBodyA) {
+        this.heightBodyA = heightBodyA;
+    }
+
 
     @Override
     public Body getBodyA() {
@@ -169,14 +188,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
 
-    public boolean isFlaggedForDelete() {
-        return isFlaggedForDelete;
-    }
-
-    public void setFlaggedForDelete(boolean isFlaggedForDelete) {
-        this.isFlaggedForDelete = isFlaggedForDelete;
-    }
-
     public float getStateTime() {
         return stateTime;
     }
@@ -195,6 +206,14 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public boolean isChangedStatus() {
         return changedStatus;
+    }
+
+    public void setChangedStatus(boolean changedStatus){
+        this.changedStatus=changedStatus;
+    }
+
+    public Vector2 getScaleBodyA() {
+        return scaleBodyA;
     }
 
 

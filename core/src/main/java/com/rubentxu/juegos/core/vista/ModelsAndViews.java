@@ -13,20 +13,20 @@ import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Hero.StateHero;
 import com.rubentxu.juegos.core.modelo.Item;
+import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.modelo.base.Box2dPhysicsCompoundObject;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ModelsAndViews {
 
 
     private final ResourcesManager resourcesManager;
+    private final World world;
 
     /**
      * Animations *
@@ -39,13 +39,13 @@ public class ModelsAndViews {
     private HashMap<String, Animation> animationMotorMill;
     private HashMap<String, Animation> animationAspasMolino;
 
-    private List<Box2DPhysicsObject> entities = new ArrayList<Box2DPhysicsObject>();
 
 
 
 
-    public ModelsAndViews(ResourcesManager resourcesManager){
+    public ModelsAndViews(ResourcesManager resourcesManager, World world){
         this.resourcesManager = resourcesManager;
+        this.world=world;
         loadHeroAnimations();
         loadEnemyAnimations();
         loadWaterAnimations();
@@ -57,19 +57,13 @@ public class ModelsAndViews {
 
     public void render(SpriteBatch batch) {
         Vector2 originDefault=new Vector2(0,0);
-        for (Box2DPhysicsObject e : entities) {
+        for (Box2DPhysicsObject e : world.getEntities()) {
             TextureRegion frame=null;
             TextureRegion frame2=null;
             Map<String, Animation> anims = getAnimation(e);
             Map<String, Animation> anims2=null;
             if(e instanceof Box2dPhysicsCompoundObject) anims2 = getAnimation2(e);
-            float offsetX=0;
-            float offsetY=0;
 
-            if(!e.getOriginBodyA().equals(originDefault)){
-                offsetX= e.getWidthBodyA()/2;
-                offsetY= e.getHeightBodyA()/2;
-            }
             if (anims != null) {
                 try{
                     frame = anims.get(String.valueOf(e.getState())).getKeyFrame(e.getStateTime());
@@ -80,16 +74,14 @@ public class ModelsAndViews {
                     } else if (!e.isFacingLeft() && frame.isFlipX()) {
                         frame.flip(true, false);
                     }
-                    batch.draw(frame, e.getXBodyA()-offsetX , e.getYBodyA()-offsetY, e.getOriginBodyA().x ,e.getOriginBodyA().y,e.getWidthBodyA(), e.getHeightBodyA(),1,1,e.getRotationBodyA());
+                    batch.draw(frame, e.getXBodyA()-e.getOriginBodyA().x , e.getYBodyA()-e.getOriginBodyA().y,
+                            e.getOriginBodyA().x ,e.getOriginBodyA().y,e.getWidthBodyA(), e.getHeightBodyA(),
+                            e.getScaleBodyA().x,e.getScaleBodyA().y,e.getRotationBodyA());
                     if(frame2 !=null) {
                         Box2dPhysicsCompoundObject e2= (Box2dPhysicsCompoundObject) e;
-                        offsetX=0;
-                        offsetY=0;
-                        if(!e2.getOriginBodyB().equals(originDefault)){
-                            offsetY= e2.getHeightBodyB()/2;
-                            offsetX= e2.getWidthBodyB()/2;
-                        }
-                        batch.draw(frame2, e2.getXBodyB()-offsetX , e2.getYBodyB()-offsetY, e2.getOriginBodyB().x ,e2.getOriginBodyB().y, e2.getWidthBodyB(), e2.getHeightBodyB(),1,1,e2.getRotationB());
+                        batch.draw(frame2, e2.getXBodyB()-e2.getOriginBodyB().x , e2.getYBodyB()-e2.getOriginBodyB().y,
+                                e2.getOriginBodyB().x ,e2.getOriginBodyB().y, e2.getWidthBodyB(), e2.getHeightBodyB(),
+                                e2.getScaleBodyB().x,e2.getScaleBodyB().y,e2.getRotationB());
                     }
 
                 }catch (Exception ex){
@@ -99,6 +91,7 @@ public class ModelsAndViews {
             if(e.getEffect()!=null){
                 e.getEffect().draw(batch);
             }
+            if(e.getState().equals(Enemy.StateEnemy.DEAD) && e.getStateTime()>1.2f) e.setState(BaseState.DESTROY);
         }
     }
 
@@ -115,7 +108,6 @@ public class ModelsAndViews {
         }else if(e.getGrupo().equals(GRUPO.ITEMS)) {
             if(((Item)e).getType().equals(Item.TYPE.COIN)) return animationItemCoin;
         }  else if(e.getGrupo().equals(GRUPO.MILL)) {
-            Gdx.app.log(Constants.LOG,"Cojo la 1ra animacion");
             return animationMotorMill;
         }
         return null;
@@ -123,7 +115,6 @@ public class ModelsAndViews {
 
     private Map<String, Animation> getAnimation2(Box2DPhysicsObject e) {
         if(e.getGrupo().equals(GRUPO.MILL)) {
-            Gdx.app.log(Constants.LOG,"Cojo la 2da animacion");
             return animationAspasMolino;
         }
         return null;
@@ -161,6 +152,10 @@ public class ModelsAndViews {
         TextureAtlas atlasVarios = resourcesManager.get(ResourcesManager.VARIOS_ATLAS);
         Array<TextureAtlas.AtlasRegion> enemy = atlasVarios.findRegions("ENEMY");
         Animation walking = new Animation(Constants.RUNNING_FRAME_DURATION, enemy,Animation.LOOP);
+        Array<TextureAtlas.AtlasRegion> dead = atlasVarios.findRegions("ENEMY");
+        dead.get(0).flip(true, true);
+
+        Animation deadEnemy = new Animation(Constants.RUNNING_FRAME_DURATION, dead,Animation.LOOP);
         animationEnemy= new HashMap<String,Animation>();
         animationEnemy.put(String.valueOf(Enemy.StateEnemy.WALKING), walking);
         animationEnemy.put(String.valueOf(Enemy.StateEnemy.JUMPING), walking);
@@ -168,6 +163,7 @@ public class ModelsAndViews {
         animationEnemy.put(String.valueOf(Enemy.StateEnemy.IDLE), walking);
         animationEnemy.put(String.valueOf(Enemy.StateEnemy.HIT), walking);
         animationEnemy.put(String.valueOf(Enemy.StateEnemy.HURT), walking);
+        animationEnemy.put(String.valueOf(Enemy.StateEnemy.DEAD), deadEnemy);
     }
 
     private void loadWaterAnimations() {
@@ -214,10 +210,5 @@ public class ModelsAndViews {
         Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, moving_platform,Animation.LOOP);
         animationItemCoin= new HashMap<String,Animation>();
         animationItemCoin.put(String.valueOf(BaseState.DEFAULT), defaultState);
-    }
-
-    public void addEntity(Box2DPhysicsObject e) {
-        entities.add(e);
-
     }
 }

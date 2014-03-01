@@ -4,13 +4,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsCompoundObject;
-import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DUtils;
 
 public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IBox2DPhysicsCompoundObject  {
 
     private Joint joint;
     private Body bodyB;
     private final Vector2 originBodyB = new Vector2(0,0);
+    private final Vector2 scaleBodyB = new Vector2(1,1);
+    private float widthBodyB;
+    private float heightBodyB;
 
     public Box2dPhysicsCompoundObject(String nombre, GRUPO grupo, Body bodyA,Body bodyB, Joint joint) {
         super(nombre, grupo, bodyA);
@@ -49,12 +51,22 @@ public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IB
 
     @Override
     public float getWidthBodyB() {
-        return Box2DUtils.width(bodyB);
+        return widthBodyB;
     }
 
     @Override
     public float getHeightBodyB() {
-        return Box2DUtils.height(bodyB);  //To change body of implemented methods use File | Settings | File Templates.
+        return heightBodyB;
+    }
+
+    @Override
+    public void setWidthBodyB(float widthBodyB) {
+        this.widthBodyB = widthBodyB;
+    }
+
+    @Override
+    public void setHeightBodyB(float heightBodyB) {
+        this.heightBodyB = heightBodyB;
     }
 
     public Body getBodyB() {
@@ -65,4 +77,9 @@ public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IB
     public Vector2 getOriginBodyB() {
         return originBodyB;
     }
+
+    public Vector2 getScaleBodyB() {
+        return scaleBodyB;
+    }
+
 }

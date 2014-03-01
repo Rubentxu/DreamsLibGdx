@@ -1,8 +1,10 @@
 package com.rubentxu.juegos.core.modelo;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.Json.Serializable;
 import com.badlogic.gdx.utils.JsonValue;
+import com.rubentxu.juegos.core.constantes.Constants;
 
 import java.util.List;
 
@@ -51,6 +53,7 @@ public class Profile implements Serializable {
     }
 
     public boolean removeLive() {
+        Gdx.app.log(Constants.LOG,"Pierdes una Vida....");
         return --lives <= 0;
     }
 

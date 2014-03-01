@@ -10,25 +10,18 @@ import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
 import com.rubentxu.juegos.core.modelo.Enemy.StateEnemy;
 import com.rubentxu.juegos.core.modelo.Hero;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 public class EnemyManager extends AbstractWorldManager {
 
 
-    public EnemyManager(World world) {
-        super(world);
-    }
+    public void update(float delta,Box2DPhysicsObject entity) {
+        Enemy enemy= (Enemy) entity;
+        enemy.getPath().update(enemy.getBodyA().getPosition(), delta);
+        enemy.setStateTime(enemy.getStateTime() + delta);
+        handleState(enemy);
 
-    public void update(float delta) {
-        for (Enemy enemy : world.getEnemies()) {
-            enemy.getPath().update(enemy.getBodyA().getPosition(), delta);
-            Vector2 vel = enemy.getVelocity();
-            Vector2 pos = enemy.getBodyA().getPosition();
-            enemy.setStateTime(enemy.getStateTime() + delta);
-            handleState(enemy);
-        }
     }
 
     private void applyPhysicJumpingImpulse(Vector2 vel, Vector2 pos, Enemy enemy) {
@@ -78,7 +71,6 @@ public class EnemyManager extends AbstractWorldManager {
         boolean check = ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.STATIC) ||
                 ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.PLATFORM) ||
                 ((Box2DPhysicsObject) fixture.getUserData()).getGrupo().equals(GRUPO.MOVING_PLATFORM);
-        System.out.println("IsGrounGrupo " + check);
         return check;
     }
 
@@ -143,15 +135,29 @@ public class EnemyManager extends AbstractWorldManager {
 
         if (hero != null && enemy != null && (contact.getFixtureA() == hero.getHeroSensorFixture() ||
                 contact.getFixtureB() == hero.getHeroSensorFixture())) {
-            Vector2[] points = contact.getWorldManifold().getPoints();
-            if (points[0].y > enemy.getBodyA().getPosition().y + enemy.getHeightBodyA() / 2) {
-                enemy.setFlaggedForDelete(true);
-                world.addBodiesFlaggedDestroy(enemy.getBodyA());
+
+            for (Vector2 point: contact.getWorldManifold().getPoints()) {
+                Vector2 pointVelEnemy= enemy.getBodyA().getLinearVelocityFromWorldPoint(point);
+                Vector2 pointVelHero= hero.getBodyA().getLinearVelocityFromWorldPoint(point);
+                Vector2 relativeVel=enemy.getBodyA().getLocalVector(pointVelHero.sub(pointVelEnemy));
+
+                if (relativeVel.y < -1 ) {
+                    enemy.setState(StateEnemy.DEAD);
+                } else if (relativeVel.y < 1 ) {
+                    Vector2 relativePoint = enemy.getBodyA().getLocalPoint(point);
+                    float platformFaceY = 0.5f;
+                    if (relativePoint.y > platformFaceY - 0.05) {
+                        enemy.setState(StateEnemy.DEAD);
+                    }
+                }
             }
+
         }
 
+
         if (hero != null && (contact.getFixtureA() == hero.getHeroPhysicsFixture()
-                || contact.getFixtureB() == hero.getHeroPhysicsFixture()) && !enemy.getState().equals(StateEnemy.HIT)) {
+                || contact.getFixtureB() == hero.getHeroPhysicsFixture()) && !enemy.getState().equals(StateEnemy.HIT)
+                && !enemy.getState().equals(StateEnemy.DEAD)) {
 
             Vector2[] points = contact.getWorldManifold().getPoints();
             Vector2 force;

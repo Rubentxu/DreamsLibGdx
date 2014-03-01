@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
@@ -15,9 +14,6 @@ import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 public class ItemsManager extends AbstractWorldManager {
 
 
-    public ItemsManager(World world) {
-        super(world);
-    }
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -25,8 +21,7 @@ public class ItemsManager extends AbstractWorldManager {
             Item item= getItem(contact);
             setChanged();
             notifyObservers(item);
-            item.setFlaggedForDelete(true);
-            world.addBodiesFlaggedDestroy(item.getBodyA());
+            item.setState(Box2DPhysicsObject.BaseState.DESTROY);
         }
     }
 
@@ -51,7 +46,7 @@ public class ItemsManager extends AbstractWorldManager {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float delta, Box2DPhysicsObject entity) {
 
     }
 

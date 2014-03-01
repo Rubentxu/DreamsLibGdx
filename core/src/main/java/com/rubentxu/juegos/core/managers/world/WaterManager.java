@@ -17,7 +17,6 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Water;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
@@ -25,11 +24,23 @@ import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
 
 public class WaterManager extends AbstractWorldManager {
 
+    @Override
+    public void update(float delta,Box2DPhysicsObject entity) {
+        Water w=(Water) entity;
+        for (int i = 0; i < w.m_bodyList.size; i++) {
+            Array<Fixture> fixtureList = w.m_bodyList.get(i).getFixtureList();
+            for (int j = 0; j < fixtureList.size; j++) {
+                Fixture fixture = fixtureList.get(j);
+                if(!fixture.isSensor()){
+                    if(isHero(fixture) && ((Hero)fixture.getUserData()).getStatePos().equals(Hero.StatePos.ONAIR))
+                        ((Hero)fixture.getUserData()).setStatePos(Hero.StatePos.INWATER);
+                    ApplyToFixture(fixture, w);
+                }
+            }
+        }
 
-
-    public WaterManager(World world) {
-        super(world);
     }
+
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -95,23 +106,6 @@ public class WaterManager extends AbstractWorldManager {
             return (Water) box2dPhysicsA;
         } else {
             return (Water) box2dPhysicsB;
-        }
-    }
-
-    @Override
-    public void update(float delta) {
-        for (Water w : world.getWaterSensors()) {
-            for (int i = 0; i < w.m_bodyList.size; i++) {
-                Array<Fixture> fixtureList = w.m_bodyList.get(i).getFixtureList();
-                for (int j = 0; j < fixtureList.size; j++) {
-                    Fixture fixture = fixtureList.get(j);
-                    if(!fixture.isSensor()){
-                        if(isHero(fixture) && ((Hero)fixture.getUserData()).getStatePos().equals(Hero.StatePos.ONAIR))
-                            ((Hero)fixture.getUserData()).setStatePos(Hero.StatePos.INWATER);
-                        ApplyToFixture(fixture, w);
-                    }
-                }
-            }
         }
     }
 

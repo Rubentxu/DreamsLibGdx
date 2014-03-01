@@ -18,15 +18,9 @@ public class World implements Disposable {
 
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;
-    private Hero hero;
     private Box2DMapObjectParser parser;
-    private HashSet<Platform> platforms = new HashSet<Platform>();
-    private HashSet<MovingPlatform> movingPlatforms = new HashSet<MovingPlatform>();
-    private HashSet<Water> waterSensors = new HashSet<Water>();
-    private HashSet<Enemy> enemies = new HashSet<Enemy>();
-    private HashSet<Item> items = new HashSet<Item>();
-    private HashSet<Mill> mills = new HashSet<Mill>();
-    private HashSet<CheckPoint> checkPoints = new HashSet<CheckPoint>();
+    private HashSet<Box2DPhysicsObject> entities = new HashSet<Box2DPhysicsObject>();
+    private Hero hero;
     private Array<Body> bodiesFlaggedDestroy = new Array<Body>();
     private Texture background_03;
     private Texture background_02;
@@ -40,7 +34,7 @@ public class World implements Disposable {
 
     private void createDreamsWorld(Level level, ResourcesManager resourcesManager) {
         physics = new com.badlogic.gdx.physics.box2d.World(new Vector2(0, -9.81f), true);
-        box2dObjectFactory = new Box2dObjectFactory(physics, resourcesManager);
+        box2dObjectFactory = new Box2dObjectFactory(physics, this, resourcesManager);
         map = resourcesManager.get(level.getMap());
         parser = new Box2DMapObjectParser(this, box2dObjectFactory);
         // System.out.println(getParser().getHierarchy(map));
@@ -52,28 +46,16 @@ public class World implements Disposable {
 
     }
 
-    public void destroyFlaggedEntities() {
-        for (Body b : bodiesFlaggedDestroy) {
-            Box2DPhysicsObject data = (Box2DPhysicsObject) b.getUserData();
-            if (data != null && data.isFlaggedForDelete()) {
-                b.setUserData(null);
-                physics.destroyBody(b);
-                switch (data.getGrupo()) {
-                    case ENEMY:
-                        enemies.remove(data);
-                        break;
-                    case MOVING_PLATFORM:
-                        movingPlatforms.remove(data);
-                        break;
-                    case ITEMS:
-                        items.remove(data);
-                        break;
+    public void destroyEntity(Box2DPhysicsObject data) {
 
-                }
-                data = null;
-                b = null;
-            }
+        if (data != null) {
+            data.getBodyA().setUserData(null);
+            physics.destroyBody(data.getBodyA());
+            entities.remove(data);
+            data.setBodyA(null);
+            data = null;
         }
+
     }
 
     @Override
@@ -82,22 +64,8 @@ public class World implements Disposable {
         physics.dispose();
         physics = null;
         background_01 = null;
-        hero.dispose();
-        hero = null;
         bodiesFlaggedDestroy = null;
-        for (MovingPlatform m : movingPlatforms) {
-            m.dispose();
-            m = null;
-        }
-        for (Water w : waterSensors) {
-            w.dispose();
-            w = null;
-        }
-        for (Enemy e : enemies) {
-            e.dispose();
-            e = null;
-        }
-        for (Item e : items) {
+        for (Box2DPhysicsObject e : entities) {
             e.dispose();
             e = null;
         }
@@ -111,13 +79,6 @@ public class World implements Disposable {
         return physics;
     }
 
-    public Hero getHero() {
-        return hero;
-    }
-
-    public void setHero(Hero hero) {
-        this.hero = hero;
-    }
 
     public Box2DMapObjectParser getParser() {
         return parser;
@@ -125,34 +86,6 @@ public class World implements Disposable {
 
     public void removeParser() {
         parser = null;
-    }
-
-    public HashSet<Platform> getPlatforms() {
-        return platforms;
-    }
-
-    public HashSet<MovingPlatform> getMovingPlatforms() {
-        return movingPlatforms;
-    }
-
-    public HashSet<Water> getWaterSensors() {
-        return waterSensors;
-    }
-
-    public HashSet<Enemy> getEnemies() {
-        return enemies;
-    }
-
-    public HashSet<Item> getItems() {
-        return items;
-    }
-
-    public HashSet<Mill> getMills() {
-        return mills;
-    }
-
-    public HashSet<CheckPoint> getCheckPoints() {
-        return checkPoints;
     }
 
     public Texture getBackground_01() {
@@ -175,4 +108,15 @@ public class World implements Disposable {
         return background_02;
     }
 
+    public HashSet<Box2DPhysicsObject> getEntities() {
+        return entities;
+    }
+
+    public void setHero(Hero hero) {
+        this.hero = hero;
+    }
+
+    public Hero getHero() {
+        return hero;
+    }
 }

@@ -18,14 +18,19 @@ import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class WorldController implements ContactListener, ContactFilter ,Disposable{
 
+    private World world;
     private HeroManager heroManager;
     private PlatformManager platformManager;
     private WaterManager waterManager;
     private EnemyManager enemyManager;
     private ItemsManager itemsManager;
+    private List<Box2DPhysicsObject> destroy=new ArrayList<Box2DPhysicsObject>();
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
 
@@ -42,12 +47,13 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
 
 
     public WorldController(DreamsGame game, World world) {
+        this.world=world;
         world.getPhysics().setContactListener(this);
-        heroManager = new HeroManager(world);
-        platformManager = new PlatformManager(world);
-        waterManager = new WaterManager(world);
-        enemyManager = new EnemyManager(world);
-        itemsManager= new ItemsManager(world);
+        heroManager = new HeroManager();
+        platformManager = new PlatformManager();
+        waterManager = new WaterManager();
+        enemyManager = new EnemyManager();
+        itemsManager= new ItemsManager();
 
         itemsManager.addObserver(game.getProfileManager());
         itemsManager.addObserver(game.getAudioManager());
@@ -91,11 +97,18 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
      * The main update method *
      */
     public void update(float delta) {
-        heroManager.update(delta);
-        platformManager.update(delta);
-        waterManager.update(delta);
-        enemyManager.update(delta);
-        itemsManager.update(delta);
+        for(Box2DPhysicsObject e: world.getEntities()) {
+            if (e.getState().equals(Box2DPhysicsObject.BaseState.DESTROY)){
+                destroy.add(e);
+            } else {
+                AbstractWorldManager manager =getManager(e.getGrupo());
+                if(manager!=null) manager.update(delta,e);
+            }
+        }
+        for(Box2DPhysicsObject d:destroy){
+            world.destroyEntity(d);
+        }
+        destroy.clear();
     }
 
     @Override

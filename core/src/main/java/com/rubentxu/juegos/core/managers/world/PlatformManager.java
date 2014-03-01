@@ -11,27 +11,16 @@ import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Hero.StateHero;
 import com.rubentxu.juegos.core.modelo.MovingPlatform;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 public class PlatformManager extends AbstractWorldManager {
 
 
-    public PlatformManager(World world) {
-        super(world);      }
-
-
-    private Box2DPhysicsObject getCollider(MovingPlatform p, Contact contact) {
-        return (Box2DPhysicsObject) ((p.equals(contact.getFixtureA().getUserData()) ? contact.getFixtureB().getUserData() : contact.getFixtureA().getUserData()));
-
-    }
-
     @Override
-    public void update(float delta) {
-        for (MovingPlatform p : world.getMovingPlatforms()) {
-            updateMovingPlatform(p, delta);
-        }
+    public void update(float delta, Box2DPhysicsObject entity) {
+        MovingPlatform platform= (MovingPlatform) entity;
+        updateMovingPlatform(platform,delta);
     }
 
     public void updateMovingPlatform(MovingPlatform platform, float delta) {
@@ -121,16 +110,15 @@ public class PlatformManager extends AbstractWorldManager {
         }
         WorldManifold manifold = contact.getWorldManifold();
         for (Vector2 point : manifold.getPoints()) {
-            float posPlatform = movingPlatform.getBodyA().getPosition().y + movingPlatform.getHeightBodyA() / 2;
-            float posPassenger = passenger.getBodyA().getPosition().y;
-            Vector2 relativeVel = getRelativeVelocity(movingPlatform, passenger, point);
+            Vector2 pointVelPlatform= movingPlatform.getBodyA().getLinearVelocityFromWorldPoint(point);
+            Vector2 pointVelOther= passenger.getBodyA().getLinearVelocityFromWorldPoint(point);
+            Vector2 relativeVel=movingPlatform.getBodyA().getLocalVector(pointVelOther.sub(pointVelPlatform));
 
-            if (relativeVel.y < -1 && posPlatform < posPassenger) {
+            if (relativeVel.y < -1 ) {
                 movingPlatform.getPassengers().add(passenger);
                 movingPlatform.enabled = true;
                 return;
-            } else if (relativeVel.y < 1 && posPlatform < posPassenger) {
-
+            } else if (relativeVel.y < 1 ) {
                 Vector2 relativePoint = movingPlatform.getBodyA().getLocalPoint(point);
                 float platformFaceY = 0.5f;
                 if (relativePoint.y > platformFaceY - 0.05) {
@@ -140,6 +128,7 @@ public class PlatformManager extends AbstractWorldManager {
                 }
             }
         }
+
         movingPlatform.enabled = false;
         contact.setEnabled(movingPlatform.enabled);
 

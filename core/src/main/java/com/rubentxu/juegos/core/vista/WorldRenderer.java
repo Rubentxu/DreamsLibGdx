@@ -9,11 +9,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
-import com.rubentxu.juegos.core.modelo.Enemy;
-import com.rubentxu.juegos.core.modelo.Item;
-import com.rubentxu.juegos.core.modelo.Mill;
-import com.rubentxu.juegos.core.modelo.MovingPlatform;
-import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.utils.debug.DebugWindow;
 import com.rubentxu.juegos.core.utils.parallax.ParallaxBackground;
@@ -45,15 +40,13 @@ public class WorldRenderer implements Disposable {
         this.game= game;
         this.world = world;
 
-        modelsAndViews=new ModelsAndViews(game.getResourcesManager());
+        modelsAndViews=new ModelsAndViews(game.getResourcesManager(),world);
 
         debugRenderer = new Box2DDebugRenderer();
         renderer = new OrthogonalTiledMapRenderer(world.getMap(), world.getParser().getUnitScale());
         world.removeParser();
         spriteBatch = (SpriteBatch) renderer.getSpriteBatch();
         cam = new OrthographicCamera();
-
-        loadTextures();
     }
 
     public void resize(int w, int h) {
@@ -68,35 +61,6 @@ public class WorldRenderer implements Disposable {
         background.addLayer(new ParallaxLayer(world.getBackground_03(),0.6f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getBackground_02(), 0.8f, 0.02f, 100, 100));
 
-    }
-
-    private void loadTextures() {
-
-        for(Mill m :world.getMills()){
-            Gdx.app.log(Constants.LOG,"Añado la entidad a la vista para el molino");
-            modelsAndViews.addEntity(m);
-        }
-         /*
-        for(CheckPoint c :world.getCheckPoints()){
-            modelsAndViews.addEntity(c);
-        }*/
-
-        for(MovingPlatform mvp :world.getMovingPlatforms()){
-            modelsAndViews.addEntity(mvp);
-        }
-
-        for(Water w :world.getWaterSensors()){
-            modelsAndViews.addEntity(w);
-        }
-
-        for(Enemy e :world.getEnemies()){
-            modelsAndViews.addEntity(e);
-        }
-
-        for(Item i :world.getItems()){
-            modelsAndViews.addEntity(i);
-        }
-        modelsAndViews.addEntity(world.getHero());
     }
 
     public void render() {
@@ -117,7 +81,7 @@ public class WorldRenderer implements Disposable {
 
         if (DreamsGame.DEBUG) {
             DebugWindow.getInstance(game.getResourcesManager()).setPosition(cam.position.x - 13f, cam.position.y - 5);
-            DebugWindow.myLabel.setText("Modo Debug:\n\n"+world.getHero().toString());
+            DebugWindow.myLabel.setText("Modo Debug:\n\n" + world.getHero().toString());
             DebugWindow.getInstance(game.getResourcesManager()).pack();
             DebugWindow.getInstance(game.getResourcesManager()).draw(spriteBatch, 1f);
 

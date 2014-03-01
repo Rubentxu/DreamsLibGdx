@@ -5,23 +5,16 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
-import com.badlogic.gdx.physics.box2d.joints.RevoluteJoint;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.CheckPoint;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
-import com.rubentxu.juegos.core.modelo.Mill;
-import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
 
 public class CheckPointManager extends AbstractWorldManager {
 
-
-    public CheckPointManager(World world) {
-        super(world);
-    }
 
     @Override
     public void handleBeginContact(Contact contact) {
@@ -50,7 +43,7 @@ public class CheckPointManager extends AbstractWorldManager {
     }
 
     @Override
-    public void update(float delta) {
+    public void update(float delta,Box2DPhysicsObject entity) {
 
     }
 

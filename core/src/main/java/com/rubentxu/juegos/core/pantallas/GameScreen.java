@@ -17,6 +17,7 @@ import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.inputs.GameInputs;
 import com.rubentxu.juegos.core.inputs.MobileInput;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
@@ -46,17 +47,15 @@ public class GameScreen extends BaseScreen {
             updateStats();
         }
         stage.act(delta);
-
         //render
         renderer.render();
         stage.draw();
-
-        world.destroyFlaggedEntities();
     }
 
     private void updateStats(){
-        ((Label)stats.findActor(Constants.SCORE)).setText(world.getHero().getProfile().getCreditsAsText());
-        ((Label)stats.findActor(Constants.LIVES)).setText(world.getHero().getProfile().getLivesAsText());
+        Hero hero=world.getHero();
+        ((Label)stats.findActor(Constants.SCORE)).setText(hero.getProfile().getCreditsAsText());
+        ((Label)stats.findActor(Constants.LIVES)).setText(hero.getProfile().getLivesAsText());
     }
 
     @Override
@@ -95,7 +94,8 @@ public class GameScreen extends BaseScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         world=new World(game);
-        world.getHero().setProfile(game.getProfileManager().retrieveProfile());
+        Hero hero= world.getHero();
+        hero.setProfile(game.getProfileManager().retrieveProfile());
         controller=new WorldController(game,world);
         renderer=new WorldRenderer(game,world);
         renderer.resize(width, height);

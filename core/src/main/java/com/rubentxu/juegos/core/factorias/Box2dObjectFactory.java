@@ -41,38 +41,47 @@ import static com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 public class Box2dObjectFactory {
 
 
-    private World world;
+    private com.rubentxu.juegos.core.modelo.World world;
+    private World physics;
     private ResourcesManager resourcesManager;
     private float unitScale;
 
-    public Box2dObjectFactory(World world, ResourcesManager resourcesManager) {
-        this.world = world;
+    public Box2dObjectFactory(World physics, com.rubentxu.juegos.core.modelo.World world, ResourcesManager resourcesManager) {
+        this.physics = physics;
+        this.world=world;
         this.resourcesManager = resourcesManager;
     }
 
-    public <T> T getEntity(GRUPO tipo, MapObject object) {
-
+    public void getEntity(GRUPO tipo, MapObject object) {
         switch (tipo) {
             case HERO:
-                return (T) createHero(object);
+                Hero hero=createHero(object);
+                world.getEntities().add(hero);
+                world.setHero(hero);
+                break;
             case ENEMY:
-                return (T) createEnemy(object);
+                world.getEntities().add(createEnemy(object));
+                break;
             case PLATFORM:
                 break;
             case MOVING_PLATFORM:
-                return (T) createMovingPlatform(object);
+                world.getEntities().add(createMovingPlatform(object));
+                break;
             case ITEMS:
-                return (T) createItem(object);
+                world.getEntities().add(createItem(object));
+                break;
             case SENSOR:
                 break;
             case STATIC:
                 break;
             case FLUID:
-                return (T) createWater(object);
+                world.getEntities().add(createWater(object));
+                break;
             case MILL:
-                return (T) createMill(object);
+                world.getEntities().add(createMill(object));
+                break;
         }
-        return null;
+
     }
 
     private Rectangle getRectangle(RectangleMapObject object) {
@@ -107,7 +116,7 @@ public class Box2dObjectFactory {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.StaticBody;
         def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
+        Body box = physics.createBody(def);
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
@@ -126,7 +135,8 @@ public class Box2dObjectFactory {
             shape.dispose();
 
             water = new Water(object.getName(), box);
-
+            water.setWidthBodyA(rectangle.width);
+            water.setHeightBodyA(rectangle.height);
             box.setUserData(water);
             fixBox.setUserData(water);
 
@@ -143,7 +153,7 @@ public class Box2dObjectFactory {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.KinematicBody;
         def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
+        Body box = physics.createBody(def);
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
@@ -163,7 +173,8 @@ public class Box2dObjectFactory {
 
             movingPlatform = new MovingPlatform(name, GRUPO.MOVING_PLATFORM, box, Float.parseFloat(properties.get(Box2DMapObjectParser.Aliases.movingPlatformDistX, String.class))
                     , Float.parseFloat(properties.get(Box2DMapObjectParser.Aliases.movingPlatformDistY, String.class)), Float.parseFloat(properties.get(Box2DMapObjectParser.Aliases.movingPlatformSpeed, String.class)));
-
+            movingPlatform.setWidthBodyA(rectangle.width);
+            movingPlatform.setHeightBodyA(rectangle.height);
             box.setUserData(movingPlatform);
             fixBox.setUserData(movingPlatform);
 
@@ -180,7 +191,7 @@ public class Box2dObjectFactory {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
+        Body box = physics.createBody(def);
         box.setFixedRotation(true);
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
@@ -212,6 +223,8 @@ public class Box2dObjectFactory {
             enemy = new Enemy(name, box, points);
             enemy.setEnemyPhysicsFixture(enemyPhysicsFixture);
             enemy.setEnemySensorFixture(enemySensorFixture);
+            enemy.setWidthBodyA(rectangle.width);
+            enemy.setHeightBodyA(rectangle.height);
             box.setUserData(enemy);
             enemyPhysicsFixture.setUserData(enemy);
             enemySensorFixture.setUserData(enemy);
@@ -224,13 +237,12 @@ public class Box2dObjectFactory {
     }
 
     public Hero createHero(MapObject object) {
-        //Hero hero = new Hero(world, rectangle.x, rectangle.y, 0.45f, 1f);
         Hero hero = null;
         MapProperties properties = object.getProperties();
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.DynamicBody;
         def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body bodyA = world.createBody(def);
+        Body bodyA = physics.createBody(def);
         bodyA.setFixedRotation(true);
 
         if (object instanceof RectangleMapObject) {
@@ -248,7 +260,7 @@ public class Box2dObjectFactory {
 
             CircleShape circle = new CircleShape();
             circle.setRadius(width / 2);
-            circle.setPosition(new Vector2(width / 2, height / 5));
+            circle.setPosition(new Vector2(width / 2, 0 ));
             fixDef.shape = circle;
             Fixture heroSensorFixture = bodyA.createFixture(fixDef);
             heroSensorFixture.setSensor(true);
@@ -258,7 +270,14 @@ public class Box2dObjectFactory {
             hero = new Hero("hero", bodyA);
             hero.setHeroPhysicsFixture(heroPhysicsFixture);
             hero.setHeroSensorFixture(heroSensorFixture);
+            hero.setWidthBodyA(width);
+            hero.setHeightBodyA(height);
             bodyA.setUserData(hero);
+            float scaleX=1.7f;
+            float scaleY=1.15f;
+            hero.getScaleBodyA().set(scaleX,scaleY);
+            /*    NuevoOrigen=((NuevoAncho/2)-(ViejoAncho/2)) / 2    */
+            hero.getOriginBodyA().set(((width*scaleX/2)-(width/2))/2f,((height*scaleY/2)-(height/2))/2f);
             heroPhysicsFixture.setUserData(hero);
             heroSensorFixture.setUserData(hero);
             hero.setEffect((ParticleEffect) resourcesManager.get(ResourcesManager.PARTICLE_EFFECT));
@@ -277,13 +296,15 @@ public class Box2dObjectFactory {
         BodyDef def = new BodyDef();
         def.type = BodyDef.BodyType.StaticBody;
         def.position.set(getProperty(properties, "x", def.position.x) * unitScale, getProperty(properties, "y", def.position.y) * unitScale);
-        Body box = world.createBody(def);
+        Body box = physics.createBody(def);
 
         if (object instanceof RectangleMapObject && !properties.get(Box2DMapObjectParser.Aliases.type).equals(Box2DMapObjectParser.Aliases.typeModelObject)) {
             PolygonShape shape = new PolygonShape();
+            float width=1;
+            float height=1;
             Rectangle rectangle = getRectangle((RectangleMapObject) object);
-            shape.setAsBox(rectangle.width / 2, rectangle.height, new Vector2(rectangle.x - box.getPosition().x
-                    + rectangle.width / 2, rectangle.y - box.getPosition().y + rectangle.height / 2), box.getAngle());
+            shape.setAsBox(width / 2, height/2, new Vector2(rectangle.x - box.getPosition().x
+                    + width / 2, rectangle.y - box.getPosition().y + height / 2), box.getAngle());
 
             FixtureDef fixDef = new FixtureDef();
             fixDef.shape = shape;
@@ -303,7 +324,8 @@ public class Box2dObjectFactory {
             } else if (object.getProperties().get(Box2DMapObjectParser.Aliases.typeItem).equals(Box2DMapObjectParser.Aliases.key)) {
                 item = new Item(name, GRUPO.ITEMS, Item.TYPE.KEY, box, 1);
             }
-
+            item.setWidthBodyA(width);
+            item.setHeightBodyA(height);
             box.setUserData(item);
             fixBox.setUserData(item);
 
@@ -320,10 +342,7 @@ public class Box2dObjectFactory {
         RevoluteJointDef revoluteJoint;
         MapProperties properties = object.getProperties();
         Mill mill = null;
-        if (object instanceof RectangleMapObject) {
-
-            Rectangle rectangle = getRectangle((RectangleMapObject) object);
-
+        if (object instanceof RectangleMapObject) { 
             Vector2[] vertices = new Vector2[6];
             vertices[0] = new Vector2(0.3256686329841614f, 0f);
             vertices[1] = new Vector2(0.1628349423408508f, 3.026409149169922f);
@@ -339,7 +358,7 @@ public class Box2dObjectFactory {
             Gdx.app.log(Constants.LOG, "Creando Mill");
             CircleShape circle = new CircleShape();
             circle.setRadius(0.5f);
-            Body bodyA = world.createBody(def);
+            Body bodyA = physics.createBody(def);
             bodyA.setTransform(position, 0);
 
             Fixture fixtA = bodyA.createFixture(circle, 1);
@@ -357,7 +376,7 @@ public class Box2dObjectFactory {
             BodyDef bd = new BodyDef();
             bd.type = BodyType.DynamicBody;
             bd.position.set(position);
-            Body bodyB = world.createBody(bd);
+            Body bodyB = physics.createBody(bd);
 
             Fixture fixtB = bodyB.createFixture(fd);
             Gdx.app.log(Constants.LOG, "Creando3 Mill");
@@ -371,12 +390,16 @@ public class Box2dObjectFactory {
             revoluteJoint.enableMotor = true;
             revoluteJoint.maxMotorTorque = 10000.0f;
             revoluteJoint.motorSpeed = 1f;
-            RevoluteJoint rj = (RevoluteJoint) world.createJoint(revoluteJoint);
+            RevoluteJoint rj = (RevoluteJoint) physics.createJoint(revoluteJoint);
 
             bodyB.resetMassData();
             mill = new Mill(object.getName(), bodyA, bodyB, rj);
             mill.getOriginBodyA().set(0.5f,0.5f);
             mill.getOriginBodyB().set(Box2DUtils.width(bodyB)/2,Box2DUtils.height(bodyB)/2);
+            mill.setWidthBodyA(1);
+            mill.setHeightBodyA(1);
+            mill.setWidthBodyB(Box2DUtils.width(bodyB));
+            mill.setHeightBodyB(Box2DUtils.height(bodyB));
             bodyA.setUserData(mill);
             bodyB.setUserData(mill);
             fixtA.setUserData(mill);
@@ -395,16 +418,12 @@ public class Box2dObjectFactory {
     private CheckPoint createCheckPoint(MapObject object) {
         CheckPoint checkPoint = null;
         if (object instanceof RectangleMapObject) {
-            Rectangle rectangle = new Rectangle(((RectangleMapObject) object).getRectangle());
-            rectangle.x *= unitScale;
-            rectangle.y *= unitScale;
-            rectangle.width *= unitScale;
-            rectangle.height *= unitScale;
+            Rectangle rectangle = getRectangle((RectangleMapObject) object);
 
             PrismaticJoint m_joint;
             BodyDef def = new BodyDef();
             def.type = BodyType.StaticBody;
-            Body bodyA = world.createBody(def);
+            Body bodyA = physics.createBody(def);
             bodyA.setTransform(rectangle.x, rectangle.y + 6f, 0);
             PolygonShape poly = new PolygonShape();
             poly.setAsBox(0.25f, 5);
@@ -422,7 +441,7 @@ public class Box2dObjectFactory {
             BodyDef bd = new BodyDef();
             bd.type = BodyType.DynamicBody;
             bd.position.set(rectangle.x, rectangle.y + 1.5f);
-            Body bodyB = world.createBody(bd);
+            Body bodyB = physics.createBody(bd);
             FixtureDef fixBd = new FixtureDef();
             fixBd.isSensor = true;
             fixBd.shape = shape;
@@ -443,9 +462,13 @@ public class Box2dObjectFactory {
             Fixture fixtB = bodyB.createFixture(fixBd);
             pjd.enableLimit = true;
 
-            m_joint = (PrismaticJoint) world.createJoint(pjd);
+            m_joint = (PrismaticJoint) physics.createJoint(pjd);
 
             checkPoint = new CheckPoint(object.getName(), bodyA, bodyB, m_joint);
+            checkPoint.setWidthBodyA(0.25f);
+            checkPoint.setHeightBodyA(5f);
+            checkPoint.setWidthBodyB(1f);
+            checkPoint.setHeightBodyB(0.25f);
             bodyA.setUserData(checkPoint);
             bodyB.setUserData(checkPoint);
             fixtA.setUserData(checkPoint);

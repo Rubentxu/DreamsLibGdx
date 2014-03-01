@@ -16,14 +16,18 @@ public interface IBox2DPhysicsObject {
 
     public float getRotationBodyA();
 
-    public float getWidthBodyA();
-
-    public float getHeightBodyA();
-
     public Body getBodyA();
 
     public ParticleEffect getEffect();
 
     public void setEffect(ParticleEffect effect);
+
+    public float getWidthBodyA();
+
+    public float getHeightBodyA();
+
+    public void setWidthBodyA(float widthBodyA);
+
+    public void setHeightBodyA(float heightBodyA);
 
 }

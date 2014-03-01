@@ -51,7 +51,6 @@ import com.badlogic.gdx.physics.box2d.joints.DistanceJointDef;
 import com.badlogic.gdx.physics.box2d.joints.FrictionJointDef;
 import com.badlogic.gdx.physics.box2d.joints.GearJointDef;
 import com.badlogic.gdx.physics.box2d.joints.MouseJointDef;
-import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJointDef;
 import com.badlogic.gdx.physics.box2d.joints.PulleyJointDef;
 import com.badlogic.gdx.physics.box2d.joints.RevoluteJointDef;
@@ -280,17 +279,17 @@ public class Box2DMapObjectParser {
 
     private void createModelObject(World world, MapObject object) {
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.hero))
-            worldEntity.setHero(box2dObjectFactory.<Hero>getEntity(GRUPO.HERO, object));
+            box2dObjectFactory.<Hero>getEntity(GRUPO.HERO, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.movingPlatform))
-            worldEntity.getMovingPlatforms().add(box2dObjectFactory.<MovingPlatform>getEntity(GRUPO.MOVING_PLATFORM, object));
+            box2dObjectFactory.<MovingPlatform>getEntity(GRUPO.MOVING_PLATFORM, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.water))
-            worldEntity.getWaterSensors().add(box2dObjectFactory.<Water>getEntity(GRUPO.FLUID, object));
+            box2dObjectFactory.<Water>getEntity(GRUPO.FLUID, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.enemy))
-            worldEntity.getEnemies().add(box2dObjectFactory.<Enemy>getEntity(GRUPO.ENEMY, object));
+            box2dObjectFactory.<Enemy>getEntity(GRUPO.ENEMY, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.item))
-            worldEntity.getItems().add(box2dObjectFactory.<Item>getEntity(GRUPO.ITEMS, object));
+           box2dObjectFactory.<Item>getEntity(GRUPO.ITEMS, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.revoluteObject)) {
-            worldEntity.getMills().add(box2dObjectFactory.<Mill>getEntity(GRUPO.MILL, object));
+           box2dObjectFactory.<Mill>getEntity(GRUPO.MILL, object);
         }
     }
 
