@@ -8,6 +8,7 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.base.State;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -76,7 +77,7 @@ public class AudioManager implements Observer {
         }
         if (arg instanceof State) {
             if (((State)arg).equals(Hero.StateHero.JUMPING)) playSound(ResourcesManager.JUMP_SOUND);
-            if (((State)arg).equals(Hero.StateHero.HURT)) playSound(ResourcesManager.HIT_SOUND);
+            if (((State)arg).equals(BaseState.HURT) || ((State)arg).equals(BaseState.HIT)) playSound(ResourcesManager.HIT_SOUND);
         }
     }
 }

@@ -17,7 +17,7 @@ import java.util.List;
 public class Enemy extends Box2DPhysicsObject implements Disposable {
 
     public enum StateEnemy implements State {
-        IDLE, WALKING, JUMPING, FALL, HURT, HIT, DEAD
+        IDLE, WALKING, JUMPING, FALL
     }
 
     public enum StatePos {ONGROUND, INWATER, ONAIR}

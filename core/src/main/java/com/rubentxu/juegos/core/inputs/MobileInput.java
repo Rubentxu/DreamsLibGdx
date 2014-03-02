@@ -12,12 +12,10 @@ public class MobileInput extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        Gdx.app.log(Constants.LOG, "PRESS BUTTON: KEY MOBILE INPUT");
         if ((keycode == Keys.ESCAPE) || (keycode == Keys.BACK) ) {
             Gdx.app.log(Constants.LOG, "PRESS BUTTON: GAME_BACK");
             DreamsGame.setGameState(GameState.GAME_BACK);
         }
-
 
         return false;
     }

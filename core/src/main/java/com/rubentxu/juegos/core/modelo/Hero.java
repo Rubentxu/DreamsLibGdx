@@ -15,7 +15,7 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
 
     public enum StateHero implements State {
-        IDLE, WALKING, JUMPING, DYING, FALL, SWIMMING, PROPULSION, HURT, HIT, DEAD, WIN
+        IDLE, WALKING, JUMPING, DYING, FALL, SWIMMING, PROPULSION,WIN
     }
 
     public enum StatePos {ONGROUND, INWATER, ONAIR}

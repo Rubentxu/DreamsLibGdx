@@ -1,13 +1,13 @@
 package com.rubentxu.juegos.core.modelo.base;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.rubentxu.juegos.core.modelo.Enemy;
-import com.rubentxu.juegos.core.modelo.Hero;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
@@ -30,7 +30,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public enum BaseState implements State {
-        INITIAL, DEFAULT, DESTROY
+        INITIAL, DEFAULT, DESTROY ,HURT,HIT,DEAD
     }
 
     public static final short MASK_HERO = (short) ~GRUPO.HERO.category;
@@ -60,19 +60,21 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public void setState(State state) {
-        if (this.state.equals(state) || (this.state.equals(Enemy.StateEnemy.DEAD) && !state.equals(BaseState.DESTROY))) {
+        if (!this.state.equals(state)) {
+            if (( this.state.equals(BaseState.HURT) || this.state.equals(BaseState.HIT) ||
+                    this.state.equals(BaseState.DEAD))
+                    && this.getStateTime() < 0.8f) {
+                changedStatus = false;
+            } else {
+                this.state = state;
+                stateTime = 0;
+                changedStatus = true;
+            }
+
+        } else {
             changedStatus = false;
-            return;
         }
-        if((this.state.equals(Enemy.StateEnemy.HURT) || this.state.equals(Enemy.StateEnemy.HIT) ||
-                this.state.equals(Hero.StateHero.HURT)  || this.state.equals(Hero.StateHero.HIT) ||
-                this.state.equals(Hero.StateHero.DEAD) ) && this.getStateTime() <1.1f){
-            changedStatus = false;
-            return;
-        }
-        this.state = state;
-        stateTime = 0;
-        changedStatus = true;
+
     }
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, Body bodyA) {
@@ -205,11 +207,9 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public boolean isChangedStatus() {
-        return changedStatus;
-    }
 
-    public void setChangedStatus(boolean changedStatus){
-        this.changedStatus=changedStatus;
+        if (changedStatus) Gdx.app.log(Constants.LOG, "Cambio el estado " + changedStatus + " Estado  " + state);
+        return changedStatus;
     }
 
     public Vector2 getScaleBodyA() {

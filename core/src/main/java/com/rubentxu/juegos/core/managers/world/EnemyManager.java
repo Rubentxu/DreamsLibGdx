@@ -12,6 +12,7 @@ import com.rubentxu.juegos.core.modelo.Enemy.StateEnemy;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
 
 public class EnemyManager extends AbstractWorldManager {
 
@@ -36,10 +37,12 @@ public class EnemyManager extends AbstractWorldManager {
 
         switch (enemy.getStatePos()) {
             case ONGROUND:
-                if (enemy.getState().equals(StateEnemy.IDLE)) {
+                if (enemy.getState().equals(StateEnemy.IDLE) || enemy.getState().equals(BaseState.HIT)
+                        || enemy.getState().equals(BaseState.DEAD)) {
                     enemy.getBodyA().setLinearVelocity(enemy.getVelocity().x * 0.9f, vel.y);
                     enemy.getEnemyPhysicsFixture().setFriction(100f);
                     enemy.getEnemySensorFixture().setFriction(100f);
+                    if(enemy.getStateTime()>1) enemy.setState(StateEnemy.WALKING);
 
                 } else if (enemy.getState().equals(StateEnemy.WALKING)) {
                     enemy.getBodyA().applyLinearImpulse(enemy.getPath().getForce(enemy.getBodyA().getMass()), enemy.getBodyA().getWorldCenter(), true);
@@ -62,6 +65,7 @@ public class EnemyManager extends AbstractWorldManager {
 
                 break;
         }
+        if (enemy.getState().equals(BaseState.DEAD) && enemy.getStateTime() > 1.2f) enemy.setState(BaseState.DESTROY);
         enemy.velocityLimit();
     }
 
@@ -132,9 +136,8 @@ public class EnemyManager extends AbstractWorldManager {
             contact.setEnabled(true);
         }
 
-
-        if (hero != null && enemy != null && (contact.getFixtureA() == hero.getHeroSensorFixture() ||
-                contact.getFixtureB() == hero.getHeroSensorFixture())) {
+/*
+        if (hero != null && enemy != null ) {
 
             for (Vector2 point: contact.getWorldManifold().getPoints()) {
                 Vector2 pointVelEnemy= enemy.getBodyA().getLinearVelocityFromWorldPoint(point);
@@ -143,19 +146,13 @@ public class EnemyManager extends AbstractWorldManager {
 
                 if (relativeVel.y < -1 ) {
                     enemy.setState(StateEnemy.DEAD);
-                } else if (relativeVel.y < 1 ) {
-                    Vector2 relativePoint = enemy.getBodyA().getLocalPoint(point);
-                    float platformFaceY = 0.5f;
-                    if (relativePoint.y > platformFaceY - 0.05) {
-                        enemy.setState(StateEnemy.DEAD);
-                    }
                 }
             }
 
-        }
+        }*/
 
 
-        if (hero != null && (contact.getFixtureA() == hero.getHeroPhysicsFixture()
+     /*   if (hero != null && (contact.getFixtureA() == hero.getHeroPhysicsFixture()
                 || contact.getFixtureB() == hero.getHeroPhysicsFixture()) && !enemy.getState().equals(StateEnemy.HIT)
                 && !enemy.getState().equals(StateEnemy.DEAD)) {
 
@@ -170,7 +167,7 @@ public class EnemyManager extends AbstractWorldManager {
             enemy.getBodyA().applyLinearImpulse(force, enemy.getBodyA().getWorldCenter(), true);
 
             enemy.setState(StateEnemy.HIT);
-        }
+        }*/
 
     }
 
