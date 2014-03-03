@@ -145,6 +145,7 @@ public class ModelsAndViews {
         animationHero.put(String.valueOf(StateHero.IDLE), idle);
         animationHero.put(String.valueOf(StateHero.SWIMMING), swimming);
         animationHero.put(String.valueOf(StateHero.PROPULSION), swimming);
+        animationHero.put(String.valueOf(BaseState.HIT), fall);
     }
 
     private void loadEnemyAnimations() {

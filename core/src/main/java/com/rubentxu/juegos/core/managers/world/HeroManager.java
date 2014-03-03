@@ -241,7 +241,7 @@ public class HeroManager extends AbstractWorldManager {
             contact.setEnabled(true);
         }
 
-        if (enemy != null && hero != null && !hero.getState().equals(BaseState.HURT)) {
+        if (enemy != null && hero != null ) {
 
             Vector2 point = contact.getWorldManifold().getPoints()[0];
             Vector2 pointVelEnemy = enemy.getBodyA().getLinearVelocityFromWorldPoint(point);
@@ -264,17 +264,18 @@ public class HeroManager extends AbstractWorldManager {
                     enemy.setState(BaseState.HIT);
                     hero.setState(BaseState.HURT);
                 }
-                Vector2 force;
-                Vector2 relativePoint = hero.getBodyA().getWorldPoint(point);
-                if (relativePoint.x < hero.getBodyA().getPosition().x) {
-                    force = new Vector2(-8 + pointVelHero.x, 8 - pointVelHero.y);
+                Vector2 force= contact.getWorldManifold().getNormal();
+                if(contact.getFixtureA().equals(hero.getHeroPhysicsFixture())){
+                    force.add(0,0.7f);
+                    force.scl(-8);
                 } else {
-                    force = new Vector2( 8 + pointVelHero.x, 8 - pointVelHero.y);
+                    force.add(0,0.7f);
+                    force.scl(8);
                 }
 
-                System.out.println("Fuerza colision Enemigo: " + force + " relativePoint " + (relativePoint.x < hero.getBodyA().getPosition().x));
+                System.out.println("Fuerza colision Enemigo: " + force + " relativePoint " +force);
                 hero.getBodyA().applyLinearImpulse(force, hero.getBodyA().getWorldCenter(), true);
-
+                hero.velocityLimit();
             }
         }
     }

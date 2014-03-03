@@ -107,6 +107,7 @@ public class PlatformManager extends AbstractWorldManager {
                     !((Hero) passenger).getState().equals(StateHero.WALKING)) {
                 contact.setFriction(0);
             }
+
         }
         WorldManifold manifold = contact.getWorldManifold();
         for (Vector2 point : manifold.getPoints()) {
@@ -122,11 +123,25 @@ public class PlatformManager extends AbstractWorldManager {
                 Vector2 relativePoint = movingPlatform.getBodyA().getLocalPoint(point);
                 float platformFaceY = 0.5f;
                 if (relativePoint.y > platformFaceY - 0.05) {
+                    if(contact.getFixtureA().equals(((Hero) passenger).getHeroPhysicsFixture()) )
+                        System.out.println(" relativeVel < 1 " +relativeVel);
                     movingPlatform.getPassengers().add(passenger);
                     movingPlatform.enabled = true;
+                    Vector2 force= contact.getWorldManifold().getNormal();
+                    if(Math.abs(force.x)==1f && force.y==0f){
+
+                        if(contact.getFixtureA().equals(((Hero) passenger).getHeroPhysicsFixture()) ){
+                            force.scl(-6);
+                        } else if (contact.getFixtureB().equals(((Hero) passenger).getHeroPhysicsFixture())) {
+                            force.scl(6);
+                        }
+                        passenger.getBodyA().applyLinearImpulse(force, passenger.getBodyA().getWorldCenter(), true);
+                        System.out.println("Fuerza colision Platform: " + force);
+                    }
                     return;
                 }
             }
+
         }
 
         movingPlatform.enabled = false;
