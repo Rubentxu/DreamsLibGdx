@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.Array;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
+import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Hero.StateHero;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.World;
@@ -88,8 +89,10 @@ public class ModelsAndViews {
                     Gdx.app.log(Constants.LOG, "Error en render: " + ex.getMessage() + "Grupo " + e.getGrupo() + " State" + e.getState());
                 }
             }
-            if (e.getEffect() != null) {
-                e.getEffect().draw(batch);
+            if (e instanceof Hero) {
+                Hero hero= (Hero) e;
+                hero.getParticleEffectContact().draw(batch);
+                hero.getParticleEffectDust().draw(batch);
             }
 
         }

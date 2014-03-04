@@ -280,7 +280,8 @@ public class Box2dObjectFactory {
             hero.getOriginBodyA().set(((width*scaleX/2)-(width/2))/2f,((height*scaleY/2)-(height/2))/2f);
             heroPhysicsFixture.setUserData(hero);
             heroSensorFixture.setUserData(hero);
-            hero.setEffect((ParticleEffect) resourcesManager.get(ResourcesManager.PARTICLE_EFFECT));
+            hero.setParticleEffectDust((ParticleEffect) resourcesManager.get(ResourcesManager.PARTICLE_EFFECT));
+            hero.setParticleEffectContact((ParticleEffect) resourcesManager.get(ResourcesManager.PARTICLE_EFFECT_CONTACT));
             shape.dispose();
             circle.dispose();
 

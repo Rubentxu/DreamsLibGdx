@@ -38,8 +38,9 @@ public class HeroManager extends AbstractWorldManager {
                 || !hero.getState().equals(BaseState.DEAD)) {
             handleInput(hero);
             hero.setStateTime(hero.getStateTime() + delta);
-            hero.getEffect().setPosition(hero.getXBodyA() + hero.getWidthBodyA() / 2, hero.getYBodyA());
-            hero.getEffect().update(delta);
+            hero.getParticleEffectDust().setPosition(hero.getXBodyA() + hero.getWidthBodyA() / 2, hero.getYBodyA());
+            hero.getParticleEffectDust().update(delta);
+            hero.getParticleEffectContact().update(delta);
         } else {
             if (hero.getStateTime() > 0.5f && !hero.getState().equals(BaseState.DEAD)) {
                 if (hero.getProfile().removeLive()) BaseGame.setGameState(GameState.GAME_OVER);
@@ -91,7 +92,7 @@ public class HeroManager extends AbstractWorldManager {
                 }
 
                 handleState(hero);
-                hero.getEffect().allowCompletion();
+                hero.getParticleEffectDust().allowCompletion();
                 break;
             case ONAIR:
                 if (keys.get(Keys.LEFT)) {
@@ -110,7 +111,7 @@ public class HeroManager extends AbstractWorldManager {
                 hero.getHeroPhysicsFixture().setFriction(0f);
                 hero.getHeroSensorFixture().setFriction(0f);
                 handleState(hero);
-                hero.getEffect().allowCompletion();
+                hero.getParticleEffectDust().allowCompletion();
                 break;
         }
         hero.velocityLimit();
@@ -129,14 +130,14 @@ public class HeroManager extends AbstractWorldManager {
             hero.getBodyA().setLinearVelocity(hero.getVelocity().x * 0.9f, vel.y);
             hero.getHeroPhysicsFixture().setFriction(100f);
             hero.getHeroSensorFixture().setFriction(100f);
-            hero.getEffect().allowCompletion();
+            hero.getParticleEffectDust().allowCompletion();
 
         } else if (hero.getState().equals(Hero.StateHero.WALKING)) {
             applyPhysicMovingImpulse(hero);
             stillTime = 0;
             hero.getHeroPhysicsFixture().setFriction(0.2f);
             hero.getHeroSensorFixture().setFriction(0.2f);
-            if (hero.getEffect().isComplete()) hero.getEffect().reset();
+            if (hero.getParticleEffectDust().isComplete()) hero.getParticleEffectDust().reset();
 
         } else if (hero.getState().equals(Hero.StateHero.JUMPING)) {
             if (!hero.getStatePos().equals(Hero.StatePos.ONAIR)) applyPhysicJumpingImpulse(vel, pos, hero);
@@ -148,7 +149,7 @@ public class HeroManager extends AbstractWorldManager {
 
         } else if (hero.getState().equals(Hero.StateHero.SWIMMING)) {
             applyPhysicMovingImpulse(hero);
-            hero.getEffect().allowCompletion();
+            hero.getParticleEffectDust().allowCompletion();
         } else if (hero.getState().equals(Hero.StateHero.FALL)) {
             if (keys.get(Keys.LEFT) ||  keys.get(Keys.RIGHT)) {
                 applyPhysicMovingImpulse(hero);
@@ -264,6 +265,8 @@ public class HeroManager extends AbstractWorldManager {
                     enemy.setState(BaseState.HIT);
                     hero.setState(BaseState.HURT);
                 }
+                hero.getParticleEffectContact().setPosition(point.x, point.y);
+                hero.getParticleEffectContact().reset();
                 Vector2 force= contact.getWorldManifold().getNormal();
                 if(contact.getFixtureA().equals(hero.getHeroPhysicsFixture())){
                     force.add(0,0.7f);
@@ -283,7 +286,7 @@ public class HeroManager extends AbstractWorldManager {
     @Override
     public void handleEndContact(Contact contact) {
         //Gdx.app.log(DreamsGame.LOG, "End contact");
-
+        Enemy enemy = getEnemy(contact);
         Hero hero = getHero(contact);
 
         if (contact.getFixtureA() == hero.getHeroSensorFixture())
@@ -298,6 +301,10 @@ public class HeroManager extends AbstractWorldManager {
                 hero.setStatePos(Hero.StatePos.ONAIR);
 
 
+        }
+
+        if (enemy != null && hero != null ) {
+            hero.getParticleEffectContact().allowCompletion();
         }
 
     }

@@ -2,7 +2,6 @@ package com.rubentxu.juegos.core.modelo.base;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
@@ -143,16 +142,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     @Override
     public Body getBodyA() {
         return bodyA;
-    }
-
-    @Override
-    public ParticleEffect getEffect() {
-        return null;
-    }
-
-    @Override
-    public void setEffect(ParticleEffect effect) {
-
     }
 
     public void setBodyA(Body bodyA) {

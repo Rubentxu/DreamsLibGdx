@@ -36,6 +36,7 @@ public class ResourcesManager extends AssetManager implements Disposable {
     public static final String MENU_BACKGROUND = "imagenes/fondos/menu-backgroud.jpg";
     public static final String MAP_DEFAULT = "maps/EscenarioDePruebas.tmx";
     public static final String PARTICLE_EFFECT = "particles/dust.pfx";
+    public static final String PARTICLE_EFFECT_CONTACT = "particles/contact.pfx";
     public static final String MUSIC_MENU = "sounds/music/MonkeysSpinningMonkeys.mp3";
     // Sonidos
     public static final String HIT_SOUND = "sounds/sound/Hit_Hurt.ogg";
@@ -79,6 +80,7 @@ public class ResourcesManager extends AssetManager implements Disposable {
         this.load(GUI_ATLAS, TextureAtlas.class);
         this.load(UISKIN_ATLAS, TextureAtlas.class);
         this.load(PARTICLE_EFFECT, ParticleEffect.class);
+        this.load(PARTICLE_EFFECT_CONTACT, ParticleEffect.class);
         this.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
         this.load(MUSIC_MENU,Music.class);
 

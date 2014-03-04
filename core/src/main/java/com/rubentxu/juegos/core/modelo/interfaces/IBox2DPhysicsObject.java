@@ -1,7 +1,6 @@
 package com.rubentxu.juegos.core.modelo.interfaces;
 
 
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.physics.box2d.Body;
 
 public interface IBox2DPhysicsObject {
@@ -17,10 +16,6 @@ public interface IBox2DPhysicsObject {
     public float getRotationBodyA();
 
     public Body getBodyA();
-
-    public ParticleEffect getEffect();
-
-    public void setEffect(ParticleEffect effect);
 
     public float getWidthBodyA();
 

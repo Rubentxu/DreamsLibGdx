@@ -14,7 +14,7 @@ import java.util.HashSet;
 public class Hero extends Box2DPhysicsObject implements Disposable {
 
 
-    public enum StateHero implements State {
+     public enum StateHero implements State {
         IDLE, WALKING, JUMPING, DYING, FALL, SWIMMING, PROPULSION,WIN
     }
 
@@ -30,7 +30,8 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     private HashSet<Fixture> grounContacts;
     private Fixture heroPhysicsFixture;
     private Fixture heroSensorFixture;
-    private ParticleEffect particleEffect;
+    private ParticleEffect particleEffectDust;
+    private ParticleEffect particleEffectContact;
     private Profile profile;
 
     public Hero(String name, Body body) {
@@ -109,16 +110,21 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         this.statePos = statePos;
     }
 
-    @Override
-    public ParticleEffect getEffect() {
-        return particleEffect;
+    public ParticleEffect getParticleEffectDust() {
+        return particleEffectDust;
     }
 
-    @Override
-    public void setEffect(ParticleEffect effect) {
-        this.particleEffect = effect;
+    public void setParticleEffectDust(ParticleEffect particleEffectDust) {
+        this.particleEffectDust = particleEffectDust;
     }
 
+    public ParticleEffect getParticleEffectContact() {
+        return particleEffectContact;
+    }
+
+    public void setParticleEffectContact(ParticleEffect particleEffectContact) {
+        this.particleEffectContact = particleEffectContact;
+    }
 
     @Override
     public String toString() {
