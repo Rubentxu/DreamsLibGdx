@@ -1,6 +1,7 @@
 package com.rubentxu.juegos.core.pantallas;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ActorGestureListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Level;
@@ -55,7 +57,8 @@ public class SelectLevelScreen extends BaseScreen {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     super.touchUp(event, x, y, pointer, button);
-                   game.getLevelManager().setCurrentLevel(levels.get(levelButton.getLevelNumber()));
+                    Gdx.app.log(Constants.LOG,"Numero de boton presionado: "+ levelButton.getLevelNumber());
+                   game.getLevelManager().setCurrentLevel(levels.get(levelButton.getLevelNumber()-1));
                    game.gameScreen= new GameScreen(game);
                    game.setScreen(game.gameScreen,getTransition());
                 }

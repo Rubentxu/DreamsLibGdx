@@ -52,7 +52,7 @@ public class Box2dObjectFactory {
         this.resourcesManager = resourcesManager;
     }
 
-    public void getEntity(GRUPO tipo, MapObject object) {
+    public void createEntity(GRUPO tipo, MapObject object) {
         switch (tipo) {
             case HERO:
                 Hero hero=createHero(object);
@@ -79,6 +79,9 @@ public class Box2dObjectFactory {
                 break;
             case MILL:
                 world.getEntities().add(createMill(object));
+                break;
+            case CHECKPOINT:
+                world.getEntities().add(createCheckPoint(object));
                 break;
         }
 
@@ -425,7 +428,7 @@ public class Box2dObjectFactory {
             BodyDef def = new BodyDef();
             def.type = BodyType.StaticBody;
             Body bodyA = physics.createBody(def);
-            bodyA.setTransform(rectangle.x, rectangle.y + 6f, 0);
+            bodyA.setTransform(rectangle.x, rectangle.y + 5f, 0);
             PolygonShape poly = new PolygonShape();
             poly.setAsBox(0.25f, 5);
             FixtureDef fixBox = new FixtureDef();
@@ -434,10 +437,10 @@ public class Box2dObjectFactory {
             fixBox.filter.categoryBits = GRUPO.CHECKPOINT.getCategory();
             fixBox.filter.maskBits = Box2DPhysicsObject.MASK_INTERACTIVE;
             Fixture fixtA = bodyA.createFixture(fixBox);
-            poly.dispose();
+
 
             PolygonShape shape = new PolygonShape();
-            shape.setAsBox(1.0f, 0.25f);
+            shape.setAsBox(1.1f, 0.8f);
 
             BodyDef bd = new BodyDef();
             bd.type = BodyType.DynamicBody;
@@ -466,14 +469,20 @@ public class Box2dObjectFactory {
             m_joint = (PrismaticJoint) physics.createJoint(pjd);
 
             checkPoint = new CheckPoint(object.getName(), bodyA, bodyB, m_joint);
-            checkPoint.setWidthBodyA(0.25f);
-            checkPoint.setHeightBodyA(5f);
-            checkPoint.setWidthBodyB(1f);
-            checkPoint.setHeightBodyB(0.25f);
+            checkPoint.setWidthBodyA(0.25f*2);
+            checkPoint.setHeightBodyA(5f*2);
+            checkPoint.setWidthBodyB(1.1f*2);
+            checkPoint.setHeightBodyB(0.8f*2);
+            checkPoint.getOriginBodyA().set(Box2DUtils.width(bodyA)/2,Box2DUtils.height(bodyA)/2);
+            checkPoint.getOriginBodyB().set(Box2DUtils.width(bodyB)/2,Box2DUtils.height(bodyB)/2);
+
+
             bodyA.setUserData(checkPoint);
             bodyB.setUserData(checkPoint);
             fixtA.setUserData(checkPoint);
             fixtB.setUserData(checkPoint);
+            poly.dispose();
+            shape.dispose();
         }
         return checkPoint;
     }

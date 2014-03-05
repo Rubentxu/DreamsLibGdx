@@ -39,6 +39,8 @@ public class ModelsAndViews {
     private Map<String, Animation> animationItemCoin;
     private HashMap<String, Animation> animationMotorMill;
     private HashMap<String, Animation> animationAspasMolino;
+    private HashMap<String, Animation> animationCheckPointMastil;
+    private HashMap<String, Animation> animationCheckPointBandera;
 
 
     public ModelsAndViews(ResourcesManager resourcesManager, World world) {
@@ -51,6 +53,8 @@ public class ModelsAndViews {
         loadItemsCoinAnimations();
         loadMotorMolinoAnimations();
         loadAspasMolinoAnimations();
+        loadCheckPointMastilAnimations();
+        loadCheckPointBanderaAnimations();
     }
 
     public void render(SpriteBatch batch) {
@@ -112,6 +116,8 @@ public class ModelsAndViews {
             if (((Item) e).getType().equals(Item.TYPE.COIN)) return animationItemCoin;
         } else if (e.getGrupo().equals(GRUPO.MILL)) {
             return animationMotorMill;
+        }else if (e.getGrupo().equals(GRUPO.CHECKPOINT)) {
+            return animationCheckPointMastil;
         }
         return null;
     }
@@ -119,6 +125,8 @@ public class ModelsAndViews {
     private Map<String, Animation> getAnimation2(Box2DPhysicsObject e) {
         if (e.getGrupo().equals(GRUPO.MILL)) {
             return animationAspasMolino;
+        }else if (e.getGrupo().equals(GRUPO.CHECKPOINT)) {
+            return animationCheckPointBandera;
         }
         return null;
     }
@@ -194,6 +202,22 @@ public class ModelsAndViews {
         Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, aspasMolino, Animation.LOOP);
         animationAspasMolino = new HashMap<String, Animation>();
         animationAspasMolino.put(String.valueOf(BaseState.DEFAULT), defaultState);
+    }
+
+    private void loadCheckPointMastilAnimations() {
+        TextureAtlas objectsAtlas = resourcesManager.get(ResourcesManager.OBJECTS_ATLAS);
+        Array<TextureAtlas.AtlasRegion> mastil = objectsAtlas.findRegions("mastil");
+        Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, mastil, Animation.LOOP);
+        animationCheckPointMastil = new HashMap<String, Animation>();
+        animationCheckPointMastil.put(String.valueOf(BaseState.DEFAULT), defaultState);
+    }
+
+    private void loadCheckPointBanderaAnimations() {
+        TextureAtlas objectsAtlas = resourcesManager.get(ResourcesManager.OBJECTS_ATLAS);
+        Array<TextureAtlas.AtlasRegion> bandera = objectsAtlas.findRegions("bandera");
+        Animation defaultState = new Animation(Constants.RUNNING_FRAME_DURATION, bandera, Animation.LOOP);
+        animationCheckPointBandera = new HashMap<String, Animation>();
+        animationCheckPointBandera.put(String.valueOf(BaseState.DEFAULT), defaultState);
     }
 
 

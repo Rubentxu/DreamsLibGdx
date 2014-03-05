@@ -17,6 +17,13 @@ motorMolino
   orig: 300, 304
   offset: 0, 0
   index: -1
+mastil
+  rotate: false
+  xy: 425, 124
+  size: 49, 477
+  orig: 49, 477
+  offset: 0, 0
+  index: -1
 bandera
   rotate: false
   xy: 123, 167

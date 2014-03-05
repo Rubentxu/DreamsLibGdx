@@ -1,14 +1,15 @@
 package com.rubentxu.juegos.core.managers.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.CheckPoint;
 import com.rubentxu.juegos.core.modelo.Hero;
-import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 
@@ -18,7 +19,12 @@ public class CheckPointManager extends AbstractWorldManager {
 
     @Override
     public void handleBeginContact(Contact contact) {
-        if(getHero(contact)!=null) {
+        CheckPoint checkPoint = getCheckPoint(contact);
+        Hero hero= getHero(contact);
+        Gdx.app.log(Constants.LOG,"Begin Contact CheckPoint");
+        if(hero !=null && checkPoint !=null) {
+            Gdx.app.log(Constants.LOG,"Begin Contact CheckPoint TRUE");
+            ((PrismaticJoint)checkPoint.getJoint()).enableMotor(true);
         }
     }
 
@@ -65,14 +71,14 @@ public class CheckPointManager extends AbstractWorldManager {
         }
     }
 
-    public Item getMill(Contact contact) {
+    public CheckPoint getCheckPoint(Contact contact) {
         Box2DPhysicsObject box2dPhysicsA = (Box2DPhysicsObject) contact.getFixtureA().getUserData();
         Box2DPhysicsObject box2dPhysicsB = (Box2DPhysicsObject) contact.getFixtureB().getUserData();
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.CHECKPOINT)) {
-            return (Item) box2dPhysicsA;
+            return (CheckPoint) box2dPhysicsA;
         } else if(box2dPhysicsB.getGrupo().equals(GRUPO.CHECKPOINT)){
-            return (Item) box2dPhysicsB;}
+            return (CheckPoint) box2dPhysicsB;}
         else {
             return null;
         }

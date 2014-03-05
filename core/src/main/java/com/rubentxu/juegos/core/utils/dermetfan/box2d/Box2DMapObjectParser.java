@@ -60,12 +60,6 @@ import com.badlogic.gdx.physics.box2d.joints.WheelJointDef;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.rubentxu.juegos.core.factorias.Box2dObjectFactory;
-import com.rubentxu.juegos.core.modelo.Enemy;
-import com.rubentxu.juegos.core.modelo.Hero;
-import com.rubentxu.juegos.core.modelo.Item;
-import com.rubentxu.juegos.core.modelo.Mill;
-import com.rubentxu.juegos.core.modelo.MovingPlatform;
-import com.rubentxu.juegos.core.modelo.Water;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
 import com.rubentxu.juegos.core.utils.dermetfan.math.BayazitDecomposer;
@@ -279,18 +273,20 @@ public class Box2DMapObjectParser {
 
     private void createModelObject(World world, MapObject object) {
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.hero))
-            box2dObjectFactory.<Hero>getEntity(GRUPO.HERO, object);
+            box2dObjectFactory.createEntity(GRUPO.HERO, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.movingPlatform))
-            box2dObjectFactory.<MovingPlatform>getEntity(GRUPO.MOVING_PLATFORM, object);
+            box2dObjectFactory.createEntity(GRUPO.MOVING_PLATFORM, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.water))
-            box2dObjectFactory.<Water>getEntity(GRUPO.FLUID, object);
+            box2dObjectFactory.createEntity(GRUPO.FLUID, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.enemy))
-            box2dObjectFactory.<Enemy>getEntity(GRUPO.ENEMY, object);
+            box2dObjectFactory.createEntity(GRUPO.ENEMY, object);
         if (object.getProperties().get(aliases.typeModelObject).equals(aliases.item))
-           box2dObjectFactory.<Item>getEntity(GRUPO.ITEMS, object);
-        if (object.getProperties().get(aliases.typeModelObject).equals(aliases.revoluteObject)) {
-           box2dObjectFactory.<Mill>getEntity(GRUPO.MILL, object);
-        }
+           box2dObjectFactory.createEntity(GRUPO.ITEMS, object);
+        if (object.getProperties().get(aliases.typeModelObject).equals(aliases.millObject))
+           box2dObjectFactory.createEntity(GRUPO.MILL, object);
+        if (object.getProperties().get(aliases.typeModelObject).equals(aliases.checkPointObject))
+            box2dObjectFactory.createEntity(GRUPO.CHECKPOINT, object);
+
     }
 
 
@@ -894,16 +890,14 @@ public class Box2DMapObjectParser {
                 enemy = "Enemy",
                 hero = "Hero",
                 item = "Item",
-                revoluteObject = "RevoluteObject",
-                typeRevolute = "typeRevolute",
-                revoluteObject1 = "revoluteObject1",
-                revoluteObject2 = "revoluteObject2",
-                revoluteObject3 = "revoluteObject3",
+                millObject = "MillObject",
+                checkPointObject = "CheckPointObject",
                 typeItem = "typeItem",
                 coin = "coin",
                 powerup = "powerup",
                 key = "key",
                 unitScale = "unitScale";
+
     }
 
 }

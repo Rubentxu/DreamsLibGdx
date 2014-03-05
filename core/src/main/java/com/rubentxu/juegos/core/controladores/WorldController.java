@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
+import com.rubentxu.juegos.core.managers.world.CheckPointManager;
 import com.rubentxu.juegos.core.managers.world.EnemyManager;
 import com.rubentxu.juegos.core.managers.world.HeroManager;
 import com.rubentxu.juegos.core.managers.world.ItemsManager;
@@ -30,6 +31,7 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
     private WaterManager waterManager;
     private EnemyManager enemyManager;
     private ItemsManager itemsManager;
+    private CheckPointManager checkPointManager;
     private List<Box2DPhysicsObject> destroy=new ArrayList<Box2DPhysicsObject>();
 
     public static java.util.Map<WorldController.Keys, Boolean> keys = new java.util.HashMap<WorldController.Keys, Boolean>();
@@ -54,6 +56,7 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
         waterManager = new WaterManager();
         enemyManager = new EnemyManager();
         itemsManager= new ItemsManager();
+        checkPointManager = new CheckPointManager();
 
         itemsManager.addObserver(game.getProfileManager());
         itemsManager.addObserver(game.getAudioManager());
@@ -146,6 +149,8 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
                 break;
             case MOVING_PLATFORM:
                 return platformManager;
+            case CHECKPOINT:
+                return checkPointManager;
             case SENSOR:
                 break;
             case STATIC:
@@ -191,5 +196,6 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
         platformManager=null;
         enemyManager=null;
         waterManager=null;
+        checkPointManager=null;
     }
 }

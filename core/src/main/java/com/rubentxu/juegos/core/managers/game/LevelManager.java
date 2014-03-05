@@ -1,10 +1,12 @@
 package com.rubentxu.juegos.core.managers.game;
 
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.Level;
 
 import java.util.ArrayList;
@@ -23,18 +25,22 @@ public class LevelManager {
     public LevelManager(DreamsGame game) {
         this.game = game;
         levels = new ArrayList<Level>();
-        game.getResourcesManager().load("maps/EscenarioDePruebas.tmx", TiledMap.class);
-        game.getResourcesManager().load(CLOUD_BACKGROUND, Texture.class);
-        game.getResourcesManager().load(TREE_BACKGROUND, Texture.class);
-        game.getResourcesManager().load(LEVEL1_BACKGROUND, Texture.class);
-        game.getResourcesManager().load(MUSIC, Music.class);
-        game.getResourcesManager().finishLoading();
+        levels = game.getProfileManager().retrieveProfile().getLevels();
+
         loadLevels();
     }
 
+    public void loadAssetLevel(Level level){
+        game.getResourcesManager().load(level.getMap(), TiledMap.class);
+        game.getResourcesManager().load(level.getBackground_03(), Texture.class);
+        game.getResourcesManager().load(level.getBackground_02(), Texture.class);
+        game.getResourcesManager().load(level.getBackground_01(), Texture.class);
+        game.getResourcesManager().load(level.getMusic(), Music.class);
+        game.getResourcesManager().finishLoading();
+    }
 
     public void loadLevels() {
-        levels = game.getProfileManager().retrieveProfile().getLevels();
+
     }
 
     public void saveState() {
@@ -46,6 +52,8 @@ public class LevelManager {
     }
 
     public void setCurrentLevel(Level currentLevel) {
+        loadAssetLevel(currentLevel);
+        Gdx.app.log(Constants.LOG,"Se cargo el mapa: "+ currentLevel.getMap());
         this.currentLevel = currentLevel;
     }
 

@@ -34,7 +34,6 @@ public class ResourcesManager extends AssetManager implements Disposable {
     public static final String STATS_BACKGROUND = "imagenes/fondos/fondoStats.png";
     public static final String CLOUD_BACKGROUND = "imagenes/fondos/nubes.png";
     public static final String MENU_BACKGROUND = "imagenes/fondos/menu-backgroud.jpg";
-    public static final String MAP_DEFAULT = "maps/EscenarioDePruebas.tmx";
     public static final String PARTICLE_EFFECT = "particles/dust.pfx";
     public static final String PARTICLE_EFFECT_CONTACT = "particles/contact.pfx";
     public static final String MUSIC_MENU = "sounds/music/MonkeysSpinningMonkeys.mp3";
