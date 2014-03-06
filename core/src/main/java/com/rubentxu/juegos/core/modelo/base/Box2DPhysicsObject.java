@@ -1,12 +1,10 @@
 package com.rubentxu.juegos.core.modelo.base;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsObject;
 
 public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
@@ -29,7 +27,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public enum BaseState implements State {
-        INITIAL, DEFAULT, DESTROY ,HURT,HIT,DEAD
+        INITIAL, DEFAULT, DESTROY, HURT, HIT, DEAD
     }
 
     public static final short MASK_HERO = (short) ~GRUPO.HERO.category;
@@ -51,29 +49,27 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     protected String nombre;
     private float stateTime;
     private State state = BaseState.INITIAL;
-    private boolean changedStatus = false;
     private boolean facingLeft = false;
 
     public State getState() {
         return state;
     }
 
-    public void setState(State state) {
+    public boolean setState(State state) {
         if (!this.state.equals(state)) {
-            if (( this.state.equals(BaseState.HURT) || this.state.equals(BaseState.HIT) ||
+            if ((this.state.equals(BaseState.HURT) || this.state.equals(BaseState.HIT) ||
                     this.state.equals(BaseState.DEAD))
                     && this.getStateTime() < 0.8f) {
-                changedStatus = false;
+                return false;
             } else {
                 this.state = state;
                 stateTime = 0;
-                changedStatus = true;
+                return true;
             }
 
         } else {
-            changedStatus = false;
+            return false;
         }
-
     }
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, Body bodyA) {
@@ -193,12 +189,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public void setFacingLeft(boolean facingLeft) {
         this.facingLeft = facingLeft;
-    }
-
-    public boolean isChangedStatus() {
-
-        if (changedStatus) Gdx.app.log(Constants.LOG, "Cambio el estado " + changedStatus + " Estado  " + state);
-        return changedStatus;
     }
 
     public Vector2 getScaleBodyA() {

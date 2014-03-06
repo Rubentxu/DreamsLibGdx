@@ -5,19 +5,19 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Joint;
 import com.rubentxu.juegos.core.modelo.interfaces.IBox2DPhysicsCompoundObject;
 
-public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IBox2DPhysicsCompoundObject  {
+public class Box2dPhysicsCompoundObject extends Box2DPhysicsObject implements IBox2DPhysicsCompoundObject {
 
     private Joint joint;
     private Body bodyB;
-    private final Vector2 originBodyB = new Vector2(0,0);
-    private final Vector2 scaleBodyB = new Vector2(1,1);
+    private final Vector2 originBodyB = new Vector2(0, 0);
+    private final Vector2 scaleBodyB = new Vector2(1, 1);
     private float widthBodyB;
     private float heightBodyB;
 
-    public Box2dPhysicsCompoundObject(String nombre, GRUPO grupo, Body bodyA,Body bodyB, Joint joint) {
+    public Box2dPhysicsCompoundObject(String nombre, GRUPO grupo, Body bodyA, Body bodyB, Joint joint) {
         super(nombre, grupo, bodyA);
-        this.bodyB=bodyB;
-        this.joint=joint;
+        this.bodyB = bodyB;
+        this.joint = joint;
     }
 
     public Joint getJoint() {

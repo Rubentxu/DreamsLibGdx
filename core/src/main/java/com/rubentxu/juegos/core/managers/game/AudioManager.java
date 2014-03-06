@@ -5,15 +5,14 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.managers.StateObserver;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
-import com.rubentxu.juegos.core.modelo.base.State;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
+import com.rubentxu.juegos.core.modelo.base.State;
 
-import java.util.Observable;
-import java.util.Observer;
-
-public class AudioManager implements Observer {
+public class AudioManager implements StateObserver {
 
 
     private DreamsGame game;
@@ -62,9 +61,9 @@ public class AudioManager implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
-        if(arg instanceof Item){
-            switch (((Item) arg).getType()){
+    public void onNotify(State state, Box2DPhysicsObject entity) {
+        if (entity instanceof Item) {
+            switch (((Item) entity).getType()) {
                 case COIN:
                     Gdx.app.log(Constants.LOG, "Play Sound: Collect COIN.");
                     playSound(ResourcesManager.PICKUP_COIN_SOUND);
@@ -75,10 +74,10 @@ public class AudioManager implements Observer {
                     break;
             }
         }
-        if (arg instanceof State) {
-            if (((State)arg).equals(Hero.StateHero.JUMPING)) playSound(ResourcesManager.JUMP_SOUND);
-            if (((State)arg).equals(BaseState.HURT) || ((State)arg).equals(BaseState.HIT)) playSound(ResourcesManager.HIT_SOUND);
-        }
+
+        if (state.equals(Hero.StateHero.JUMPING)) playSound(ResourcesManager.JUMP_SOUND);
+        if (state.equals(BaseState.HURT) || state.equals(BaseState.HIT)) playSound(ResourcesManager.HIT_SOUND);
+
     }
 }
 

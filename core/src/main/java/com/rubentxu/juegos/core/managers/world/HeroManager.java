@@ -17,6 +17,7 @@ import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.BaseState;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
+import com.rubentxu.juegos.core.modelo.base.State;
 
 import static com.rubentxu.juegos.core.controladores.WorldController.keys;
 import static com.rubentxu.juegos.core.modelo.Hero.StateHero.FALL;
@@ -42,56 +43,57 @@ public class HeroManager extends AbstractWorldManager {
             hero.getParticleEffectDust().update(delta);
             hero.getParticleEffectContact().update(delta);
         } else {
+            State state=hero.getState();
             if (hero.getStateTime() > 0.5f && !hero.getState().equals(BaseState.DEAD)) {
                 if (hero.getProfile().removeLive()) BaseGame.setGameState(GameState.GAME_OVER);
-                hero.setState(Hero.StateHero.IDLE);
+                state=Hero.StateHero.IDLE;
             }
-            handleState(hero);
+            handleState(state,hero);
             hero.setStateTime(hero.getStateTime() + delta);
         }
     }
 
 
     public void handleInput(Hero hero) {
-
+        State state=null;
         switch (hero.getStatePos()) {
             case ONGROUND:
                 if (keys.get(Keys.LEFT)) {
-                    hero.setState(WALKING);
+                    state=WALKING;
                     hero.setFacingLeft(true);
                 }
                 if (keys.get(Keys.RIGHT)) {
-                    hero.setState(WALKING);
+                    state=WALKING;
                     hero.setFacingLeft(false);
                 }
 
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    hero.setState(IDLE);
+                    state=IDLE;
                 }
                 if (keys.get(Keys.JUMP)) {
-                    if (hero.getStateTime() > 0.2) hero.setState(JUMPING);
+                    if (hero.getStateTime() > 0.2) state=JUMPING;
                 }
-                handleState(hero);
+                handleState(state,hero);
                 break;
             case INWATER:
                 if (keys.get(Keys.LEFT)) {
-                    hero.setState(SWIMMING);
+                    state=SWIMMING;
                     hero.setFacingLeft(true);
                 }
                 if (keys.get(Keys.RIGHT)) {
-                    hero.setState(SWIMMING);
+                    state=SWIMMING;
                     hero.setFacingLeft(false);
                 }
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    hero.setState(IDLE);
+                    state=IDLE;
                 }
                 if (keys.get(Keys.JUMP)) {
-                    hero.setState(PROPULSION);
+                    state=PROPULSION;
                 }
 
-                handleState(hero);
+                handleState(state,hero);
                 hero.getParticleEffectDust().allowCompletion();
                 break;
             case ONAIR:
@@ -103,14 +105,14 @@ public class HeroManager extends AbstractWorldManager {
                 }
 
                 if (hero.getVelocity().y <= 0) {
-                    hero.setState(FALL);
+                    state=FALL;
                 } else {
 
-                    hero.setState(JUMPING);
+                    state=JUMPING;
                 }
                 hero.getHeroPhysicsFixture().setFriction(0f);
                 hero.getHeroSensorFixture().setFriction(0f);
-                handleState(hero);
+                handleState(state,hero);
                 hero.getParticleEffectDust().allowCompletion();
                 break;
         }
@@ -118,10 +120,10 @@ public class HeroManager extends AbstractWorldManager {
 
     }
 
-    public void handleState(Hero hero) {
-        hero.setState(hero.getState());
-        if (hero.isChangedStatus()) setChanged();
-        notifyObservers(hero.getState());
+    public void handleState(State state,Hero hero) {
+
+        if (hero.setState(state)) notifyObservers(state,hero);
+
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBodyA().getPosition();
 

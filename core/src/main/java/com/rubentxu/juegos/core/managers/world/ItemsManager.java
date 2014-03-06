@@ -9,6 +9,7 @@ import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject.GRUPO;
+import com.rubentxu.juegos.core.modelo.base.State;
 
 
 public class ItemsManager extends AbstractWorldManager {
@@ -19,9 +20,8 @@ public class ItemsManager extends AbstractWorldManager {
     public void handleBeginContact(Contact contact) {
         if(getHero(contact)!=null) {
             Item item= getItem(contact);
-            setChanged();
-            notifyObservers(item);
-            item.setState(Box2DPhysicsObject.BaseState.DESTROY);
+            State state=Box2DPhysicsObject.BaseState.DESTROY;
+            if (item.setState(state)) notifyObservers(state,item);
         }
     }
 

@@ -6,13 +6,16 @@ import com.badlogic.gdx.utils.Base64Coder;
 import com.badlogic.gdx.utils.Json;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.managers.StateObserver;
 import com.rubentxu.juegos.core.modelo.Item;
 import com.rubentxu.juegos.core.modelo.Profile;
+import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
+import com.rubentxu.juegos.core.modelo.base.State;
 
 import java.util.Observable;
 import java.util.Observer;
 
-public class ProfileManager  implements Observer {
+public class ProfileManager  implements StateObserver {
 
 
     private Profile profile;
@@ -76,12 +79,12 @@ public class ProfileManager  implements Observer {
     }
 
     @Override
-    public void update(Observable o, Object arg) {
+    public void onNotify(State state, Box2DPhysicsObject entity) {
 
-        if(arg instanceof Item){
-            switch (((Item) arg).getType()){
+        if(entity instanceof Item){
+            switch (((Item) entity).getType()){
                 case COIN:
-                    profile.addCredits(((Item) arg).getValue());
+                    profile.addCredits(((Item) entity).getValue());
                     break;
                 case POWERUP:
                     break;
