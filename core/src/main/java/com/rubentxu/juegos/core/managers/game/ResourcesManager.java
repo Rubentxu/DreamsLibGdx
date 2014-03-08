@@ -90,10 +90,10 @@ public class ResourcesManager extends AssetManager implements Disposable {
     }
 
     public Music getMusic(String name) {
-        this.unload(name);
+        if (this.isLoaded(name,Music.class)) return this.get(name,Music.class);
         this.load(name, Music.class);
         this.finishLoading();
-        return this.get(name);
+        return this.get(name,Music.class);
     }
 
     @Override

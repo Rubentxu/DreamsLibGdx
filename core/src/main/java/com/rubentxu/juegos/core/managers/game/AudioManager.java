@@ -17,6 +17,7 @@ public class AudioManager implements StateObserver {
 
     private DreamsGame game;
     private Music currentMusicPlaying;
+    private String currentNameMusicPlaying;
     private Sound soundToPlay;
 
     public AudioManager(DreamsGame game) {
@@ -25,9 +26,10 @@ public class AudioManager implements StateObserver {
 
     public void stopMusic() {
         if (currentMusicPlaying != null) {
-            Gdx.app.log(Constants.LOG, "Stopping current music");
             currentMusicPlaying.stop();
-            currentMusicPlaying.dispose();
+            String assetFileName=game.getResourcesManager().getAssetFileName(currentMusicPlaying);
+            game.getResourcesManager().unload(assetFileName);
+            Gdx.app.log(Constants.LOG, "Stopping and unload current music "+assetFileName);
             currentMusicPlaying = null;
         }
     }
