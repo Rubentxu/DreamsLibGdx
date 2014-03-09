@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -20,6 +21,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
 
 public class OptionScreen extends BaseScreen {
 
@@ -31,9 +34,8 @@ public class OptionScreen extends BaseScreen {
         CURRENT_SCREEN = SCREEN.OPTIONS;
     }
 
-    private Label label(String text, Color color, boolean scale) {
+    private Label label(String text, Color color) {
         Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
-        if (scale == true) label.setFontScale(1.5f);
         label.setAlignment(Align.center, Align.center);
         return label;
     }
@@ -44,8 +46,8 @@ public class OptionScreen extends BaseScreen {
         game.getPreferencesManager().load();
 
         mainTable.setFillParent(true);
-        mainTable.defaults().pad(16f);
-        mainTable.add(label("Opciones del Juego", Color.CYAN, true));
+        mainTable.defaults().pad(6f);
+        mainTable.add(label("Opciones del Juego", Color.CYAN));
         mainTable.row();
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
@@ -142,7 +144,7 @@ public class OptionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.getPreferencesManager().save();
-                game.setScreen(game.menuScreen,getTransition());
+                game.setScreen(game.menuScreen,game.menuScreen.getTransition());
             }
         });
 
@@ -151,6 +153,14 @@ public class OptionScreen extends BaseScreen {
         this.stage.addActor(mainTable);
 
     }
+
+
+    public ScreenTransition getTransition() {
+        return  ScreenTransitionSlide.init(0.7f,
+                ScreenTransitionSlide.DOWN, true, Interpolation.swingOut);
+    }
+
+
 
     @Override
     public InputProcessor getInputProcessor() {

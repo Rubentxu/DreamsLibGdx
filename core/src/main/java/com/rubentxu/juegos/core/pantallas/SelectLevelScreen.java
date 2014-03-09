@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -19,6 +20,8 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Level;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
 import com.rubentxu.juegos.core.utils.gui.mtx.ButtonLevel;
 
 import java.util.List;
@@ -30,9 +33,8 @@ public class SelectLevelScreen extends BaseScreen {
         CURRENT_SCREEN=SCREEN.LEVELSCREEN;
     }
 
-    private Label label(String text, Color color, boolean scale) {
+    private Label label(String text, Color color) {
         Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
-        if (scale == true) label.setFontScale(2);
         label.setAlignment(Align.center, Align.center);
         return label;
     }
@@ -60,7 +62,7 @@ public class SelectLevelScreen extends BaseScreen {
                     Gdx.app.log(Constants.LOG,"Numero de boton presionado: "+ levelButton.getLevelNumber());
                    game.getLevelManager().setCurrentLevel(levels.get(levelButton.getLevelNumber()-1));
                    game.gameScreen= new GameScreen(game);
-                   game.setScreen(game.gameScreen,getTransition());
+                   game.setScreen(game.gameScreen,game.gameScreen.getTransition());
                 }
             });
 
@@ -77,6 +79,11 @@ public class SelectLevelScreen extends BaseScreen {
 
         this.stage.addActor(mainTable);
 
+    }
+
+    public ScreenTransition getTransition() {
+        return ScreenTransitionSlide.init(0.7f,
+                ScreenTransitionSlide.LEFT, true, Interpolation.swingOut);
     }
 
     @Override

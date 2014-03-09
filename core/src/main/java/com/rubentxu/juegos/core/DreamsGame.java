@@ -13,7 +13,7 @@ import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
 
 public class DreamsGame extends BaseGame {
 
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
     FPSLogger log;
 
     @Override

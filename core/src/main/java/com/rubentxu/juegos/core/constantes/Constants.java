@@ -3,8 +3,11 @@ package com.rubentxu.juegos.core.constantes;
 
 public class Constants {
 
-    public static final float VIEWPORT_HEIGHT= 22.5f;
-    public static final float VIEWPORT_WIDTH= 30f;
+    public static final float WORLD_HEIGHT = 16.875f; // 1080 / 64 =16.875 px
+    public static final float WORLD_WIDTH = 30f;     //  1920 / 64 = 30f px
+
+    public static final float VIRTUAL_HEIGHT = 1080f; // 16.875 x 64 =1080 px
+    public static final float VIRTUAL_WIDTH = 1920f;     //  30 x 64 = 1920 px
     // Box2D config
     public static final float RUNNING_FRAME_DURATION = 0.02f;
     public static final int VELOCITY_ITERATIONS = 10;

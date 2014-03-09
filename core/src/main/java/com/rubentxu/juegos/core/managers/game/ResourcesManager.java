@@ -25,9 +25,9 @@ public class ResourcesManager extends AssetManager implements Disposable {
     public static final String VARIOS_ATLAS = "imagenes/varios/varios.pack";
     public static final String OBJECTS_ATLAS = "imagenes/varios/objects.pack";
     public static final String SPLASH = "imagenes/fondos/splash.jpg";
-    public static final String DEFAULT_FONT = "fonts/DreamOfMe-32.fnt";
-    public static final String BIG_FONT = "fonts/DreamOfMe-40.fnt";
-    public static final String HEADER_FONT = "fonts/Bedbug-18.fnt";
+    public static final String DEFAULT_FONT = "fonts/Brushy_Cre-64.fnt";
+    public static final String DEBUG_FONT = "fonts/SuperMarioBros-96.fnt";
+    public static final String HEADER_FONT = "fonts/MarioLuigi2-96.fnt";
     public static final String DEBUG_BACKGROUND = "imagenes/fondos/debug.jpg";
     public static final String TREE_BACKGROUND = "imagenes/fondos/arboles.png";
     public static final String LEVEL1_BACKGROUND = "imagenes/fondos/fondo.jpg";
@@ -68,7 +68,7 @@ public class ResourcesManager extends AssetManager implements Disposable {
     private void loadAssetsGame() {
         Gdx.app.log(Constants.LOG, "Load ResourcesManager Game");
         this.load(DEFAULT_FONT, BitmapFont.class);
-        this.load(BIG_FONT, BitmapFont.class);
+        this.load(DEBUG_FONT, BitmapFont.class);
         this.load(HEADER_FONT, BitmapFont.class);
         this.load(DEBUG_BACKGROUND, Texture.class);
         this.load(MENU_BACKGROUND, Texture.class);

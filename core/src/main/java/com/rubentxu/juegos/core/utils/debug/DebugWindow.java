@@ -22,8 +22,8 @@ public class DebugWindow extends Window{
 
     public static Window createWindowDebug(ResourcesManager resourcesManager){
 
-        BitmapFont font = (BitmapFont) resourcesManager.get(resourcesManager.BIG_FONT);
-        font.setScale(1 / 64F);
+        BitmapFont font = (BitmapFont) resourcesManager.get(resourcesManager.DEBUG_FONT);
+        font.setScale(1 / 150F);
         font.setUseIntegerPositions(false);
         Window.WindowStyle style = new Window.WindowStyle();
         //style.background = background;

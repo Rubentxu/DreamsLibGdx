@@ -29,8 +29,8 @@ public abstract class BaseScreen implements Screen {
     protected float height;
     public static SCREEN CURRENT_SCREEN = SCREEN.SPLASH;
     //private ScreenTransition transition = ScreenTransitionFade.init(0.75f);
-    private ScreenTransition transition = ScreenTransitionSlide.init(1.15f,
-            ScreenTransitionSlide.DOWN, false, Interpolation.bounceOut);
+    private ScreenTransition transition = ScreenTransitionSlide.init(0.7f,
+            ScreenTransitionSlide.DOWN, false, Interpolation.swingOut);
 
 
     // ScreenTransition transition = ScreenTransitionSlice.init(2,ScreenTransitionSlice.UP_DOWN, 10, Interpolation.pow5Out);
@@ -64,7 +64,7 @@ public abstract class BaseScreen implements Screen {
         stage.setViewport(width, height, true);
         stage.clear();
         mainTable.getColor().a = 0f;
-        mainTable.addAction(fadeIn(1.2f));
+        mainTable.addAction(fadeIn(0.2f));
     }
 
     @Override

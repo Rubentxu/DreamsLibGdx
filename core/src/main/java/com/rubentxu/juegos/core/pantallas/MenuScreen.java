@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,6 +17,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
 
 public class MenuScreen extends BaseScreen {
 
@@ -24,9 +27,9 @@ public class MenuScreen extends BaseScreen {
         CURRENT_SCREEN=SCREEN.MENU;
     }
 
-    private Label label(String text, Color color, boolean scale) {
+    private Label label(String text, Color color) {
         Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
-        if (scale == true) label.setFontScale(2);
+
         label.setAlignment(Align.center, Align.center);
         return label;
     }
@@ -51,7 +54,7 @@ public class MenuScreen extends BaseScreen {
                 game.gameScreen=null;
                 //game.gameScreen= new GameScreen(game);
                 game.levelScreen=new SelectLevelScreen(game);
-                game.setScreen(game.levelScreen,getTransition());
+                game.setScreen(game.levelScreen,game.levelScreen.getTransition());
             }
         });
 
@@ -59,7 +62,7 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click optionScreen...");
                 game.optionScreen= new OptionScreen(game);
-                game.setScreen(game.optionScreen,getTransition());
+                game.setScreen(game.optionScreen,game.optionScreen.getTransition());
             }
         });
 
@@ -67,14 +70,14 @@ public class MenuScreen extends BaseScreen {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click highScoreScreen...");
                 game.highScoreScreen= new HighScoresScreen(game);
-                game.setScreen(game.highScoreScreen,getTransition());
+                game.setScreen(game.highScoreScreen,game.highScoreScreen.getTransition());
             }
         });
 
 
         mainTable.setFillParent(true);
-        mainTable.defaults().pad(16f);
-        mainTable.add(label("Hero Dreams", Color.CYAN, true));
+        mainTable.defaults().pad(2f);
+        mainTable.add(label("SUPER MARIANO", Color.CYAN));
         mainTable.row();
         mainTable.add(btnStart);
         mainTable.row();
@@ -84,11 +87,15 @@ public class MenuScreen extends BaseScreen {
         mainTable.row();
         mainTable.add(button3);
         mainTable.row();
-        mainTable.add(label("Pulsa en comenzar, para iniciar la partida.", Color.LIGHT_GRAY, false));
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
         this.stage.addActor(mainTable);
 
+    }
+
+    public ScreenTransition getTransition() {
+        return ScreenTransitionSlide.init(0.7f,
+                ScreenTransitionSlide.RIGHT, true, Interpolation.swingOut);
     }
 
     @Override

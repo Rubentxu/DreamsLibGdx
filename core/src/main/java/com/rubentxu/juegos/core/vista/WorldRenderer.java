@@ -52,11 +52,11 @@ public class WorldRenderer implements Disposable {
     public void resize(int w, int h) {
         this.width=w;
         this.height=h;
+        cam.viewportHeight = Constants.WORLD_HEIGHT;
+        cam.viewportWidth = (Constants.WORLD_HEIGHT / height) * width;
+        Gdx.app.log(Constants.LOG,"World ViewPortWidth: "+cam.viewportWidth+ " World ViewPortHeight: "+cam.viewportHeight);
 
-        cam.viewportWidth = Constants.VIEWPORT_WIDTH;
-        cam.viewportHeight = (Constants.VIEWPORT_WIDTH / width) * height;
-
-        background=new ParallaxBackground(cam.viewportWidth, cam.viewportHeight);
+        background=new ParallaxBackground(Constants.WORLD_WIDTH, cam.viewportHeight);
         background.addLayer(new ParallaxLayer(world.getBackground_01(),0.4f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getBackground_03(),0.6f,0,100,100));
         background.addLayer(new ParallaxLayer(world.getBackground_02(), 0.8f, 0.02f, 100, 100));

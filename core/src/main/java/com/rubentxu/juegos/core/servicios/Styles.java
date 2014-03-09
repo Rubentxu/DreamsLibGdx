@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
+import com.rubentxu.juegos.core.utils.gui.ScreenUtil;
 
 public class Styles implements Disposable {
     public BitmapFont font;
@@ -35,7 +36,11 @@ public class Styles implements Disposable {
         if (!initialize) {
             initialize=true;
             font = resourcesManager.get(resourcesManager.DEFAULT_FONT);
+            font.setScale(ScreenUtil.getRatio());
+            font.setUseIntegerPositions(false);
             font2 = resourcesManager.get(resourcesManager.HEADER_FONT);
+            font2.setScale(ScreenUtil.getRatio());
+            font2.setUseIntegerPositions(false);
             skin = new Skin();
             skin.add("default", font);
             skin.add("header", font2);
