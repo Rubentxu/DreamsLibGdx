@@ -22,6 +22,7 @@ import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Level;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 import com.rubentxu.juegos.core.utils.gui.mtx.ButtonLevel;
 
 import java.util.List;
@@ -43,6 +44,8 @@ public class SelectLevelScreen extends BaseScreen {
     public void resize(int width, int height) {
         super.resize(width, height);
         final List<Level> levels = game.getLevelManager().getLevels();
+        int size= (int) (350* ScaleUtil.getSizeRatio());
+        int pad= (int) (30 * ScaleUtil.getSizeRatio());
         for (int i = 0; i < levels.size(); i++){
 
             final ButtonLevel levelButton =new ButtonLevel(game.getResourcesManager());
@@ -53,7 +56,7 @@ public class SelectLevelScreen extends BaseScreen {
             levelButton.setLevelNumber(i + 1, game.getResourcesManager().getStyles().font2);
 
             levelButton.setLevelStars(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("estrellaZocalo")
-                    , ((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("estrella"), 4, levels.get(i).getAchievements());
+                    , ((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("estrella"), 5, levels.get(i).getAchievements(),size);
 
             levelButton.addListener(new ActorGestureListener() {
                 @Override
@@ -70,7 +73,7 @@ public class SelectLevelScreen extends BaseScreen {
                 mainTable.row();
             }
 
-            mainTable.add(levelButton).size(150, 150).pad(5, 5, 5, 5).expand();
+            mainTable.add(levelButton).size(size, size).pad(pad).expand();
         }
 
         mainTable.setFillParent(true);

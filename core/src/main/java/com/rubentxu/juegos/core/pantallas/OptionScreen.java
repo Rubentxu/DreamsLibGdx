@@ -23,6 +23,7 @@ import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 
 public class OptionScreen extends BaseScreen {
 
@@ -45,9 +46,11 @@ public class OptionScreen extends BaseScreen {
         super.resize(width, height);
         game.getPreferencesManager().load();
 
+        mainTable.defaults().height(height / 5f);
         mainTable.setFillParent(true);
-        mainTable.defaults().pad(6f);
-        mainTable.add(label("Opciones del Juego", Color.CYAN));
+        mainTable.defaults().pad(6*ScaleUtil.getSizeRatio());
+        mainTable.defaults().padLeft(50*ScaleUtil.getSizeRatio());
+        mainTable.add(label("Opciones del Juego", Color.CYAN)).colspan(3);
         mainTable.row();
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
@@ -63,7 +66,6 @@ public class OptionScreen extends BaseScreen {
             }
         });
         mainTable.add(musicCheckbox);
-        mainTable.row();
 
         Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, game.getResourcesManager().getStyles().skin);
         volumeSliderMusic.setValue(game.getPreferencesManager().volMusic);
@@ -78,7 +80,6 @@ public class OptionScreen extends BaseScreen {
 
         });
         mainTable.add(volumeSliderMusic);
-        mainTable.row();
 
         volumeValueMusic = new Label(" Volume ", game.getResourcesManager().getStyles().skin);
         updateVolumeLabelMusic();
@@ -98,7 +99,6 @@ public class OptionScreen extends BaseScreen {
             }
         });
         mainTable.add(soundCheckbox);
-        mainTable.row();
 
 
         Slider volumeSliderSound = new Slider(0f, 1f, 0.1f, false, game.getResourcesManager().getStyles().skin);
@@ -114,7 +114,6 @@ public class OptionScreen extends BaseScreen {
 
         });
         mainTable.add(volumeSliderSound);
-        mainTable.row();
 
         volumeValueSound = new Label(" Volume ", game.getResourcesManager().getStyles().skin);
         updateVolumeLabelSound();
@@ -131,15 +130,11 @@ public class OptionScreen extends BaseScreen {
                 game.getPreferencesManager().touchPadEnabled=enabled;
             }
         });
-        mainTable.add(touchPadCheckbox);
+        mainTable.add(touchPadCheckbox).colspan(3);
         mainTable.row();
 
-
-
-
-
         TextButton backButton = new TextButton("Volver Menu", game.getResourcesManager().getStyles().skin);
-        backButton.pad(20);
+        backButton.pad(50* ScaleUtil.getSizeRatio());
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -148,7 +143,7 @@ public class OptionScreen extends BaseScreen {
             }
         });
 
-        mainTable.add(backButton);
+        mainTable.add(backButton).colspan(3).fillX();
 
         this.stage.addActor(mainTable);
 

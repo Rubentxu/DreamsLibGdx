@@ -15,6 +15,7 @@ import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.modelo.Profile;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 
 public class HighScoresScreen extends BaseScreen {
 
@@ -30,7 +31,7 @@ public class HighScoresScreen extends BaseScreen {
 
         mainTable.setFillParent(true);
 
-        mainTable.defaults().spaceBottom(30);
+        mainTable.defaults().spaceBottom(70* ScaleUtil.getSizeRatio());
         mainTable.add(label("Puntuaciones: ", Color.CYAN)).colspan(2);
 
         // episode 1 high-score
@@ -60,9 +61,9 @@ public class HighScoresScreen extends BaseScreen {
                 game.setScreen(game.menuScreen,game.menuScreen.getTransition());
             }
         });
-        backButton.pad(20);
+        backButton.pad(30*ScaleUtil.getSizeRatio());
         mainTable.row();
-        mainTable.add(backButton).size(250, 60).colspan(2);
+        mainTable.add(backButton).size(600*ScaleUtil.getSizeRatio(), 250*ScaleUtil.getSizeRatio()).colspan(2);
 
         this.stage.addActor(mainTable);
 

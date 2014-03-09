@@ -1,12 +1,11 @@
 package com.rubentxu.juegos.core.utils.builders;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,11 +15,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.servicios.Styles;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 
 
 public class GuiBuilder {
@@ -30,36 +29,36 @@ public class GuiBuilder {
         Table tableControlPad = new Table();
 
 
-        tableControlPad.row().height(height /6);
-        ImageButton btnUpLeft = new ImageButton( styles.skin, "buttonLeft");
-        tableControlPad.add(btnUpLeft).width(width / 5).expandY().fill();
+        tableControlPad.row().height(height);
+        ImageButton btnLeft = new ImageButton( styles.skin, "buttonLeft");
+        tableControlPad.add(btnLeft).width(width).expandY().fill();
 
-        btnUpLeft.addListener(new ClickListener() {
+        btnLeft.addListener(new ClickListener() {
 
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("Event "+event.getType());
-                super.touchDown(event,x,y,pointer,button);
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("Event " + event.getType());
+                super.touchDown(event, x, y, pointer, button);
                 controller.leftPressed();
                 controller.rightReleased();
                 return true;
             }
 
             @Override
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                System.out.println("Event "+event.getType());
-                super.touchUp(event,x,y,pointer,button);
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("Event " + event.getType());
+                super.touchUp(event, x, y, pointer, button);
                 controller.leftReleased();
             }
 
             @Override
-            public void touchDragged (InputEvent event, float x, float y, int pointer) {
-                System.out.println("Event- "+event.getType());
-                super.touchDragged(event,x,y,pointer);
-                if(isOver(event.getListenerActor(), x, y)){
+            public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                System.out.println("Event- " + event.getType());
+                super.touchDragged(event, x, y, pointer);
+                if (isOver(event.getListenerActor(), x, y)) {
                     controller.rightReleased();
                     controller.leftPressed();
-                }else {
+                } else {
                     controller.leftReleased();
                 }
             }
@@ -67,7 +66,7 @@ public class GuiBuilder {
 
 
         ImageButton btnRight = new ImageButton(styles.skin, "buttonRight");
-        tableControlPad.add(btnRight).width(width / 5).expandY().fill().padRight((width / 5)*2);
+        tableControlPad.add(btnRight).width(width).expandY().fill().padRight((width)*2);
         btnRight.addListener(new ClickListener() {
 
             @Override
@@ -100,7 +99,7 @@ public class GuiBuilder {
         });
 
         ImageButton btnUP = new ImageButton(styles.skin, "buttonUp");
-        tableControlPad.add(btnUP).width(width / 5).expandY().fill();
+        tableControlPad.add(btnUP).width(width).expandY().fill();
         btnUP.addListener(new ClickListener() {
 
             @Override
@@ -129,15 +128,17 @@ public class GuiBuilder {
             }
         });
 
-        tableControlPad.setBounds(0,0,width,height /6);
+        tableControlPad.setBounds(0,0, Gdx.graphics.getWidth(),height+10);
         return tableControlPad;
 
     }
 
 
     public static final Touchpad buildTouchPad(float width,float height, Styles styles, final WorldController controller) {
-        Touchpad touchpad = new Touchpad(10, styles.skin);
-        touchpad.setBounds(15, 15, width / 6, width / 6);
+        Touchpad touchpad = new Touchpad(10* ScaleUtil.getSizeRatio(), styles.skin);
+        touchpad.setPosition(25 * ScaleUtil.getSizeRatio(), 15);
+        touchpad.setWidth(width);
+        touchpad.setHeight(height);
 
         touchpad.addListener(new ChangeListener() {
             @Override
@@ -171,9 +172,7 @@ public class GuiBuilder {
     public static final Table buildStats(float width,float height, Styles styles,ResourcesManager resourcesManager) {
 
         Table tableProfile = new Table();
-        tableProfile.setBounds(0, 0, width , height /15);
-        SpriteDrawable drawable=  styles.skin.get("stats", SpriteDrawable.class);
-        //tableProfile.setBackground(drawable);
+        tableProfile.setBounds(0, 0, width , height );
 
 
         Image imageLives = new Image(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).findRegion("vidas"));
@@ -187,13 +186,17 @@ public class GuiBuilder {
 
         Label score = new Label("0000", styles.skin, "default", Color.ORANGE);
         score.setName(Constants.SCORE);
+        tableProfile.defaults().height(height);
+        tableProfile.defaults().width(width/4.5f);
 
-        tableProfile.add(imageLives).top().left().padRight(2);
-        tableProfile.add(lives).top().left().width(width / 5).expandY().fill();
 
-        tableProfile.add(labelScore).top().right().expandY().fill();
-        tableProfile.add(score).top().right().expandY().fill();
+        tableProfile.add(imageLives).left().padRight(15).width(imageLives.getPrefWidth()*ScaleUtil.getSizeRatio());
+        tableProfile.add(lives).expandY().fill();
+        tableProfile.add();
 
+        tableProfile.add(labelScore).right().expandY().fill();
+        tableProfile.add(score).right().expandY().fill();
+        tableProfile.debug();
         return tableProfile;
     }
 

@@ -19,6 +19,7 @@ import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 
 public class MenuScreen extends BaseScreen {
 
@@ -27,32 +28,22 @@ public class MenuScreen extends BaseScreen {
         CURRENT_SCREEN=SCREEN.MENU;
     }
 
-    private Label label(String text, Color color) {
-        Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
-
-        label.setAlignment(Align.center, Align.center);
-        return label;
-    }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-
+        int pad= (int) (20* ScaleUtil.getSizeRatio());
         final TextButton btnStart = new TextButton("Comenzar", game.getResourcesManager().getStyles().skin);
-        btnStart.pad(30);
+        btnStart.pad(pad);
         final TextButton btnOptions = new TextButton("Opciones", game.getResourcesManager().getStyles().skin);
-        btnOptions.pad(30);
+        btnOptions.pad(pad);
         final TextButton btnScores = new TextButton("Puntuaciones", game.getResourcesManager().getStyles().skin);
-        btnScores.pad(30);
-        final TextButton button3 = new TextButton("Creditos", game.getResourcesManager().getStyles().skin);
-        button3.pad(30);
-        button3.setChecked(false);
+        btnScores.pad(pad);
 
         btnStart.addListener(new ClickListener() {
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Click Comenzar...");
                 game.gameScreen=null;
-                //game.gameScreen= new GameScreen(game);
                 game.levelScreen=new SelectLevelScreen(game);
                 game.setScreen(game.levelScreen,game.levelScreen.getTransition());
             }
@@ -74,22 +65,23 @@ public class MenuScreen extends BaseScreen {
             }
         });
 
-
+        Label label = new Label("SUPER MARIANO", game.getResourcesManager().getStyles().skin, "header",  Color.CYAN);
+        label.setAlignment(Align.center, Align.center);
         mainTable.setFillParent(true);
-        mainTable.defaults().pad(2f);
-        mainTable.add(label("SUPER MARIANO", Color.CYAN));
+        mainTable.defaults().padBottom(pad);
+        mainTable.defaults().height(height / 4.5f - pad);
+        mainTable.defaults().fillX();
+        mainTable.add(label);
         mainTable.row();
         mainTable.add(btnStart);
         mainTable.row();
         mainTable.add(btnOptions);
         mainTable.row();
         mainTable.add(btnScores);
-        mainTable.row();
-        mainTable.add(button3);
-        mainTable.row();
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
         this.stage.addActor(mainTable);
+        mainTable.debug();
 
     }
 

@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.rubentxu.juegos.core.DreamsGame;
@@ -23,6 +24,7 @@ import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlice;
 import com.rubentxu.juegos.core.utils.builders.GuiBuilder;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 import com.rubentxu.juegos.core.vista.WorldRenderer;
 
 
@@ -103,14 +105,16 @@ public class GameScreen extends BaseScreen {
         renderer=new WorldRenderer(game,world);
         renderer.resize(width, height);
 
-        stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(),game.getResourcesManager());
+        stats=GuiBuilder.buildStats(stage.getWidth(), 100*ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(),game.getResourcesManager());
         stats.setBounds(0,height-height/7,width,height/7);
         stage.addActor(stats);
 
         if(game.getPreferencesManager().touchPadEnabled){
-            stage.addActor(GuiBuilder.buildTouchPad(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
+            Touchpad touchPad = GuiBuilder.buildTouchPad(350 * ScaleUtil.getSizeRatio(), 350 * ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller);
+            touchPad.scale(ScaleUtil.getSizeRatio());
+            stage.addActor(touchPad);
         } else {
-            stage.addActor(GuiBuilder.buildPadButtons(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
+            stage.addActor(GuiBuilder.buildPadButtons(370*ScaleUtil.getSizeRatio(),190*ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller));
         }
     }
 

@@ -36,13 +36,14 @@ public class ButtonLevel extends AbstractButton {
 		// ##################################################################
 		if (isLockActive && textureLocked != null) {
 			drawLocked(batch);
+            drawLevelNumber(batch);
 		}
 
 		// If level number set
 		// ##################################################################
 		else if (levelNumber != -999 && bitMapFont != null) {
 			super.draw(batch, parentAlpha);
-			drawLevelNumber(batch);
+            drawLevelNumber(batch);
 			drawText(batch);
 			drawStars(batch);
 			drawExternalTexture(batch);
@@ -62,7 +63,7 @@ public class ButtonLevel extends AbstractButton {
 		if(textureStarHolder != null && textureStar != null){
 			// Updated start positions
 			float activePosXStart = (getX() + getWidth() / 2) - ((starSizeWidth * numberOfTotalStars) / 2);
-			float activePoxYStart = (getY() + starSizeHeight / 1.3f);	
+			float activePoxYStart = (getY() + starSizeHeight / 1f);
 
 			// Stars align together next by next (increase for each star)
 			// S as Star
@@ -128,17 +129,14 @@ public class ButtonLevel extends AbstractButton {
 	 * @param numberOfTotalStars number of total stars
 	 * @param numberOfEarnedStars number of earned/achieved stars
 	 * */
-	public void setLevelStars(TextureRegion starHolderTexture, TextureRegion starTexture, int numberOfTotalStars, int numberOfEarnedStars){
+	public void setLevelStars(TextureRegion starHolderTexture, TextureRegion starTexture, int numberOfTotalStars, int numberOfEarnedStars,int size){
 		textureStarHolder = starHolderTexture;
 		textureStar = starTexture;
 		this.numberOfTotalStars = numberOfTotalStars;
 		this.numberOfEarnedStars = numberOfEarnedStars;
 
-		//
-		float btnSizeW = getWidth() - (getWidth() / starSizeRatio);
-		float btnSizeH = getHeight() - (getHeight() / starSizeRatio);
-		starSizeWidth = btnSizeW / numberOfTotalStars;
-		starSizeHeight = btnSizeH / numberOfTotalStars;
+		starSizeWidth = size / numberOfTotalStars;
+		starSizeHeight = size / numberOfTotalStars;
 	}
 
 
