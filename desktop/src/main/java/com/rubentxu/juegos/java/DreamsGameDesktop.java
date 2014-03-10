@@ -10,10 +10,10 @@ public class DreamsGameDesktop {
 	public static void main (String[] args) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Dreams Game " + Constants.VERSION;
-        DreamsGame.DEBUG= true;
+        DreamsGame.DEBUG= false;
         config.useGL20 = true;
-        config.width = 1200;
-        config.height = 1024;
+        config.width = 480;
+        config.height = 270;
 		new LwjglApplication(new DreamsGame(), config);
 	}
 }

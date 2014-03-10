@@ -73,8 +73,8 @@
   </object>
   <object name="enemigo" type="modelObject" x="6229" y="1065" width="71" height="84">
    <properties>
-    <property name="pointX" value="2"/>
-    <property name="pointY" value="3"/>
+    <property name="pointX" value="105"/>
+    <property name="pointY" value="10"/>
     <property name="typeModelObject" value="Enemy"/>
    </properties>
   </object>

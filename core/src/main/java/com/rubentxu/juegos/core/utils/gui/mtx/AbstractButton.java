@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+
 public abstract class AbstractButton extends Button {
     // Locked (Not mandatory)
     protected boolean isLockActive = false;
@@ -40,7 +41,13 @@ public abstract class AbstractButton extends Button {
         this.bitMapFont = bitMapFont;
         this.DIPActive = DIPActive;
         //
-
+        if (DIPActive) {
+            setSize(width * AppSettings.getWorldSizeRatio(), height
+                    * AppSettings.getWorldSizeRatio());
+            if (this.bitMapFont != null) {
+                bitMapFont.setScale(AppSettings.getWorldSizeRatio());
+            }
+        }
     }
 
     @Override
@@ -67,7 +74,7 @@ public abstract class AbstractButton extends Button {
      * Set the lock, it overrides the hit method, so it wont detect hits, also
      * if it is active, lock texture will be drawn
      *
-     * @see
+     * @see hit()
      * */
     public void setLockActive(boolean isLockActive) {
         this.isLockActive = isLockActive;
@@ -122,7 +129,7 @@ public abstract class AbstractButton extends Button {
      *            the text to be written
      * @param isTextActive
      *            to write/draw the text or not
-     *
+     * @see setTextChange
      */
     public void setText(String text, boolean isTextActive) {
         this.text = text;
@@ -144,8 +151,8 @@ public abstract class AbstractButton extends Button {
         textPosY = y;
 
         if (DIPActive) {
-            textPosX = x;
-            textPosY = y;
+            textPosX = x * AppSettings.getWorldPositionXRatio();
+            textPosY = y * AppSettings.getWorldPositionYRatio();
         }
     }
 
@@ -162,6 +169,9 @@ public abstract class AbstractButton extends Button {
     public void setBitMapFont(BitmapFont bitMapFont) {
         this.bitMapFont = bitMapFont;
 
+        if (DIPActive) {
+            bitMapFont.setScale(AppSettings.getWorldSizeRatio());
+        }
     }
 
     /**
@@ -206,6 +216,10 @@ public abstract class AbstractButton extends Button {
         externalTexturePosX = x;
         externalTexturePosY = y;
 
+        if (DIPActive) {
+            externalTexturePosX = x * AppSettings.getWorldPositionXRatio();
+            externalTexturePosY = y * AppSettings.getWorldPositionYRatio();
+        }
     }
 
     /**
@@ -214,6 +228,11 @@ public abstract class AbstractButton extends Button {
     public void setTextureExternalSize(float width, float height) {
         externalTextureSizeW = width;
         externalTextureSizeH = height;
+
+        if (DIPActive) {
+            externalTextureSizeW *= AppSettings.getWorldSizeRatio();
+            externalTextureSizeH *= AppSettings.getWorldSizeRatio();
+        }
     }
 
     public boolean isDIPActive() {
