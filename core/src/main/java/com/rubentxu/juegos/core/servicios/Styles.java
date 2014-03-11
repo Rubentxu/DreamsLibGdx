@@ -20,13 +20,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
-import com.rubentxu.juegos.core.utils.gui.mtx.AppSettings;
 
 public class Styles implements Disposable {
     public BitmapFont font;
     public BitmapFont font2;
     public Skin skin;
     public boolean initialize = false;
+
 
     public Styles(ResourcesManager resourcesManager) {
         createStyles(resourcesManager);
@@ -36,10 +36,10 @@ public class Styles implements Disposable {
         if (!initialize) {
             initialize=true;
             font = resourcesManager.get(resourcesManager.DEFAULT_FONT);
-            font.setScale(AppSettings.getRatio());
+            //font.setScale(AppSettings.getRatio());
             font.setUseIntegerPositions(false);
             font2 = resourcesManager.get(resourcesManager.HEADER_FONT);
-            font2.setScale(AppSettings.getRatio());
+            //font2.setScale(AppSettings.getRatio());
             font2.setUseIntegerPositions(false);
             skin = new Skin();
             skin.add("default", font);
@@ -90,7 +90,6 @@ public class Styles implements Disposable {
             skin.add("buttonUp", buttonUp);
             skin.add("buttonUpPress", buttonUpPress);
             skin.add("debug", debug);
-
 
             LabelStyle lbs = new LabelStyle();
             lbs.font = font;

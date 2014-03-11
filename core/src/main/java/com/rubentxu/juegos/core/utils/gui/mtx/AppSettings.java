@@ -15,11 +15,11 @@ public class AppSettings {
     }
 
     public static float getWorldRatioX(float deviceWidth){
-        return deviceWidth / Constants.WORLD_WIDTH;
+        return deviceWidth / Constants.VIRTUAL_WIDTH;
     }
 
     public static float getWorldRatioY(float deviceHeight){
-        return deviceHeight / Constants.WORLD_HEIGHT;
+        return deviceHeight / Constants.VIRTUAL_HEIGHT;
     }
 
 

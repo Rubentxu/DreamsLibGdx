@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -16,14 +15,13 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
-
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+import com.rubentxu.juegos.core.utils.gui.mtx.TableModel;
 
 public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
     protected Stage stage;
-    protected Table mainTable;
+    protected TableModel mainTable;
     protected Window dialog;
     protected float width;
     protected float height;
@@ -50,9 +48,8 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void show() {
-        mainTable = new Table();
         Gdx.app.log(Constants.LOG, "Showing screen: " + getName() + " Current_Screen " + CURRENT_SCREEN);
-
+        stage.clear();
 
     }
 
@@ -62,9 +59,8 @@ public abstract class BaseScreen implements Screen {
         this.width = width;
         this.height = height;
         stage.setViewport(width, height, true);
-        stage.clear();
-        mainTable.getColor().a = 0f;
-        mainTable.addAction(fadeIn(0.2f));
+
+
     }
 
     @Override

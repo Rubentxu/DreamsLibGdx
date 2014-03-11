@@ -4,30 +4,29 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class MenuCreator {
-    public static Table createTable(boolean fillParent, Skin skin) {
-        Table table = new Table(skin);
+    public static TableModel createTable(boolean fillParent, Skin skin) {
+        TableModel table = new TableModel(skin);
         table.setFillParent(fillParent);
         return table;
     }
 
-    public static ButtonGame createCustomGameButton(BitmapFont bitmapFont,
-                                                    TextureRegion up, TextureRegion down, float width, float height,
-                                                    boolean DIPActive) {
-        Drawable dUp = new TextureRegionDrawable(up);
-        Drawable dDown = new TextureRegionDrawable(down);
-        return new ButtonGame(bitmapFont, dUp, dDown, width, height, true);
+    public static TableModel createTable(TextureRegion textureBackground, float width,float height, boolean DIPActive) {
+        TableModel table = new TableModel(textureBackground, width,
+        height, DIPActive);
+        return table;
     }
 
-    public static ButtonGame createCustomGameButton(BitmapFont bitmapFont,
-                                                    TextureRegion up, TextureRegion down) {
-        Drawable dUp = new TextureRegionDrawable(up);
-        Drawable dDown = new TextureRegionDrawable(down);
-        return new ButtonGame(bitmapFont, dUp, dDown);
+    public static ButtonGame createCustomGameButton(BitmapFont bitmapFont,Drawable up, Drawable down,
+                                                    float width, float height, boolean DIPActive) {
+        return new ButtonGame(bitmapFont, up, down, width, height, true);
+    }
+
+    public static ButtonGame createCustomGameButton(BitmapFont bitmapFont,Drawable up,  Drawable  down) {
+        return new ButtonGame(bitmapFont, up, down);
     }
 
     public static ButtonToggle createCustomToggleButton(BitmapFont bitmapFont,

@@ -46,6 +46,7 @@ public abstract class AbstractButton extends Button {
                     * AppSettings.getWorldSizeRatio());
             if (this.bitMapFont != null) {
                 bitMapFont.setScale(AppSettings.getWorldSizeRatio());
+                bitMapFont.setUseIntegerPositions(false);
             }
         }
     }
@@ -74,7 +75,7 @@ public abstract class AbstractButton extends Button {
      * Set the lock, it overrides the hit method, so it wont detect hits, also
      * if it is active, lock texture will be drawn
      *
-     * @see hit()
+     *
      * */
     public void setLockActive(boolean isLockActive) {
         this.isLockActive = isLockActive;
@@ -129,7 +130,7 @@ public abstract class AbstractButton extends Button {
      *            the text to be written
      * @param isTextActive
      *            to write/draw the text or not
-     * @see setTextChange
+     *
      */
     public void setText(String text, boolean isTextActive) {
         this.text = text;
@@ -171,6 +172,7 @@ public abstract class AbstractButton extends Button {
 
         if (DIPActive) {
             bitMapFont.setScale(AppSettings.getWorldSizeRatio());
+            bitMapFont.setUseIntegerPositions(false);
         }
     }
 
