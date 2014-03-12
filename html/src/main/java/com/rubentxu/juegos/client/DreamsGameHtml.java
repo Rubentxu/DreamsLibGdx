@@ -1,4 +1,4 @@
-package com.rubentxu.juegos.html;
+package com.rubentxu.juegos.client;
 
 import com.rubentxu.juegos.core.DreamsGame;
 
