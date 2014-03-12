@@ -7,31 +7,23 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class TextGui extends AbstractActorLight {
     private String text = "";
     private BitmapFont bitMapFont;
-    //
     private float originalPosY;
 
-    public TextGui(BitmapFont bitMapFont, float width, float height,
-                boolean DIPActive) {
-        super(width, height, DIPActive);
+    public TextGui(BitmapFont bitMapFont, float width, float height) {
+        super(width, height);
         this.bitMapFont = bitMapFont;
-        //
-        if (DIPActive) {
-            bitMapFont.setScale(AppSettings.getWorldSizeRatio());
-        }
+        bitMapFont.setScale(AppSettings.getSizeRatio());
     }
 
-    public void setBitMapFont(BitmapFont bitMapFont, boolean DIPActive) {
+    public void setBitMapFont(BitmapFont bitMapFont) {
         this.bitMapFont = bitMapFont;
-        //
-        if (DIPActive) {
-            bitMapFont.setScale(AppSettings.getWorldSizeRatio());
-        }
+        bitMapFont.setScale(AppSettings.getSizeRatio());
+
     }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
-        //
         drawText(batch);
     }
 

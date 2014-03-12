@@ -7,11 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveByAction;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 
 public abstract class AbstractActorLight extends Actor {
-    //
-    protected final String logTag = "MtxAbstractActorLightLog";
-    public static boolean logActive = true;
 
-    // Texture Region for actor (Not mandatory)
     private TextureRegion textureRegion;
     private boolean isTextureRegionActive = false;
 
@@ -19,9 +15,8 @@ public abstract class AbstractActorLight extends Actor {
     private float Xoriginal;
     private float Yoriginal;
 
-    public AbstractActorLight(TextureRegion textureRegion,
-                              boolean isTextureRegionActive, float posX, float posY, float orgnX,
-                              float orgnY, float width, float height) {
+    public AbstractActorLight(TextureRegion textureRegion,boolean isTextureRegionActive, float posX, float posY,
+                              float orgnX,float orgnY, float width, float height) {
         super();
         this.textureRegion = textureRegion;
         this.isTextureRegionActive = isTextureRegionActive;
@@ -31,9 +26,8 @@ public abstract class AbstractActorLight extends Actor {
         setOrigin(orgnX, orgnY);
     }
 
-    public AbstractActorLight(TextureRegion textureRegion,
-                              boolean isTextureRegionActive, float posX, float posY, float width,
-                              float height) {
+    public AbstractActorLight(TextureRegion textureRegion,boolean isTextureRegionActive, float posX, float posY,
+                              float width,float height) {
         super();
         this.textureRegion = textureRegion;
         this.isTextureRegionActive = isTextureRegionActive;
@@ -49,15 +43,11 @@ public abstract class AbstractActorLight extends Actor {
         setSize(width, height);
     }
 
-    public AbstractActorLight(float width, float height, boolean DIPActive) {
+    public AbstractActorLight(float width, float height) {
         super();
-        if (DIPActive) {
-            float ratioSize = AppSettings.getWorldSizeRatio();
-            setSize(width * ratioSize, height * ratioSize);
-        } else {
-            setSize(width, height);
-        }
 
+        float ratioSize = AppSettings.getSizeRatio();
+        setSize(width * ratioSize, height * ratioSize);
     }
 
     public AbstractActorLight() {
@@ -76,10 +66,7 @@ public abstract class AbstractActorLight extends Actor {
         batch.setColor(this.getColor().r, this.getColor().g, this.getColor().b,
                 parentAlpha * this.getColor().a);
 
-        // DRAW TEXTURE REGION (Draw only if set active and not null)
-        // ##################################################################
         if (isTextureRegionActive && textureRegion != null) {
-            // Draw it due to actors' settings
             batch.draw(textureRegion, getX(), getY(), getOriginX(),
                     getOriginY(), getWidth(), getHeight(), getScaleX(),
                     getScaleY(), getRotation());
@@ -87,7 +74,6 @@ public abstract class AbstractActorLight extends Actor {
     }
 
     public void actionMoveTo(float x, float y, float duration) {
-        // Move to a specific position by time
         MoveToAction action = new MoveToAction();
         action.setPosition(x, y);
         if (duration > 0) {
@@ -97,7 +83,6 @@ public abstract class AbstractActorLight extends Actor {
     }
 
     public void actionMoveBy(float x, float y, float duration) {
-        // Move towards a direction during given time (NON-STOP)
         MoveByAction action = new MoveByAction();
         action.setAmount(x, y);
         if (duration > 0) {
@@ -110,13 +95,10 @@ public abstract class AbstractActorLight extends Actor {
      * Translate actor in a direction of speed without stopping. Actor moves in
      * constants speed set without acceleration
      *
-     * @param speedX
-     *            axis-X speed
-     * @param speedY
-     *            axis-Y speed
-     * @param delta
-     *            the delta time for accurate speed
-     * */
+     * @param speedX axis-X speed
+     * @param speedY axis-Y speed
+     * @param delta  the delta time for accurate speed
+     */
     public void translateWithoutAcc(float speedX, float speedY, float delta) {
         setPosition(getX() + (speedX * delta), getY() + (speedY * delta));
     }
@@ -125,8 +107,7 @@ public abstract class AbstractActorLight extends Actor {
      * Get textureRegion of the actor
      *
      * @return TextureRegion
-     *
-     * */
+     */
     public TextureRegion getTextureRegion() {
         return textureRegion;
     }
@@ -135,11 +116,9 @@ public abstract class AbstractActorLight extends Actor {
      * Set texture region for the actor, it will be drawn only if texture region
      * is set and active
      *
-     * @param textureRegion
-     *            texture region of the actor
-     * @param isTextureRegionActive
-     *            set texture region active to be drawn or not
-     * */
+     * @param textureRegion         texture region of the actor
+     * @param isTextureRegionActive set texture region active to be drawn or not
+     */
     public void setTextureRegion(TextureRegion textureRegion,
                                  boolean isTextureRegionActive) {
         this.textureRegion = textureRegion;

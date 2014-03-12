@@ -31,7 +31,7 @@ public class SelectLevelScreen extends BaseScreen {
 
     public SelectLevelScreen(DreamsGame game) {
         super(game, new Stage(0, 0, true));
-        CURRENT_SCREEN=SCREEN.LEVELSCREEN;
+        CURRENT_SCREEN = SCREEN.LEVELSCREEN;
     }
 
     private Label label(String text, Color color) {
@@ -89,16 +89,16 @@ public class SelectLevelScreen extends BaseScreen {
         mainTable.setBackground(new NinePatchDrawable(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_PACK_ATLAS)).createPatch("gui_bloque_vacio")));
         stage.addActor(mainTable);
         final List<Level> levels = game.getLevelManager().getLevels();
-        for (int i = 0; i < levels.size(); i++){
+        for (int i = 0; i < levels.size(); i++) {
 
             Drawable dUp = new NinePatchDrawable(game.getResourcesManager().getStyles().skin.get("btnMenu", NinePatchDrawable.class));
             Drawable dDown = new NinePatchDrawable(game.getResourcesManager().getStyles().skin.get("btnMenuPress", NinePatchDrawable.class));
-            final ButtonLevel levelButton = new ButtonLevel(game.getResourcesManager().getStyles().font,dUp, dDown);
-            if(!levels.get(i).isActive()) {
-                levelButton.setTextureLocked(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_PACK_ATLAS)).findRegion("gui_candado"),true);
+            final ButtonLevel levelButton = new ButtonLevel(game.getResourcesManager().getStyles().font, dUp, dDown);
+            if (!levels.get(i).isActive()) {
+                levelButton.setTextureLocked(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_PACK_ATLAS)).findRegion("gui_candado"), true);
             }
 
-            levelButton.setLevelNumber(i + 1,game.getResourcesManager().getStyles().font2);
+            levelButton.setLevelNumber(i + 1, game.getResourcesManager().getStyles().font2);
 
             levelButton.setLevelStars(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("estrellaZocalo")
                     , ((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_PACK_ATLAS)).findRegion("gui_estrella"), 4, levels.get(i).getAchievements());
@@ -108,17 +108,17 @@ public class SelectLevelScreen extends BaseScreen {
                 @Override
                 public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                     super.touchUp(event, x, y, pointer, button);
-                    Gdx.app.log(Constants.LOG,"Numero de boton presionado: "+ levelButton.getLevelNumber());
-                    game.getLevelManager().setCurrentLevel(levels.get(levelButton.getLevelNumber()-1));
-                    game.gameScreen= new GameScreen(game);
+                    Gdx.app.log(Constants.LOG, "Numero de boton presionado: " + levelButton.getLevelNumber());
+                    game.getLevelManager().setCurrentLevel(levels.get(levelButton.getLevelNumber() - 1));
+                    game.gameScreen = new GameScreen(game);
                     game.setScreen(game.gameScreen, game.gameScreen.getTransition());
                 }
             });
- 
-            if(i % 5 == 0){
+
+            if (i % 5 == 0) {
                 mainTable.row();
             }
-            mainTable.add(levelButton).size(150* AppSettings.getRatio(), 150* AppSettings.getRatio()).pad(5* AppSettings.getRatio()).expand();
+            mainTable.add(levelButton).size(150 * AppSettings.getSizeRatio(), 150 * AppSettings.getSizeRatio()).pad(5 * AppSettings.getSizeRatio()).expand();
         }
     }
 

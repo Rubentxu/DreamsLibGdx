@@ -36,10 +36,10 @@ public class Styles implements Disposable {
         if (!initialize) {
             initialize=true;
             font = resourcesManager.get(resourcesManager.DEFAULT_FONT);
-            //font.setScale(AppSettings.getRatio());
+            //font.setScale(AppSettings.getSizeRatio());
             font.setUseIntegerPositions(false);
             font2 = resourcesManager.get(resourcesManager.HEADER_FONT);
-            //font2.setScale(AppSettings.getRatio());
+            //font2.setScale(AppSettings.getSizeRatio());
             font2.setUseIntegerPositions(false);
             skin = new Skin();
             skin.add("default", font);

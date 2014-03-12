@@ -6,48 +6,34 @@ import com.rubentxu.juegos.core.constantes.Constants;
 
 public class AppSettings {
 
-    public static float getRatioX(float deviceWidth){
-        return deviceWidth / Constants.VIRTUAL_WIDTH;
+    public static float getRatioX(){
+        return Gdx.graphics.getWidth() / Constants.VIRTUAL_WIDTH;
     }
 
-    public static float getRatioY(float deviceHeight){
-        return deviceHeight / Constants.VIRTUAL_HEIGHT;
+    public static float getRatioY(){
+        return Gdx.graphics.getHeight() / Constants.VIRTUAL_HEIGHT;
     }
 
-    public static float getWorldRatioX(float deviceWidth){
-        return deviceWidth / Constants.VIRTUAL_WIDTH;
+    public static float getWorldRatioX(){
+        return Gdx.graphics.getWidth() / Constants.WORLD_WIDTH;
     }
 
-    public static float getWorldRatioY(float deviceHeight){
-        return deviceHeight / Constants.VIRTUAL_HEIGHT;
+    public static float getWorldRatioY(){
+        return Gdx.graphics.getHeight() / Constants.WORLD_HEIGHT;
     }
 
-
-    public static float getRatio(float deviceWidth, float deviceHeight){
-        return (getRatioX(deviceWidth) + getRatioY(deviceHeight)) / 2;
-    }
-
-    public static float getRatio(){
-        return (getRatioX(Gdx.graphics.getWidth()) + getRatioY(Gdx.graphics.getHeight())) / 2;
-    }
-
-    public static float getWorldRatio(){
-        return (getWorldRatioX(Gdx.graphics.getWidth()) + getWorldRatioY(Gdx.graphics.getHeight())) / 2;
+    public static float getSizeRatio(){
+        if(getRatioX() < getRatioY())
+            return getRatioX();
+        else
+            return getRatioY();
     }
 
     public static float getWorldSizeRatio() {
-
-        if(getWorldPositionXRatio() < getWorldPositionYRatio())
-            return getWorldPositionXRatio();
+        if(getWorldRatioX() < getWorldRatioY())
+            return getWorldRatioX();
         else
-            return getWorldPositionYRatio();
+            return getWorldRatioY();
     }
 
-    public static float getWorldPositionXRatio() {
-        return  getWorldRatioX(Gdx.graphics.getWidth());
-    }
-
-    public static float getWorldPositionYRatio() {
-        return  getWorldRatioY(Gdx.graphics.getHeight());
-    }
 }

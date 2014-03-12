@@ -6,37 +6,23 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.esotericsoftware.tablelayout.Cell;
+import com.esotericsoftware.tablelayout.Value.FixedValue;
 
 public class TableModel extends Table {
     public TextureRegion textureBackground;
     public boolean isBackgroundTextureActive;
 
-    public TableModel(TextureRegion textureBackground, float width, float height, boolean DIPActive) {
+    public TableModel(TextureRegion textureBackground, float width, float height) {
         isBackgroundTextureActive = true;
         this.textureBackground = textureBackground;
-        //
-        if (DIPActive) {
-            setSize(width * AppSettings.getWorldSizeRatio(), height
-                    * AppSettings.getWorldPositionYRatio());
-        } else {
-            setHeight(height);
-            setWidth(width);
-        }
+        setSize(width, height);
     }
 
-    public TableModel(TextureRegion textureBackground, float x, float y,
-                      float width, float height) {
+    public TableModel(TextureRegion textureBackground, float x, float y,float width, float height) {
         isBackgroundTextureActive = true;
         this.textureBackground = textureBackground;
         setBounds(x, y, width, height);
         setPosition(x, y);
-        setHeight(height);
-        setWidth(width);
-    }
-
-    public TableModel(TextureRegion textureBackground, float width, float height) {
-        isBackgroundTextureActive = true;
-        this.textureBackground = textureBackground;
         setHeight(height);
         setWidth(width);
     }
@@ -63,8 +49,7 @@ public class TableModel extends Table {
         return textureBackground;
     }
 
-    public void setTextureBackground(TextureRegion textureBackground,
-                                     boolean isBackgroundTextureActive) {
+    public void setTextureBackground(TextureRegion textureBackground, boolean isBackgroundTextureActive) {
         this.textureBackground = textureBackground;
         this.isBackgroundTextureActive = isBackgroundTextureActive;
     }
@@ -74,26 +59,18 @@ public class TableModel extends Table {
     }
 
     @SuppressWarnings("rawtypes")
-    public Cell add(Actor actor, float width, float height, boolean DIPActive) {
-        if (DIPActive) {
-            return super.add(actor).size(
-                    width * AppSettings.getWorldSizeRatio(),
-                    height * AppSettings.getWorldSizeRatio());
-        } else {
-            return super.add(actor);
-        }
+    public Cell add(Actor actor, float width, float height) {
+        return super.add(actor).size(width * AppSettings.getSizeRatio(),height * AppSettings.getSizeRatio());
     }
 
     @Override
     public void draw(SpriteBatch batch, float parentAlpha) {
-        // Then draw child actors over bg
-        super.draw(batch, parentAlpha);
 
-        // First draw bg
         if (textureBackground != null && isBackgroundTextureActive) {
             batch.draw(textureBackground, getX(), getY(), getOriginX(),
                     getOriginY(), getWidth(), getHeight(), getScaleX(),
                     getScaleY(), getRotation());
         }
+        super.draw(batch, parentAlpha);
     }
 }

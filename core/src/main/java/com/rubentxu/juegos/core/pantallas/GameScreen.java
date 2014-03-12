@@ -35,8 +35,8 @@ public class GameScreen extends BaseScreen {
 
 
     public GameScreen(DreamsGame dreamsGame) {
-        super(dreamsGame,new Stage(0, 0, true));
-        CURRENT_SCREEN= SCREEN.GAME;
+        super(dreamsGame, new Stage(0, 0, true));
+        CURRENT_SCREEN = SCREEN.GAME;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class GameScreen extends BaseScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //updates
-        if(!DreamsGame.getGameState().equals(GameState.GAME_PAUSED)){
+        if (!DreamsGame.getGameState().equals(GameState.GAME_PAUSED)) {
             controller.update(delta);
             updateStats();
         }
@@ -55,15 +55,15 @@ public class GameScreen extends BaseScreen {
         stage.draw();
     }
 
-    private void updateStats(){
-        Hero hero=world.getHero();
-        ((Label)stats.findActor(Constants.SCORE)).setText(hero.getProfile().getCreditsAsText());
-        ((Label)stats.findActor(Constants.LIVES)).setText(hero.getProfile().getLivesAsText());
+    private void updateStats() {
+        Hero hero = world.getHero();
+        ((Label) stats.findActor(Constants.SCORE)).setText(hero.getProfile().getCreditsAsText());
+        ((Label) stats.findActor(Constants.LIVES)).setText(hero.getProfile().getLivesAsText());
     }
 
     @Override
     public void showDialog() {
-        if(dialog==null ){
+        if (dialog == null) {
             dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
 
             TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
@@ -79,7 +79,7 @@ public class GameScreen extends BaseScreen {
                     System.out.println("Click Continuar...");
                     DreamsGame.setGameState(GameState.GAME_RUNNING);
                     dialog.remove();
-                    dialog=null;
+                    dialog = null;
                 }
             });
 
@@ -88,7 +88,7 @@ public class GameScreen extends BaseScreen {
             dialog.add(btnContinuar);
             dialog.add(btnSalir);
             dialog.pack();
-            dialog.setPosition(width/2-dialog.getWidth()/2, height/2-dialog.getHeight()/2);
+            dialog.setPosition(width / 2 - dialog.getWidth() / 2, height / 2 - dialog.getHeight() / 2);
             stage.addActor(dialog);
         }
     }
@@ -96,18 +96,18 @@ public class GameScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-        world=new World(game);
-        Hero hero= world.getHero();
+        world = new World(game);
+        Hero hero = world.getHero();
         hero.setProfile(game.getProfileManager().retrieveProfile());
-        controller=new WorldController(game,world);
-        renderer=new WorldRenderer(game,world);
+        controller = new WorldController(game, world);
+        renderer = new WorldRenderer(game, world);
         renderer.resize(width, height);
 
-        stats=GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(),game.getResourcesManager());
-        stats.setBounds(0,height-height/7,width,height/7);
+        stats = GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), game.getResourcesManager());
+        stats.setBounds(0, height - height / 7, width, height / 7);
         stage.addActor(stats);
 
-        if(game.getPreferencesManager().touchPadEnabled){
+        if (game.getPreferencesManager().touchPadEnabled) {
             stage.addActor(GuiBuilder.buildTouchPad(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
         } else {
             stage.addActor(GuiBuilder.buildPadButtons(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
@@ -123,7 +123,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void pause() {
-       super.pause();
+        super.pause();
     }
 
     @Override
@@ -134,17 +134,16 @@ public class GameScreen extends BaseScreen {
     @Override
     public void dispose() {
         world.dispose();
-        world=null;
+        world = null;
         renderer.dispose();
-        renderer=null;
+        renderer = null;
         controller.dispose();
-        controller=null;
+        controller = null;
     }
 
     public ScreenTransition getTransition() {
         return ScreenTransitionSlice.init(0.6f, ScreenTransitionSlice.UP, 20, Interpolation.swingOut);
     }
-
 
 
     public World getWorld() {
@@ -172,7 +171,7 @@ public class GameScreen extends BaseScreen {
     }
 
     @Override
-    public InputProcessor getInputProcessor () {
+    public InputProcessor getInputProcessor() {
         GameInputs gameInputs = new GameInputs(controller, renderer);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);

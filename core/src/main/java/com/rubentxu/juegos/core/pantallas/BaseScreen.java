@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -21,7 +22,7 @@ public abstract class BaseScreen implements Screen {
 
     protected final DreamsGame game;
     protected Stage stage;
-    protected TableModel mainTable;
+    protected Table mainTable;
     protected Window dialog;
     protected float width;
     protected float height;
@@ -106,7 +107,7 @@ public abstract class BaseScreen implements Screen {
     public abstract InputProcessor getInputProcessor();
 
     public void showDialog() {
-        if(dialog==null ){
+        if (dialog == null) {
             dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
 
             TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
@@ -122,7 +123,7 @@ public abstract class BaseScreen implements Screen {
                     System.out.println("Click Continuar...");
                     DreamsGame.setGameState(GameState.GAME_RUNNING);
                     dialog.remove();
-                    dialog=null;
+                    dialog = null;
                 }
             });
 
@@ -131,7 +132,7 @@ public abstract class BaseScreen implements Screen {
             dialog.add(btnContinuar);
             dialog.add(btnSalir);
             dialog.pack();
-            dialog.setPosition(width/2-dialog.getWidth()/2, height/2-dialog.getHeight()/2);
+            dialog.setPosition(width / 2 - dialog.getWidth() / 2, height / 2 - dialog.getHeight() / 2);
             stage.addActor(dialog);
         }
 

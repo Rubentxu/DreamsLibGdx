@@ -7,13 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
 public class ButtonGame extends AbstractButton {
 
-    public ButtonGame(BitmapFont bitMapFont, Drawable up, Drawable down) {
-        super(bitMapFont, up, down);
-    }
-
-    public ButtonGame(BitmapFont bitMapFont, Drawable up, Drawable down,
-                      float width, float height, boolean DIPActive) {
-        super(bitMapFont, up, down, width, height, DIPActive);
+    public ButtonGame(BitmapFont bitMapFont, Drawable up, Drawable down,float width, float height) {
+        super(bitMapFont, up, down, width, height);
     }
 
     @Override
