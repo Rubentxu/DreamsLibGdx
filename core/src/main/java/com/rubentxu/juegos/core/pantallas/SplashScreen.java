@@ -45,13 +45,21 @@ public class SplashScreen extends BaseScreen {
         splashImage.setHeight(height);
         splashImage.getColor().a = 0f;
 
+<<<<<<< HEAD
         splashImage.addAction(sequence(fadeIn(0.05f), run(new Runnable() {
             public void run() {
                 game.menuScreen = new MenuScreen(game);
             }
         }), delay(0.01f, fadeOut(0.05f)), run(new Runnable() {
+=======
+        splashImage.addAction(sequence(fadeIn(0.01f), run(new Runnable() {
             public void run() {
-                game.setScreen(game.menuScreen,game.menuScreen.getTransition());
+                game.menuScreen = new MenuScreen(game);
+            }
+        }), delay(0.01f, fadeOut(0.01f)), run(new Runnable() {
+>>>>>>> master
+            public void run() {
+                game.setScreen(game.menuScreen, game.menuScreen.getTransition());
             }
         })));
 
@@ -71,7 +79,7 @@ public class SplashScreen extends BaseScreen {
     }
 
     @Override
-    public void showDialog(){
+    public void showDialog() {
 
     }
 

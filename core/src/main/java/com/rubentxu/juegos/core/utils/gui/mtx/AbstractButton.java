@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 
+
 public abstract class AbstractButton extends Button {
     // Locked (Not mandatory)
     protected boolean isLockActive = false;
@@ -26,27 +27,23 @@ public abstract class AbstractButton extends Button {
     protected float externalTextureSizeH = 50.0f;
     protected TextureRegion textureExternal;
 
-    //
-    private boolean DIPActive = false;
-
     public AbstractButton(BitmapFont bitMapFont, Drawable up, Drawable down) {
         super(up, down);
         this.bitMapFont = bitMapFont;
     }
 
-    public AbstractButton(BitmapFont bitMapFont, Drawable up, Drawable down,
-                          float width, float height, boolean DIPActive) {
+    public AbstractButton(BitmapFont bitMapFont, Drawable up, Drawable down, float width, float height) {
         super(up, down);
         this.bitMapFont = bitMapFont;
-        this.DIPActive = DIPActive;
-        //
-
+        setSize(width * AppSettings.getRatioX(), height * AppSettings.getRatioY());
+        if (this.bitMapFont != null) {
+            bitMapFont.setScale(AppSettings.getSizeRatio());
+            bitMapFont.setUseIntegerPositions(false);
+        }
     }
 
     @Override
     public Actor hit(float x, float y, boolean touchable) {
-        // return super.hit(x, y, touchable);
-
         if (!isLockActive) {
             // If not locked detect the inputs
             return super.hit(x, y, touchable);
@@ -58,7 +55,7 @@ public abstract class AbstractButton extends Button {
 
     /**
      * Get if the button lock active
-     * */
+     */
     public boolean isLockActive() {
         return isLockActive;
     }
@@ -66,16 +63,14 @@ public abstract class AbstractButton extends Button {
     /**
      * Set the lock, it overrides the hit method, so it wont detect hits, also
      * if it is active, lock texture will be drawn
-     *
-     * @see
-     * */
+     */
     public void setLockActive(boolean isLockActive) {
         this.isLockActive = isLockActive;
     }
 
     /**
      * Get lock texture
-     * */
+     */
     public TextureRegion getTextureLocked() {
         return textureLocked;
     }
@@ -83,11 +78,9 @@ public abstract class AbstractButton extends Button {
     /**
      * Set lock texture
      *
-     * @param textureLocked
-     *            the lock texture to draw
-     * @param isLockActive
-     *            to enable lock or not
-     * */
+     * @param textureLocked the lock texture to draw
+     * @param isLockActive  to enable lock or not
+     */
     public void setTextureLocked(TextureRegion textureLocked,
                                  boolean isLockActive) {
         this.textureLocked = textureLocked;
@@ -96,7 +89,7 @@ public abstract class AbstractButton extends Button {
 
     /**
      * Get if text active
-     * */
+     */
     public boolean isTextActive() {
         return isTextActive;
     }
@@ -118,11 +111,8 @@ public abstract class AbstractButton extends Button {
     /**
      * Set text (first initiation), later to change text use setTextChange
      *
-     * @param text
-     *            the text to be written
-     * @param isTextActive
-     *            to write/draw the text or not
-     *
+     * @param text         the text to be written
+     * @param isTextActive to write/draw the text or not
      */
     public void setText(String text, boolean isTextActive) {
         this.text = text;
@@ -140,13 +130,9 @@ public abstract class AbstractButton extends Button {
      * Set text position of text (it adds to original button positions' x and y)
      */
     public void setTextPosXY(float x, float y) {
-        textPosX = x;
-        textPosY = y;
+        textPosX = x * AppSettings.getRatioX();
+        textPosY = y * AppSettings.getRatioY();
 
-        if (DIPActive) {
-            textPosX = x;
-            textPosY = y;
-        }
     }
 
     /**
@@ -161,6 +147,8 @@ public abstract class AbstractButton extends Button {
      */
     public void setBitMapFont(BitmapFont bitMapFont) {
         this.bitMapFont = bitMapFont;
+        bitMapFont.setScale(AppSettings.getSizeRatio());
+        bitMapFont.setUseIntegerPositions(false);
 
     }
 
@@ -188,7 +176,7 @@ public abstract class AbstractButton extends Button {
     /**
      * Set external texture, it is all optional. This is for extra texture
      * region to be drawn over everything
-     * <p>
+     * <p/>
      * EXAMPLE<br>
      * A menu button and there is a mini coin texture over the button in the
      * right side
@@ -205,6 +193,8 @@ public abstract class AbstractButton extends Button {
     public void setTextureExternalPosXY(float x, float y) {
         externalTexturePosX = x;
         externalTexturePosY = y;
+        externalTexturePosX = x * AppSettings.getRatioX();
+        externalTexturePosY = y * AppSettings.getRatioY();
 
     }
 
@@ -214,13 +204,9 @@ public abstract class AbstractButton extends Button {
     public void setTextureExternalSize(float width, float height) {
         externalTextureSizeW = width;
         externalTextureSizeH = height;
+        externalTextureSizeW *= AppSettings.getSizeRatio();
+        externalTextureSizeH *= AppSettings.getSizeRatio();
+
     }
 
-    public boolean isDIPActive() {
-        return DIPActive;
-    }
-
-    public void setDIPActive(boolean dIPActive) {
-        DIPActive = dIPActive;
-    }
 }

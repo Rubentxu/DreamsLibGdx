@@ -54,14 +54,14 @@ public class OptionScreen extends BaseScreen {
         mainTable.row();
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
-        final CheckBox musicCheckbox = new CheckBox(" Music",  game.getResourcesManager().getStyles().skin);
+        final CheckBox musicCheckbox = new CheckBox(" Music", game.getResourcesManager().getStyles().skin);
         musicCheckbox.align(Align.left);
         musicCheckbox.setChecked(game.getPreferencesManager().music);
         musicCheckbox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
-                game.getPreferencesManager().music=enabled;
+                game.getPreferencesManager().music = enabled;
                 game.getAudioManager().playMusic(ResourcesManager.MUSIC_MENU);
             }
         });
@@ -87,14 +87,14 @@ public class OptionScreen extends BaseScreen {
         mainTable.row();
 
 
-        final CheckBox soundCheckbox = new CheckBox(" Sound",game.getResourcesManager().getStyles().skin);
+        final CheckBox soundCheckbox = new CheckBox(" Sound", game.getResourcesManager().getStyles().skin);
         soundCheckbox.align(Align.left);
         soundCheckbox.setChecked(game.getPreferencesManager().sound);
         soundCheckbox.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = soundCheckbox.isChecked();
-                game.getPreferencesManager().sound=enabled;
+                game.getPreferencesManager().sound = enabled;
 
             }
         });
@@ -127,19 +127,23 @@ public class OptionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = touchPadCheckbox.isChecked();
-                game.getPreferencesManager().touchPadEnabled=enabled;
+                game.getPreferencesManager().touchPadEnabled = enabled;
             }
         });
         mainTable.add(touchPadCheckbox).colspan(3);
         mainTable.row();
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> master
         TextButton backButton = new TextButton("Volver Menu", game.getResourcesManager().getStyles().skin);
         backButton.pad(50* ScaleUtil.getSizeRatio());
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.getPreferencesManager().save();
-                game.setScreen(game.menuScreen,game.menuScreen.getTransition());
+                game.setScreen(game.menuScreen, game.menuScreen.getTransition());
             }
         });
 
@@ -151,10 +155,9 @@ public class OptionScreen extends BaseScreen {
 
 
     public ScreenTransition getTransition() {
-        return  ScreenTransitionSlide.init(0.7f,
+        return ScreenTransitionSlide.init(0.7f,
                 ScreenTransitionSlide.DOWN, true, Interpolation.swingOut);
     }
-
 
 
     @Override
@@ -167,12 +170,12 @@ public class OptionScreen extends BaseScreen {
 
     private void updateVolumeLabelMusic() {
         int volume = (int) (game.getPreferencesManager().volMusic * 100);
-        volumeValueMusic.setText("Volume "+Integer.toString(volume));
+        volumeValueMusic.setText("Volume " + Integer.toString(volume));
     }
 
     private void updateVolumeLabelSound() {
         int volume = (int) (game.getPreferencesManager().volSound * 100);
-        volumeValueSound.setText("Volume "+Integer.toString(volume));
+        volumeValueSound.setText("Volume " + Integer.toString(volume));
     }
 
 }
