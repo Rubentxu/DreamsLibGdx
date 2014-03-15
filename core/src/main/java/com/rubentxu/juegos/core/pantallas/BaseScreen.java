@@ -16,7 +16,8 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
-import com.rubentxu.juegos.core.utils.gui.mtx.TableModel;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
 public abstract class BaseScreen implements Screen {
 
@@ -49,8 +50,9 @@ public abstract class BaseScreen implements Screen {
 
     @Override
     public void show() {
+        mainTable = new Table();
         Gdx.app.log(Constants.LOG, "Showing screen: " + getName() + " Current_Screen " + CURRENT_SCREEN);
-        stage.clear();
+
 
     }
 
@@ -60,8 +62,9 @@ public abstract class BaseScreen implements Screen {
         this.width = width;
         this.height = height;
         stage.setViewport(width, height, true);
-
-
+        stage.clear();
+        mainTable.getColor().a = 0f;
+        mainTable.addAction(fadeIn(0.2f));
     }
 
     @Override
@@ -108,7 +111,7 @@ public abstract class BaseScreen implements Screen {
     public abstract InputProcessor getInputProcessor();
 
     public void showDialog() {
-        if (dialog == null) {
+        if(dialog==null ){
             dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
 
             TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
@@ -124,7 +127,7 @@ public abstract class BaseScreen implements Screen {
                     System.out.println("Click Continuar...");
                     DreamsGame.setGameState(GameState.GAME_RUNNING);
                     dialog.remove();
-                    dialog = null;
+                    dialog=null;
                 }
             });
 
@@ -133,7 +136,7 @@ public abstract class BaseScreen implements Screen {
             dialog.add(btnContinuar);
             dialog.add(btnSalir);
             dialog.pack();
-            dialog.setPosition(width / 2 - dialog.getWidth() / 2, height / 2 - dialog.getHeight() / 2);
+            dialog.setPosition(width/2-dialog.getWidth()/2, height/2-dialog.getHeight()/2);
             stage.addActor(dialog);
         }
 

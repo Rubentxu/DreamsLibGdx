@@ -20,17 +20,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
-<<<<<<< HEAD
 import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
-=======
->>>>>>> master
 
 public class Styles implements Disposable {
     public BitmapFont font;
     public BitmapFont font2;
     public Skin skin;
     public boolean initialize = false;
-
 
     public Styles(ResourcesManager resourcesManager) {
         createStyles(resourcesManager);
@@ -40,17 +36,10 @@ public class Styles implements Disposable {
         if (!initialize) {
             initialize=true;
             font = resourcesManager.get(resourcesManager.DEFAULT_FONT);
-<<<<<<< HEAD
             font.setScale(ScaleUtil.getSizeRatio());
             font.setUseIntegerPositions(false);
             font2 = resourcesManager.get(resourcesManager.HEADER_FONT);
             font2.setScale(ScaleUtil.getSizeRatio());
-=======
-            //font.setScale(AppSettings.getSizeRatio());
-            font.setUseIntegerPositions(false);
-            font2 = resourcesManager.get(resourcesManager.HEADER_FONT);
-            //font2.setScale(AppSettings.getSizeRatio());
->>>>>>> master
             font2.setUseIntegerPositions(false);
             skin = new Skin();
             skin.add("default", font);
@@ -101,6 +90,7 @@ public class Styles implements Disposable {
             skin.add("buttonUp", buttonUp);
             skin.add("buttonUpPress", buttonUpPress);
             skin.add("debug", debug);
+
 
             LabelStyle lbs = new LabelStyle();
             lbs.font = font;
