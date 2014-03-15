@@ -16,6 +16,7 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
+import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
@@ -113,8 +114,10 @@ public abstract class BaseScreen implements Screen {
     public void showDialog() {
         if(dialog==null ){
             dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
-
+            dialog.setHeight(Gdx.graphics.getHeight()/3);
+            int pad= (int) (20* ScaleUtil.getSizeRatio());
             TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
+            btnSalir.pad(pad);
             TextButton btnContinuar = new TextButton("Continuar", game.getResourcesManager().getStyles().skin);
             btnSalir.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -130,8 +133,9 @@ public abstract class BaseScreen implements Screen {
                     dialog=null;
                 }
             });
-
-            dialog.defaults().spaceBottom(10);
+            btnContinuar.pad(pad);
+            dialog.defaults().height(dialog.getHeight() / 2f);
+            dialog.defaults().spaceBottom(50 * ScaleUtil.getSizeRatio());
             dialog.row().fill().expandX();
             dialog.add(btnContinuar);
             dialog.add(btnSalir);

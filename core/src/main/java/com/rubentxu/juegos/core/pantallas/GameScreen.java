@@ -67,8 +67,10 @@ public class GameScreen extends BaseScreen {
     public void showDialog() {
         if(dialog==null ){
             dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
-
+            dialog.setHeight(Gdx.graphics.getHeight()/3);
+            int pad= (int) (20* ScaleUtil.getSizeRatio());
             TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
+            btnSalir.pad(pad);
             TextButton btnContinuar = new TextButton("Continuar", game.getResourcesManager().getStyles().skin);
             btnSalir.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -84,8 +86,9 @@ public class GameScreen extends BaseScreen {
                     dialog=null;
                 }
             });
-
-            dialog.defaults().spaceBottom(10);
+            btnContinuar.pad(pad);
+            dialog.defaults().height(dialog.getHeight() / 2f);
+            dialog.defaults().spaceBottom(50 * ScaleUtil.getSizeRatio());
             dialog.row().fill().expandX();
             dialog.add(btnContinuar);
             dialog.add(btnSalir);

@@ -78,7 +78,7 @@ public class Styles implements Disposable {
 
 
             SliderStyle sliderStyle = new SliderStyle(slider, slider_knob);
-            skin.add("default",new WindowStyle(font2,Color.LIGHT_GRAY,debug));
+            skin.add("default",new WindowStyle(font2,Color.ORANGE,debug));
 
             skin.add("stats", stats);
             skin.add("btnMenu", btnMenu);
