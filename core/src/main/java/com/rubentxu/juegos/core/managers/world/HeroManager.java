@@ -42,58 +42,58 @@ public class HeroManager extends AbstractWorldManager {
             hero.getParticleEffectDust().setPosition(hero.getXBodyA() + hero.getWidthBodyA() / 2, hero.getYBodyA());
             hero.getParticleEffectDust().update(delta);
             hero.getParticleEffectContact().update(delta);
-        } else {
-            State state=hero.getState();
-            if (hero.getStateTime() > 0.5f && !hero.getState().equals(BaseState.DEAD)) {
-                if (hero.getProfile().removeLive()) BaseGame.setGameState(GameState.GAME_OVER);
-                state=Hero.StateHero.IDLE;
-            }
-            handleState(state,hero);
+        } else if (hero.getState().equals(BaseState.HURT)) {
+
+            Gdx.app.log(Constants.LOG, "---------------------------------------------------------------------PIERDES VIDA???");
+            if (hero.getProfile().removeLive()) BaseGame.setGameState(GameState.GAME_OVER);
+            hero.setState(Hero.StateHero.IDLE);
+
+            handleState(hero.getState(), hero);
             hero.setStateTime(hero.getStateTime() + delta);
         }
     }
 
 
     public void handleInput(Hero hero) {
-        State state=null;
+        State state = null;
         switch (hero.getStatePos()) {
             case ONGROUND:
                 if (keys.get(Keys.LEFT)) {
-                    state=WALKING;
+                    state = WALKING;
                     hero.setFacingLeft(true);
                 }
                 if (keys.get(Keys.RIGHT)) {
-                    state=WALKING;
+                    state = WALKING;
                     hero.setFacingLeft(false);
                 }
 
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    state=IDLE;
+                    state = IDLE;
                 }
                 if (keys.get(Keys.JUMP)) {
-                    if (hero.getStateTime() > 0.2) state=JUMPING;
+                    if (hero.getStateTime() > 0.2) state = JUMPING;
                 }
-                handleState(state,hero);
+                handleState(state, hero);
                 break;
             case INWATER:
                 if (keys.get(Keys.LEFT)) {
-                    state=SWIMMING;
+                    state = SWIMMING;
                     hero.setFacingLeft(true);
                 }
                 if (keys.get(Keys.RIGHT)) {
-                    state=SWIMMING;
+                    state = SWIMMING;
                     hero.setFacingLeft(false);
                 }
                 if (!keys.get(Keys.LEFT) && !keys.get(Keys.RIGHT)) {
                     stillTime += Gdx.graphics.getDeltaTime();
-                    state=IDLE;
+                    state = IDLE;
                 }
                 if (keys.get(Keys.JUMP)) {
-                    state=PROPULSION;
+                    state = PROPULSION;
                 }
 
-                handleState(state,hero);
+                handleState(state, hero);
                 hero.getParticleEffectDust().allowCompletion();
                 break;
             case ONAIR:
@@ -105,14 +105,14 @@ public class HeroManager extends AbstractWorldManager {
                 }
 
                 if (hero.getVelocity().y <= 0) {
-                    state=FALL;
+                    state = FALL;
                 } else {
 
-                    state=JUMPING;
+                    state = JUMPING;
                 }
                 hero.getHeroPhysicsFixture().setFriction(0f);
                 hero.getHeroSensorFixture().setFriction(0f);
-                handleState(state,hero);
+                handleState(state, hero);
                 hero.getParticleEffectDust().allowCompletion();
                 break;
         }
@@ -120,9 +120,9 @@ public class HeroManager extends AbstractWorldManager {
 
     }
 
-    public void handleState(State state,Hero hero) {
+    public void handleState(State state, Hero hero) {
 
-        if (hero.setState(state)) notifyObservers(state,hero);
+        if (hero.setState(state)) notifyObservers(state, hero);
 
         Vector2 vel = hero.getVelocity();
         Vector2 pos = hero.getBodyA().getPosition();
@@ -143,7 +143,7 @@ public class HeroManager extends AbstractWorldManager {
 
         } else if (hero.getState().equals(Hero.StateHero.JUMPING)) {
             if (!hero.getStatePos().equals(Hero.StatePos.ONAIR)) applyPhysicJumpingImpulse(vel, pos, hero);
-            if (keys.get(Keys.LEFT) ||  keys.get(Keys.RIGHT)) {
+            if (keys.get(Keys.LEFT) || keys.get(Keys.RIGHT)) {
                 applyPhysicMovingImpulse(hero);
             }
         } else if (hero.getState().equals(Hero.StateHero.PROPULSION)) {
@@ -153,7 +153,7 @@ public class HeroManager extends AbstractWorldManager {
             applyPhysicMovingImpulse(hero);
             hero.getParticleEffectDust().allowCompletion();
         } else if (hero.getState().equals(Hero.StateHero.FALL)) {
-            if (keys.get(Keys.LEFT) ||  keys.get(Keys.RIGHT)) {
+            if (keys.get(Keys.LEFT) || keys.get(Keys.RIGHT)) {
                 applyPhysicMovingImpulse(hero);
             }
         }
@@ -244,7 +244,7 @@ public class HeroManager extends AbstractWorldManager {
             contact.setEnabled(true);
         }
 
-        if (enemy != null && hero != null ) {
+        if (enemy != null && hero != null) {
 
             Vector2 point = contact.getWorldManifold().getPoints()[0];
             Vector2 pointVelEnemy = enemy.getBodyA().getLinearVelocityFromWorldPoint(point);
@@ -254,8 +254,7 @@ public class HeroManager extends AbstractWorldManager {
             Gdx.app.log(Constants.LOG, " Contacto relativeVel " + relativeVel + " pointVelEnemy " + pointVelEnemy
                     + " pointVelHero " + pointVelHero + " diff " + diff + " HeroPhysics " +
                     contact.getFixtureA().equals(hero.getHeroPhysicsFixture()) + " " + contact.getFixtureB().equals(hero.getHeroPhysicsFixture()) +
-                    " HeroSensor " + contact.getFixtureA().equals(hero.getHeroSensorFixture()) + " " + contact.getFixtureB().equals(hero.getHeroSensorFixture()) +
-                    "--------------------------------------------------------------------------------------------------------------------------------------------");
+                    " HeroSensor " + contact.getFixtureA().equals(hero.getHeroSensorFixture()) + " " + contact.getFixtureB().equals(hero.getHeroSensorFixture()));
 
 
             if (contact.getFixtureA().equals(hero.getHeroPhysicsFixture()) ||
@@ -269,16 +268,16 @@ public class HeroManager extends AbstractWorldManager {
                 }
                 hero.getParticleEffectContact().setPosition(point.x, point.y);
                 hero.getParticleEffectContact().reset();
-                Vector2 force= contact.getWorldManifold().getNormal();
-                if(contact.getFixtureA().equals(hero.getHeroPhysicsFixture())){
-                    force.add(0,0.7f);
+                Vector2 force = contact.getWorldManifold().getNormal();
+                if (contact.getFixtureA().equals(hero.getHeroPhysicsFixture())) {
+                    force.add(0, 0.7f);
                     force.scl(-8);
                 } else {
-                    force.add(0,0.7f);
+                    force.add(0, 0.7f);
                     force.scl(8);
                 }
 
-                System.out.println("Fuerza colision Enemigo: " + force + " relativePoint " +force);
+                System.out.println("Fuerza colision Enemigo: " + force + " relativePoint " + force);
                 hero.getBodyA().applyLinearImpulse(force, hero.getBodyA().getWorldCenter(), true);
                 hero.velocityLimit();
             }
@@ -305,7 +304,7 @@ public class HeroManager extends AbstractWorldManager {
 
         }
 
-        if (enemy != null && hero != null ) {
+        if (enemy != null && hero != null) {
             hero.getParticleEffectContact().allowCompletion();
         }
 

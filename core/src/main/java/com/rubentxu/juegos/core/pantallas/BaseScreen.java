@@ -1,11 +1,13 @@
 package com.rubentxu.juegos.core.pantallas;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -63,6 +65,7 @@ public abstract class BaseScreen implements Screen {
         this.height = height;
         stage.setViewport(width, height, true);
         stage.clear();
+        setBackBackButton();
         mainTable.getColor().a = 0f;
         mainTable.addAction(fadeIn(0.2f));
     }
@@ -107,7 +110,6 @@ public abstract class BaseScreen implements Screen {
         return transition;
     }
 
-    public abstract InputProcessor getInputProcessor();
 
     public void showDialog() {
         if(dialog==null ){
@@ -126,7 +128,7 @@ public abstract class BaseScreen implements Screen {
                     System.out.println("Click Continuar...");
                     DreamsGame.setGameState(GameState.GAME_RUNNING);
                     dialog.remove();
-                    dialog=null;
+                    dialog = null;
                 }
             });
 
@@ -140,5 +142,28 @@ public abstract class BaseScreen implements Screen {
         }
 
     }
+
+
+
+    public InputProcessor getInputProcessor() {
+        return stage;
+    }
+
+    private void setBackBackButton() {
+        stage.addListener(new InputListener() {
+
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if ((keycode == Input.Keys.ESCAPE) || (keycode == Input.Keys.BACK) ) {
+                    Gdx.app.log(Constants.LOG, "PRESS BUTTON: GAME_BACK");
+                    DreamsGame.setGameState(GameState.GAME_BACK);
+                }
+
+                return false;
+            }
+        });
+    }
+
+
 
 }

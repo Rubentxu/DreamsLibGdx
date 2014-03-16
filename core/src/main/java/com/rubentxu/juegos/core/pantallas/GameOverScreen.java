@@ -14,9 +14,9 @@ import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
 import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
 
-public class HighScoresScreen extends BaseScreen {
+public class GameOverScreen extends BaseScreen {
 
-    public HighScoresScreen(DreamsGame game) {
+    public GameOverScreen(DreamsGame game) {
         super(game,new Stage(0, 0, true));
         CURRENT_SCREEN = SCREEN.HIGHSCORES;
     }

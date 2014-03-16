@@ -18,7 +18,6 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.controladores.WorldController;
 import com.rubentxu.juegos.core.inputs.GameInputs;
-import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.modelo.Hero;
 import com.rubentxu.juegos.core.modelo.World;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
@@ -81,7 +80,7 @@ public class GameScreen extends BaseScreen {
                     System.out.println("Click Continuar...");
                     DreamsGame.setGameState(GameState.GAME_RUNNING);
                     dialog.remove();
-                    dialog=null;
+                    dialog = null;
                 }
             });
 
@@ -180,7 +179,6 @@ public class GameScreen extends BaseScreen {
         GameInputs gameInputs = new GameInputs(controller, renderer);
         InputMultiplexer multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(new MobileInput());
         multiplexer.addProcessor(gameInputs);
         return multiplexer;
     }

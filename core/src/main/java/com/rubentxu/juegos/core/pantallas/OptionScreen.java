@@ -1,8 +1,6 @@
 package com.rubentxu.juegos.core.pantallas;
 
 
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -19,7 +17,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
-import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
@@ -56,7 +53,7 @@ public class OptionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = musicCheckbox.isChecked();
-                game.getPreferencesManager().music=enabled;
+                game.getPreferencesManager().music = enabled;
                 game.getAudioManager().playMusic(ResourcesManager.MUSIC_MENU);
             }
         });
@@ -90,7 +87,7 @@ public class OptionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = soundCheckbox.isChecked();
-                game.getPreferencesManager().sound=enabled;
+                game.getPreferencesManager().sound = enabled;
 
             }
         });
@@ -123,7 +120,7 @@ public class OptionScreen extends BaseScreen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 boolean enabled = touchPadCheckbox.isChecked();
-                game.getPreferencesManager().touchPadEnabled=enabled;
+                game.getPreferencesManager().touchPadEnabled = enabled;
             }
         });
         mainTable.add(touchPadCheckbox).colspan(3);
@@ -153,16 +150,6 @@ public class OptionScreen extends BaseScreen {
     public ScreenTransition getTransition() {
         return  ScreenTransitionSlide.init(0.7f,
                 ScreenTransitionSlide.DOWN, true, Interpolation.swingOut);
-    }
-
-
-
-    @Override
-    public InputProcessor getInputProcessor() {
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(stage);
-        multiplexer.addProcessor(new MobileInput());
-        return multiplexer;
     }
 
     private void updateVolumeLabelMusic() {

@@ -54,7 +54,7 @@ public class Profile implements Serializable {
 
     public boolean removeLive() {
         Gdx.app.log(Constants.LOG,"Pierdes una Vida....");
-        return --lives <= 0;
+        return lives-- <= 0;
     }
 
     @Override

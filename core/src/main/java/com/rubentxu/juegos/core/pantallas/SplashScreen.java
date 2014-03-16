@@ -1,7 +1,5 @@
 package com.rubentxu.juegos.core.pantallas;
 
-import com.badlogic.gdx.InputMultiplexer;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -11,7 +9,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.rubentxu.juegos.core.DreamsGame;
-import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
@@ -61,13 +58,6 @@ public class SplashScreen extends BaseScreen {
     @Override
     public void dispose() {
         super.dispose();
-    }
-
-    @Override
-    public InputProcessor getInputProcessor() {
-        InputMultiplexer multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(new MobileInput());
-        return multiplexer;
     }
 
     @Override

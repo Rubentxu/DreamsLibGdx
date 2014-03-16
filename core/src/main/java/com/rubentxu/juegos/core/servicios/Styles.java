@@ -15,7 +15,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider.SliderStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton.TextButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Touchpad;
 import com.badlogic.gdx.scenes.scene2d.ui.Window.WindowStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Disposable;
@@ -49,15 +48,8 @@ public class Styles implements Disposable {
             skin.add("lt-green", new Color(.39f, .9f, .6f, 1f));
             skin.add("dark-blue", new Color(.79f, .95f, 91f, 1f));
 
-            NinePatchDrawable btnMenu = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("btnMenu"));
-            NinePatchDrawable btnMenuPress = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("btnMenuPress"));
-            NinePatchDrawable buttonLeft = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("buttonLeft"));
-            NinePatchDrawable buttonLeftPress = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("buttonLeftPress"));
-            NinePatchDrawable buttonRight = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("buttonRight"));
-            NinePatchDrawable buttonRightPress = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("buttonRightPress"));
-            NinePatchDrawable buttonUp = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("buttonUp"));
-            NinePatchDrawable buttonUpPress = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("buttonUpPress"));
-            NinePatchDrawable debug = new NinePatchDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).createPatch("debug"));
+            skin.addRegions(resourcesManager.<TextureAtlas>get(resourcesManager.GUI_ATLAS));
+            skin.addRegions(resourcesManager.<TextureAtlas>get(resourcesManager.GUI_PACK_ATLAS));
 
 
             TextureRegionDrawable touchpad_background = new TextureRegionDrawable(((TextureAtlas) resourcesManager.get(resourcesManager.GUI_ATLAS)).findRegion("touchpad_background"));
@@ -78,18 +70,8 @@ public class Styles implements Disposable {
 
 
             SliderStyle sliderStyle = new SliderStyle(slider, slider_knob);
-            skin.add("default",new WindowStyle(font2,Color.LIGHT_GRAY,debug));
-
+            skin.add("default",new WindowStyle(font2,Color.ORANGE,skin.getDrawable("debug")));
             skin.add("stats", stats);
-            skin.add("btnMenu", btnMenu);
-            skin.add("btnMenuPress", btnMenuPress);
-            skin.add("buttonLeft", buttonLeft);
-            skin.add("buttonLeftPress", buttonLeftPress);
-            skin.add("buttonRight", buttonRight);
-            skin.add("buttonRightPress", buttonRightPress);
-            skin.add("buttonUp", buttonUp);
-            skin.add("buttonUpPress", buttonUpPress);
-            skin.add("debug", debug);
 
 
             LabelStyle lbs = new LabelStyle();
@@ -102,14 +84,17 @@ public class Styles implements Disposable {
             lbsHeader.fontColor = Color.WHITE;
             skin.add("header", lbsHeader);
 
-            TextButtonStyle tbs = new TextButtonStyle(btnMenu, btnMenuPress, btnMenu, font);
+            TextButtonStyle tbs = new TextButtonStyle(skin.getDrawable("btnMenu"), skin.getDrawable("btnMenuPress"), skin.getDrawable("btnMenu"), font);
             tbs.fontColor = skin.getColor("dark-blue");
             tbs.pressedOffsetX = Math.round(1f * Gdx.graphics.getDensity());
             tbs.pressedOffsetY = tbs.pressedOffsetX * -1f;
 
-            ImageButton.ImageButtonStyle ImageButtonLeft = new ImageButton.ImageButtonStyle(buttonLeft, buttonLeftPress, buttonLeft, null, null, null);
-            ImageButton.ImageButtonStyle ImageButtonRight = new ImageButton.ImageButtonStyle(buttonRight, buttonRightPress, buttonRight, null, null, null);
-            ImageButton.ImageButtonStyle ImageButtonUp = new ImageButton.ImageButtonStyle(buttonUp, buttonUpPress, buttonUp, null, null, null);
+            ImageButton.ImageButtonStyle ImageButtonLeft = new ImageButton.ImageButtonStyle(skin.getDrawable("buttonLeft"), skin.getDrawable("buttonLeftPress"),
+                    skin.getDrawable("buttonLeft"), null, null, null);
+            ImageButton.ImageButtonStyle ImageButtonRight = new ImageButton.ImageButtonStyle(skin.getDrawable("buttonRight"), skin.getDrawable("buttonRightPress"),
+                    skin.getDrawable("buttonRight"), null, null, null);
+            ImageButton.ImageButtonStyle ImageButtonUp = new ImageButton.ImageButtonStyle(skin.getDrawable("buttonUp"), skin.getDrawable("buttonUpPress"),
+                    skin.getDrawable("buttonUp"), null, null, null);
 
 
             Touchpad.TouchpadStyle touchpadStyle = new Touchpad.TouchpadStyle();

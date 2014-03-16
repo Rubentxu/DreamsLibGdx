@@ -1,9 +1,9 @@
 package com.rubentxu.juegos.core.utils.gui.mtx;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 public class ButtonLevel extends AbstractButton {
@@ -22,12 +22,13 @@ public class ButtonLevel extends AbstractButton {
     private int levelNumber = -999;
 
     // Font (For writings and level number)
-    private BitmapFont bitMapFont;
+
 
     public ButtonLevel(ResourcesManager resourcesManager) {
 
-        super(resourcesManager.<BitmapFont>get(ResourcesManager.HEADER_FONT), resourcesManager.getStyles().skin.get("btnMenu",NinePatchDrawable.class)
-                , resourcesManager.getStyles().skin.get("btnMenuPress",NinePatchDrawable.class));
+        super(resourcesManager.<BitmapFont>get(ResourcesManager.HEADER_FONT), resourcesManager.getStyles().skin.getDrawable("gui_bloque_vacio")
+                , resourcesManager.getStyles().skin.getDrawable("btnMenuPress"));
+        bitMapFont.setColor(Color.ORANGE);
     }
 
     @Override
