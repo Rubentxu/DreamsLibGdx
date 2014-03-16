@@ -20,7 +20,6 @@ public class ResourcesManager extends AssetManager implements Disposable {
     private Styles styles;
 
     public static final String GUI_ATLAS = "gui/gui.pack";
-    public static final String GUI_PACK_ATLAS = "gui/gui-pack.pack";
     public static final String UISKIN_ATLAS = "gui/uiskin.pack";
     public static final String SPRITE_ATLAS = "imagenes/animaciones/sprites.pack";
     public static final String VARIOS_ATLAS = "imagenes/varios/varios.pack";
@@ -78,7 +77,6 @@ public class ResourcesManager extends AssetManager implements Disposable {
         this.load(VARIOS_ATLAS, TextureAtlas.class);
         this.load(OBJECTS_ATLAS, TextureAtlas.class);
         this.load(GUI_ATLAS, TextureAtlas.class);
-        this.load(GUI_PACK_ATLAS, TextureAtlas.class);
         this.load(UISKIN_ATLAS, TextureAtlas.class);
         this.load(PARTICLE_EFFECT, ParticleEffect.class);
         this.load(PARTICLE_EFFECT_CONTACT, ParticleEffect.class);

@@ -11,19 +11,19 @@ public class ScreenTransitionFade implements ScreenTransition {
     private static final ScreenTransitionFade instance = new ScreenTransitionFade();
     private float duration;
 
-    public static ScreenTransitionFade init(float duration) {
+    public static ScreenTransitionFade init (float duration) {
         instance.duration = duration;
         return instance;
     }
 
     @Override
-    public float getDuration() {
+    public float getDuration () {
         return duration;
     }
 
     @Override
-    public void render(SpriteBatch batch, Texture currScreen,
-                       Texture nextScreen, float alpha) {
+    public void render (SpriteBatch batch, Texture currScreen,
+                        Texture nextScreen, float alpha) {
         float w = currScreen.getWidth();
         float h = currScreen.getHeight();
         alpha = Interpolation.fade.apply(alpha);

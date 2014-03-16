@@ -1,6 +1,5 @@
 package com.rubentxu.juegos.core.utils.gui;
 
-
 import com.badlogic.gdx.Gdx;
 import com.rubentxu.juegos.core.constantes.Constants;
 

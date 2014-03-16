@@ -35,26 +35,21 @@ public class OptionScreen extends BaseScreen {
         CURRENT_SCREEN = SCREEN.OPTIONS;
     }
 
-    private Label label(String text, Color color) {
-        Label label = new Label(text, game.getResourcesManager().getStyles().skin, "header", color);
-        label.setAlignment(Align.center, Align.center);
-        return label;
-    }
 
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
         game.getPreferencesManager().load();
-
-        mainTable.defaults().height(height / 5f);
+        Label label = new Label("Opciones del Juego", game.getResourcesManager().getStyles().skin, "header", Color.ORANGE);
+        label.setAlignment(Align.center, Align.center);
         mainTable.setFillParent(true);
-        mainTable.defaults().pad(6*ScaleUtil.getSizeRatio());
-        mainTable.defaults().padLeft(50*ScaleUtil.getSizeRatio());
-        mainTable.add(label("Opciones del Juego", Color.CYAN)).colspan(3);
+        mainTable.defaults().pad(6 * ScaleUtil.getSizeRatio());
+        mainTable.defaults().padLeft(50 * ScaleUtil.getSizeRatio());
+        mainTable.add(label).colspan(3);
         mainTable.row();
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
-        final CheckBox musicCheckbox = new CheckBox(" Music", game.getResourcesManager().getStyles().skin);
+        final CheckBox musicCheckbox = new CheckBox(" Music",  game.getResourcesManager().getStyles().skin);
         musicCheckbox.align(Align.left);
         musicCheckbox.setChecked(game.getPreferencesManager().music);
         musicCheckbox.addListener(new ClickListener() {
@@ -66,6 +61,7 @@ public class OptionScreen extends BaseScreen {
             }
         });
         mainTable.add(musicCheckbox);
+
 
         Slider volumeSliderMusic = new Slider(0f, 1f, 0.1f, false, game.getResourcesManager().getStyles().skin);
         volumeSliderMusic.setValue(game.getPreferencesManager().volMusic);
@@ -133,8 +129,12 @@ public class OptionScreen extends BaseScreen {
         mainTable.add(touchPadCheckbox).colspan(3);
         mainTable.row();
 
+
+
+
+
         TextButton backButton = new TextButton("Volver Menu", game.getResourcesManager().getStyles().skin);
-        backButton.pad(50* ScaleUtil.getSizeRatio());
+        backButton.pad(20);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -143,7 +143,7 @@ public class OptionScreen extends BaseScreen {
             }
         });
 
-        mainTable.add(backButton).colspan(3).fillX();
+        mainTable.add(backButton).colspan(3);
 
         this.stage.addActor(mainTable);
 
@@ -151,7 +151,7 @@ public class OptionScreen extends BaseScreen {
 
 
     public ScreenTransition getTransition() {
-        return ScreenTransitionSlide.init(0.7f,
+        return  ScreenTransitionSlide.init(0.7f,
                 ScreenTransitionSlide.DOWN, true, Interpolation.swingOut);
     }
 

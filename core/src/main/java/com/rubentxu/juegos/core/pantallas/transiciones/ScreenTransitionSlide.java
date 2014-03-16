@@ -68,7 +68,7 @@ public class ScreenTransitionSlide implements ScreenTransition {
         batch.draw(texBottom, 0, 0, 0, 0, w, h, 1, 1, 0, 0, 0,
                 currScreen.getWidth(), currScreen.getHeight(),
                 false, true);
-        batch.draw(texTop, x, y, 0, 0, w, h, 1, 1, 0, 0, 0, nextScreen.getWidth(), nextScreen.getHeight(), false, true);
+        batch.draw(texTop, x, y, 0, 0, w, h, 1, 1, 0, 0, 0,nextScreen.getWidth(), nextScreen.getHeight(),false, true);
         batch.end();
     }
 }

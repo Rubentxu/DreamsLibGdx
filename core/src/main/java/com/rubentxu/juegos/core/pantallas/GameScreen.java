@@ -67,10 +67,8 @@ public class GameScreen extends BaseScreen {
     public void showDialog() {
         if(dialog==null ){
             dialog = new Window("Que desea hacer ?", game.getResourcesManager().getStyles().skin);
-            dialog.setHeight(Gdx.graphics.getHeight()/3);
-            int pad= (int) (20* ScaleUtil.getSizeRatio());
+
             TextButton btnSalir = new TextButton("Salir", game.getResourcesManager().getStyles().skin);
-            btnSalir.pad(pad);
             TextButton btnContinuar = new TextButton("Continuar", game.getResourcesManager().getStyles().skin);
             btnSalir.addListener(new ClickListener() {
                 public void clicked(InputEvent event, float x, float y) {
@@ -86,9 +84,8 @@ public class GameScreen extends BaseScreen {
                     dialog=null;
                 }
             });
-            btnContinuar.pad(pad);
-            dialog.defaults().height(dialog.getHeight() / 2f);
-            dialog.defaults().spaceBottom(50 * ScaleUtil.getSizeRatio());
+
+            dialog.defaults().spaceBottom(10);
             dialog.row().fill().expandX();
             dialog.add(btnContinuar);
             dialog.add(btnSalir);
@@ -108,13 +105,13 @@ public class GameScreen extends BaseScreen {
         renderer=new WorldRenderer(game,world);
         renderer.resize(width, height);
 
-        stats=GuiBuilder.buildStats(stage.getWidth(), 100*ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(),game.getResourcesManager());
+        stats=GuiBuilder.buildStats(stage.getWidth(), 100* ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(),game.getResourcesManager());
         stats.setBounds(0,height-height/7,width,height/7);
         stage.addActor(stats);
 
         if(game.getPreferencesManager().touchPadEnabled){
             Touchpad touchPad = GuiBuilder.buildTouchPad(350 * ScaleUtil.getSizeRatio(), 350 * ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller);
-            touchPad.scale(ScaleUtil.getSizeRatio());
+            //touchPad.scale(ScaleUtil.getSizeRatio());
             stage.addActor(touchPad);
         } else {
             stage.addActor(GuiBuilder.buildPadButtons(370*ScaleUtil.getSizeRatio(),190*ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller));
@@ -130,7 +127,7 @@ public class GameScreen extends BaseScreen {
 
     @Override
     public void pause() {
-        super.pause();
+       super.pause();
     }
 
     @Override
