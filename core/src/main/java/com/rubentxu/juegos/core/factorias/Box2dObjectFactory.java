@@ -251,9 +251,11 @@ public class Box2dObjectFactory {
         if (object instanceof RectangleMapObject) {
             PolygonShape shape = new PolygonShape();
             float width= 1f;
+            float radius= width/2;
             float height=2f;
             Rectangle rectangle = getRectangle((RectangleMapObject) object);
-            shape.setAsBox(width / 2, height / 2, new Vector2(rectangle.x - bodyA.getPosition().x + width / 2, rectangle.y - bodyA.getPosition().y + height / 2), bodyA.getAngle());
+            shape.setAsBox(width / 2, height/ 2 -radius/2, new Vector2(rectangle.x - bodyA.getPosition().x + width / 2,
+                    rectangle.y - bodyA.getPosition().y + height / 2 - radius/2), bodyA.getAngle());
 
             FixtureDef fixDef = new FixtureDef();
             fixDef.shape = shape;
@@ -262,11 +264,11 @@ public class Box2dObjectFactory {
             Fixture heroPhysicsFixture = bodyA.createFixture(fixDef);
 
             CircleShape circle = new CircleShape();
-            circle.setRadius(width / 2);
+            circle.setRadius(radius);
             circle.setPosition(new Vector2(width / 2, 0 ));
             fixDef.shape = circle;
             Fixture heroSensorFixture = bodyA.createFixture(fixDef);
-            heroSensorFixture.setSensor(true);
+            //heroSensorFixture.setSensor(true);
 
             bodyA.setBullet(true);
 
@@ -280,7 +282,7 @@ public class Box2dObjectFactory {
             float scaleY=1.15f;
             hero.getScaleBodyA().set(scaleX,scaleY);
             /*    NuevoOrigen=((NuevoAncho/2)-(ViejoAncho/2)) / 2    */
-            hero.getOriginBodyA().set(((width*scaleX/2)-(width/2))/2f,((height*scaleY/2)-(height/2))/2f);
+            hero.getOriginBodyA().set(((width*scaleX/2)-(width/2))/2f,((height*scaleY/2+radius)-(height/2)+radius)/2f);
             heroPhysicsFixture.setUserData(hero);
             heroSensorFixture.setUserData(hero);
             hero.setParticleEffectDust((ParticleEffect) resourcesManager.get(ResourcesManager.PARTICLE_EFFECT));

@@ -1,5 +1,6 @@
 package com.rubentxu.juegos.core.controladores;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactFilter;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.utils.Disposable;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.Constants;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.managers.world.CheckPointManager;
 import com.rubentxu.juegos.core.managers.world.EnemyManager;
@@ -60,7 +62,9 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
 
         itemsManager.addObserver(game.getProfileManager());
         itemsManager.addObserver(game.getAudioManager());
+        heroManager.addObserver(game.getProfileManager());
         heroManager.addObserver(game.getAudioManager());
+
     }
 
     public void leftPressed() {
@@ -109,9 +113,12 @@ public class WorldController implements ContactListener, ContactFilter ,Disposab
             }
         }
         for(Box2DPhysicsObject d:destroy){
+            Gdx.app.log(Constants.LOG,"Destroy entity :" + d.getGrupo());
             world.destroyEntity(d);
         }
         destroy.clear();
+
+        world.getPhysics().step(delta, Constants.VELOCITY_ITERATIONS, Constants.POSITION_ITERATIONS);
     }
 
     @Override

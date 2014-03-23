@@ -16,6 +16,7 @@ public class Level implements Json.Serializable {
     private boolean active = false;
     private int achievements = 0;
     private int highScore = 0;
+    private int num = 0;
 
     public Level() {
     }
@@ -89,25 +90,16 @@ public class Level implements Json.Serializable {
     public void read(Json json, JsonValue jsonData) {
 
         map = json.readValue("map", String.class, jsonData);
-        ;
         levelName = json.readValue("levelName", String.class, jsonData);
-        ;
         description = json.readValue("description", String.class, jsonData);
-        ;
         music = json.readValue("music", String.class, jsonData);
-        ;
         background_01 = json.readValue("background_01", String.class, jsonData);
-        ;
         background_02 = json.readValue("background_02", String.class, jsonData);
-        ;
         background_03 = json.readValue("background_03", String.class, jsonData);
-        ;
         active = json.readValue("active", Boolean.class, jsonData);
-        ;
         achievements = json.readValue("achievements", Integer.class, jsonData);
-        ;
         highScore = json.readValue("highScore", Integer.class, jsonData);
-        ;
+        num = json.readValue("num", Integer.class, jsonData);
 
     }
 
@@ -123,5 +115,6 @@ public class Level implements Json.Serializable {
         json.writeValue("active", active);
         json.writeValue("achievements", achievements);
         json.writeValue("highScore", highScore);
+        json.writeValue("num", num);
     }
 }

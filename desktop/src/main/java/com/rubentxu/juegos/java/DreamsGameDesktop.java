@@ -27,7 +27,7 @@ public class DreamsGameDesktop {
         sizes.add(new Vector2(1920, 1080));
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-        config.title = "Dreams Game " + Constants.VERSION;
+        config.title = "Dreams Game " + Constants.VERSION+" "+DreamsGame.log;
         DreamsGame.DEBUG= false;
         config.useGL20 = true;
         config.width = (int) sizes.get(5).x;

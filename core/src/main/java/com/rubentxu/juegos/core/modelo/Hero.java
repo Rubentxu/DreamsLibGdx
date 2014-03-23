@@ -15,7 +15,26 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
 
 
      public enum StateHero implements State {
-        IDLE, WALKING, JUMPING, DYING, FALL, SWIMMING, PROPULSION,WIN
+        IDLE, WALKING, JUMPING, DYING, FALL, SWIMMING, PROPULSION,WIN ;
+
+         protected float stateTimeMin;
+
+         StateHero(){
+             this.stateTimeMin = 0.1f;
+         }
+
+         StateHero(float stateTimeMin){
+             this.stateTimeMin = stateTimeMin;
+         }
+
+         StateHero(BaseState state){
+             this.stateTimeMin =state.getStateTimeMin();
+         }
+
+         @Override
+         public float getStateTimeMin(){
+             return this.stateTimeMin;
+         }
     }
 
     public enum StatePos {ONGROUND, INWATER, ONAIR}
@@ -32,7 +51,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     private Fixture heroSensorFixture;
     private ParticleEffect particleEffectDust;
     private ParticleEffect particleEffectContact;
-    private Profile profile;
 
     public Hero(String name, Body body) {
         super(name, GRUPO.HERO,body);
@@ -94,13 +112,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
     }
 
 
-    public Profile getProfile() {
-        return profile;
-    }
-
-    public void setProfile(Profile profile) {
-        this.profile = profile;
-    }
 
     public StatePos getStatePos() {
         return statePos;
@@ -152,7 +163,6 @@ public class Hero extends Box2DPhysicsObject implements Disposable {
         grounContacts = null;
         heroPhysicsFixture = null;
         heroSensorFixture = null;
-        profile = null;
     }
 
 }

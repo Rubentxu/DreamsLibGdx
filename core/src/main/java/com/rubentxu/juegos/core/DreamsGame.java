@@ -2,19 +2,17 @@ package com.rubentxu.juegos.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.AudioManager;
 import com.rubentxu.juegos.core.managers.game.LevelManager;
 import com.rubentxu.juegos.core.managers.game.PreferencesManager;
 import com.rubentxu.juegos.core.managers.game.ProfileManager;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
-import com.rubentxu.juegos.core.pantallas.SplashScreen;
-import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
-import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
 
 public class DreamsGame extends BaseGame {
 
     public static boolean DEBUG = false;
-    FPSLogger log;
+    public static FPSLogger log;
 
     @Override
     public void create() {
@@ -26,9 +24,7 @@ public class DreamsGame extends BaseGame {
         audioManager =new AudioManager(this);
 
         log = new FPSLogger();
-
-        ScreenTransition transition = ScreenTransitionFade.init(0.75f);
-        setScreen(new SplashScreen(this),transition);
+        setGameState(GameState.GAME_SHOW_SPLASH);
     }
 
     @Override

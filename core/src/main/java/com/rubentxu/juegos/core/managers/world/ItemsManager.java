@@ -15,13 +15,12 @@ import com.rubentxu.juegos.core.modelo.base.State;
 public class ItemsManager extends AbstractWorldManager {
 
 
-
     @Override
     public void handleBeginContact(Contact contact) {
-        if(getHero(contact)!=null) {
-            Item item= getItem(contact);
-            State state=Box2DPhysicsObject.BaseState.DESTROY;
-            if (item.setState(state)) notifyObservers(state,item);
+        if (getHero(contact) != null) {
+            Item item = getItem(contact);
+            State state = Box2DPhysicsObject.BaseState.DESTROY;
+            if (item.setState(state)) notifyObservers(state, item);
         }
     }
 
@@ -61,9 +60,9 @@ public class ItemsManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
-            return (Hero) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.HERO)) {
+            return (Hero) box2dPhysicsB;
+        } else {
             return null;
         }
     }
@@ -74,9 +73,9 @@ public class ItemsManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.ITEMS)) {
             return (Item) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.ITEMS)){
-            return (Item) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.ITEMS)) {
+            return (Item) box2dPhysicsB;
+        } else {
             return null;
         }
     }

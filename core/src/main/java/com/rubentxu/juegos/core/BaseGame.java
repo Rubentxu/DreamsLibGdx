@@ -17,11 +17,14 @@ import com.rubentxu.juegos.core.pantallas.GameScreen;
 import com.rubentxu.juegos.core.pantallas.HighScoresScreen;
 import com.rubentxu.juegos.core.pantallas.MenuScreen;
 import com.rubentxu.juegos.core.pantallas.OptionScreen;
+import com.rubentxu.juegos.core.pantallas.ScoreScreen;
 import com.rubentxu.juegos.core.pantallas.SelectLevelScreen;
+import com.rubentxu.juegos.core.pantallas.SplashScreen;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
+import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionFade;
 
 public class BaseGame implements ApplicationListener {
-    private boolean init=false;
+    private boolean init = false;
     private BaseScreen currScreen;
     private BaseScreen nextScreen;
     private FrameBuffer currFbo;
@@ -35,12 +38,13 @@ public class BaseGame implements ApplicationListener {
     public OptionScreen optionScreen;
     public HighScoresScreen highScoreScreen;
     public SelectLevelScreen levelScreen;
+    public ScoreScreen scoreScreen;
 
     protected ResourcesManager resourcesManager;
     protected AudioManager audioManager;
     protected LevelManager levelManager;
     protected PreferencesManager preferencesManager;
-    private static GameState gameState= GameState.GAME_RUNNING;
+    private static GameState gameState = GameState.GAME_RUNNING;
     protected ProfileManager profileManager;
 
     public static GameState getGameState() {
@@ -48,7 +52,7 @@ public class BaseGame implements ApplicationListener {
     }
 
     public static void setGameState(GameState gameState) {
-        Gdx.app.log(Constants.LOG,"Change GameState: "+gameState);
+        Gdx.app.log(Constants.LOG, "Change GameState: " + gameState);
         BaseGame.gameState = gameState;
     }
 
@@ -74,20 +78,21 @@ public class BaseGame implements ApplicationListener {
         if (currScreen != null) {
             currScreen.pause();
             DreamsGame.setGameState(GameState.SCREEN_TRANSITION);
-        }else {
+        } else {
             Gdx.input.setInputProcessor(nextScreen.getInputProcessor());
             currScreen = nextScreen;
             nextScreen = null;
             screenTransition = null;
         }
 
-        Gdx.app.log(Constants.LOG, "SCREENS: Menu: "+menuScreen+" Option: "+optionScreen+" Game: "+gameScreen+" Score: "+highScoreScreen);
-        if(screen instanceof GameScreen ){
-            Gdx.app.log(Constants.LOG,"music Game");
+        Gdx.app.log(Constants.LOG, "SCREENS: Menu: " + menuScreen + " Option: " + optionScreen + " Game: " + gameScreen
+                + " Score: " + highScoreScreen);
+        if (screen instanceof GameScreen) {
+            Gdx.app.log(Constants.LOG, "music Game");
             audioManager.stopMusic();
             audioManager.playMusic(levelManager.getCurrentLevel().getMusic());
-        }else if(screen instanceof MenuScreen) {
-            Gdx.app.log(Constants.LOG,"music Menu");
+        } else if (screen instanceof MenuScreen) {
+            Gdx.app.log(Constants.LOG, "music Menu");
             audioManager.stopMusic();
             audioManager.playMusic(resourcesManager.MUSIC_MENU);
 
@@ -109,6 +114,8 @@ public class BaseGame implements ApplicationListener {
             case GAME_UPDATE:
                 break;
             case GAME_OVER:
+                currScreen.showMessage("Game Over", 1.5f);
+                currScreen.render(deltaTime);
                 break;
             case GAME_WIN:
                 break;
@@ -121,9 +128,34 @@ public class BaseGame implements ApplicationListener {
             case GAME_BACK:
                 DreamsGame.setGameState(GameState.GAME_PAUSED);
                 break;
+            case GAME_SHOW_SPLASH:
+                ScreenTransition transition = ScreenTransitionFade.init(0.75f);
+                SplashScreen splash = new SplashScreen((DreamsGame) this);
+                setScreen(splash, transition);
+                break;
             case GAME_SHOW_MENU:
-                if(menuScreen==null) menuScreen = new MenuScreen((DreamsGame) this);
+                if (menuScreen == null) menuScreen = new MenuScreen((DreamsGame) this);
                 setScreen(menuScreen, menuScreen.getTransition());
+                break;
+            case GAME_SHOW_SCORE:
+                if (scoreScreen == null) scoreScreen = new ScoreScreen((DreamsGame) this);
+                setScreen(scoreScreen, scoreScreen.getTransition());
+                break;
+            case GAME_SHOW_LEVEL_MENU:
+                if (levelScreen == null) levelScreen = new SelectLevelScreen((DreamsGame) this);
+                setScreen(levelScreen, levelScreen.getTransition());
+                break;
+            case GAME_SHOW_OPTIONS:
+                if (optionScreen == null) optionScreen = new OptionScreen((DreamsGame) this);
+                setScreen(optionScreen, optionScreen.getTransition());
+                break;
+            case GAME_SHOW_HIGHSCORES:
+                if (highScoreScreen == null) highScoreScreen = new HighScoresScreen((DreamsGame) this);
+                setScreen(highScoreScreen, highScoreScreen.getTransition());
+                break;
+            case GAME_SHOW_GAME:
+                if (gameScreen == null) gameScreen = new GameScreen((DreamsGame) this);
+                setScreen(gameScreen, gameScreen.getTransition());
                 break;
             case SCREEN_TRANSITION:
                 float duration = 0;
@@ -148,7 +180,7 @@ public class BaseGame implements ApplicationListener {
                     nextFbo.end();
 
                     float alpha = t / duration;
-                    screenTransition.render(batch,currFbo.getColorBufferTexture(),nextFbo.getColorBufferTexture(),alpha);
+                    screenTransition.render(batch, currFbo.getColorBufferTexture(), nextFbo.getColorBufferTexture(), alpha);
                 }
                 break;
             case GAME_EXIT:

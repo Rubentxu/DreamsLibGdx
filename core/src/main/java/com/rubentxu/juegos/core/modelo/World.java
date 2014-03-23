@@ -12,14 +12,16 @@ import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.base.Box2DPhysicsObject;
 import com.rubentxu.juegos.core.utils.dermetfan.box2d.Box2DMapObjectParser;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class World implements Disposable {
 
     private TiledMap map;
     private com.badlogic.gdx.physics.box2d.World physics;
     private Box2DMapObjectParser parser;
-    private HashSet<Box2DPhysicsObject> entities = new HashSet<Box2DPhysicsObject>();
+    private ArrayList<Box2DPhysicsObject> entities ;
     private Hero hero;
     private Array<Body> bodiesFlaggedDestroy = new Array<Body>();
     private Texture background_03;
@@ -28,6 +30,12 @@ public class World implements Disposable {
     protected Box2dObjectFactory box2dObjectFactory;
 
     public World(DreamsGame game) {
+        entities=new ArrayList<Box2DPhysicsObject>();
+        Collections.sort(entities,new Comparator<Box2DPhysicsObject>(){
+            public int compare(Box2DPhysicsObject one, Box2DPhysicsObject two){
+                return one.getGrupo().compareTo(two.getGrupo());
+            }
+        });
         createDreamsWorld(game.getLevelManager().getCurrentLevel(), game.getResourcesManager());
     }
 
@@ -108,7 +116,7 @@ public class World implements Disposable {
         return background_02;
     }
 
-    public HashSet<Box2DPhysicsObject> getEntities() {
+    public ArrayList<Box2DPhysicsObject> getEntities() {
         return entities;
     }
 

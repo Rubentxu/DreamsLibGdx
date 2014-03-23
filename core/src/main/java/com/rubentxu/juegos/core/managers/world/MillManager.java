@@ -18,7 +18,7 @@ public class MillManager extends AbstractWorldManager {
 
     @Override
     public void handleBeginContact(Contact contact) {
-        if(getHero(contact)!=null) {
+        if (getHero(contact) != null) {
 
         }
     }
@@ -59,9 +59,9 @@ public class MillManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
-            return (Hero) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.HERO)) {
+            return (Hero) box2dPhysicsB;
+        } else {
             return null;
         }
     }
@@ -72,18 +72,18 @@ public class MillManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.MILL)) {
             return (Item) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.MILL)){
-            return (Item) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.MILL)) {
+            return (Item) box2dPhysicsB;
+        } else {
             return null;
         }
     }
 
-    private void enableMotor(Mill mill){
-        ((RevoluteJoint)mill.getJoint()).enableMotor(true);
+    private void enableMotor(Mill mill) {
+        ((RevoluteJoint) mill.getJoint()).enableMotor(true);
     }
 
-    private void disableMotor(Mill mill){
-        ((RevoluteJoint)mill.getJoint()).enableMotor(false);
+    private void disableMotor(Mill mill) {
+        ((RevoluteJoint) mill.getJoint()).enableMotor(false);
     }
 }

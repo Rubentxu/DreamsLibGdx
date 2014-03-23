@@ -9,18 +9,25 @@ import com.rubentxu.juegos.core.constantes.Constants;
 import java.util.List;
 
 public class Profile implements Serializable {
-    private int credits;
+
     private int lives;
+    private int kills;
+    private int coinsAquired;
+    private int starAquired;
     private List<Level> levels;
 
     public Profile() {
-        credits = 0;
-        lives = 3;
+        lives = 2;
+        kills=0;
+        coinsAquired=0;
+        starAquired=0;
     }
 
     public Profile(List<Level> levels) {
-        credits = 0;
-        lives = 3;
+        lives = 2;
+        kills=0;
+        coinsAquired=0;
+        starAquired=0;
         this.levels = levels;
     }
 
@@ -36,40 +43,39 @@ public class Profile implements Serializable {
         return false;
     }
 
-    public int getCredits() {
-        return credits;
-    }
-
-    public void addCredits(int credits) {
-        this.credits += credits;
-    }
-
-    public String getCreditsAsText() {
-        return String.valueOf(credits);
-    }
-
     public int getLives() {
         return lives;
     }
 
+    public void addLives(int lives){
+        Gdx.app.log(Constants.LOG,"Añadido una Vida....");
+        this.lives+=lives;
+    }
+
     public boolean removeLive() {
         Gdx.app.log(Constants.LOG,"Pierdes una Vida....");
-        return lives-- <= 0;
+        --lives;
+        if(lives<0) lives=0;
+        return lives == 0;
     }
 
     @Override
     public void read(Json json, JsonValue jsonData) {
-
         levels = json.readValue("levels", List.class, jsonData);
-        credits = json.readValue("credits", Integer.class, jsonData);
         lives = json.readValue("lives", Integer.class, jsonData);
     }
 
     @Override
     public void write(Json json) {
         json.writeValue("levels", levels);
-        json.writeValue("credits", credits);
         json.writeValue("lives", lives);
+    }
+
+    public void resetValues(){
+        if(lives<=0) lives=1;
+        coinsAquired=0;
+        kills=0;
+        starAquired=0;
     }
 
     public CharSequence getLivesAsText() {
@@ -78,5 +84,37 @@ public class Profile implements Serializable {
 
     public List<Level> getLevels() {
         return levels;
+    }
+
+    public int getKills() {
+        return kills;
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public int getCoinsAquired() {
+        return coinsAquired;
+    }
+
+    public void setCoinsAquired(int coinsAquired) {
+        this.coinsAquired = coinsAquired;
+    }
+
+    public void addCoinsAquired(int goldAquired) {
+        this.coinsAquired += goldAquired;
+    }
+
+    public int getStarAquired() {
+        return starAquired;
+    }
+
+    public void setStarAquired(int starAquired) {
+        this.starAquired = starAquired;
+    }
+
+    public void addStarAquired(int starAquired) {
+        this.starAquired += starAquired;
     }
 }

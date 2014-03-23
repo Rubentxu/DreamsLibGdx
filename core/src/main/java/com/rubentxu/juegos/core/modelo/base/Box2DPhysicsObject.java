@@ -27,7 +27,22 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     }
 
     public enum BaseState implements State {
-        INITIAL, DEFAULT, DESTROY, HURT, HIT, DEAD
+        INITIAL, DEFAULT, DESTROY, HURT(1f), HIT(1f), DEAD(1f) ;
+
+        protected float stateTimeLimit;
+
+        BaseState(){
+            this.stateTimeLimit = 0.0f;
+        }
+
+        BaseState(float stateTimeLimit){
+            this.stateTimeLimit =stateTimeLimit;
+        }
+
+        @Override
+        public float getStateTimeMin(){
+            return this.stateTimeLimit;
+        }
     }
 
     public static final short MASK_HERO = (short) ~GRUPO.HERO.category;
@@ -48,7 +63,8 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
     protected GRUPO grupo;
     protected String nombre;
     private float stateTime;
-    private State state = BaseState.INITIAL;
+    private State state = BaseState.DEFAULT;
+
     private boolean facingLeft = false;
 
     public State getState() {
@@ -57,9 +73,7 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
 
     public boolean setState(State state) {
         if (!this.state.equals(state)) {
-            if ((this.state.equals(BaseState.HURT) || this.state.equals(BaseState.HIT) ||
-                    this.state.equals(BaseState.DEAD))
-                    && this.getStateTime() < 0.8f) {
+            if (this.getStateTime() < this.state.getStateTimeMin()) {
                 return false;
             } else {
                 this.state = state;
@@ -72,10 +86,22 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
         }
     }
 
+    public float getStateTime() {
+        return stateTime;
+    }
+
+    public boolean setStateTime(float stateTime) {
+        boolean check=false;
+        if(this.stateTime< this.state.getStateTimeMin() && stateTime > this.state.getStateTimeMin()) check= true;
+        this.stateTime = stateTime;
+        return check;
+    }
+
     public Box2DPhysicsObject(String nombre, GRUPO grupo, Body bodyA) {
         this.nombre = nombre;
         this.grupo = grupo;
         this.bodyA = bodyA;
+
     }
 
     public Box2DPhysicsObject(String nombre, GRUPO grupo, World physics) {
@@ -174,14 +200,6 @@ public class Box2DPhysicsObject implements IBox2DPhysicsObject, Disposable {
         return originBodyA;
     }
 
-
-    public float getStateTime() {
-        return stateTime;
-    }
-
-    public void setStateTime(float stateTime) {
-        this.stateTime = stateTime;
-    }
 
     public boolean isFacingLeft() {
         return facingLeft;

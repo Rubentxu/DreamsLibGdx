@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Scaling;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
@@ -48,7 +49,7 @@ public class SplashScreen extends BaseScreen {
             }
         }), delay(1f, fadeOut(0.5f)), run(new Runnable() {
             public void run() {
-                game.setScreen(game.menuScreen,game.menuScreen.getTransition());
+                game.setGameState(GameState.GAME_SHOW_MENU);
             }
         })));
 
@@ -61,7 +62,7 @@ public class SplashScreen extends BaseScreen {
     }
 
     @Override
-    public void showDialog(){
+    public void showDialog() {
 
     }
 

@@ -76,9 +76,14 @@ public class AudioManager implements StateObserver {
                     break;
             }
         }
-
+        Gdx.app.log(Constants.LOG, "Play Sound Notify: "+state);
         if (state.equals(Hero.StateHero.JUMPING)) playSound(ResourcesManager.JUMP_SOUND);
         if (state.equals(BaseState.HURT) || state.equals(BaseState.HIT)) playSound(ResourcesManager.HIT_SOUND);
+
+    }
+
+    @Override
+    public void onNotifyStateTimeLimit(State state, Box2DPhysicsObject entity, float time) {
 
     }
 }

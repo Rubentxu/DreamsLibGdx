@@ -25,15 +25,15 @@ import com.rubentxu.juegos.core.utils.physics.BuoyancyUtils;
 public class WaterManager extends AbstractWorldManager {
 
     @Override
-    public void update(float delta,Box2DPhysicsObject entity) {
-        Water w=(Water) entity;
+    public void update(float delta, Box2DPhysicsObject entity) {
+        Water w = (Water) entity;
         for (int i = 0; i < w.m_bodyList.size; i++) {
             Array<Fixture> fixtureList = w.m_bodyList.get(i).getFixtureList();
             for (int j = 0; j < fixtureList.size; j++) {
                 Fixture fixture = fixtureList.get(j);
-                if(!fixture.isSensor()){
-                    if(isHero(fixture) && ((Hero)fixture.getUserData()).getStatePos().equals(Hero.StatePos.ONAIR))
-                        ((Hero)fixture.getUserData()).setStatePos(Hero.StatePos.INWATER);
+                if (!fixture.isSensor()) {
+                    if (isHero(fixture) && ((Hero) fixture.getUserData()).getStatePos().equals(Hero.StatePos.ONAIR))
+                        ((Hero) fixture.getUserData()).setStatePos(Hero.StatePos.INWATER);
                     ApplyToFixture(fixture, w);
                 }
             }
@@ -47,18 +47,18 @@ public class WaterManager extends AbstractWorldManager {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBodyA();
         w.addBody(b);
-        if(isHero(b)) {
-            ((Hero)b.getUserData()).setStatePos(Hero.StatePos.INWATER);
+        if (isHero(b)) {
+            ((Hero) b.getUserData()).setStatePos(Hero.StatePos.INWATER);
         }
 
     }
 
-    public Boolean isHero(Body b){
-        return ((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO);
+    public Boolean isHero(Body b) {
+        return ((Box2DPhysicsObject) b.getUserData()).getGrupo().equals(GRUPO.HERO);
     }
 
-    public Boolean isHero(Fixture b){
-        return ((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO);
+    public Boolean isHero(Fixture b) {
+        return ((Box2DPhysicsObject) b.getUserData()).getGrupo().equals(GRUPO.HERO);
     }
 
     @Override
@@ -66,8 +66,8 @@ public class WaterManager extends AbstractWorldManager {
         Water w = getWater(contact);
         Body b = getSubmergedBody(contact).getBodyA();
         w.removeBody(b);
-        if(((Box2DPhysicsObject)b.getUserData()).getGrupo().equals(GRUPO.HERO)) {
-            ((Hero)b.getUserData()).setStatePos(Hero.StatePos.ONAIR);
+        if (((Box2DPhysicsObject) b.getUserData()).getGrupo().equals(GRUPO.HERO)) {
+            ((Hero) b.getUserData()).setStatePos(Hero.StatePos.ONAIR);
         }
 
     }

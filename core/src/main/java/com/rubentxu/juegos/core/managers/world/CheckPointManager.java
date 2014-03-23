@@ -20,11 +20,11 @@ public class CheckPointManager extends AbstractWorldManager {
     @Override
     public void handleBeginContact(Contact contact) {
         CheckPoint checkPoint = getCheckPoint(contact);
-        Hero hero= getHero(contact);
-        Gdx.app.log(Constants.LOG,"Begin Contact CheckPoint");
-        if(hero !=null && checkPoint !=null) {
-            Gdx.app.log(Constants.LOG,"Begin Contact CheckPoint TRUE");
-            ((PrismaticJoint)checkPoint.getJoint()).enableMotor(true);
+        Hero hero = getHero(contact);
+        Gdx.app.log(Constants.LOG, "Begin Contact CheckPoint");
+        if (hero != null && checkPoint != null) {
+            Gdx.app.log(Constants.LOG, "Begin Contact CheckPoint TRUE");
+            ((PrismaticJoint) checkPoint.getJoint()).enableMotor(true);
         }
     }
 
@@ -49,7 +49,7 @@ public class CheckPointManager extends AbstractWorldManager {
     }
 
     @Override
-    public void update(float delta,Box2DPhysicsObject entity) {
+    public void update(float delta, Box2DPhysicsObject entity) {
 
     }
 
@@ -64,9 +64,9 @@ public class CheckPointManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.HERO)) {
             return (Hero) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.HERO)){
-            return (Hero) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.HERO)) {
+            return (Hero) box2dPhysicsB;
+        } else {
             return null;
         }
     }
@@ -77,18 +77,18 @@ public class CheckPointManager extends AbstractWorldManager {
 
         if (box2dPhysicsA.getGrupo().equals(GRUPO.CHECKPOINT)) {
             return (CheckPoint) box2dPhysicsA;
-        } else if(box2dPhysicsB.getGrupo().equals(GRUPO.CHECKPOINT)){
-            return (CheckPoint) box2dPhysicsB;}
-        else {
+        } else if (box2dPhysicsB.getGrupo().equals(GRUPO.CHECKPOINT)) {
+            return (CheckPoint) box2dPhysicsB;
+        } else {
             return null;
         }
     }
 
-    private void enableMotor(CheckPoint checkPoint){
-        ((PrismaticJoint)checkPoint.getJoint()).enableMotor(true);
+    private void enableMotor(CheckPoint checkPoint) {
+        ((PrismaticJoint) checkPoint.getJoint()).enableMotor(true);
     }
 
-    private void disableMotor(CheckPoint checkPoint){
-        ((PrismaticJoint)checkPoint.getJoint()).enableMotor(false);
+    private void disableMotor(CheckPoint checkPoint) {
+        ((PrismaticJoint) checkPoint.getJoint()).enableMotor(false);
     }
 }

@@ -7,9 +7,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.rubentxu.juegos.core.BaseGame;
 import com.rubentxu.juegos.core.constantes.Constants;
-import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.controladores.WorldController.Keys;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.Enemy;
@@ -35,22 +33,24 @@ public class HeroManager extends AbstractWorldManager {
     @Override
     public void update(float delta, Box2DPhysicsObject entity) {
         Hero hero = (Hero) entity;
-        if (!hero.getState().equals(BaseState.HURT) || !hero.getState().equals(BaseState.HIT)
-                || !hero.getState().equals(BaseState.DEAD)) {
-            handleInput(hero);
-            hero.setStateTime(hero.getStateTime() + delta);
-            hero.getParticleEffectDust().setPosition(hero.getXBodyA() + hero.getWidthBodyA() / 2, hero.getYBodyA());
-            hero.getParticleEffectDust().update(delta);
-            hero.getParticleEffectContact().update(delta);
-        } else if (hero.getState().equals(BaseState.HURT)) {
+        boolean checkStateTimeLimit= hero.setStateTime(hero.getStateTime() + delta);
 
-            Gdx.app.log(Constants.LOG, "---------------------------------------------------------------------PIERDES VIDA???");
-            if (hero.getProfile().removeLive()) BaseGame.setGameState(GameState.GAME_OVER);
-            hero.setState(Hero.StateHero.IDLE);
+        if (checkStateTimeLimit) {
 
-            handleState(hero.getState(), hero);
-            hero.setStateTime(hero.getStateTime() + delta);
+            notifyObservers(hero.getState(), hero, hero.getStateTime());
+            if (hero.getState().equals(BaseState.HURT) || hero.getState().equals(BaseState.HIT)) {
+                Gdx.app.log(Constants.LOG, "CheckSTateTimeLimit HeroManager: " + checkStateTimeLimit);
+                hero.setState(Hero.StateHero.IDLE);
+            }
         }
+        if (!hero.getState().equals(BaseState.HURT) && !hero.getState().equals(BaseState.HIT)
+                && !hero.getState().equals(BaseState.DEAD)) {
+            handleInput(hero);
+        }
+        if(!hero.getStatePos().equals(Hero.StatePos.ONGROUND)) hero.getParticleEffectDust().allowCompletion();
+        hero.getParticleEffectDust().setPosition(hero.getXBodyA() + hero.getWidthBodyA() / 2, hero.getYBodyA()- hero.getWidthBodyA() / 2);
+        hero.getParticleEffectDust().update(delta);
+        hero.getParticleEffectContact().update(delta);
     }
 
 
@@ -94,7 +94,6 @@ public class HeroManager extends AbstractWorldManager {
                 }
 
                 handleState(state, hero);
-                hero.getParticleEffectDust().allowCompletion();
                 break;
             case ONAIR:
                 if (keys.get(Keys.LEFT)) {
@@ -113,7 +112,6 @@ public class HeroManager extends AbstractWorldManager {
                 hero.getHeroPhysicsFixture().setFriction(0f);
                 hero.getHeroSensorFixture().setFriction(0f);
                 handleState(state, hero);
-                hero.getParticleEffectDust().allowCompletion();
                 break;
         }
         hero.velocityLimit();
@@ -151,7 +149,6 @@ public class HeroManager extends AbstractWorldManager {
 
         } else if (hero.getState().equals(Hero.StateHero.SWIMMING)) {
             applyPhysicMovingImpulse(hero);
-            hero.getParticleEffectDust().allowCompletion();
         } else if (hero.getState().equals(Hero.StateHero.FALL)) {
             if (keys.get(Keys.LEFT) || keys.get(Keys.RIGHT)) {
                 applyPhysicMovingImpulse(hero);
@@ -257,31 +254,43 @@ public class HeroManager extends AbstractWorldManager {
                     " HeroSensor " + contact.getFixtureA().equals(hero.getHeroSensorFixture()) + " " + contact.getFixtureB().equals(hero.getHeroSensorFixture()));
 
 
-            if (contact.getFixtureA().equals(hero.getHeroPhysicsFixture()) ||
-                    contact.getFixtureB().equals(hero.getHeroPhysicsFixture())) {
-                if (relativeVel.y < -0.5) {
-                    enemy.setState(BaseState.DEAD);
-                    hero.setState(BaseState.HIT);
-                } else {
+            if ((contact.getFixtureA().equals(hero.getHeroPhysicsFixture()) || contact.getFixtureB().equals(hero.getHeroPhysicsFixture()))
+                    && !hero.getState().equals(BaseState.HIT) && !hero.getState().equals(BaseState.HURT)) {
+
+                if (relativeVel.y >= -0.5) {
                     enemy.setState(BaseState.HIT);
-                    hero.setState(BaseState.HURT);
-                }
-                hero.getParticleEffectContact().setPosition(point.x, point.y);
-                hero.getParticleEffectContact().reset();
-                Vector2 force = contact.getWorldManifold().getNormal();
-                if (contact.getFixtureA().equals(hero.getHeroPhysicsFixture())) {
-                    force.add(0, 0.7f);
-                    force.scl(-8);
-                } else {
-                    force.add(0, 0.7f);
-                    force.scl(8);
+                    if(hero.setState(BaseState.HURT))  notifyObservers(BaseState.HURT, hero);
+                    resolveContact(contact, hero, point);
                 }
 
-                System.out.println("Fuerza colision Enemigo: " + force + " relativePoint " + force);
-                hero.getBodyA().applyLinearImpulse(force, hero.getBodyA().getWorldCenter(), true);
-                hero.velocityLimit();
+            }else if ((contact.getFixtureA().equals(hero.getHeroSensorFixture()) || contact.getFixtureB().equals(hero.getHeroSensorFixture()))
+                    && !hero.getState().equals(BaseState.HIT) && !hero.getState().equals(BaseState.HURT)) {
+
+                if (relativeVel.y <= -0.5) {
+                    enemy.setState(BaseState.DEAD);
+                    if(hero.setState(BaseState.HIT))  notifyObservers(BaseState.HIT, hero);
+                    resolveContact(contact, hero, point);
+                }
+
             }
         }
+    }
+
+    private void resolveContact(Contact contact, Hero hero, Vector2 point) {
+        hero.getParticleEffectContact().setPosition(point.x, point.y);
+        hero.getParticleEffectContact().reset();
+        Vector2 force = contact.getWorldManifold().getNormal();
+        if (contact.getFixtureA().equals(hero.getHeroPhysicsFixture())) {
+            force.add(0, 1f);
+            force.scl(-8);
+        } else {
+            force.add(0, 1f);
+            force.scl(8);
+        }
+
+        System.out.println("Fuerza colision Enemigo: " + force + " relativePoint " + force);
+        hero.getBodyA().applyLinearImpulse(force, hero.getBodyA().getWorldCenter(), true);
+        hero.velocityLimit();
     }
 
     @Override

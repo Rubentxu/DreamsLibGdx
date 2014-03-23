@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.rubentxu.juegos.core.DreamsGame;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
@@ -46,7 +47,7 @@ public class OptionScreen extends BaseScreen {
         mainTable.row();
         mainTable.setBackground(new SpriteDrawable(new Sprite((Texture) game.getResourcesManager().get(ResourcesManager.MENU_BACKGROUND))));
 
-        final CheckBox musicCheckbox = new CheckBox(" Music",  game.getResourcesManager().getStyles().skin);
+        final CheckBox musicCheckbox = new CheckBox(" Music", game.getResourcesManager().getStyles().skin);
         musicCheckbox.align(Align.left);
         musicCheckbox.setChecked(game.getPreferencesManager().music);
         musicCheckbox.addListener(new ClickListener() {
@@ -80,7 +81,7 @@ public class OptionScreen extends BaseScreen {
         mainTable.row();
 
 
-        final CheckBox soundCheckbox = new CheckBox(" Sound",game.getResourcesManager().getStyles().skin);
+        final CheckBox soundCheckbox = new CheckBox(" Sound", game.getResourcesManager().getStyles().skin);
         soundCheckbox.align(Align.left);
         soundCheckbox.setChecked(game.getPreferencesManager().sound);
         soundCheckbox.addListener(new ClickListener() {
@@ -127,16 +128,13 @@ public class OptionScreen extends BaseScreen {
         mainTable.row();
 
 
-
-
-
         TextButton backButton = new TextButton("Volver Menu", game.getResourcesManager().getStyles().skin);
         backButton.pad(20);
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 game.getPreferencesManager().save();
-                game.setScreen(game.menuScreen,game.menuScreen.getTransition());
+                game.setGameState(GameState.GAME_SHOW_MENU);
             }
         });
 
@@ -148,18 +146,18 @@ public class OptionScreen extends BaseScreen {
 
 
     public ScreenTransition getTransition() {
-        return  ScreenTransitionSlide.init(0.7f,
+        return ScreenTransitionSlide.init(0.7f,
                 ScreenTransitionSlide.DOWN, true, Interpolation.swingOut);
     }
 
     private void updateVolumeLabelMusic() {
         int volume = (int) (game.getPreferencesManager().volMusic * 100);
-        volumeValueMusic.setText("Volume "+Integer.toString(volume));
+        volumeValueMusic.setText("Volume " + Integer.toString(volume));
     }
 
     private void updateVolumeLabelSound() {
         int volume = (int) (game.getPreferencesManager().volSound * 100);
-        volumeValueSound.setText("Volume "+Integer.toString(volume));
+        volumeValueSound.setText("Volume " + Integer.toString(volume));
     }
 
 }

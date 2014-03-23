@@ -14,6 +14,7 @@ public class Path {
     private float distance = 0;
     private Vector2 velocity;
     private int direction = FORWARD;
+    private boolean changeDirection=false;
 
     public Path(float speed) {
         points = new ArrayList<Vector2>();
@@ -30,7 +31,8 @@ public class Path {
         boolean checkChange = false;
         if (maxDist == 0) maxDist = points.get(waypoint).dst2(bodyPosition);
         distance += getVelocity().len() * delta;
-        if (isWaypointReached(bodyPosition, delta)) {
+        if (isWaypointReached(bodyPosition, delta) || changeDirection) {
+            changeDirection=false;
             distance = 0;
             int tempPoint = waypoint;
             waypoint = getNextPoint();
@@ -47,7 +49,7 @@ public class Path {
         return Math.abs(points.get(waypoint).x - bodyPosition.x) <= speed * delta;
     }
 
-    int getNextPoint() {
+    public int getNextPoint() {
         int nextPoint = waypoint + direction;
         if (nextPoint >= points.size()) {
             direction = REVERSE;
@@ -76,4 +78,7 @@ public class Path {
     }
 
 
+    public void setChangeDirection(boolean changeDirection) {
+        this.changeDirection = changeDirection;
+    }
 }

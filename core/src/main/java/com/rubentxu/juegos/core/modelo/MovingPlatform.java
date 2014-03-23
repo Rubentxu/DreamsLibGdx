@@ -14,7 +14,26 @@ public class MovingPlatform extends Platform implements Disposable {
 
 
     public enum StateMovingPlatform implements State {
-        ENABLED, DISABLED
+        ENABLED, DISABLED ;
+
+        protected float stateTimeMin;
+
+        StateMovingPlatform(){
+            this.stateTimeMin = 0.1f;
+        }
+
+        StateMovingPlatform(float stateTimeMin){
+            this.stateTimeMin = stateTimeMin;
+        }
+
+        StateMovingPlatform(BaseState state){
+            this.stateTimeMin =state.getStateTimeMin();
+        }
+
+        @Override
+        public float getStateTimeMin(){
+            return this.stateTimeMin;
+        }
     }
 
     private Vector2 pVelocity, start;

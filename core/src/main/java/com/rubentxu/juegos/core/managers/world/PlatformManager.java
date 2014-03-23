@@ -19,8 +19,8 @@ public class PlatformManager extends AbstractWorldManager {
 
     @Override
     public void update(float delta, Box2DPhysicsObject entity) {
-        MovingPlatform platform= (MovingPlatform) entity;
-        updateMovingPlatform(platform,delta);
+        MovingPlatform platform = (MovingPlatform) entity;
+        updateMovingPlatform(platform, delta);
     }
 
     public void updateMovingPlatform(MovingPlatform platform, float delta) {
@@ -35,7 +35,7 @@ public class PlatformManager extends AbstractWorldManager {
 
             if (check && velPlatform.y < 0) {
                 for (Box2DPhysicsObject passenger : platform.getPassengers()) {
-                    float force = passenger.getBodyA().getMass() * velPlatform.y*2 ;
+                    float force = passenger.getBodyA().getMass() * velPlatform.y * 2;
                     passenger.getBodyA().applyLinearImpulse(0, force, passenger.getBodyA().getPosition().x,
                             passenger.getBodyA().getPosition().y, true);
                 }
@@ -111,26 +111,26 @@ public class PlatformManager extends AbstractWorldManager {
         }
         WorldManifold manifold = contact.getWorldManifold();
         for (Vector2 point : manifold.getPoints()) {
-            Vector2 pointVelPlatform= movingPlatform.getBodyA().getLinearVelocityFromWorldPoint(point);
-            Vector2 pointVelOther= passenger.getBodyA().getLinearVelocityFromWorldPoint(point);
-            Vector2 relativeVel=movingPlatform.getBodyA().getLocalVector(pointVelOther.sub(pointVelPlatform));
+            Vector2 pointVelPlatform = movingPlatform.getBodyA().getLinearVelocityFromWorldPoint(point);
+            Vector2 pointVelOther = passenger.getBodyA().getLinearVelocityFromWorldPoint(point);
+            Vector2 relativeVel = movingPlatform.getBodyA().getLocalVector(pointVelOther.sub(pointVelPlatform));
 
-            if (relativeVel.y < -1 ) {
+            if (relativeVel.y < -1) {
                 movingPlatform.getPassengers().add(passenger);
                 movingPlatform.enabled = true;
                 return;
-            } else if (relativeVel.y < 1 ) {
+            } else if (relativeVel.y < 1) {
                 Vector2 relativePoint = movingPlatform.getBodyA().getLocalPoint(point);
                 float platformFaceY = 0.5f;
                 if (relativePoint.y > platformFaceY - 0.05) {
-                    if(contact.getFixtureA().equals(((Hero) passenger).getHeroPhysicsFixture()) )
-                        System.out.println(" relativeVel < 1 " +relativeVel);
+                    if (contact.getFixtureA().equals(((Hero) passenger).getHeroPhysicsFixture()))
+                        System.out.println(" relativeVel < 1 " + relativeVel);
                     movingPlatform.getPassengers().add(passenger);
                     movingPlatform.enabled = true;
-                    Vector2 force= contact.getWorldManifold().getNormal();
-                    if(Math.abs(force.x)==1f && force.y==0f){
+                    Vector2 force = contact.getWorldManifold().getNormal();
+                    if (Math.abs(force.x) == 1f && force.y == 0f) {
 
-                        if(contact.getFixtureA().equals(((Hero) passenger).getHeroPhysicsFixture()) ){
+                        if (contact.getFixtureA().equals(((Hero) passenger).getHeroPhysicsFixture())) {
                             force.scl(-6);
                         } else if (contact.getFixtureB().equals(((Hero) passenger).getHeroPhysicsFixture())) {
                             force.scl(6);

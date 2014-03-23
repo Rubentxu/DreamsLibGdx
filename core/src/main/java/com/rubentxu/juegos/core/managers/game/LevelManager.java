@@ -17,15 +17,11 @@ public class LevelManager {
     private final DreamsGame game;
     private List<Level> levels;
     private Level currentLevel;
-    public static final String TREE_BACKGROUND = "imagenes/fondos/arboles.png";
-    public static final String LEVEL1_BACKGROUND = "imagenes/fondos/fondo.jpg";
-    public static final String CLOUD_BACKGROUND = "imagenes/fondos/nubes.png";
-    public static final String MUSIC = "sounds/music/BusyDayAtTheMarket.mp3";
 
     public LevelManager(DreamsGame game) {
         this.game = game;
         levels = new ArrayList<Level>();
-        levels = game.getProfileManager().retrieveProfile().getLevels();
+        levels = game.getProfileManager().getProfile().getLevels();
 
         loadLevels();
     }

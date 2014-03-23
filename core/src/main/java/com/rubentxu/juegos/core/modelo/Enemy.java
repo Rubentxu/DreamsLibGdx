@@ -17,7 +17,26 @@ import java.util.List;
 public class Enemy extends Box2DPhysicsObject implements Disposable {
 
     public enum StateEnemy implements State {
-        IDLE, WALKING, JUMPING, FALL
+        IDLE(0.5f), WALKING, JUMPING, FALL;
+
+        protected float stateTimeMin;
+
+        StateEnemy(){
+            this.stateTimeMin = 0.1f;
+        }
+
+        StateEnemy(float stateTimeMin){
+            this.stateTimeMin = stateTimeMin;
+        }
+
+        StateEnemy(BaseState state){
+            this.stateTimeMin =state.getStateTimeMin();
+        }
+
+        @Override
+        public float getStateTimeMin(){
+            return this.stateTimeMin;
+        }
     }
 
     public enum StatePos {ONGROUND, INWATER, ONAIR}
