@@ -117,4 +117,12 @@ public class Level implements Json.Serializable {
         json.writeValue("highScore", highScore);
         json.writeValue("num", num);
     }
+
+    public int getNum() {
+        return num;
+    }
+
+    public void setNum(int num) {
+        this.num = num;
+    }
 }

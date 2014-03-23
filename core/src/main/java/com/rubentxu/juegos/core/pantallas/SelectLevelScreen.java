@@ -51,7 +51,7 @@ public class SelectLevelScreen extends BaseScreen {
                 levelButton.setTextureLocked(skin.getRegion("gui_candado"), true);
             }
 
-            levelButton.setLevelNumber(i + 1, game.getResourcesManager().getStyles().font2);
+            levelButton.setLevelNumber(levels.get(i).getNum(), game.getResourcesManager().getStyles().font2);
 
             levelButton.setLevelStars(((TextureAtlas) game.getResourcesManager().get(ResourcesManager.GUI_ATLAS)).findRegion("estrellaZocalo"),
                     skin.getRegion("gui_estrella"), 5, levels.get(i).getAchievements(), size);
