@@ -178,7 +178,7 @@ public class GuiBuilder {
         Label lives = new Label("0", styles.skin, "default", Color.ORANGE);
         lives.setName(Constants.LIVES);
 
-        Label labelScore = new Label("Puntuacion: ", styles.skin, "default", Color.ORANGE);
+        Label labelScore = new Label("Tijeras: ", styles.skin, "default", Color.ORANGE);
         labelScore.setName(Constants.LABEL_SCORE);
 
         Label score = new Label("0000", styles.skin, "default", Color.ORANGE);

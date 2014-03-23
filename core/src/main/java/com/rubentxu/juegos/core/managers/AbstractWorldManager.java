@@ -56,9 +56,8 @@ public abstract class AbstractWorldManager implements Disposable {
     }
 
     public void notifyObservers(State state, Box2DPhysicsObject entity,float stateTime) {
-        Gdx.app.log(Constants.LOG, "NotifyStateTimeLimit State "+state+" Entity "+entity.getGrupo());
+        Gdx.app.debug(Constants.LOG, "NotifyStateTimeLimit State "+state+" Entity "+entity.getGrupo());
         for (StateObserver observer : observers) {
-            Gdx.app.log(Constants.LOG, "NotifyStateTimeLimit for");
             observer.onNotifyStateTimeLimit(state, entity,stateTime);
         }
     }

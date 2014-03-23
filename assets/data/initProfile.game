@@ -12,7 +12,7 @@
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
          map:maps/Escenario.tmx,
-         num=1
+         num:1
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -26,7 +26,7 @@
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
          map:maps/Escenario2.tmx,
-         num=2
+         num:2
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -40,7 +40,7 @@
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
          map:maps/Escenario3.tmx,
-         num=3
+         num:3
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -54,7 +54,7 @@
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
          map:maps/Escenario4.tmx,
-         num=4
+         num:4
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -68,7 +68,7 @@
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
          map:maps/Escenario5.tmx,
-         num=5
+         num:5
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -81,8 +81,8 @@
          background_01:imagenes/fondos/fondo.jpg,
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
-         map:maps/Escenario6.tmx
-         num=6
+         map:maps/Escenario6.tmx,
+         num:6
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -95,8 +95,8 @@
          background_01:imagenes/fondos/fondo.jpg,
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
-         map:maps/Escenario7.tmx
-         num=7
+         map:maps/Escenario7.tmx,
+         num:7
       },
       {
          class:com.rubentxu.juegos.core.modelo.Level,
@@ -109,8 +109,8 @@
          background_01:imagenes/fondos/fondo.jpg,
          background_02:imagenes/fondos/nubes.png,
          background_03:imagenes/fondos/arboles.png,
-         map:maps/Escenario8.tmx
-         num=8
+         map:maps/Escenario8.tmx,
+         num:8
       }
    ],
    lives:2

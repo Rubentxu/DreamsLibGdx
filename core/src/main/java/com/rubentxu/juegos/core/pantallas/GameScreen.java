@@ -50,6 +50,7 @@ public class GameScreen extends BaseScreen {
 
         //updates
         if (!DreamsGame.getGameState().equals(GameState.GAME_PAUSED) &&
+                !DreamsGame.getGameState().equals(GameState.GAME_LEVELWIN) &&
                 !DreamsGame.getGameState().equals(GameState.GAME_OVER)) {
             controller.update(delta);
             updateStats();
@@ -113,7 +114,6 @@ public class GameScreen extends BaseScreen {
 
         if (game.getPreferencesManager().touchPadEnabled) {
             Touchpad touchPad = GuiBuilder.buildTouchPad(350 * ScaleUtil.getSizeRatio(), 350 * ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller);
-            //touchPad.scale(ScaleUtil.getSizeRatio());
             stage.addActor(touchPad);
         } else {
             stage.addActor(GuiBuilder.buildPadButtons(370 * ScaleUtil.getSizeRatio(), 190 * ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller));

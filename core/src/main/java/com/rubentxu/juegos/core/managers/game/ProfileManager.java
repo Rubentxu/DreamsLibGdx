@@ -40,7 +40,7 @@ public class ProfileManager implements StateObserver {
 
             } catch (Exception e) {
                 FileHandle initProfileDataFile = Gdx.files.internal(Constants.INIT_PROFILE_DATA_FILE);
-                Gdx.app.log(Constants.LOG, "Retrieving profile from: " + initProfileDataFile.path());
+                Gdx.app.error(Constants.LOG, "Retrieving profile from: " + initProfileDataFile.path());
                 profile = json.fromJson(Profile.class, initProfileDataFile.readString().trim());
                 persist(profile);
             }
@@ -101,7 +101,7 @@ public class ProfileManager implements StateObserver {
 
     @Override
     public void onNotifyStateTimeLimit(State state, Box2DPhysicsObject entity, float time) {
-        Gdx.app.log(Constants.LOG, "NotifyStateTimeLimit ProfileManager....");
+        Gdx.app.debug(Constants.LOG, "NotifyStateTimeLimit ProfileManager....");
         if (state.equals(Box2DPhysicsObject.BaseState.HURT) && entity instanceof Hero) {
             Hero hero = (Hero) entity;
             Gdx.app.log(Constants.LOG, "---------------------------------------------------------------------PIERDES VIDA???");

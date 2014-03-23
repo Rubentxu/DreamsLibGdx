@@ -6,7 +6,9 @@ import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.joints.PrismaticJoint;
+import com.rubentxu.juegos.core.BaseGame;
 import com.rubentxu.juegos.core.constantes.Constants;
+import com.rubentxu.juegos.core.constantes.GameState;
 import com.rubentxu.juegos.core.managers.AbstractWorldManager;
 import com.rubentxu.juegos.core.modelo.CheckPoint;
 import com.rubentxu.juegos.core.modelo.Hero;
@@ -50,6 +52,9 @@ public class CheckPointManager extends AbstractWorldManager {
 
     @Override
     public void update(float delta, Box2DPhysicsObject entity) {
+        CheckPoint checkPoint= (CheckPoint) entity;
+        if(((PrismaticJoint) checkPoint.getJoint()).getJointTranslation()>((PrismaticJoint) checkPoint.getJoint()).getUpperLimit())
+            BaseGame.setGameState(GameState.GAME_LEVELWIN);
 
     }
 

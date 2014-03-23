@@ -81,6 +81,7 @@ public class ScoreScreen extends BaseScreen {
         mainTable.row();
         mainTable.add(levelMenuButton);
         stage.addActor(mainTable);
+        if(profile.getLives()>0) profile.getLevels().get(currentLevel.getNum()+1).setActive(true);
         profile.resetValues();
         if(score> currentLevel.getHighScore()) currentLevel.setHighScore(score);
         if(currentLevel.getAchievements()< profile.getStarAquired()) currentLevel.setAchievements(profile.getStarAquired());

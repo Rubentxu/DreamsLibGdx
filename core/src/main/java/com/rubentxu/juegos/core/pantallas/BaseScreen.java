@@ -148,8 +148,8 @@ public abstract class BaseScreen implements Screen {
 
     }
 
-    public void showMessage(String text, float time) {
-
+    public void showMessage(String text, float time, final GameState gameState) {
+        Gdx.app.debug(Constants.LOG, "Show Message !");
         if (message == null) {
             message = new Label(text, game.getResourcesManager().getStyles().skin, "header", Color.ORANGE);
             container = new Stack();
@@ -172,7 +172,8 @@ public abstract class BaseScreen implements Screen {
                     Actions.run(new Runnable() {
                         public void run() {
                             Gdx.app.log(Constants.LOG, "Show Message Actions complete!");
-                            DreamsGame.setGameState(GameState.GAME_SHOW_SCORE);
+                            DreamsGame.setGameState(gameState);
+                            container.setVisible(false);
                         }
                     })
             ));

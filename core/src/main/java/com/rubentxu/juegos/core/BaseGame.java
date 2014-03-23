@@ -56,8 +56,7 @@ public class BaseGame implements ApplicationListener {
         BaseGame.gameState = gameState;
     }
 
-    public void setScreen(BaseScreen screen,
-                          ScreenTransition screenTransition) {
+    public void setScreen(BaseScreen screen, ScreenTransition screenTransition) {
         int w = Gdx.graphics.getWidth();
         int h = Gdx.graphics.getHeight();
         if (!init) {
@@ -85,8 +84,7 @@ public class BaseGame implements ApplicationListener {
             screenTransition = null;
         }
 
-        Gdx.app.log(Constants.LOG, "SCREENS: Menu: " + menuScreen + " Option: " + optionScreen + " Game: " + gameScreen
-                + " Score: " + highScoreScreen);
+        Gdx.app.log(Constants.LOG, "SCREENS: instanceof: " + screen.getClass());
         if (screen instanceof GameScreen) {
             Gdx.app.log(Constants.LOG, "music Game");
             audioManager.stopMusic();
@@ -114,12 +112,14 @@ public class BaseGame implements ApplicationListener {
             case GAME_UPDATE:
                 break;
             case GAME_OVER:
-                currScreen.showMessage("Game Over", 1.5f);
+                currScreen.showMessage("Game Over", 1.5f, GameState.GAME_SHOW_SCORE);
                 currScreen.render(deltaTime);
                 break;
             case GAME_WIN:
                 break;
             case GAME_LEVELWIN:
+                currScreen.showMessage("Nivel Completado", 1f, GameState.GAME_SHOW_SCORE);
+                currScreen.render(deltaTime);
                 break;
             case GAME_IDLE:
                 break;
