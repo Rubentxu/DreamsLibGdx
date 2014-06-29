@@ -1,0 +1,123 @@
+varios.png
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+MOVING_PLATFORM
+  rotate: false
+  xy: 215, 1
+  size: 267, 53
+  orig: 267, 53
+  offset: 0, 0
+  index: 1
+ENEMY
+  rotate: false
+  xy: 188, 168
+  size: 156, 167
+  orig: 156, 167
+  offset: 0, 0
+  index: 1
+ENEMY
+  rotate: false
+  xy: 188, 168
+  size: 156, 167
+  orig: 156, 167
+  offset: 0, 0
+  index: 2
+nadando
+  rotate: false
+  xy: 192, 55
+  size: 74, 112
+  orig: 202, 112
+  offset: 63, 0
+  index: 1
+nadando
+  rotate: false
+  xy: 385, 55
+  size: 58, 112
+  orig: 202, 112
+  offset: 78, 0
+  index: 2
+agua
+  rotate: false
+  xy: 1, 279
+  size: 170, 170
+  orig: 170, 170
+  offset: 0, 0
+  index: 1
+nadando
+  rotate: false
+  xy: 326, 55
+  size: 58, 112
+  orig: 202, 112
+  offset: 75, 0
+  index: 3
+nadando
+  rotate: false
+  xy: 137, 55
+  size: 54, 110
+  orig: 202, 112
+  offset: 73, 2
+  index: 4
+nadando
+  rotate: false
+  xy: 68, 166
+  size: 60, 112
+  orig: 202, 112
+  offset: 68, 0
+  index: 5
+nadando
+  rotate: false
+  xy: 1, 136
+  size: 66, 112
+  orig: 202, 112
+  offset: 63, 0
+  index: 6
+enemigo
+  rotate: false
+  xy: 345, 168
+  size: 140, 167
+  orig: 140, 167
+  offset: 0, 0
+  index: -1
+nadando
+  rotate: false
+  xy: 444, 55
+  size: 60, 112
+  orig: 202, 112
+  offset: 68, 0
+  index: 7
+nadando
+  rotate: false
+  xy: 129, 166
+  size: 58, 112
+  orig: 202, 112
+  offset: 78, 0
+  index: 10
+nadando
+  rotate: false
+  xy: 82, 55
+  size: 54, 110
+  orig: 202, 112
+  offset: 73, 2
+  index: 8
+nadando
+  rotate: false
+  xy: 267, 55
+  size: 58, 112
+  orig: 202, 112
+  offset: 75, 0
+  index: 9
+agua
+  rotate: false
+  xy: 1, 55
+  size: 80, 80
+  orig: 80, 80
+  offset: 0, 0
+  index: 2
+MOVING_PLATFORM
+  rotate: false
+  xy: 1, 1
+  size: 213, 53
+  orig: 213, 53
+  offset: 0, 0
+  index: 2

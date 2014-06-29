@@ -1,0 +1,33 @@
+
+objects.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+aspasMolino
+  rotate: false
+  xy: 1, 1
+  size: 120, 600
+  orig: 120, 600
+  offset: 0, 0
+  index: -1
+motorMolino
+  rotate: false
+  xy: 123, 297
+  size: 300, 304
+  orig: 300, 304
+  offset: 0, 0
+  index: -1
+mastil
+  rotate: false
+  xy: 425, 124
+  size: 49, 477
+  orig: 49, 477
+  offset: 0, 0
+  index: -1
+bandera
+  rotate: false
+  xy: 123, 167
+  size: 172, 128
+  orig: 172, 128
+  offset: 0, 0
+  index: -1

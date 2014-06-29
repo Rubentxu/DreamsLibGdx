@@ -1,0 +1,21 @@
+package com.indignado.games.smariano.constantes;
+
+
+public enum GameState {
+    GAME_RUNNING,
+    GAME_PAUSED,
+    GAME_UPDATE,
+    GAME_OVER,
+    GAME_WIN,
+    GAME_LEVELWIN,
+    GAME_IDLE,
+    GAME_SLOWMOTION,
+    GAME_BACK,
+    SCREEN_TRANSITION,
+    GAME_EXIT ,
+    GAME_SHOW_MENU,
+    GAME_SHOW_SCORE,
+    GAME_SHOW_LEVEL_MENU,
+    GAME_SHOW_SPLASH,
+    GAME_SHOW_OPTIONS, GAME_SHOW_HIGHSCORES, GAME_SHOW_GAME;
+}
