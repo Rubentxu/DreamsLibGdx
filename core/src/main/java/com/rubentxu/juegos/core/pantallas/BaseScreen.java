@@ -66,6 +66,7 @@ public abstract class BaseScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         Gdx.app.log(Constants.LOG, "Resizing screen: " + getName() + " to: " + width + " x " + height);
+        stage.getWidth().getViewport().update(width, height, true);
         this.width = width;
         this.height = height;
         stage.setViewport(width, height, true);
