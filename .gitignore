@@ -55,6 +55,13 @@ nbactions.xml
 nb-configuration.xml
 
 ## Gradle
-
+android/target/
+**/target/
 .gradle
 build/
+
+
+## Varios
+android/target/
+**/target/
+gen/
