@@ -21,11 +21,8 @@ import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 import com.rubentxu.juegos.core.modelo.Level;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransition;
 import com.rubentxu.juegos.core.pantallas.transiciones.ScreenTransitionSlide;
-<<<<<<< HEAD
 import com.rubentxu.juegos.core.utils.gui.ScaleUtil;
-=======
 import com.rubentxu.juegos.core.utils.gui.mtx.AppSettings;
->>>>>>> master
 import com.rubentxu.juegos.core.utils.gui.mtx.ButtonLevel;
 import com.rubentxu.juegos.core.utils.gui.mtx.MenuCreator;
 
@@ -47,14 +44,14 @@ public class SelectLevelScreen extends BaseScreen {
     @Override
     public void resize(int width, int height) {
         super.resize(width, height);
-<<<<<<< HEAD
+
         final List<Level> levels = game.getLevelManager().getLevels();
         int size= (int) (350* ScaleUtil.getSizeRatio());
         int pad= (int) (30 * ScaleUtil.getSizeRatio());
-=======
+
         setUpLevelsScreen();
        /* final List<Level> levels = game.getLevelManager().getLevels();
->>>>>>> master
+
         for (int i = 0; i < levels.size(); i++){
 
             final ButtonLevel levelButton =new ButtonLevel(game.getResourcesManager());

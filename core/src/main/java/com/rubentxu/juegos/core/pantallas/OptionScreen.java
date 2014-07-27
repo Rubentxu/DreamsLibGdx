@@ -133,10 +133,6 @@ public class OptionScreen extends BaseScreen {
         mainTable.add(touchPadCheckbox).colspan(3);
         mainTable.row();
 
-<<<<<<< HEAD
-=======
-
->>>>>>> master
         TextButton backButton = new TextButton("Volver Menu", game.getResourcesManager().getStyles().skin);
         backButton.pad(50* ScaleUtil.getSizeRatio());
         backButton.addListener(new ClickListener() {

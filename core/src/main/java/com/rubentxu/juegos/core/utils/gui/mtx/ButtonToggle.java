@@ -27,7 +27,7 @@ public class ButtonToggle extends AbstractButton {
         this.isToggleActive = isToggleActive;
     }
 
-    @Override
+
     public void draw(SpriteBatch batch, float parentAlpha) {
         if (isToggleActive && textureLocked != null) {
             drawLocked(batch);

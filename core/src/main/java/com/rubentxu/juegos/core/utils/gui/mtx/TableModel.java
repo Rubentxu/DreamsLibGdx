@@ -6,7 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.esotericsoftware.tablelayout.Cell;
-import com.esotericsoftware.tablelayout.Value.FixedValue;
 
 public class TableModel extends Table {
     public TextureRegion textureBackground;
@@ -63,7 +62,7 @@ public class TableModel extends Table {
         return super.add(actor).size(width * AppSettings.getSizeRatio(),height * AppSettings.getSizeRatio());
     }
 
-    @Override
+
     public void draw(SpriteBatch batch, float parentAlpha) {
 
         if (textureBackground != null && isBackgroundTextureActive) {

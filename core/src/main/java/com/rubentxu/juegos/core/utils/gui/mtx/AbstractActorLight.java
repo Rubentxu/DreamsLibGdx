@@ -59,7 +59,7 @@ public abstract class AbstractActorLight extends Actor {
         super.act(delta);
     }
 
-    @Override
+
     public void draw(SpriteBatch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
         // For fade out/in effect

@@ -105,7 +105,7 @@ public class GameScreen extends BaseScreen {
         renderer = new WorldRenderer(game, world);
         renderer.resize(width, height);
 
-<<<<<<< HEAD
+
         stats=GuiBuilder.buildStats(stage.getWidth(), 100*ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(),game.getResourcesManager());
         stats.setBounds(0,height-height/7,width,height/7);
         stage.addActor(stats);
@@ -114,14 +114,7 @@ public class GameScreen extends BaseScreen {
             Touchpad touchPad = GuiBuilder.buildTouchPad(350 * ScaleUtil.getSizeRatio(), 350 * ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller);
             touchPad.scale(ScaleUtil.getSizeRatio());
             stage.addActor(touchPad);
-=======
-        stats = GuiBuilder.buildStats(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), game.getResourcesManager());
-        stats.setBounds(0, height - height / 7, width, height / 7);
-        stage.addActor(stats);
 
-        if (game.getPreferencesManager().touchPadEnabled) {
-            stage.addActor(GuiBuilder.buildTouchPad(stage.getWidth(), stage.getHeight(), game.getResourcesManager().getStyles(), controller));
->>>>>>> master
         } else {
             stage.addActor(GuiBuilder.buildPadButtons(370*ScaleUtil.getSizeRatio(),190*ScaleUtil.getSizeRatio(), game.getResourcesManager().getStyles(), controller));
         }

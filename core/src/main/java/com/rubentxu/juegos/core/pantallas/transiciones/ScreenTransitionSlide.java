@@ -1,7 +1,7 @@
 package com.rubentxu.juegos.core.pantallas.transiciones;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Interpolation;
@@ -63,7 +63,7 @@ public class ScreenTransitionSlide implements ScreenTransition {
         Texture texTop = slideOut ? currScreen : nextScreen;
 
         Gdx.gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        Gdx.gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(texBottom, 0, 0, 0, 0, w, h, 1, 1, 0, 0, 0,
                 currScreen.getWidth(), currScreen.getHeight(),

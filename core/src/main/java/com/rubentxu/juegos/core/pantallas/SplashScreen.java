@@ -14,11 +14,8 @@ import com.rubentxu.juegos.core.DreamsGame;
 import com.rubentxu.juegos.core.inputs.MobileInput;
 import com.rubentxu.juegos.core.managers.game.ResourcesManager;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.delay;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeOut;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.run;
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.sequence;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
+
 
 public class SplashScreen extends BaseScreen {
 
@@ -45,19 +42,13 @@ public class SplashScreen extends BaseScreen {
         splashImage.setHeight(height);
         splashImage.getColor().a = 0f;
 
-<<<<<<< HEAD
+
         splashImage.addAction(sequence(fadeIn(0.05f), run(new Runnable() {
             public void run() {
                 game.menuScreen = new MenuScreen(game);
             }
         }), delay(0.01f, fadeOut(0.05f)), run(new Runnable() {
-=======
-        splashImage.addAction(sequence(fadeIn(0.01f), run(new Runnable() {
-            public void run() {
-                game.menuScreen = new MenuScreen(game);
-            }
-        }), delay(0.01f, fadeOut(0.01f)), run(new Runnable() {
->>>>>>> master
+
             public void run() {
                 game.setScreen(game.menuScreen, game.menuScreen.getTransition());
             }

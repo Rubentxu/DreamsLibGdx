@@ -11,7 +11,7 @@ public class ButtonGame extends AbstractButton {
         super(bitMapFont, up, down, width, height);
     }
 
-    @Override
+
     public void draw(SpriteBatch batch, float parentAlpha) {
         if (isLockActive && textureLocked != null) {
             drawLocked(batch);
