@@ -1,7 +1,7 @@
 DreamsLibGdx
 ============
 
-Nuevo intento de juego de plataformas, en este caso con la libreria LibGdx en Java.
+Juego de plataformas, en este caso con la libreria LibGdx en Java.
 
 Este juego estara basado en el patron MVC (al menos lo intenta), utiliza maven para gestionar las dependencias y la compilacion.
 Gracias al arquetipo creado para tal fin, pongo enlace para interesados: http://code.google.com/p/libgdx/wiki/MavenProjectSetup.
